@@ -173,9 +173,30 @@
             "collection": "notificaciones",
             "fields": [
                 {
-                    "name": "nombre",
-                    "title": "Nombre",
+                    "name": "fecha",
+                    "title": "Fecha",
+                    "type": "datetime",
+                    "edit": {
+                        "hidden": true
+                    },
+                    "auto": true
+                },
+                {
+                    "name": "asunto",
+                    "title": "Asunto",
                     "type": "text",
+                    "required": true
+                },
+                {
+                    "name": "destinatario",
+                    "title": "Destinatario",
+                    "type": "text",
+                    "required": true
+                },
+                {
+                    "name": "mensaje",
+                    "title": "Mensaje",
+                    "type": "textarea",
                     "required": true
                 }
             ]
