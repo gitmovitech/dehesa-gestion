@@ -70,45 +70,112 @@
             "collection": "asociados",
             "fields": [
                 {
-                    "name": "name",
+                    "name": "nombre",
                     "title": "Nombre",
                     "type": "text",
                     "required": true
                 },
                 {
-                    "name": "email",
-                    "title": "Correo electrónico",
-                    "type": "email",
-                    "required": true,
-                    "id": true
+                    "name": "apellidos",
+                    "title": "Apellidos",
+                    "type": "text",
+                    "required": true
                 },
                 {
-                    "name": "password",
-                    "title": "Contraseña",
-                    "type": "password",
-                    "hiddenlist": true,
+                    "name": "run",
+                    "title": "RUN",
+                    "type": "text",
+                    "required": true
+                },
+                {
+                    "name": "celular",
+                    "title": "Celular",
+                    "type": "number",
+                    "required": true
+                },
+                {
+                    "name": "telefono",
+                    "title": "Teléfono",
+                    "type": "number"
+                },
+                {
+                    "name": "direccion",
+                    "title": "Dirección",
+                    "type": "textarea",
                     "required": true
                 },
                 {
                     "name": "type",
-                    "title": "Tipo de usuario",
+                    "title": "Formas de pago",
                     "type": "select",
                     "data": {
                         "options": [
                             {
-                                "key": "Editor",
-                                "value": "Editor"
+                                "key": "Efectivo",
+                                "value": "Efectivo"
                             },
                             {
-                                "key": "Contable",
-                                "value": "Contable"
+                                "key": "Cheque",
+                                "value": "Cheque"
                             },
                             {
-                                "key": "Administrador",
-                                "value": "Administrador"
+                                "key": "Pac-Pat",
+                                "value": "Pac-Pat"
                             }
                         ]
                     },
+                    "required": true
+                }
+            ]
+        },
+        {
+            "icon": "glyphicon glyphicon-briefcase",
+            "name": "Proveedores",
+            "collection": "proveedores",
+            "fields": [
+                {
+                    "name": "nombre",
+                    "title": "Nombre",
+                    "type": "text",
+                    "required": true
+                }
+            ]
+        },
+        {
+            "icon": "glyphicon glyphicon-usd",
+            "name": "Pagos",
+            "collection": "pagos",
+            "fields": [
+                {
+                    "name": "nombre",
+                    "title": "Nombre",
+                    "type": "text",
+                    "required": true
+                }
+            ]
+        },
+        {
+            "icon": "glyphicon glyphicon-hand-right",
+            "name": "Servicios",
+            "collection": "servicios",
+            "fields": [
+                {
+                    "name": "nombre",
+                    "title": "Nombre",
+                    "type": "text",
+                    "required": true
+                }
+            ]
+        },
+        {
+            "icon": "glyphicon glyphicon-bullhorn",
+            "name": "Notificaciones",
+            "collection": "notificaciones",
+            "fields": [
+                {
+                    "name": "nombre",
+                    "title": "Nombre",
+                    "type": "text",
                     "required": true
                 }
             ]

@@ -1,7 +1,7 @@
 <div class="container-fluid" ng-if="pages">
     <h1>
         <i class="{{page.icon}}"></i> {{page.name}}
-        <button ng-if="session.type == 'admin'" class="btn btn-sm btn-primary" ng-click="showModal(page.fields)">
+        <button ng-if="session.type == 'Administrador'" class="btn btn-sm btn-primary" ng-click="showModal(page.fields)">
             <i class="glyphicon glyphicon-plus-sign"></i> Agregar
         </button>
     </h1>
@@ -31,7 +31,7 @@
                         <i class="glyphicon glyphicon-modal-window"></i> Comandos
                     </button>
                 </td>
-                <td ng-if="key == '_id' && session.type == 'admin'" ng-repeat="(key,tddata) in trdata">
+                <td ng-if="key == '_id' && session.type == 'Administrador'" ng-repeat="(key,tddata) in trdata">
                     <button class="btn btn-success btn-xs" ng-click="showModal(page.fields, trdata)"><i class="glyphicon glyphicon-edit"></i> Editar</button>
                     <button class="btn btn-danger btn-xs" ng-click="dropItem(page.fields, trdata)"><i class="glyphicon glyphicon-remove-circle"></i> Eliminar</button>
                 </td>

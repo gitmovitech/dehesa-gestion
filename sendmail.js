@@ -7,10 +7,10 @@ var newUser = function (params, callback) {
     html += '<p>Datos de acceso son:</p>';
     html += '<p>Usuario: ' + params.to + '<br>';
     html += 'Contraseña: ' + params.pass + '</p>';
-    html += '<br><br><p>Atte. Operaciones Bermann.</p>';
+    html += '<br><br><p>Atte. Junta de Vecinos Jardín La Dehesa.</p>';
     mail.sendMail({
-        fromname: 'Operaciones Bermann',
-        from: 'no-reply@bermanngps.cl',
+        fromname: 'Junta de Vecinos Jardín La Dehesa',
+        from: 'no-reply@jvdehesa.cl',
         toname: params.toname,
         to: params.to,
         subject: 'Nueva cuenta de usuario',
