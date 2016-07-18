@@ -82,6 +82,13 @@
                     "required": true
                 },
                 {
+                    "name": "email",
+                    "title": "Correo electrónico",
+                    "type": "email",
+                    "required": true,
+                    "id": true
+                },
+                {
                     "name": "run",
                     "title": "RUN",
                     "type": "text",
@@ -125,6 +132,37 @@
                         ]
                     },
                     "required": true
+                },
+                {
+                    "name": "type",
+                    "title": "Servicios adquiridos",
+                    "type": "select",
+                    "data": {
+                        "options": [
+                        ]
+                    },
+                    "required": true
+                },
+                {
+                    "name": "type",
+                    "title": "Tipo de casa",
+                    "type": "select",
+                    "data": {
+                        "options": [
+                            {
+                                "key": "Modelo 1",
+                                "value": "Modelo 1"
+                            },
+                            {
+                                "key": "Modelo 2",
+                                "value": "Modelo 2"
+                            },
+                            {
+                                "key": "Modelo 3",
+                                "value": "Modelo 3"
+                            }
+                        ]
+                    }
                 }
             ]
         },
@@ -169,7 +207,7 @@
         },
         {
             "icon": "glyphicon glyphicon-bullhorn",
-            "name": "Notificaciones",
+            "name": "Mensajes y notificaciones",
             "collection": "notificaciones",
             "fields": [
                 {

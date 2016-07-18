@@ -82,3 +82,7 @@
 .box-login{
     width:300px;margin:20px auto;padding:30px;box-shadow: 0 0 5px gray;border-radius:4px
 }
+.input-required-asterisk{
+    color:red;
+    font-size:10px;
+}
