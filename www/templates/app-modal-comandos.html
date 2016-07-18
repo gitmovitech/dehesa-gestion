@@ -1,0 +1,79 @@
+<div id="modal-comandos" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><i class="glyphicon glyphicon-modal-window"></i> Comandos</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Comandos enviados</h3>
+                            </div>
+                            <div class="panel-body command-bg">
+                                <div id="command-{{$index + 1}}" class="command-item-bg" ng-repeat="cmd in commandSentHistory track by $index">
+                                    <div class="{{cmd.appearcss}}">
+                                        <div class="padding">
+                                            <span class="textgray">{{cmd.executed| date: 'medium'}}</span>
+                                            <span class="label label-success">{{cmd.command}}</span>
+                                            <span class="textgray">{{cmd.user}}</span>
+                                        </div>
+                                        <div class="padding" ng-if="cmd.commandText">
+                                            <span class="commandInfo bg-success"><b>Comando:</b> {{cmd.commandText}}</span>
+                                        </div>
+                                        <div class="text-right padding">
+                                            <span class="label {{cmd.label}}">{{cmd.response}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="panel panel-warning">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Respuestas del dispositivo</h3>
+                            </div>
+                            <div class="panel-body command-bg">
+                                <div id="commandReceived-{{$index + 1}}" class="command-item-bg" ng-repeat="cmd in commandReceivedHistory track by $index">
+                                    <div class="{{cmd.appearcss}}">
+                                        <div class="padding">
+                                            <span class="textgray">{{cmd.reponsedate| date: 'medium'}}</span>
+                                        </div>
+                                        <div class="text-right padding">
+                                            <span class="label {{cmd.responselabel}}">{{cmd.response}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <form class="form-inline text-left">
+                    <select id="selectCommand" ng-blur="commands.select()" class="chosen-select" data-placeholder="Seleccione del diccionario">
+                        <option value=""></option>
+                        <option value="{{item.command}}" ng-repeat="item in optionCommandText">{{item.detail}}</option>
+                    </select>
+                    <br>
+                    <div class="form-group">
+                        <label class="sr-only" for="inputCommand"></label>
+                        <div class="input-group" id="inputCommandGroup">
+                            <input ng-model="commands.input" type="text" class="form-control typeahead" id="inputCommand" placeholder="Escriba comando">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-success" ng-click="commands.send()">Enviar comando</button>
+                    
+                    <div class="progress progress-command" ng-if="waitingResponse">
+                        <div class="progress-bar-info progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                            <span class="sr-only">Esperando respuesta</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

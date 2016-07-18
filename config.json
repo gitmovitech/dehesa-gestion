@@ -1,0 +1,64 @@
+{
+    "url": "http://gestion.jvdehesa.cl",
+    "sendmail": {
+        "sendgrid": {
+            "key": "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"
+        }
+    },
+    "admin": {
+        "name": "Victor Vargas",
+        "email": "vvargas@movitech.cl",
+        "password": "xxx",
+        "type": "admin"
+    },
+    "mongo": {
+        "name": "dehesa"
+    },
+    "pages": [
+        {
+            "icon": "glyphicon glyphicon-user",
+            "name": "Cuentas de usuario",
+            "collection": "users",
+            "fields": [
+                {
+                    "name": "name",
+                    "title": "Nombre",
+                    "type": "text",
+                    "required": true
+                },
+                {
+                    "name": "email",
+                    "title": "Correo electrónico",
+                    "type": "email",
+                    "required": true,
+                    "id": true
+                },
+                {
+                    "name": "password",
+                    "title": "Contraseña",
+                    "type": "password",
+                    "hiddenlist": true,
+                    "required": true
+                },
+                {
+                    "name": "type",
+                    "title": "Tipo de usuario",
+                    "type": "select",
+                    "data": {
+                        "options": [
+                        {
+                            "key": "operador",
+                            "value": "operador"
+                        },
+                        {
+                            "key": "admin",
+                            "value": "admin"
+                        }
+                    ]
+                    },
+                    "required": true
+                }
+            ]
+        }
+    ]
+}
