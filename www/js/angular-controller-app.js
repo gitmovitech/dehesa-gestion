@@ -16,7 +16,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
     }).success(function (response) {
         $scope.session = response;
         var pages = Session.getPages().pages;
-        if ($scope.session.type == 'admin') {
+        if ($scope.session.type == 'Administrador') {
             $scope.pages = pages;
         } else {
             for (var x in pages) {

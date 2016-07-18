@@ -1,23 +1,24 @@
 <div class="container">
 
     <div class="row">
-        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-            
-            <img src="logo.png" width="200"/>
-            <form class="form-signin" ng-submit="signin()">
-                <h2 class="form-signin-heading">Inicie sesión</h2>
-                <label for="email" class="sr-only">Correo eletrónico</label>
-                <input type="email" ng-model="input.email" id="email" class="form-control" placeholder="Correo eletrónico" required autofocus>
-                <label for="password" class="sr-only">Contraseña</label>
-                <input type="password" ng-model="input.password" id="password" class="form-control" placeholder="Contraseña" required>
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" ng-model="input.remember" value="remember-me"> Recúerdame en este computador
-                    </label>
-                </div>
-                <button class="btn btn-primary" type="submit">Iniciar sesión</button>
-                <!--<a class="btn btn-link" href="recovery">Olvidé mi contraseña</a>-->
-            </form>
+        <div class="col-xs-12 text-center">
+            <div class="box-login">
+                <img src="logo.png" width="200"/>
+                <form class="form-signin" ng-submit="signin()">
+                    <h2 class="form-signin-heading">Inicie sesión</h2>
+                    <label for="email" class="sr-only">Correo eletrónico</label>
+                    <input type="email" ng-model="input.email" id="email" class="form-control" placeholder="Correo eletrónico" required autofocus>
+                    <label for="password" class="sr-only">Contraseña</label>
+                    <input type="password" ng-model="input.password" id="password" class="form-control" placeholder="Contraseña" required>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" ng-model="input.remember" value="remember-me"> Recúerdame en este computador
+                        </label>
+                    </div>
+                    <button class="btn btn-primary" type="submit">Iniciar sesión</button>
+                    <!--<a class="btn btn-link" href="recovery">Olvidé mi contraseña</a>-->
+                </form>
+            </div>
         </div>
     </div>
 

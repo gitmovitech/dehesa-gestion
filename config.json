@@ -9,7 +9,7 @@
         "name": "Victor Vargas",
         "email": "vvargas@movitech.cl",
         "password": "xxx",
-        "type": "admin"
+        "type": "Administrador"
     },
     "mongo": {
         "name": "dehesa"
@@ -46,15 +46,68 @@
                     "type": "select",
                     "data": {
                         "options": [
-                        {
-                            "key": "operador",
-                            "value": "operador"
-                        },
-                        {
-                            "key": "admin",
-                            "value": "admin"
-                        }
-                    ]
+                            {
+                                "key": "Editor",
+                                "value": "Editor"
+                            },
+                            {
+                                "key": "Contable",
+                                "value": "Contable"
+                            },
+                            {
+                                "key": "Administrador",
+                                "value": "Administrador"
+                            }
+                        ]
+                    },
+                    "required": true
+                }
+            ]
+        },
+        {
+            "icon": "glyphicon glyphicon-list-alt",
+            "name": "Asociados",
+            "collection": "asociados",
+            "fields": [
+                {
+                    "name": "name",
+                    "title": "Nombre",
+                    "type": "text",
+                    "required": true
+                },
+                {
+                    "name": "email",
+                    "title": "Correo electrónico",
+                    "type": "email",
+                    "required": true,
+                    "id": true
+                },
+                {
+                    "name": "password",
+                    "title": "Contraseña",
+                    "type": "password",
+                    "hiddenlist": true,
+                    "required": true
+                },
+                {
+                    "name": "type",
+                    "title": "Tipo de usuario",
+                    "type": "select",
+                    "data": {
+                        "options": [
+                            {
+                                "key": "Editor",
+                                "value": "Editor"
+                            },
+                            {
+                                "key": "Contable",
+                                "value": "Contable"
+                            },
+                            {
+                                "key": "Administrador",
+                                "value": "Administrador"
+                            }
+                        ]
                     },
                     "required": true
                 }

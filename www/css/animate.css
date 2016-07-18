@@ -79,12 +79,6 @@
 .popover-content{
     width:300px;
 }
-.commandInfo{
-    padding: 2px 10px;
-    font-size: 11px;
-}
-.progress-command{
-    height:8px;
-    margin-top:6px;
-    margin-bottom:0;
+.box-login{
+    width:300px;margin:20px auto;padding:30px;box-shadow: 0 0 5px gray;border-radius:4px
 }
