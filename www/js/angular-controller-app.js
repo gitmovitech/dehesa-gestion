@@ -75,6 +75,9 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
     };
     $scope.readyToUpload = false;
     $scope.load = function (item, index) {
+        if(sessionStorage.uploaded_csv){
+            $scope.uploaded_csv = JSON.parse(sessionStorage.uploaded_csv);
+        }
         if (typeof $scope.page != 'undefined')
             if (typeof $scope.page.filter != 'undefined')
                 $scope.page.filter.value = '';
@@ -252,6 +255,16 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                         filename: $scope.uploader.queue[0].file.name
                     }
                 }).success(function (response) {
+                    for(var r in response){
+                        response[r] = {
+                            titular: response[r][0],
+                            rut: response[r][1],
+                            direccion: response[r][2],
+                            numeracion: response[r][3],
+                            tarifa: response[r][4],
+                            status: 'Pendiente'
+                        }
+                    }
                     sessionStorage.uploaded_csv = JSON.stringify(response);
                     location.reload();
                 });
