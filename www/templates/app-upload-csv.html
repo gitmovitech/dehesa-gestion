@@ -1,0 +1,73 @@
+<div class="modal fade" id="modalCSVpagos" tabindex="-1" role="dialog" aria-labelledby="modalEditLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form class="form-horizontal" ng-submit="uploadCSV()">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modalEditLabel"><b><i class="{{page.icon}}"></i> {{page.name}}</b></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group" ng-repeat="item in fields" ng-class="{'hidden':item.edit.hidden}">
+                        <label for="{{item.name}}" class="col-sm-2 control-label" ng-if="item.name != '_id'">
+                            <i class="glyphicon glyphicon-asterisk input-required-asterisk" ng-if="item.required"></i>
+                            {{item.title}}
+                        </label>
+                        <div class="col-sm-10">
+
+                            <input id="inputfile" ng-if="item.type == 'file'" style="display:none" multiple ng-model="item.value" type="file" nv-file-select uploader="uploader" onchange="angular.element(this).scope().onUploadSelect()" name="{{item.name}}" id="{{item.name}}" placeholder="Escriba aquí"/>
+                            <a href="javascript:" ng-click="selectFile()" ng-if="item.type == 'file'" class="btn btn-primary">Seleccionar Archivo(s)</a>
+                            <div ng-if="item.type == 'file' && readyToUpload">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th ng-show="uploader.isHTML5">Tamaño</th>
+                                            <th>Progreso</th>
+                                            <th>Estado</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="item in uploader.queue">
+                                            <td><strong>{{ item.file.name}}</strong></td>
+                                            <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size / 1024 / 1024|number:2 }} MB</td>
+                                            <td ng-show="uploader.isHTML5">
+                                                <div class="progress progress-striped active" style="margin-bottom: 0;">
+                                                    <div class="progress-bar progress-bar-success" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
+                                                </div>
+                                            </td>
+                                            <td ng-show="!uploader.isHTML5">
+                                                {{item.progress}}%
+                                            </td>
+                                            <td class="text-center">
+                                                <span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                                                <span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                                                <span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+                                            </td>
+                                            <td nowrap>
+                                                <button type="button" class="btn btn-success btn-xs" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess">
+                                                    <span class="glyphicon glyphicon-upload"></span> Subir
+                                                </button>
+                                                <button type="button" class="btn btn-warning btn-xs" ng-click="item.cancel()" ng-disabled="!item.isUploading">
+                                                    <span class="glyphicon glyphicon-ban-circle"></span> Cancelar
+                                                </button>
+                                                <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
+                                                    <span class="glyphicon glyphicon-trash"></span> Remover
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-success">Importar registros</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

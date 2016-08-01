@@ -115,94 +115,104 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
     }
 
     $scope.showModal = function (fields, data) {
-        $scope.fields = fields;
-        /**
-         * Opciones para el dropdown en caso que deba conectarse a datos externos
-         */
-        for (var x in fields) {
-            if (typeof fields[x].data != 'undefined') {
-                if (fields[x].data.source == 'function') {
-                    $http.get('/api/data/function', {
-                        params: {
-                            token: Session.get(),
-                            function: fields[x].data.function,
-                            databack: x
-                        }
-                    }).success(function (response) {
-                        if (response.success) {
-                            $scope.fields[response.databack].value = '';
-                            $scope.fields[response.databack].data.options = response.data;
-                        }
-                    });
-                } else
-                if (fields[x].data.source == 'postgres') {
-                    $http.get('/api/data', {
-                        params: {
-                            token: Session.get(),
-                            table: fields[x].data.table,
-                            fields: fields[x].data.fields,
-                            databack: x
-                        }
-                    }).success(function (response) {
-                        if (response.success) {
-                            var fieldsinfo = $scope.fields[response.databack];
-                            var key;
-                            var value;
-                            var options = [];
-                            console.info(fieldsinfo.name);
-                            switch (fieldsinfo.name) {
-                                case 'cliente':
-                                    for (var x in response.data) {
-                                        if (response.data[x].cl_id != '') {
-                                            key = response.data[x].cl_id;
-                                            value = [response.data[x].cl_rut, response.data[x].cl_razon_social].join(' - ');
-                                            options[options.length] = {
-                                                key: key,
-                                                value: value
-                                            }
-                                        }
-                                    }
-                                    $scope.fields[response.databack].data.options = options;
-                                    break;
-                                case 'modelo':
-                                    for (var x in response.data) {
-                                        if (response.data[x].tav_id != '') {
-                                            key = response.data[x].tav_id;
-                                            value = response.data[x].tav_detalle;
-                                            options[options.length] = {
-                                                key: key,
-                                                value: value
-                                            }
-                                        }
-                                    }
-                                    $scope.fields[response.databack].data.options = options;
-                                    break;
+        if ($scope.collection == 'pagos') {
+            $scope.fields = [{
+                    name: 'csv_pagos',
+                    title: 'Cargar CSV',
+                    type: 'file'
+                }]
+            jQuery('#modalCSVpagos').modal('show');
+        } else {
+            console.info(fields);
+            $scope.fields = fields;
+            /**
+             * Opciones para el dropdown en caso que deba conectarse a datos externos
+             */
+            for (var x in fields) {
+                if (typeof fields[x].data != 'undefined') {
+                    if (fields[x].data.source == 'function') {
+                        $http.get('/api/data/function', {
+                            params: {
+                                token: Session.get(),
+                                function: fields[x].data.function,
+                                databack: x
                             }
-                            console.log($scope.fields[response.databack]);
-                        }
-                    });
-                }
-            }
-        }
-
-        if (data) {
-            for (var x in $scope.fields) {
-                for (var key in data) {
-                    if (key == $scope.fields[x].name) {
-                        if (data[key])
-                            $scope.fields[x].value = data[key];
+                        }).success(function (response) {
+                            if (response.success) {
+                                $scope.fields[response.databack].value = '';
+                                $scope.fields[response.databack].data.options = response.data;
+                            }
+                        });
+                    } else
+                    if (fields[x].data.source == 'postgres') {
+                        $http.get('/api/data', {
+                            params: {
+                                token: Session.get(),
+                                table: fields[x].data.table,
+                                fields: fields[x].data.fields,
+                                databack: x
+                            }
+                        }).success(function (response) {
+                            if (response.success) {
+                                var fieldsinfo = $scope.fields[response.databack];
+                                var key;
+                                var value;
+                                var options = [];
+                                console.info(fieldsinfo.name);
+                                switch (fieldsinfo.name) {
+                                    case 'cliente':
+                                        for (var x in response.data) {
+                                            if (response.data[x].cl_id != '') {
+                                                key = response.data[x].cl_id;
+                                                value = [response.data[x].cl_rut, response.data[x].cl_razon_social].join(' - ');
+                                                options[options.length] = {
+                                                    key: key,
+                                                    value: value
+                                                }
+                                            }
+                                        }
+                                        $scope.fields[response.databack].data.options = options;
+                                        break;
+                                    case 'modelo':
+                                        for (var x in response.data) {
+                                            if (response.data[x].tav_id != '') {
+                                                key = response.data[x].tav_id;
+                                                value = response.data[x].tav_detalle;
+                                                options[options.length] = {
+                                                    key: key,
+                                                    value: value
+                                                }
+                                            }
+                                        }
+                                        $scope.fields[response.databack].data.options = options;
+                                        break;
+                                }
+                                console.log($scope.fields[response.databack]);
+                            }
+                        });
                     }
                 }
             }
-        } else {
-            for (var x in $scope.fields) {
-                $scope.fields[x].value = '';
+
+            if (data) {
+                for (var x in $scope.fields) {
+                    for (var key in data) {
+                        if (key == $scope.fields[x].name) {
+                            if (data[key])
+                                $scope.fields[x].value = data[key];
+                        }
+                    }
+                }
+            } else {
+                for (var x in $scope.fields) {
+                    $scope.fields[x].value = '';
+                }
             }
+            jQuery('#modalEdit').modal('show');
+            setTimeout(function () {
+                jQuery('.chosen-select').chosen();
+            }, 800);
         }
-        jQuery('#modalEdit').modal('show');
-        setTimeout(function () {
-            jQuery('.chosen-select').chosen();
-        }, 800);
     }
     $scope.sendForm = function () {
         var reload = false;
@@ -232,6 +242,27 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
             }
         });
     }
+
+    $scope.uploadCSV = function () {
+        if ($scope.uploader.queue.length > 0) {
+            if ($scope.uploader.queue[0].isUploaded) {
+                $http.post('/api/data/import/csv', {
+                    params: {
+                        token: Session.get(),
+                        filename: $scope.uploader.queue[0].file.name
+                    }
+                }).success(function (response) {
+                    sessionStorage.uploaded_csv = JSON.stringify(response);
+                    location.reload();
+                });
+            } else {
+                alert('Primero presione el boton subir para cargar el CSV en el sistema');
+            }
+        } else {
+            alert('Primero seleccione un archivo CSV para cargar al sistema');
+        }
+    }
+
     $scope.dropItem = function (item, fields) {
         console.log(item);
         console.info(fields);
@@ -486,9 +517,9 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         }
     }
     socket.on('checkStatusSent', function (response) {
-        if(response.estado == 1){
-            for(var x in $scope.commandSentHistory){
-                if($scope.commandSentHistory[x].executed == response.executed){
+        if (response.estado == 1) {
+            for (var x in $scope.commandSentHistory) {
+                if ($scope.commandSentHistory[x].executed == response.executed) {
                     $scope.commandSentHistory[x].label = 'label-success';
                     $scope.commandSentHistory[x].response = 'Comando recibido satisfactoriamente';
                     $scope.$apply();

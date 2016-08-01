@@ -2,7 +2,9 @@
     <h1>
         <i class="{{page.icon}}"></i> {{page.name}}
         <button ng-if="session.type == 'Administrador'" class="btn btn-sm btn-primary" ng-click="showModal(page.fields)">
-            <i class="glyphicon glyphicon-plus-sign"></i> Crear nuevo
+            <i class="glyphicon glyphicon-plus-sign"></i> 
+            <span ng-if="page.collection != 'pagos'">Crear nuevo</span>
+            <span ng-if="page.collection == 'pagos'">Cargar CSV del mes</span>
         </button>
     </h1>
     <div class="form-group">

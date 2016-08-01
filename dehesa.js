@@ -1,3 +1,4 @@
+var charset = require('charset');
 var express = require('express');
 var app = express();
 var server = require('http').Server(app);
@@ -231,12 +232,11 @@ app.post('/api/signin', function (req, res) {
     }
 });
 app.post('/api/upload', upload.single('file'), function (req, res, next) {
-    if (!fs.existsSync(__dirname + '/causas')) {
-        fs.mkdirSync(__dirname + '/causas', 0777);
+    if (!fs.existsSync(__dirname + '/uploads')) {
+        fs.mkdirSync(__dirname + '/uploads', 0777);
     }
-    var ts = Math.round((new Date()).getTime() / 1000);
-    fs.rename(__dirname + '/' + req.file.path, __dirname + '/causas/' + ts + '-' + req.file.originalname);
-    res.send({answer: 'Archivo cargado correctamente', filename: ts + '-' + req.file.originalname});
+    fs.rename(__dirname + '/' + req.file.path, __dirname + '/uploads/' + req.file.originalname);
+    res.send({answer: 'Archivo cargado correctamente', filename: req.file.originalname});
 });
 app.get('/descargas/:file', function (req, res) {
     var file = __dirname + '/causas/' + req.params.file
@@ -316,6 +316,20 @@ app.post('/api/message', function (req, res) {
         });
     } else {
         res.send([]);
+    }
+});
+app.post('/api/data/import/csv', function (req, res) {
+    if (req.body.params.token) {
+        getSession(req.body.params.token, function (userdata, err) {
+            if (userdata) {
+                var file = __dirname + '/uploads/' + req.body.params.filename;
+                if (fs.existsSync(file)) {
+                    var xlsx = require('node-xlsx');
+                    var data = xlsx.parse(fs.readFileSync(file));
+                    res.send(data[0].data);
+                }
+            }
+        });
     }
 });
 app.use(express.static(__dirname + '/www'));
