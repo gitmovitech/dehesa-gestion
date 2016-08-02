@@ -99,14 +99,11 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                             response.data[t].valor = response.data[t].valor.replace(',', '.');
                             response.data[t].valor = parseFloat(response.data[t].valor) * parseFloat($scope.valoruf);
                         }
-                        $scope.servicios.total = $scope.servicios.total + response.data[t].valor
+                        $scope.servicios.total = $scope.servicios.total + response.data[t].valor;
                     }
                 }
             });
         });
-        if (sessionStorage.uploaded_csv) {
-            $scope.uploaded_csv = JSON.parse(sessionStorage.uploaded_csv);
-        }
 
         if (item) {
             sessionStorage.page = index;
@@ -137,7 +134,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         if ($scope.collection == 'pagos') {
             $scope.fields = [{
                     name: 'csv_pagos',
-                    title: 'Cargar CSV',
+                    title: 'Cargar Excel',
                     type: 'file'
                 }]
             jQuery('#modalCSVpagos').modal('show');

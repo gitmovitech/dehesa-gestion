@@ -283,7 +283,7 @@ exports.addMonthPayment = function (data, cb) {
                 if (response) {
                     cb(false, 'Los datos de este mes ya se encuentran cargados');
                 } else {
-                    dehesaPagos.procesar();
+                    dehesaPagos.procesar(database.collection('pagos'), data, 0, cb);
                 }
             });
         });
