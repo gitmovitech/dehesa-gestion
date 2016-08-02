@@ -1,4 +1,5 @@
 var xlsx = require('node-xlsx');
+var RutJS = require('./RutJS');
 var express = require('express');
 var app = express();
 var server = require('http').Server(app);
@@ -254,70 +255,7 @@ app.get('/descargas/:file', function (req, res) {
         res.send('El archivo no fue encontrado en el servidor');
     }
 });
-app.post('/api/message', function (req, res) {
-    if (req.body.params.token) {
-        getSession(req.body.params.token, function (userdata, err) {
-            if (userdata) {
-                var message = {
-                    from: [userdata.first_name, userdata.last_name].join(' '),
-                    date: new Date().getTime(),
-                    message: req.body.params.data.message
-                }
-                db.getCollection(req.body.params.collection, function (causes) {
-                    if (causes) {
-                        //console.log(causes);
-                        var data;
-                        if (causes.messages) {
-                            var arr = causes.messages;
-                            arr[arr.length] = message;
-                            data = {
-                                messages: arr
-                            }
-                        } else {
-                            data = {
-                                messages: [message]
-                            };
-                        }
 
-                        db.editCollectionById(req.body.params.collection, data, req.body.params.data.id, function () {
-                            var to;
-                            var toname;
-                            if (causes.lawyer_assigned == userdata.email) {
-                                to = causes.client_assigned;
-                            }
-                            if (causes.client_assigned == userdata.email) {
-                                to = causes.lawyer_assigned
-                            }
-                            db.getCollection('users', function (response) {
-                                for (var x in response) {
-                                    if (response[x].email == to) {
-                                        toname = [response[x].first_name, response[x].last_name].join(' ');
-                                        break;
-                                    }
-                                }
-                                var maildata = {
-                                    fromname: message.from,
-                                    toname: toname,
-                                    to: to,
-                                    number: causes.number,
-                                    url: config.url
-                                }
-                                sendmail.send(maildata);
-                                res.send(true);
-                            });
-                        });
-                    }
-                }, {
-                    id: req.body.params.data.id
-                });
-            } else {
-                res.send(err);
-            }
-        });
-    } else {
-        res.send([]);
-    }
-});
 /**
  * IMPORTAR EXCEL
  */
@@ -327,49 +265,52 @@ app.post('/api/data/import/excel', function (req, res) {
             if (userdata) {
                 var file = __dirname + '/uploads/' + req.body.params.filename;
                 if (fs.existsSync(file)) {
-                    var data
-
+                    var data;
                     try {
                         data = xlsx.parse(fs.readFileSync(file));
-                        if (data[0].data) {
-                            data = data[0].data;
-                            if (data[0][0] && data[0][1] && data[0][2] && data[0][3] && data[0][4]) {
-                                for (var r in data) {
-                                    if (data[r][0] && data[r][1] && data[r][2] && data[r][3] && data[r][4]) {
-                                        data[r] = {
-                                            nombre: data[r][0],
-                                            run: data[r][1],
-                                            direccion: data[r][2],
-                                            codigo: data[r][3],
-                                            tarifa: data[r][4],
-                                            status: 'Pendiente',
-                                            fecha: new Date().getTime()
-                                        }
-                                    }
-                                }
-                                db.addMonthPayment(data, function (response) {
-                                    res.send({
-                                        success: true
-                                    });
-                                });
-                            } else {
-                                res.send({
-                                    success: false,
-                                    message: 'El archivo excel subido no se encuentra correctamente formateado con los campos requeridos. Suba el archivo nuevamente y con el formato adecuado.'
-                                });
-                            }
-                        } else {
-                            res.send({
-                                success: false,
-                                message: 'El archivo excel subido no se encuentra correctamente formateado. Suba el archivo nuevamente y con el formato adecuado.'
-                            });
-                        }
                     } catch (e) {
                         res.send({
                             success: false,
                             message: 'El archivo excel subido no es válido. Suba el archivo en formato excel y con el formato adecuado.'
                         });
                     }
+                    if (data[0].data) {
+                        data = data[0].data;
+                        if (data[0][0] && data[0][1] && data[0][2] && data[0][3] && data[0][4]) {
+                            for (var r in data) {
+                                if (data[r][0] && data[r][1] && data[r][2] && data[r][3] && data[r][4]) {
+                                    if (RutJS.isValid(data[r][1])) {
+                                        data[r] = {
+                                            nombre: data[r][0],
+                                            run: RutJS.cleanRut(data[r][1]),
+                                            direccion: data[r][2],
+                                            codigo: data[r][3],
+                                            tarifa: data[r][4],
+                                            status: 'Pendiente',
+                                            month: new Date().getMonth(),
+                                            year: new Date().getFullYear()
+                                        }
+                                    }
+                                }
+                            }
+                            db.addMonthPayment(data, function () {
+                                res.send({
+                                    success: true
+                                });
+                            });
+                        } else {
+                            res.send({
+                                success: false,
+                                message: 'El archivo excel subido no se encuentra correctamente formateado con los campos requeridos. Suba el archivo nuevamente y con el formato adecuado.'
+                            });
+                        }
+                    } else {
+                        res.send({
+                            success: false,
+                            message: 'El archivo excel subido no se encuentra correctamente formateado. Suba el archivo nuevamente y con el formato adecuado.'
+                        });
+                    }
+
                 } else {
                     res.send({
                         success: false,

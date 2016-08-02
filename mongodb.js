@@ -1,11 +1,11 @@
 var MongoClient = require('mongodb').MongoClient;
 var ObjectID = require('mongodb').ObjectID;
-var fs = require('fs');
 var md5 = require('md5');
 var config = require('./config');
 var url = 'mongodb://localhost:27017/' + config.mongo.name;
 var database;
 var sendmail = require('./sendmail');
+var dehesaPagos = require('./dehesa-procesos-pagos');
 MongoClient.connect(url, function (err, db) {
     if (!err) {
         console.log("Conectado a " + config.mongo.name + " DB");
@@ -250,7 +250,7 @@ exports.editCollectionById = function (collection, data, id, callback) {
 /**
  * PAGOS
  */
-var insertAsociado = function (asociados, data, index) {
+var checkAndInsertAsociado = function (asociados, data, index, cb) {
     if (data[index]) {
         asociados.findOne({
             "run": data[index].run
@@ -266,13 +266,25 @@ var insertAsociado = function (asociados, data, index) {
                     direccion: data[index].direccion
                 });
             }
-            insertAsociado(asociados, data, index + 1);
+            checkAndInsertAsociado(asociados, data, index + 1, cb);
         });
+    } else {
+        cb();
     }
 }
-exports.addMonthPayment = function (data) {
+exports.addMonthPayment = function (data, cb) {
     if (database) {
-        var asociados = database.collection('asociados');
-        insertAsociado(asociados, data, 0);
+        checkAndInsertAsociado(database.collection('asociados'), data, 0, function () {
+            database.collection('pagos').findOne({
+                month: new Date().getMonth(),
+                year: new Date().getFullYear()
+            }, function (err, response) {
+                if (response) {
+                    cb(false, 'Los datos de este mes ya se encuentran cargados');
+                } else {
+                    dehesaPagos.procesar();
+                }
+            });
+        });
     }
 }
