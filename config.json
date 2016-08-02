@@ -183,10 +183,28 @@
             "icon": "glyphicon glyphicon-usd",
             "name": "Pagos",
             "collection": "pagos",
+            "joined": true,
             "fields": [
                 {
+                    "name": "_id",
+                    "type": "text",
+                    "id": true
+                },
+                {
                     "name": "nombre",
-                    "title": "Nombre",
+                    "title": "Titular",
+                    "type": "text",
+                    "onfly": true
+                },
+                {
+                    "name": "run",
+                    "title": "RUN",
+                    "type": "text",
+                    "required": true
+                },
+                {
+                    "name": "code",
+                    "title": "Código",
                     "type": "text",
                     "required": true
                 }
@@ -198,10 +216,38 @@
             "collection": "servicios",
             "fields": [
                 {
+                    "name": "_id",
+                    "type": "text",
+                    "id": true
+                },
+                {
                     "name": "nombre",
                     "title": "Nombre",
                     "type": "text",
                     "required": true
+                },
+                {
+                    "name": "valor",
+                    "title": "Valor",
+                    "type": "text",
+                    "required": true
+                },
+                {
+                    "name": "type",
+                    "title": "Tipo de valor",
+                    "type": "select",
+                    "data": {
+                        "options": [
+                            {
+                                "key": "UF",
+                                "value": "UF"
+                            },
+                            {
+                                "key": "Pesos",
+                                "value": "Pesos"
+                            }
+                        ]
+                    }
                 }
             ]
         },

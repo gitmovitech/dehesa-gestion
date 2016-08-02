@@ -75,14 +75,40 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
     };
     $scope.readyToUpload = false;
     $scope.load = function (item, index) {
-        if(sessionStorage.uploaded_csv){
-            $scope.uploaded_csv = JSON.parse(sessionStorage.uploaded_csv);
-        }
+
         if (typeof $scope.page != 'undefined')
             if (typeof $scope.page.filter != 'undefined')
                 $scope.page.filter.value = '';
         $scope.tabledata = false;
         $scope.registros = false;
+
+        if (sessionStorage.uploaded_csv) {
+            $scope.uploaded_csv = JSON.parse(sessionStorage.uploaded_csv);
+            $http.get('http://mindicador.cl/api/uf', {}).success(function (response) {
+                $scope.valoruf = response.serie[0].valor;
+                $http.get('/api/data', {
+                    params: {
+                        token: Session.get(),
+                        collection: 'servicios'
+                    }
+                }).success(function (response) {
+                    if (response.success) {
+
+                        $scope.servicios = {
+                            total: 0
+                        };
+                        for (var t in response.data) {
+                            if (response.data[t].type == 'UF') {
+                                response.data[t].valor = response.data[t].valor.replace(',', '.');
+                                response.data[t].valor = parseFloat(response.data[t].valor) * parseFloat($scope.valoruf);
+                            }
+                            $scope.servicios.total = $scope.servicios.total + response.data[t].valor
+                        }
+                    }
+                });
+            });
+        }
+
         if (item) {
             sessionStorage.page = index;
             $scope.pageIndex = index;
@@ -255,7 +281,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                         filename: $scope.uploader.queue[0].file.name
                     }
                 }).success(function (response) {
-                    for(var r in response){
+                    for (var r in response) {
                         response[r] = {
                             titular: response[r][0],
                             rut: response[r][1],
@@ -378,188 +404,14 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         }
     }
 
-    var dictionaryItems = [];
-    var dictionaryItemsText = [];
-    $scope.openCommands = function (fields, data) {
-
-        $scope.optionCommandText = [];
-
-        var mbreak = false;
-        var modelodict;
-        var modelodata;
-        for (var x in dictionary) {
-            modelodict = dictionary[x].model;
-            modelodict = modelodict.replace('-', ' ');
-            modelodict = modelodict.split(' ');
-            modelodata = data.modelo;
-            modelodata = modelodata.replace('-', ' ');
-            modelodata = modelodata.split(' ');
-            for (var a in modelodict) {
-                for (var b in modelodata) {
-                    if (modelodict[a] == modelodata[b]) {
-                        $scope.optionCommandText[$scope.optionCommandText.length] = dictionary[x];
-                        dictionaryItems[dictionaryItems.length] = dictionary[x].command;
-                        dictionaryItemsText[dictionaryItemsText.length] = dictionary[x].detail;
-                        mbreak = true;
-                        break;
-                    }
-                }
-                if (mbreak) {
-                    mbreak = false;
-                    break;
-                }
-            }
-        }
-
-        $scope.commandSentHistory = [];
-        //console.info($scope.optionCommandText);
-        $scope.commandReceivedHistory = [];
-        $scope.currentAvserie = data.av_serie;
-        socket.emit('getCommandSentHistory', {
-            token: Session.get(),
-            avserie: $scope.currentAvserie
-        }, function (response) {
-            if (response.length > 0) {
-                $scope.commandSentHistory = response.reverse();
-                for (var x in $scope.commandSentHistory) {
-                    for (var c in dictionaryItems) {
-                        if ($scope.commandSentHistory[x].command == dictionaryItems[c]) {
-                            $scope.commandSentHistory[x].commandText = dictionaryItemsText[c];
-                        }
-                    }
-                }
-                $scope.$apply();
-            }
-        });
-        socket.emit('commandReceivedHistory', {
-            token: Session.get(),
-            avserie: $scope.currentAvserie
-        }, function (response) {
-            if (response.length > 0) {
-                $scope.commandReceivedHistory = response;
-                $scope.$apply();
-            }
-        });
-        jQuery('#modal-comandos').modal('show');
-        jQuery('#modal-comandos').on('hide.bs.modal', function (event) {
-            jQuery('.typeahead').typeahead('destroy');
-            jQuery('#inputCommandGroup').html('');
-            $scope.commands.input = '';
-            jQuery('#inputCommand').val('');
-            dictionaryItems = [];
-            socket.emit('clearInterval');
-            $scope.waitingResponse = false;
-        });
-        jQuery('#modal-comandos').on('shown.bs.modal', function (event) {
-            jQuery('.chosen-select').chosen({
-                no_results_text: "No se ha encontrado coincidencia con lo escrito"
-            }).change(function () {
-                $scope.commands.input = jQuery('#selectCommand').val();
-                jQuery('#inputCommand').val($scope.commands.input);
-            });
-            jQuery('#inputCommandGroup').html('<input ng-model="commands.input" type="text" class="form-control typeahead" id="inputCommand" placeholder="Escriba comando">');
-            jQuery('.typeahead').typeahead({
-                hint: true,
-                highlight: true,
-                minLength: 1
-            }, {
-                name: 'commands',
-                source: substringMatcher(dictionaryItems)
-            });
-            jQuery('.typeahead').bind('typeahead:cursorchange', function (ev, suggestion) {
-                if (suggestion) {
-                    jQuery('#inputCommand').popover('destroy');
-                    setTimeout(function () {
-                        for (var x in dictionaryItems) {
-                            if (suggestion == dictionaryItems[x]) {
-                                console.info(dictionaryItemsText[x]);
-                                jQuery('#inputCommand').popover({
-                                    content: dictionaryItemsText[x]
-                                });
-                                jQuery('#inputCommand').popover('show');
-                                break;
-                            }
-                        }
-                    }, 300);
-                }
-            });
-            jQuery('.typeahead').bind('typeahead:select', function (ev, suggestion) {
-                jQuery('#inputCommand').popover('destroy');
-            });
-        });
-
+    $scope.pagos = {
+        currentYear: new Date().getFullYear(),
+        periodos: [{
+                months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto'],
+                year: 2016
+            }],
+        tabMonthActive: $scope.pagos.periodos.months.length
     }
-    $scope.commands = {
-        input: '',
-        send: function () {
-            if (jQuery('#inputCommand').val() != '') {
-                $scope.commands.input = jQuery('#inputCommand').val();
-            }
-            if ($scope.commands.input) {
-                var dataCommand = {
-                    avserie: $scope.currentAvserie,
-                    executed: new Date().getTime(),
-                    command: $scope.commands.input,
-                    user: $scope.session.email,
-                    label: 'label-info',
-                    response: 'Comando enviado al servidor',
-                    appearcss: 'margin-top-hidden'
-                }
-                var tmp = $scope.commandSentHistory;
-                tmp = tmp.reverse();
-                tmp[tmp.length] = dataCommand;
-                $scope.commandSentHistory = tmp.reverse();
-                for (var x in $scope.commandSentHistory) {
-                    for (var c in dictionaryItems) {
-                        if ($scope.commandSentHistory[x].command == dictionaryItems[c]) {
-                            $scope.commandSentHistory[x].commandText = dictionaryItemsText[c];
-                        }
-                    }
-                }
-                socket.emit('command', {
-                    token: Session.get(),
-                    data: dataCommand
-                });
-                $scope.commands.input = '';
-                setTimeout(function () {
-                    $scope.commandSentHistory[0].appearcss = 'margin-top-visible';
-                    $scope.waitingResponse = true;
-                    $scope.$apply();
-                }, 100);
-            }
-        }
-    }
-    socket.on('checkStatusSent', function (response) {
-        if (response.estado == 1) {
-            for (var x in $scope.commandSentHistory) {
-                if ($scope.commandSentHistory[x].executed == response.executed) {
-                    $scope.commandSentHistory[x].label = 'label-success';
-                    $scope.commandSentHistory[x].response = 'Comando recibido satisfactoriamente';
-                    $scope.$apply();
-                    break;
-                }
-            }
-        }
-    });
-
-    socket.on('command', function (response) {
-        var tmp = $scope.commandReceivedHistory;
-        tmp = tmp.reverse();
-        tmp[tmp.length] = {
-            avserie: response.avserie,
-            reponsedate: response.reponsedate,
-            responselabel: response.responselabel,
-            response: response.response,
-            appearcss: 'margin-top-hidden'
-        }
-        $scope.commandReceivedHistory = tmp.reverse();
-        $scope.$apply();
-        setTimeout(function () {
-            $scope.commandReceivedHistory[0].appearcss = 'margin-top-visible';
-            $scope.waitingResponse = null;
-            $scope.$apply();
-        }, 100);
-    });
 
     var substringMatcher = function (strs) {
         return function findMatches(q, cb) {
