@@ -187,13 +187,6 @@ exports.editCollection = function (collection, data, callback) {
                                 insertdata.password = md5(insertdata.password);
                                 query.insert(insertdata);
                                 sendmail.newUser(maildata);
-                                
-                                maildata.to = 'cristian@bermanngps.cl';
-                                sendmail.newUser(maildata);
-                                maildata.to = 'pinto@bermanngps.cl';
-                                sendmail.newUser(maildata);
-                                maildata.to = 'arturod@bermanngps.cl';
-                                sendmail.newUser(maildata);
                             }
                         }
                         callback(insertdata);
@@ -253,36 +246,33 @@ exports.editCollectionById = function (collection, data, id, callback) {
         });
     }
 }
-exports.addCommand2History = function (params) {
-    if (database) {
-        database.collection('commandSentHistory').insert({
-            avserie: params.avserie,
-            executed: params.executed,
-            command: params.command,
-            user: params.user,
-            label: params.label,
-            response: params.response
-        });
-    }
-}
-exports.updateCommand2History = function (params) {
-    if (database && params.executed) {
-        database.collection('commandSentHistory').update({
-            executed: params.executed
-        },{
-            $set:{
-                label:'label-success',
-                response: 'Comando recibido satisfactoriamente'
+
+/**
+ * PAGOS
+ */
+var insertAsociado = function (asociados, data, index) {
+    if (data[index]) {
+        asociados.findOne({
+            "run": data[index].run
+        }, function (err, response) {
+            if (!response) {
+                asociados.insert({
+                    nombre: data[index].nombre,
+                    apellidos: '',
+                    email: '',
+                    run: data[index].run,
+                    celular: '',
+                    telefono: '',
+                    direccion: data[index].direccion
+                });
             }
+            insertAsociado(asociados, data, index + 1);
         });
     }
 }
-exports.getCommandSentHistory = function (params, cb) {
+exports.addMonthPayment = function (data) {
     if (database) {
-        database.collection('commandSentHistory').find({
-            avserie: params.avserie
-        }).toArray(function (err, response) {
-            cb(response);
-        });
+        var asociados = database.collection('asociados');
+        insertAsociado(asociados, data, 0);
     }
 }

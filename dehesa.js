@@ -1,4 +1,4 @@
-var charset = require('charset');
+var xlsx = require('node-xlsx');
 var express = require('express');
 var app = express();
 var server = require('http').Server(app);
@@ -318,20 +318,81 @@ app.post('/api/message', function (req, res) {
         res.send([]);
     }
 });
-app.post('/api/data/import/csv', function (req, res) {
+/**
+ * IMPORTAR EXCEL
+ */
+app.post('/api/data/import/excel', function (req, res) {
     if (req.body.params.token) {
         getSession(req.body.params.token, function (userdata, err) {
             if (userdata) {
                 var file = __dirname + '/uploads/' + req.body.params.filename;
                 if (fs.existsSync(file)) {
-                    var xlsx = require('node-xlsx');
-                    var data = xlsx.parse(fs.readFileSync(file));
-                    res.send(data[0].data);
+                    var data
+
+                    try {
+                        data = xlsx.parse(fs.readFileSync(file));
+                        if (data[0].data) {
+                            data = data[0].data;
+                            if (data[0][0] && data[0][1] && data[0][2] && data[0][3] && data[0][4]) {
+                                for (var r in data) {
+                                    if (data[r][0] && data[r][1] && data[r][2] && data[r][3] && data[r][4]) {
+                                        data[r] = {
+                                            nombre: data[r][0],
+                                            run: data[r][1],
+                                            direccion: data[r][2],
+                                            codigo: data[r][3],
+                                            tarifa: data[r][4],
+                                            status: 'Pendiente',
+                                            fecha: new Date().getTime()
+                                        }
+                                    }
+                                }
+                                db.addMonthPayment(data, function (response) {
+                                    res.send({
+                                        success: true
+                                    });
+                                });
+                            } else {
+                                res.send({
+                                    success: false,
+                                    message: 'El archivo excel subido no se encuentra correctamente formateado con los campos requeridos. Suba el archivo nuevamente y con el formato adecuado.'
+                                });
+                            }
+                        } else {
+                            res.send({
+                                success: false,
+                                message: 'El archivo excel subido no se encuentra correctamente formateado. Suba el archivo nuevamente y con el formato adecuado.'
+                            });
+                        }
+                    } catch (e) {
+                        res.send({
+                            success: false,
+                            message: 'El archivo excel subido no es válido. Suba el archivo en formato excel y con el formato adecuado.'
+                        });
+                    }
+                } else {
+                    res.send({
+                        success: false,
+                        message: 'El archivo no fue encontrado en el servidor. Si el error persiste comuníquese con soporte'
+                    });
                 }
+            } else {
+                res.send({
+                    success: false,
+                    message: 'Su sesión ya no es válida. Por favor inicie sesión nuevamente',
+                    logout: true
+                });
             }
+        });
+    } else {
+        res.send({
+            success: false,
+            message: 'Token de sesión no encontrado. Por favor inicie sesión nuevamente',
+            logout: true
         });
     }
 });
+
 app.use(express.static(__dirname + '/www'));
 app.get('/*', function (req, res) {
     var serverpath = __dirname;

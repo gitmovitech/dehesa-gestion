@@ -85,14 +85,14 @@
                     "name": "email",
                     "title": "Correo electrónico",
                     "type": "email",
-                    "required": true,
-                    "id": true
+                    "required": true
                 },
                 {
                     "name": "run",
                     "title": "RUN",
                     "type": "text",
-                    "required": true
+                    "required": true,
+                    "id": true
                 },
                 {
                     "name": "celular",
@@ -183,7 +183,7 @@
             "icon": "glyphicon glyphicon-usd",
             "name": "Pagos",
             "collection": "pagos",
-            "joined": true,
+            "joined": ["asociados"],
             "fields": [
                 {
                     "name": "_id",
@@ -207,6 +207,33 @@
                     "title": "Código",
                     "type": "text",
                     "required": true
+                },
+                {
+                    "name": "tarifa",
+                    "title": "Tarifa",
+                    "type": "text",
+                    "required": true
+                },
+                {
+                    "name": "type",
+                    "title": "Estado de pago",
+                    "type": "select",
+                    "data": {
+                        "options": [
+                            {
+                                "key": "Pendiente",
+                                "value": "Pendiente"
+                            },
+                            {
+                                "key": "Pagado",
+                                "value": "Pagado"
+                            },
+                            {
+                                "key": "Revisar",
+                                "value": "Revisar"
+                            }
+                        ]
+                    }
                 }
             ]
         },

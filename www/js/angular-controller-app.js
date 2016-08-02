@@ -1,7 +1,6 @@
 app.controller('app', function ($scope, Session, $http, $location, FileUploader, Pagination) {
 
     var socket = io.connect();
-    var dictionary = [];
     $scope.pagination = Pagination.getNew(30);
     if (!sessionStorage.page || sessionStorage.page == 'undefined') {
         sessionStorage.page = 0;
@@ -82,31 +81,31 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         $scope.tabledata = false;
         $scope.registros = false;
 
+        $http.get('http://mindicador.cl/api/uf', {}).success(function (response) {
+            $scope.valoruf = response.serie[0].valor;
+            $http.get('/api/data', {
+                params: {
+                    token: Session.get(),
+                    collection: 'servicios'
+                }
+            }).success(function (response) {
+                if (response.success) {
+
+                    $scope.servicios = {
+                        total: 0
+                    };
+                    for (var t in response.data) {
+                        if (response.data[t].type == 'UF') {
+                            response.data[t].valor = response.data[t].valor.replace(',', '.');
+                            response.data[t].valor = parseFloat(response.data[t].valor) * parseFloat($scope.valoruf);
+                        }
+                        $scope.servicios.total = $scope.servicios.total + response.data[t].valor
+                    }
+                }
+            });
+        });
         if (sessionStorage.uploaded_csv) {
             $scope.uploaded_csv = JSON.parse(sessionStorage.uploaded_csv);
-            $http.get('http://mindicador.cl/api/uf', {}).success(function (response) {
-                $scope.valoruf = response.serie[0].valor;
-                $http.get('/api/data', {
-                    params: {
-                        token: Session.get(),
-                        collection: 'servicios'
-                    }
-                }).success(function (response) {
-                    if (response.success) {
-
-                        $scope.servicios = {
-                            total: 0
-                        };
-                        for (var t in response.data) {
-                            if (response.data[t].type == 'UF') {
-                                response.data[t].valor = response.data[t].valor.replace(',', '.');
-                                response.data[t].valor = parseFloat(response.data[t].valor) * parseFloat($scope.valoruf);
-                            }
-                            $scope.servicios.total = $scope.servicios.total + response.data[t].valor
-                        }
-                    }
-                });
-            });
         }
 
         if (item) {
@@ -128,18 +127,6 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                     fieldsdata = response.data;
                 }
             });
-            if (item.model == 'devices') {
-                $http.get('/api/data', {
-                    params: {
-                        token: Session.get(),
-                        collection: 'dictionary'
-                    }
-                }).success(function (response) {
-                    if (response.success) {
-                        dictionary = response.data;
-                    }
-                });
-            }
         }
     }
 
@@ -275,23 +262,33 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
     $scope.uploadCSV = function () {
         if ($scope.uploader.queue.length > 0) {
             if ($scope.uploader.queue[0].isUploaded) {
-                $http.post('/api/data/import/csv', {
+                $http.post('/api/data/import/excel', {
                     params: {
                         token: Session.get(),
                         filename: $scope.uploader.queue[0].file.name
                     }
                 }).success(function (response) {
-                    for (var r in response) {
-                        response[r] = {
-                            titular: response[r][0],
-                            rut: response[r][1],
-                            direccion: response[r][2],
-                            numeracion: response[r][3],
-                            tarifa: response[r][4],
-                            status: 'Pendiente'
+                    if (response.success) {
+
+                    } else if (response.message) {
+                        alert(response.message);
+                        if (response.logout) {
+                            sessionStorage.clear();
+                            localStorage.clear();
+                            $location.path('/');
                         }
                     }
-                    sessionStorage.uploaded_csv = JSON.stringify(response);
+                    /*for (var r in response) {
+                     response[r] = {
+                     titular: response[r][0],
+                     rut: response[r][1],
+                     direccion: response[r][2],
+                     numeracion: response[r][3],
+                     tarifa: response[r][4],
+                     status: 'Pendiente'
+                     }
+                     }
+                     sessionStorage.uploaded_csv = JSON.stringify(response);*/
                     location.reload();
                 });
             } else {
@@ -407,11 +404,17 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
     $scope.pagos = {
         currentYear: new Date().getFullYear(),
         periodos: [{
+                months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                year: 2015
+            }, {
                 months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto'],
                 year: 2016
             }],
-        tabMonthActive: $scope.pagos.periodos.months.length
+        tabYearActive: 0,
+        tabMonthActive: 0
     }
+    $scope.pagos.tabYearActive = $scope.pagos.periodos.length - 1;
+    $scope.pagos.tabMonthActive = $scope.pagos.periodos[$scope.pagos.periodos.length - 1].months.length - 1;
 
     var substringMatcher = function (strs) {
         return function findMatches(q, cb) {

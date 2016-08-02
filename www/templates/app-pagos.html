@@ -3,14 +3,14 @@
 
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" ng-class="{'active': pagos.currentYear == item.year}" ng-repeat="item in pagos.periodos">
-            <a href="#" data-key="periodo-year-{{$index}}" aria-controls="periodo-year-{{$index}}" role="tab" data-toggle="tab">{{item.year}}</a>
+        <li role="presentation" ng-class="{'active': pagos.tabYearActive == $index}" ng-repeat="item in pagos.periodos">
+            <a href="#" ng-click="pagos.tabYearActive = $index" role="tab" data-toggle="tab">{{item.year}}</a>
         </li>
     </ul>
 
     <!-- Tab panes -->
     <div class="tab-content">
-        <div role="tabpanel" class="tab-pane" ng-class="{'active': pagos.currentYear == item.year}" id="periodo-year-{{$index}}" ng-repeat="item in pagos.periodos">
+        <div role="tabpanel" class="tab-pane" ng-class="{'active': pagos.tabYearActive == $index}" id="periodo-year-{{$index}}" ng-repeat="item in pagos.periodos">
             <ul class="nav nav-tabs" role="tablist">
                 <li role="presentation" ng-class="{'active': pagos.tabMonthActive == $index}" ng-repeat="month in item.months">
                     <a href="#" ng-click="pagos.tabMonthActive = $index" role="tab" data-toggle="tab">{{month}}</a>
@@ -18,43 +18,77 @@
             </ul>
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane" ng-class="{'active': pagos.tabMonthActive == $index}" ng-repeat="month in item.months">
-                    <h3>Previsualización de datos a cargar:</h3>
-                    <button ng-if="item.months[item.months.length - 1] == month" class="btn btn-sm btn-primary" ng-click="showModal(page.fields)">
-                        <i class="glyphicon glyphicon-cloud-upload"></i> Subir archivo excel del mes
-                    </button>
-                    <button class="btn btn-sm btn-primary" ng-if="uploaded_csv.length > 0">
-                        <i class="glyphicon glyphicon-ok-sign"></i> Confirmar datos
-                    </button>
 
-                    <table class="table table-striped table-hover" ng-if="page.collection == 'pagos'">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>Titular</th>
-                                <th>RUN</th>
-                                <th>Dirección</th>
-                                <th>Código</th>
-                                <th>Tarifa sin IVA</th>
-                                <th>Estado de pago</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="items in uploaded_csv| startFrom: pagination.page * pagination.perPage | limitTo: pagination.perPage">
-                                <td class="text-danger">{{$index + 1}}</td>
-                                <td ng-repeat="(key,item) in items" ng-if="key != 'status'">
-                                    <span class="text-success" ng-if="key == 'tarifa'">{{(valoruf * item) + servicios.total | currency}}</span>
-                                    <span ng-if="key != 'tarifa'">{{item}}</span>
-                                </td>
-                                <td ng-repeat="(key,item) in items" ng-if="key == 'status'">
-                                    <select>
-                                        <option value="Pendiente" ng-selected="item == 'Pendiente'">Pendiente</option>
-                                        <option value="Pagado" ng-selected="item == 'Pagado'">Pagado</option>
-                                        <option value="Revisar" ng-selected="item == 'Revisar'">Revisar</option>
-                                    </select>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div ng-if="pagos.tabMonthActive == item.months.length - 1">
+                        <h3>Listado de cuentas:</h3>
+                        <button ng-if="item.months[item.months.length - 1] == month" class="btn btn-sm btn-primary" ng-click="showModal(page.fields)">
+                            <i class="glyphicon glyphicon-cloud-upload"></i> Subir archivo excel del mes
+                        </button>
+                        <button class="btn btn-sm btn-primary" ng-if="uploaded_csv.length > 0">
+                            <i class="glyphicon glyphicon-ok-sign"></i> Confirmar datos
+                        </button>
+
+                        <div class="form-group" style="margin-top:10px;">
+                            <label class="sr-only" for="buscador"></label>
+                            <div class="input-group">
+                                <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
+                                <input placeholder="Buscar aquí" type="text" class="form-control" ng-keyup="search()" ng-model="page.filter.value" id="buscador">
+                            </div>
+                        </div>
+
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th ng-repeat="field in page.fields" ng-if="field.name != '_id'">{{field.title}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="(index,trdata) in tabledata| startFrom: pagination.page * pagination.perPage | limitTo: pagination.perPage">
+                                    <td><b class="text-danger">{{(index + 1) * (pagination.page + 1)}}</b></td>
+                                    <td ng-repeat="(key,tddata) in trdata" ng-if="key != '_id'">
+                                        {{::tddata}}
+                                    </td>
+                                    <td ng-if="key == '_id' && session.type == 'Administrador'" ng-repeat="(key,tddata) in trdata">
+                                        <button class="btn btn-success btn-xs" ng-click="showModal(page.fields, trdata)"><i class="glyphicon glyphicon-edit"></i> Editar</button>
+                                        <button class="btn btn-danger btn-xs" ng-click="dropItem(page.fields, trdata)"><i class="glyphicon glyphicon-remove-circle"></i> Eliminar</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!--<table class="table table-striped table-hover" ng-if="page.collection == 'pagos'">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Titular</th>
+                                    <th>RUN</th>
+                                    <th>Dirección</th>
+                                    <th>Código</th>
+                                    <th>Tarifa sin IVA</th>
+                                    <th>Estado de pago</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="items in uploaded_csv">
+                                    <td class="text-danger">{{$index + 1}}</td>
+                                    <td ng-repeat="(key,item) in items" ng-if="key != 'status'">
+                                        <span class="text-success" ng-if="key == 'tarifa'">{{(valoruf * item) + servicios.total | currency}}</span>
+                                        <span ng-if="key != 'tarifa'">{{item}}</span>
+                                    </td>
+                                    <td ng-repeat="(key,item) in items" ng-if="key == 'status'">
+                                        <select>
+                                            <option value="Pendiente" ng-selected="item == 'Pendiente'">Pendiente</option>
+                                            <option value="Pagado" ng-selected="item == 'Pagado'">Pagado</option>
+                                            <option value="Revisar" ng-selected="item == 'Revisar'">Revisar</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>-->
+
+                    </div>
+
                 </div>
             </div>
         </div>
