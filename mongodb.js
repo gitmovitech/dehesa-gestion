@@ -256,15 +256,16 @@ var checkAndInsertAsociado = function (asociados, data, index, cb) {
             "run": data[index].run
         }, function (err, response) {
             if (!response) {
-                asociados.insert({
-                    nombre: data[index].nombre,
-                    apellidos: '',
-                    email: '',
-                    run: data[index].run,
-                    celular: '',
-                    telefono: '',
-                    direccion: data[index].direccion
-                });
+                if (data[index].run)
+                    asociados.insert({
+                        nombre: data[index].nombre,
+                        apellidos: '',
+                        email: '',
+                        run: data[index].run,
+                        celular: '',
+                        telefono: '',
+                        direccion: data[index].direccion
+                    });
             }
             checkAndInsertAsociado(asociados, data, index + 1, cb);
         });

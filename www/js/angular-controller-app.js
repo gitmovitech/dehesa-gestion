@@ -121,6 +121,9 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                 }
             }).success(function (response) {
                 if (response.success) {
+                    for (var d in response.data) {
+                        response.data[d].index = parseInt(parseInt(d)+parseInt(1));
+                    }
                     $scope.registros = response.data.length;
                     $scope.pagination.numPages = Math.ceil(response.data.length / $scope.pagination.perPage);
                     $scope.tabledata = response.data;
