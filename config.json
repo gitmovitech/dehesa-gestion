@@ -203,7 +203,7 @@
                     "required": true
                 },
                 {
-                    "name": "code",
+                    "name": "codigo",
                     "title": "Código",
                     "type": "text",
                     "required": true
