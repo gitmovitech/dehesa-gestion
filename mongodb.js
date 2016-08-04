@@ -64,7 +64,7 @@ exports.getUserByEmail = function (email, callback) {
         }
     });
 }
-exports.getCollection = function (collection, callback, data) {
+exports.getCollection = function (collection, callback, data, join) {
     if (collection) {
         database.listCollections().toArray(function (err, collections) {
             var perm = false;
@@ -77,14 +77,49 @@ exports.getCollection = function (collection, callback, data) {
             if (perm) {
                 var query = database.collection(collection);
                 if (data) {
-                    query.findOne({"_id": ObjectID(data.id)}, function (err, response) {
-                        if (!err) {
-                            callback(response);
-                        } else {
-                            console.log(err)
-                            callback([]);
-                        }
-                    });
+                    if (data.id) {
+                        query.findOne({"_id": ObjectID(data.id)}, function (err, response) {
+                            if (!err) {
+                                callback(response);
+                            } else {
+                                console.log(err)
+                                callback([]);
+                            }
+                        });
+                    } else {
+                        query.find(JSON.parse(data)).toArray(function (err, response) {
+                            if (!err) {
+                                for (var x in response) {
+                                    for (var y in response[x]) {
+                                        if (y == 'files')
+                                            response[x][y] = response[x][y].split(',');
+                                    }
+                                }
+                                if (join) {
+                                    join = JSON.parse(join);
+                                    var firstResponse = response;
+                                    database.collection(join.name).find({}).toArray(function (err, secondResponse) {
+                                        if (secondResponse) {
+                                            for (var d in firstResponse) {
+                                                for (var s in secondResponse) {
+                                                    if (secondResponse[s].run == firstResponse[d].run) {
+                                                        firstResponse[d].nombre = [secondResponse[s].nombre, secondResponse[s].apellidos].join(' ');
+                                                        //{"_id":"57a123189a55c2116f977b45","run":"249483575","codigo":"1250 -A","tarifa":1.2,"type":"Pendiente","month":7,"year":2016}
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        callback(firstResponse);
+
+                                    });
+                                } else
+                                    callback(response);
+                            } else {
+                                console.log(err)
+                                callback([]);
+                            }
+                        });
+                    }
                 } else {
                     query.find({}).toArray(function (err, response) {
                         if (!err) {

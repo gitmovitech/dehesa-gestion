@@ -45,6 +45,15 @@ app.get('/api/data', function (req, res) {
         getSession(req.query.token, function (userdata, err) {
             if (userdata) {
 
+                var where = null;
+                if(req.query.where){
+                    where = req.query.where;
+                }
+                var joined = null;
+                if(req.query.joined){
+                    joined = req.query.joined;
+                }
+
                 db.getCollection(req.query.collection, function (response) {
                     if (response) {
                         if (req.query.databack) {
@@ -73,7 +82,7 @@ app.get('/api/data', function (req, res) {
                             });
                         }
                     }
-                });
+                }, where, joined);
 
             } else {
                 res.send(err);

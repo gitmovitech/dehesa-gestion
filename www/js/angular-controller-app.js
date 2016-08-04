@@ -1,4 +1,4 @@
-app.controller('app', function ($scope, Session, $http, $location, FileUploader, Pagination) {
+app.controller('app', function ($scope, Session, $http, $location, FileUploader, Pagination, RutHelper) {
 
     var socket = io.connect();
     $scope.pagination = Pagination.getNew(30);
@@ -74,7 +74,6 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
     };
     $scope.readyToUpload = false;
     $scope.load = function (item, index) {
-
         if (typeof $scope.page != 'undefined')
             if (typeof $scope.page.filter != 'undefined')
                 $scope.page.filter.value = '';
@@ -110,16 +109,46 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
             $scope.pageIndex = index;
             $scope.page = item;
             $scope.collection = item.collection;
-            $http.get('/api/data', {
-                params: {
-                    token: Session.get(),
-                    collection: item.collection,
-                    model: item.model
+
+            var params = {
+                token: Session.get(),
+                collection: item.collection,
+                model: item.model
+            }
+            if (item.collection == 'pagos') {
+                params.joined = item.joined.collection;
+                if (!$scope.currentPagosYear) {
+                    $scope.currentPagosYear = new Date().getFullYear();
                 }
+                if (!$scope.currentPagosMonth) {
+                    $scope.currentPagosMonth = new Date().getMonth();
+                }
+                params.where = {
+                    year: $scope.currentPagosYear,
+                    month: $scope.currentPagosMonth
+                }
+            }
+            $http.get('/api/data', {
+                params: params
             }).success(function (response) {
                 if (response.success) {
                     for (var d in response.data) {
-                        response.data[d].index = parseInt(parseInt(d)+parseInt(1));
+                        if (item.collection == 'pagos') {
+                            response.data[d] = {
+                                index: parseInt(parseInt(d) + parseInt(1)),
+                                _id: response.data[d]._id,
+                                nombre: response.data[d].nombre,
+                                run: RutHelper.format(response.data[d].run),
+                                codigo: response.data[d].codigo,
+                                tarifa: {
+                                    total: response.data[d].tarifa,
+                                    detalle:''
+                                },
+                                type: response.data[d].type
+                            }
+                        } else {
+                            response.data[d].index = parseInt(parseInt(d) + parseInt(1));
+                        }
                     }
                     $scope.registros = response.data.length;
                     $scope.pagination.numPages = Math.ceil(response.data.length / $scope.pagination.perPage);

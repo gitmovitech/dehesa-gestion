@@ -183,7 +183,19 @@
             "icon": "glyphicon glyphicon-usd",
             "name": "Pagos",
             "collection": "pagos",
-            "joined": ["asociados"],
+            "joined": {
+                "collection": [
+                    {
+                        "fields": [
+                            "nombre",
+                            "appellidos"
+                        ],
+                        "name": "asociados",
+                        "localField": "run",
+                        "foreignField": "run"
+                    }
+                ]
+            },
             "fields": [
                 {
                     "name": "_id",

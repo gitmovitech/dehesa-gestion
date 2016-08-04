@@ -47,7 +47,10 @@
                                 <tr ng-repeat="(index,trdata) in tabledata| startFrom: pagination.page * pagination.perPage | limitTo: pagination.perPage">
                                     <td><b class="text-danger">{{(index + 1) * (pagination.page + 1)}}</b></td>
                                     <td ng-repeat="(key,tddata) in trdata" ng-if="key != '_id' && key != 'month' && key != 'year' && key != 'index' && key != 'type'">
-                                        <span class="text-success" ng-if="key == 'tarifa'">{{(valoruf * tddata) + servicios.total | currency}}</span>
+                                        <span class="text-success" ng-if="key == 'tarifa'">
+                                            {{(valoruf * tddata.total) + servicios.total | currency}} 
+                                            <a href="javascript:"><i class="glyphicon glyphicon-tags"></i></a>
+                                        </span>
                                         <span ng-if="key != 'tarifa'">{{::tddata}}</span>
                                     </td>
                                     <td ng-repeat="(key,item) in trdata" ng-if="key == 'type'">
@@ -56,10 +59,6 @@
                                             <option value="Pagado" ng-selected="item == 'Pagado'">Pagado</option>
                                             <option value="Revisar" ng-selected="item == 'Revisar'">Revisar</option>
                                         </select>
-                                    </td>
-                                    <td ng-if="key == '_id' && session.type == 'Administrador'" ng-repeat="(key,tddata) in trdata">
-                                        <button class="btn btn-success btn-xs" ng-click="showModal(page.fields, trdata)"><i class="glyphicon glyphicon-edit"></i> Editar</button>
-                                        <button class="btn btn-danger btn-xs" ng-click="dropItem(page.fields, trdata)"><i class="glyphicon glyphicon-remove-circle"></i> Eliminar</button>
                                     </td>
                                 </tr>
                             </tbody>
