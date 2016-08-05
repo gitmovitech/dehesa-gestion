@@ -3,14 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group name="Movitech">
-            <file>file:/Users/iosdeveloper/Proyectos2016/GestionDehesa/sendmail.js</file>
-            <file>file:/Users/iosdeveloper/Proyectos2016/GestionDehesa/config.json</file>
-            <file>file:/Users/iosdeveloper/Proyectos2016/GestionDehesa/www/js/angular-controller-app.js</file>
-            <file>file:/Users/iosdeveloper/Proyectos2016/GestionDehesa/www/templates/app-list.html</file>
-            <file>file:/Users/iosdeveloper/Proyectos2016/GestionDehesa/mongodb.js</file>
-            <file>file:/Users/iosdeveloper/Proyectos2016/GestionDehesa/dehesa.js</file>
-            <file>file:/Users/iosdeveloper/Proyectos2016/GestionDehesa/www/templates/app-edit.html</file>
-            <file>file:/Users/iosdeveloper/Proyectos2016/GestionDehesa/www/templates/app.html</file>
+            <file>file:/Users/victorvargas/Projects/Movitech/gestion-dehesa/dehesa.js</file>
+            <file>file:/Users/victorvargas/Projects/Movitech/gestion-dehesa/config.json</file>
+            <file>file:/Users/victorvargas/Projects/Movitech/gestion-dehesa/www/templates/app-pagos.html</file>
+            <file>file:/Users/victorvargas/Projects/Movitech/gestion-dehesa/www/js/angular-controller-app.js</file>
+            <file>file:/Users/victorvargas/Projects/Movitech/gestion-dehesa/mongodb.js</file>
         </group>
     </open-files>
 </project-private>

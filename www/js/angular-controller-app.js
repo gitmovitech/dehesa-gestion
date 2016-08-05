@@ -80,29 +80,42 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         $scope.tabledata = false;
         $scope.registros = false;
 
-        $http.get('http://mindicador.cl/api/uf', {}).success(function (response) {
-            $scope.valoruf = response.serie[0].valor;
-            $http.get('/api/data', {
-                params: {
-                    token: Session.get(),
-                    collection: 'servicios'
-                }
-            }).success(function (response) {
-                if (response.success) {
-
-                    $scope.servicios = {
-                        total: 0
-                    };
-                    for (var t in response.data) {
-                        if (response.data[t].type == 'UF') {
-                            response.data[t].valor = response.data[t].valor.replace(',', '.');
-                            response.data[t].valor = parseFloat(response.data[t].valor) * parseFloat($scope.valoruf);
-                        }
-                        $scope.servicios.total = $scope.servicios.total + response.data[t].valor;
+        if (item.collection == 'pagos')
+            $http.get('http://mindicador.cl/api/uf', {}).success(function (response) {
+                $scope.valoruf = response.serie[0].valor;
+                $http.get('/api/data', {
+                    params: {
+                        token: Session.get(),
+                        collection: 'servicios'
                     }
-                }
+                }).success(function (response) {
+                    if (response.success) {
+
+                        $scope.servicios = {
+                            total: 0,
+                            detalle: []
+                        };
+                        for (var t in response.data) {
+                            if (response.data[t].type == 'UF') {
+                                response.data[t].valor = response.data[t].valor.replace(',', '.');
+                                response.data[t].valor = parseFloat(response.data[t].valor) * parseFloat($scope.valoruf);
+                            }
+                            $scope.servicios.detalle[$scope.servicios.detalle.length] = response.data[t];
+                            $scope.servicios.total = $scope.servicios.total + response.data[t].valor;
+                        }
+                        jQuery('.popover-tarifa').each(function () {
+                            var detalle = jQuery(this).data('popover-content');
+                            console.info(detalle)
+                            jQuery(this).popover({
+                                title: 'Detalle de la tarifa',
+                                content: detalle,
+                                placement: 'right',
+                                trigger: 'focus'
+                            });
+                        });
+                    }
+                });
             });
-        });
 
         if (item) {
             sessionStorage.page = index;
@@ -140,10 +153,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                                 nombre: response.data[d].nombre,
                                 run: RutHelper.format(response.data[d].run),
                                 codigo: response.data[d].codigo,
-                                tarifa: {
-                                    total: response.data[d].tarifa,
-                                    detalle:''
-                                },
+                                tarifa: response.data[d].tarifa,
                                 type: response.data[d].type
                             }
                         } else {
