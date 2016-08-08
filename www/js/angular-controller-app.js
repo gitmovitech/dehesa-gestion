@@ -181,7 +181,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                 }]
             jQuery('#modalCSVpagos').modal('show');
         } else {
-            console.info(fields);
+            //console.info(fields);
             $scope.fields = fields;
             /**
              * Opciones para el dropdown en caso que deba conectarse a datos externos
@@ -217,7 +217,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                                 var data = [];
                                 var add = true;
                                 for (var y in response.data) {
-                                    console.info(response.data[y]);
+                                    //console.info(response.data[y]);
                                     for (var key in response.data[y]) {
                                         if ($scope.fields[response.databack].data.filter) {
                                             for (var filtro in $scope.fields[response.databack].data.filter) {
@@ -382,7 +382,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
             alert('Primero seleccione un archivo CSV para cargar al sistema');
         }
     }
-
+    
     $scope.dropItem = function (item, fields) {
         console.log(item);
         console.info(fields);

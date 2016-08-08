@@ -172,7 +172,7 @@
                 {
                     "name": "run",
                     "title": "RUN",
-                    "type": "text",
+                    "type": "rut",
                     "required": true,
                     "id": true
                 },
@@ -219,6 +219,8 @@
                     "name": "servicios",
                     "title": "Servicios",
                     "type": "select",
+                    "chosen": true,
+                    "multiple": true,
                     "data": {
                         "collection": "servicios",
                         "fields": [
@@ -238,18 +240,14 @@
                     "title": "Tipo de casa",
                     "type": "select",
                     "data": {
-                        "options": [
+                        "collection": "modelos",
+                        "fields": [
                             {
-                                "key": "Modelo 1",
-                                "value": "Modelo 1"
+                                "field": "nombre"
                             },
                             {
-                                "key": "Modelo 2",
-                                "value": "Modelo 2"
-                            },
-                            {
-                                "key": "Modelo 3",
-                                "value": "Modelo 3"
+                                "field": "_id",
+                                "id": true
                             }
                         ]
                     },

@@ -32,7 +32,8 @@
                     <button class="btn btn-danger btn-xs" ng-click="dropItem(page.fields, trdata)"><i class="glyphicon glyphicon-remove-circle"></i> Eliminar</button>
                 </td>
                 <td ng-repeat="(key,tddata) in trdata" ng-if="key != '_id' && key != 'index' && key != 'password'">
-                    {{::tddata}}
+                    <span ng-if="key == 'run'">{{::tddata | rut}}</span>
+                    <span ng-if="key != 'run'">{{::tddata}}</span>
                     <span class="text-success" ng-if="trdata.type == 'UF' && key == 'valor'">({{tddata| convert2UF|currency}})</span>
                 </td>
             </tr>

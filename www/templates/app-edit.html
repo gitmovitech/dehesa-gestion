@@ -78,7 +78,10 @@
                                 ng-if="item.name != '_id' && item.type != 'textarea' && item.type != 'select' && item.type != 'rut' && item.type != 'file'" 
                                 placeholder="Escriba aquí" ng-required="{{item.required}}">
 
-                            <select data-placeholder="Seleccione" class="form-control" ng-class="{'chosen-select':item.chosen}" ng-if="item.type == 'select'" ng-model="item.value">
+                            <select data-placeholder="Seleccione" class="form-control" ng-class="{'chosen-select':item.chosen}" ng-if="item.type == 'select' && item.multiple" multiple="multiple" ng-model="item.value">
+                                <option value="{{option.key}}" ng-repeat="option in item.data.options" ng-if="item.data">{{option.value}}</option>
+                            </select>
+                            <select data-placeholder="Seleccione" class="form-control" ng-class="{'chosen-select':item.chosen}" ng-if="item.type == 'select' && !item.multiple" ng-model="item.value">
                                 <option value="{{option.key}}" ng-repeat="option in item.data.options" ng-if="item.data">{{option.value}}</option>
                             </select>
 
