@@ -1,5 +1,5 @@
 <div class="container-fluid" ng-if="pages">
-    <h4 ng-if="page.collection == 'modelos'" style="float:right">Valor UF hoy: <b class="text-success">{{valoruf| currency}}</b></h4>
+    <h4 ng-if="page.collection == 'modelos' || page.collection == 'servicios'" style="float:right">Valor UF hoy: <b class="text-success">{{valoruf| currency}}</b></h4>
     <h1>
         <i class="{{page.icon}}"></i> {{page.name}}
         <button ng-if="session.type == 'Administrador' && page.collection != 'pagos'" class="btn btn-sm btn-primary" ng-click="showModal(page.fields)">
