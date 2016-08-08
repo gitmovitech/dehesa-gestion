@@ -310,7 +310,10 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
             }
             jQuery('#modalEdit').modal('show');
             setTimeout(function () {
-                jQuery('.chosen-select').chosen();
+                jQuery('.chosen-select').each(function () {
+                    console.info('#' + jQuery(this).attr('id'));
+                    jQuery('#' + jQuery(this).attr('id')).chosen();
+                });
             }, 800);
         }
     }
@@ -382,7 +385,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
             alert('Primero seleccione un archivo CSV para cargar al sistema');
         }
     }
-    
+
     $scope.dropItem = function (item, fields) {
         console.log(item);
         console.info(fields);
@@ -483,6 +486,10 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         } else {
             alert('Debe escribir un mensaje antes de enviar el mensaje');
         }
+    }
+    $scope.chosenSelect = function (name,item) {
+        console.warn(item);
+        console.info(jQuery('#'+jQuery(name).attr('id')).chosen().val());
     }
 
     $scope.pagos = {

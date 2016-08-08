@@ -219,7 +219,6 @@
                     "name": "servicios",
                     "title": "Servicios",
                     "type": "select",
-                    "chosen": true,
                     "multiple": true,
                     "data": {
                         "collection": "servicios",

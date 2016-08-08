@@ -7,7 +7,7 @@
                     <h4 class="modal-title" id="modalEditLabel"><b><i class="{{page.icon}}"></i> {{page.name}}</b></h4>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group" ng-repeat="item in fields" ng-class="{'hidden':item.edit.hidden}">
+                    <div class="form-group" ng-repeat="(key,item) in fields" ng-class="{'hidden':item.edit.hidden}">
                         <label for="{{item.name}}" class="col-sm-2 control-label" ng-if="item.name != '_id'">
                             <i class="glyphicon glyphicon-asterisk input-required-asterisk" ng-if="item.required"></i>
                             {{item.title}}
@@ -78,10 +78,10 @@
                                 ng-if="item.name != '_id' && item.type != 'textarea' && item.type != 'select' && item.type != 'rut' && item.type != 'file'" 
                                 placeholder="Escriba aquí" ng-required="{{item.required}}">
 
-                            <select data-placeholder="Seleccione" class="form-control" ng-class="{'chosen-select':item.chosen}" ng-if="item.type == 'select' && item.multiple" multiple="multiple" ng-model="item.value">
+                            <select id="select-{{item.name}}" onchange="angular.element(this).scope().chosenSelect(this)" data-placeholder="Seleccione" class="form-control chosen-select" ng-if="item.type == 'select' && item.multiple" multiple="multiple" ng-model="item.value">
                                 <option value="{{option.key}}" ng-repeat="option in item.data.options" ng-if="item.data">{{option.value}}</option>
                             </select>
-                            <select data-placeholder="Seleccione" class="form-control" ng-class="{'chosen-select':item.chosen}" ng-if="item.type == 'select' && !item.multiple" ng-model="item.value">
+                            <select data-placeholder="Seleccione" class="form-control" ng-if="item.type == 'select' && !item.multiple" ng-model="item.value">
                                 <option value="{{option.key}}" ng-repeat="option in item.data.options" ng-if="item.data">{{option.value}}</option>
                             </select>
 
