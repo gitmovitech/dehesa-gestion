@@ -1,6 +1,6 @@
 app.controller('app', function ($scope, Session, $http, $location, FileUploader, Pagination, RutHelper) {
 
-    var socket = io.connect();
+    //var socket = io.connect();
     $scope.pagination = Pagination.getNew(30);
     if (!sessionStorage.page || sessionStorage.page == 'undefined') {
         sessionStorage.page = 0;
@@ -25,7 +25,6 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
             }
             $scope.pages = pages;
         }
-
         $scope.load($scope.pages[sessionStorage.page], sessionStorage.page);
     });
     $scope.search = function () {
@@ -203,50 +202,92 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                             }
                         });
                     } else
-                    if (fields[x].data.source == 'postgres') {
+                    if (typeof fields[x].data.collection != 'undefined') {
                         $http.get('/api/data', {
                             params: {
                                 token: Session.get(),
-                                table: fields[x].data.table,
-                                fields: fields[x].data.fields,
+                                collection: fields[x].data.collection,
                                 databack: x
                             }
                         }).success(function (response) {
                             if (response.success) {
-                                var fieldsinfo = $scope.fields[response.databack];
-                                var key;
-                                var value;
-                                var options = [];
-                                console.info(fieldsinfo.name);
-                                switch (fieldsinfo.name) {
-                                    case 'cliente':
-                                        for (var x in response.data) {
-                                            if (response.data[x].cl_id != '') {
-                                                key = response.data[x].cl_id;
-                                                value = [response.data[x].cl_rut, response.data[x].cl_razon_social].join(' - ');
-                                                options[options.length] = {
-                                                    key: key,
-                                                    value: value
+                                /**
+                                 * Busqueda a traves de filtro
+                                 */
+                                var data = [];
+                                var add = true;
+                                for (var y in response.data) {
+                                    console.info(response.data[y]);
+                                    for (var key in response.data[y]) {
+                                        if ($scope.fields[response.databack].data.filter) {
+                                            for (var filtro in $scope.fields[response.databack].data.filter) {
+                                                if (key == $scope.fields[response.databack].data.filter[filtro].key) {
+                                                    if ($scope.fields[response.databack].data.filter[filtro].value == response.data[y][key]) {
+                                                        data[data.length] = response.data[y];
+                                                    }
                                                 }
                                             }
-                                        }
-                                        $scope.fields[response.databack].data.options = options;
-                                        break;
-                                    case 'modelo':
-                                        for (var x in response.data) {
-                                            if (response.data[x].tav_id != '') {
-                                                key = response.data[x].tav_id;
-                                                value = response.data[x].tav_detalle;
-                                                options[options.length] = {
-                                                    key: key,
-                                                    value: value
+                                        } else {
+                                            for (var n in data) {
+                                                add = true;
+                                                if (data[n]._id == response.data[y]._id) {
+                                                    add = false;
+                                                    break;
                                                 }
                                             }
+                                            if (add)
+                                                data[data.length] = response.data[y];
                                         }
-                                        $scope.fields[response.databack].data.options = options;
-                                        break;
+                                    }
                                 }
-                                console.log($scope.fields[response.databack]);
+
+                                /**
+                                 * Seleccion de campos
+                                 */
+                                if (data.length > 0) {
+                                    var option = [];
+                                    for (var y in data) {
+                                        option[y] = [];
+                                        for (var field in $scope.fields[response.databack].data.fields) {
+                                            for (var key in data[y]) {
+                                                if ($scope.fields[response.databack].data.fields[field].field == key) {
+                                                    id = false;
+                                                    if ($scope.fields[response.databack].data.fields[field].id) {
+                                                        id = true;
+                                                    }
+                                                    option[y][option[y].length] = {
+                                                        field: $scope.fields[response.databack].data.fields[field].field,
+                                                        id: id,
+                                                        value: data[y][key]
+                                                    };
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                /**
+                                 * Formateo de option > value
+                                 */
+                                var key = [];
+                                var value = []
+                                data = []
+                                for (var x in option) {
+                                    key[x] = [];
+                                    value[x] = [];
+                                    for (var z in option[x]) {
+                                        if (option[x][z].id) {
+                                            key[x][key[x].length] = option[x][z].value;
+                                        } else {
+                                            value[x][value[x].length] = option[x][z].value;
+                                        }
+                                    }
+                                    data[data.length] = {
+                                        key: key[x].join(' '),
+                                        value: value[x].join(' ')
+                                    }
+                                }
+                                $scope.fields[response.databack].data.options = data;
+
                             }
                         });
                     }

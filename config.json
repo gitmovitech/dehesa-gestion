@@ -194,7 +194,7 @@
                     "required": true
                 },
                 {
-                    "name": "type",
+                    "name": "formas_pago",
                     "title": "Formas de pago",
                     "type": "select",
                     "data": {
@@ -216,17 +216,25 @@
                     "required": true
                 },
                 {
-                    "name": "type",
-                    "title": "Servicios adquiridos",
+                    "name": "servicios",
+                    "title": "Servicios",
                     "type": "select",
                     "data": {
-                        "options": [
+                        "collection": "servicios",
+                        "fields": [
+                            {
+                                "field": "nombre"
+                            },
+                            {
+                                "field": "_id",
+                                "id": true
+                            }
                         ]
                     },
                     "required": true
                 },
                 {
-                    "name": "type",
+                    "name": "tipo_casa",
                     "title": "Tipo de casa",
                     "type": "select",
                     "data": {
@@ -244,7 +252,8 @@
                                 "value": "Modelo 3"
                             }
                         ]
-                    }
+                    },
+                    "required": true
                 }
             ]
         },

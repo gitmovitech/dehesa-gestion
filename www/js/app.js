@@ -38,7 +38,8 @@ app.filter('originalname', function () {
 });
 app.filter('convert2UF', function () {
     return function (input) {
-        if(sessionStorage.uf){
+        if (sessionStorage.uf) {
+            input = input.replace(',', '.');
             input = parseFloat(input);
             input = input * parseFloat(sessionStorage.uf);
         }
