@@ -1,4 +1,4 @@
-var app = angular.module('intranet', ['ngRoute', 'ngAnimate', 'platanus.rut', 'angularFileUpload','simplePagination']);
+var app = angular.module('intranet', ['ngRoute', 'ngAnimate', 'platanus.rut', 'angularFileUpload', 'simplePagination']);
 app.config(function ($routeProvider, $locationProvider) {
 
     $locationProvider.html5Mode(true).hashPrefix('!');
@@ -24,10 +24,24 @@ app.config(function ($routeProvider, $locationProvider) {
                 redirectTo: '/'
             });
 });
+app.run(function ($http) {
+    $http.get('http://mindicador.cl/api/uf', {}).success(function (response) {
+        sessionStorage.uf = response.serie[0].valor;
+    });
+});
 app.filter('originalname', function () {
     return function (input) {
         input = input.split('-');
         input = input.splice(1);
         return input.join('-');
+    };
+});
+app.filter('convert2UF', function () {
+    return function (input) {
+        if(sessionStorage.uf){
+            input = parseFloat(input);
+            input = input * parseFloat(sessionStorage.uf);
+        }
+        return input;
     };
 });

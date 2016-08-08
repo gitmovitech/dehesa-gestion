@@ -80,9 +80,13 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         $scope.tabledata = false;
         $scope.registros = false;
 
+        if (sessionStorage.uf) {
+            $scope.valoruf = parseFloat(sessionStorage.uf);
+        }
         if (item.collection == 'pagos')
             $http.get('http://mindicador.cl/api/uf', {}).success(function (response) {
                 $scope.valoruf = response.serie[0].valor;
+                sessionStorage.uf = $scope.valoruf;
                 $http.get('/api/data', {
                     params: {
                         token: Session.get(),
