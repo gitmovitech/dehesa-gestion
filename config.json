@@ -325,12 +325,42 @@
                                 "value": "Pendiente"
                             },
                             {
-                                "key": "Pagado",
-                                "value": "Pagado"
+                                "key": "Pagado con Pac Pat",
+                                "value": "Pagado con Pac Pat",
+                                "files": true,
+                                "comments": true
                             },
                             {
-                                "key": "Revisar",
-                                "value": "Revisar"
+                                "key": "Pac Pat Rechazado",
+                                "value": "Pac Pat Rechazado",
+                                "comments": true
+                            },
+                            {
+                                "key": "Pagado con transferencia",
+                                "value": "Pagado con transferencia",
+                                "files": true,
+                                "comments": true,
+                                "quantity": true
+                            },
+                            {
+                                "key": "Cheque recibido",
+                                "value": "Cheque recibido",
+                                "files": true,
+                                "comments": true,
+                                "quantity": true
+                            },
+                            {
+                                "key": "Pagado con cheque",
+                                "value": "Pagado con cheque",
+                                "files": true,
+                                "comments": true
+                            },
+                            {
+                                "key": "Pagado en efectivo",
+                                "value": "Pagado en efectivo",
+                                "files": true,
+                                "comments": true,
+                                "quantity": true
                             }
                         ]
                     }
