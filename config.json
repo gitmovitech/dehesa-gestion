@@ -255,19 +255,6 @@
             ]
         },
         {
-            "icon": "glyphicon glyphicon-briefcase",
-            "name": "Proveedores",
-            "collection": "proveedores",
-            "fields": [
-                {
-                    "name": "nombre",
-                    "title": "Nombre",
-                    "type": "text",
-                    "required": true
-                }
-            ]
-        },
-        {
             "icon": "glyphicon glyphicon-usd",
             "name": "Pagos",
             "collection": "pagos",
