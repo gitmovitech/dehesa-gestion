@@ -313,8 +313,8 @@ exports.addMonthPayment = function (data, cb) {
     if (database) {
         checkAndInsertAsociado(database.collection('asociados'), data, 0, function () {
             database.collection('pagos').findOne({
-                month: new Date().getMonth(),
-                year: new Date().getFullYear()
+                month: data.month,
+                year: data.year
             }, function (err, response) {
                 if (response) {
                     cb(false, 'Los datos de este mes ya se encuentran cargados');

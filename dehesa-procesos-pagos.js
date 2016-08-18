@@ -6,8 +6,8 @@ var procesar = function (collection, data, index, cb) {
                 codigo: data[index].codigo,
                 tarifa: data[index].tarifa,
                 type: data[index].status,
-                month: new Date().getMonth(),
-                year: new Date().getFullYear()
+                month: data[index].month,
+                year: data[index].year
             });
         }
         procesar(collection, data, index + 1, cb);

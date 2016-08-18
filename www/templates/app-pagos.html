@@ -40,16 +40,16 @@
                             <thead>
                                 <tr>
                                     <th></th>
-                                    <th ng-repeat="field in page.fields" ng-if="field.name != '_id'">{{field.title}}</th>
+                                    <th ng-repeat="field in page.fields track by field.name" ng-if="field.name != '_id'">{{field.title}}</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="(index,trdata) in tabledata| startFrom: pagination.page * pagination.perPage | limitTo: pagination.perPage">
+                                <tr ng-repeat="(index,trdata) in tabledata  | startFrom: pagination.page * pagination.perPage | limitTo: pagination.perPage track by trdata._id">
                                     <td><b class="text-danger">{{(index + 1) * (pagination.page + 1)}}</b></td>
                                     <td ng-repeat="(key,tddata) in trdata" ng-if="key != '_id' && key != 'month' && key != 'year' && key != 'index' && key != 'type'">
                                         <span class="text-success" ng-if="key == 'tarifa'">
-                                            {{(valoruf * tddata) + servicios.total | currency}} 
-                                            <a href="javascript:" data-id="{{trdata._id}}" class="popover-tarifa">
+                                            {{::(valoruf * tddata) + servicios.total | currency}} 
+                                            <a href="javascript:" data-id="{{::trdata._id}}" class="popover-tarifa">
                                                 <i class="glyphicon glyphicon-tags"></i>
                                             </a>
                                         </span>

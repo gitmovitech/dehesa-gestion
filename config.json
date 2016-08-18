@@ -263,7 +263,7 @@
                     {
                         "fields": [
                             "nombre",
-                            "appellidos"
+                            "apellidos"
                         ],
                         "name": "asociados",
                         "localField": "run",

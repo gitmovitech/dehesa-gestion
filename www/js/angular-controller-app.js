@@ -1,7 +1,7 @@
 app.controller('app', function ($scope, Session, $http, $location, FileUploader, Pagination, RutHelper) {
 
     //var socket = io.connect();
-    $scope.pagination = Pagination.getNew(30);
+    $scope.pagination = Pagination.getNew(20);
     if (!sessionStorage.page || sessionStorage.page == 'undefined') {
         sessionStorage.page = 0;
         $scope.pageIndex = sessionStorage.page;
@@ -493,7 +493,49 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         console.warn(item);
         console.info(jQuery('#' + jQuery(name).attr('id')).chosen().val());
     }
-
+    var months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    var obtenerPagos = function (year, month) {
+        for (var c in months) {
+            if (months[c] == month) {
+                month = parseInt(c);
+                break;
+            }
+        }
+        var params = {
+            token: Session.get(),
+            collection: 'pagos',
+            joined: {
+                "fields": ["nombre", "apellidos"],
+                "name": "asociados",
+                "localField": "run",
+                "foreignField": "run"
+            },
+            where: {
+                year: year,
+                month: month
+            }
+        }
+        $http.get('/api/data', {
+            params: params
+        }).success(function (response) {
+            if (response.success) {
+                for (var d in response.data) {
+                    response.data[d] = {
+                        index: parseInt(parseInt(d) + parseInt(1)),
+                        _id: response.data[d]._id,
+                        nombre: response.data[d].nombre,
+                        run: RutHelper.format(response.data[d].run),
+                        codigo: response.data[d].codigo,
+                        tarifa: response.data[d].tarifa,
+                        type: response.data[d].type
+                    }
+                }
+                $scope.registros = response.data.length;
+                $scope.pagination.numPages = Math.ceil(response.data.length / $scope.pagination.perPage);
+                $scope.tabledata = response.data;
+            }
+        });
+    }
     $scope.pagos = {
         periodos: [{
                 months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
@@ -510,20 +552,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         changeTab: function (index, year, month) {
             this.tabMonthActive = index;
             this.monthActive = month;
-            var el = this;
-            $http.get('/api/pagos', {
-                params: {
-                    token: Session.get(),
-                    year: year,
-                    month: month
-                }
-            }).success(function (response) {
-                if (response.length > 0) {
-                    el.showUploadExcel = false;
-                } else {
-                    el.showUploadExcel = true;
-                }
-            });
+            obtenerPagos(year, month);
         }
     }
     $scope.pagos.tabYearActive = $scope.pagos.periodos.length - 1;
