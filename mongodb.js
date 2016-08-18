@@ -308,6 +308,7 @@ var checkAndInsertAsociado = function (asociados, data, index, cb) {
         cb();
     }
 }
+
 exports.addMonthPayment = function (data, cb) {
     if (database) {
         checkAndInsertAsociado(database.collection('asociados'), data, 0, function () {
@@ -321,6 +322,21 @@ exports.addMonthPayment = function (data, cb) {
                     dehesaPagos.procesar(database.collection('pagos'), data, 0, cb);
                 }
             });
+        });
+    }
+}
+
+exports.getPayments = function (params, cb) {
+    if (database) {
+        database.collection('pagos').find({
+            month: parseInt(params.month),
+            year: parseInt(params.year)
+        }).toArray(function (err, response) {
+            if (response) {
+                cb(response);
+            } else {
+                cb(false)
+            }
         });
     }
 }

@@ -13,15 +13,15 @@
         <div role="tabpanel" class="tab-pane" ng-class="{'active': pagos.tabYearActive == $index}" id="periodo-year-{{$index}}" ng-repeat="item in pagos.periodos">
             <ul class="nav nav-tabs" role="tablist">
                 <li role="presentation" ng-class="{'active': pagos.tabMonthActive == $index}" ng-repeat="month in item.months">
-                    <a href="#" ng-click="pagos.tabMonthActive = $index" role="tab" data-toggle="tab">{{month}}</a>
+                    <a href="#" ng-click="pagos.changeTab($index, item.year, month)" role="tab" data-toggle="tab">{{month}}</a>
                 </li>
             </ul>
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane" ng-class="{'active': pagos.tabMonthActive == $index}" ng-repeat="month in item.months">
 
-                    <div ng-if="pagos.tabMonthActive == item.months.length - 1">
+                    <div>
                         <h3>Listado de cuentas:</h3>
-                        <button ng-if="item.months[item.months.length - 1] == month" class="btn btn-sm btn-primary" ng-click="showModal(page.fields)">
+                        <button ng-if="pagos.showUploadExcel" class="btn btn-sm btn-primary" ng-click="showModal(page.fields, null, {month:month,year:item.year})">
                             <i class="glyphicon glyphicon-cloud-upload"></i> Subir archivo excel del mes
                         </button>
                         <button class="btn btn-sm btn-primary" ng-if="uploaded_csv.length > 0">

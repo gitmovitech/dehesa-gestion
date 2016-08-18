@@ -46,11 +46,11 @@ app.get('/api/data', function (req, res) {
             if (userdata) {
 
                 var where = null;
-                if(req.query.where){
+                if (req.query.where) {
                     where = req.query.where;
                 }
                 var joined = null;
-                if(req.query.joined){
+                if (req.query.joined) {
                     joined = req.query.joined;
                 }
 
@@ -268,6 +268,7 @@ app.get('/descargas/:file', function (req, res) {
 /**
  * IMPORTAR EXCEL
  */
+var month = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 app.post('/api/data/import/excel', function (req, res) {
     if (req.body.params.token) {
         getSession(req.body.params.token, function (userdata, err) {
@@ -283,6 +284,12 @@ app.post('/api/data/import/excel', function (req, res) {
                             message: 'El archivo excel subido no es válido. Suba el archivo en formato excel y con el formato adecuado.'
                         });
                     }
+                    for (var c in month) {
+                        if (month[c] == req.body.params.periodo.month) {
+                            month = parseInt(c);
+                            break;
+                        }
+                    }
                     if (data[0].data) {
                         data = data[0].data;
                         if (data[0][0] && data[0][1] && data[0][2] && data[0][3] && data[0][4]) {
@@ -296,9 +303,10 @@ app.post('/api/data/import/excel', function (req, res) {
                                             codigo: data[r][3],
                                             tarifa: data[r][4],
                                             status: 'Pendiente',
-                                            month: new Date().getMonth(),
-                                            year: new Date().getFullYear()
+                                            month: month,
+                                            year: parseInt(req.body.params.periodo.year)
                                         }
+                                        console.info(data[r].month, data[r].year)
                                     }
                                 }
                             }
@@ -339,6 +347,40 @@ app.post('/api/data/import/excel', function (req, res) {
             success: false,
             message: 'Token de sesión no encontrado. Por favor inicie sesión nuevamente',
             logout: true
+        });
+    }
+});
+
+/**
+ * OBTENER REGISTROS DE PAGOS CARGADOS DEL MES
+ */
+app.get('/api/pagos', function (req, res) {
+    if (req.query.token) {
+        getSession(req.query.token, function (response, err) {
+            if (response) {
+                if (req.query.month && req.query.year) {
+                    var meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+                    var mes = null;
+                    for (var x in meses) {
+                        if (meses[x] == req.query.month) {
+                            mes = x;
+                            break;
+                        }
+                    }
+                    if (mes && req.query.year.length == 4) {
+                        db.getPayments({
+                            month: mes,
+                            year: req.query.year
+                        }, function (response) {
+                            if (response) {
+                                res.send(response);
+                            } else {
+                                res.send(false);
+                            }
+                        });
+                    }
+                }
+            }
         });
     }
 });

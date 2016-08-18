@@ -171,9 +171,10 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
             });
         }
     }
-
-    $scope.showModal = function (fields, data) {
+    var excelPeriodo;
+    $scope.showModal = function (fields, data, object) {
         if ($scope.collection == 'pagos') {
+            excelPeriodo = object;
             $scope.fields = [{
                     name: 'csv_pagos',
                     title: 'Cargar Excel',
@@ -352,7 +353,8 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                 $http.post('/api/data/import/excel', {
                     params: {
                         token: Session.get(),
-                        filename: $scope.uploader.queue[0].file.name
+                        filename: $scope.uploader.queue[0].file.name,
+                        periodo: excelPeriodo
                     }
                 }).success(function (response) {
                     if (response.success) {
@@ -487,13 +489,12 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
             alert('Debe escribir un mensaje antes de enviar el mensaje');
         }
     }
-    $scope.chosenSelect = function (name,item) {
+    $scope.chosenSelect = function (name, item) {
         console.warn(item);
-        console.info(jQuery('#'+jQuery(name).attr('id')).chosen().val());
+        console.info(jQuery('#' + jQuery(name).attr('id')).chosen().val());
     }
 
     $scope.pagos = {
-        currentYear: new Date().getFullYear(),
         periodos: [{
                 months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
                 year: 2015
@@ -501,11 +502,34 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                 months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto'],
                 year: 2016
             }],
-        tabYearActive: 0,
-        tabMonthActive: 0
+        tabYearActive: null,
+        yearActive: null,
+        tabMonthActive: null,
+        monthActive: null,
+        showUploadExcel: false,
+        changeTab: function (index, year, month) {
+            this.tabMonthActive = index;
+            this.monthActive = month;
+            var el = this;
+            $http.get('/api/pagos', {
+                params: {
+                    token: Session.get(),
+                    year: year,
+                    month: month
+                }
+            }).success(function (response) {
+                if (response.length > 0) {
+                    el.showUploadExcel = false;
+                } else {
+                    el.showUploadExcel = true;
+                }
+            });
+        }
     }
     $scope.pagos.tabYearActive = $scope.pagos.periodos.length - 1;
+    $scope.pagos.yearActive = $scope.pagos.periodos[$scope.pagos.periodos.length - 1].year;
     $scope.pagos.tabMonthActive = $scope.pagos.periodos[$scope.pagos.periodos.length - 1].months.length - 1;
+    $scope.pagos.monthActive = $scope.pagos.periodos[$scope.pagos.periodos.length - 1].months[$scope.pagos.periodos[$scope.pagos.periodos.length - 1].months.length - 1];
 
     var substringMatcher = function (strs) {
         return function findMatches(q, cb) {
