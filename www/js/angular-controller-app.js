@@ -317,6 +317,16 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                 }
             }
         }
+        if($scope.collection == 'asociados'){
+            for(var x in $scope.fields){
+                if($scope.fields[x].name == 'servicios'){
+                    console.info($scope.fields[x])
+                }
+                if($scope.fields[x].name == 'tipo_casa'){
+                    console.info($scope.fields[x])
+                }
+            }
+        }
         $http.post('/api/data', {
             params: {
                 token: Session.get(),
@@ -324,7 +334,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                 fields: $scope.fields
             }
         }).success(function (response) {
-            jQuery('#modalEdit').modal('hide');
+            //jQuery('#modalEdit').modal('hide');
             if (reload) {
                 setTimeout(function () {
                     location.reload();

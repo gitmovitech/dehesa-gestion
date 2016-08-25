@@ -64,3 +64,20 @@ var obtenerCobrosIndividualesAsociados = function (database, data, index, cb) {
     }
 }
 exports.obtenerCobrosIndividualesAsociados = obtenerCobrosIndividualesAsociados;
+
+/**
+ * Sumar cargos anteriores
+ */
+var sumarDeudasAnteriores = function (pagos, data, index, cb) {
+    if (data[index]) {
+        pagos.find({run: data[index].run}).toArray(function (err, response) {
+            console.log(response);
+            sumarDeudasAnteriores(pagos, data, index + 1, cb);
+        });
+    } else {
+        cb(data);
+    }
+}
+/**
+ * Restar saldo a favor
+ */
