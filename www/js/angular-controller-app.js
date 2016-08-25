@@ -1,7 +1,7 @@
 app.controller('app', function ($scope, Session, $http, $location, FileUploader, Pagination, RutHelper) {
 
     //var socket = io.connect();
-    $scope.pagination = Pagination.getNew(20);
+    $scope.pagination = Pagination.getNew(15);
     if (!sessionStorage.page || sessionStorage.page == 'undefined') {
         sessionStorage.page = 0;
         $scope.pageIndex = sessionStorage.page;
@@ -519,8 +519,9 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
             params: params
         }).success(function (response) {
             if (response.success) {
+                var registros = [];
                 for (var d in response.data) {
-                    response.data[d] = {
+                    registros[registros.length] = {
                         index: parseInt(parseInt(d) + parseInt(1)),
                         _id: response.data[d]._id,
                         nombre: response.data[d].nombre,
@@ -532,7 +533,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                 }
                 $scope.registros = response.data.length;
                 $scope.pagination.numPages = Math.ceil(response.data.length / $scope.pagination.perPage);
-                $scope.tabledata = response.data;
+                $scope.tabledata = registros;
             }
         });
     }
