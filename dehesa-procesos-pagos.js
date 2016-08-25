@@ -59,6 +59,7 @@ var obtenerCobrosIndividualesAsociados = function (database, data, index, cb) {
             }
         });
     } else {
+        serviciosAsociados = [];
         cb(data);
     }
 }
