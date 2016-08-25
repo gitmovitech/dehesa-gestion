@@ -1,21 +1,3 @@
-var showPopover = function (elem) {
-    var detalle = jQuery(elem).data('popover-content');
-    var text = '<p>ADT: ' + detalle.adt + ' UF - (' + $filter('currency')(parseFloat(detalle.adt) * valoruf) + ')</p>';
-    if (detalle.modelo)
-        text += '<p>' + detalle.modelo.nombre + ': ' + detalle.modelo.valor + ' UF - (' + $filter('currency')(detalle.modelo.valor.replace(',', '.') * valoruf) + ')</p>';
-    if (detalle.servicios) {
-        for (var x in detalle.servicios) {
-            text += '<p>' + detalle.servicios[x].nombre + ': ' + detalle.servicios[x].valor + ' UF - (' + $filter('currency')(detalle.servicios[x].valor.replace(',', '.') * valoruf) + ')</p>';
-        }
-    }
-    jQuery(this).popover({
-        title: 'Detalle de la tarifa',
-        html: true,
-        content: text,
-        placement: 'right',
-        trigger: 'focus'
-    });
-}
 var app = angular.module('intranet', ['ngRoute', 'ngAnimate', 'platanus.rut', 'angularFileUpload', 'simplePagination']);
 app.config(function ($routeProvider, $locationProvider) {
 
