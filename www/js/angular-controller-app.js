@@ -1,4 +1,4 @@
-app.controller('app', function ($scope, Session, $http, $location, FileUploader, Pagination, RutHelper) {
+app.controller('app', function ($scope, Session, $http, $location, FileUploader, Pagination, RutHelper, $filter) {
 
     //var socket = io.connect();
     $scope.pagination = Pagination.getNew(15);
@@ -106,16 +106,6 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                             $scope.servicios.detalle[$scope.servicios.detalle.length] = response.data[t];
                             $scope.servicios.total = $scope.servicios.total + response.data[t].valor;
                         }
-                        jQuery('.popover-tarifa').each(function () {
-                            var detalle = jQuery(this).data('popover-content');
-                            console.info(detalle)
-                            jQuery(this).popover({
-                                title: 'Detalle de la tarifa',
-                                content: detalle,
-                                placement: 'right',
-                                trigger: 'focus'
-                            });
-                        });
                     }
                 });
             });
@@ -534,16 +524,16 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                     if (response.data[d].modelo) {
                         if (response.data[d].modelo.valor)
                             if (response.data[d].modelo.type == 'UF')
-                                valor += valoruf * parseFloat(response.data[d].modelo.valor);
+                                valor += valoruf * response.data[d].modelo.valor.replace(',','.');
                             else
-                                valor += parseFloat(response.data[d].modelo.valor);
+                                valor += response.data[d].modelo.valor.replace(',','.');
                     }
                     if (response.data[d].servicios) {
                         for (var x in response.data[d].servicios) {
                             if (response.data[d].servicios[x].type == 'UF')
-                                valor += valoruf * parseFloat(response.data[d].servicios[x].valor);
+                                valor += valoruf * response.data[d].servicios[x].valor.replace(',','.');
                             else
-                                valor += parseFloat(response.data[d].servicios[x].valor);
+                                valor += response.data[d].servicios[x].valor.replace(',','.');
                         }
                     }
                     registros[registros.length] = {
@@ -564,6 +554,31 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                 $scope.registros = response.data.length;
                 $scope.pagination.numPages = Math.ceil(response.data.length / $scope.pagination.perPage);
                 $scope.tabledata = registro_pagos = registros;
+                
+                /**
+                 * DETALLE DEL POPOVER
+                 */
+                setTimeout(function () {
+                    jQuery('.popover-tarifa').each(function () {
+                        var detalle = jQuery(this).data('popover-content');
+                        var text = 'ADT: ' + detalle.adt + ' UF - (' + $filter('currency')(parseFloat(detalle.adt) * valoruf) + ')<br>';
+                        if (detalle.modelo)
+                            text += detalle.modelo.nombre + ': ' + detalle.modelo.valor + ' UF - (' + $filter('currency')(detalle.servicios[x].valor.replace(',','.') * valoruf) + ')<br>';
+                        if (detalle.servicios) {
+                            for (var x in detalle.servicios) {
+                                text += detalle.servicios[x].nombre + ': ' + detalle.servicios[x].valor + ' UF - (' + $filter('currency')(detalle.servicios[x].valor.replace(',','.') * valoruf) + ')<br>';
+                            }
+                        }
+                        jQuery(this).popover({
+                            title: 'Detalle de la tarifa',
+                            html: true,
+                            content: text,
+                            placement: 'right',
+                            trigger: 'focus'
+                        });
+                    });
+                }, 1000);
+                
             }
         });
     }
