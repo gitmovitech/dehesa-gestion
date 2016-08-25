@@ -165,7 +165,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                     }
                     $scope.registros = response.data.length;
                     $scope.pagination.numPages = Math.ceil(response.data.length / $scope.pagination.perPage);
-                    $scope.tabledata = response.data;
+                    $scope.tabledata = registro_pagos = response.data;
                     fieldsdata = response.data;
                 }
             });
@@ -494,6 +494,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         console.info(jQuery('#' + jQuery(name).attr('id')).chosen().val());
     }
     var months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    var registro_pagos = [];
     var obtenerPagos = function (year, month) {
         for (var c in months) {
             if (months[c] == month) {
@@ -533,7 +534,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                 }
                 $scope.registros = response.data.length;
                 $scope.pagination.numPages = Math.ceil(response.data.length / $scope.pagination.perPage);
-                $scope.tabledata = registros;
+                $scope.tabledata = registro_pagos = registros;
             }
         });
     }
@@ -554,6 +555,29 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
             this.tabMonthActive = index;
             this.monthActive = month;
             obtenerPagos(year, month);
+        },
+        search: function () {
+            var arr;
+            var tmpdata = [];
+            for (var x in registro_pagos) {
+                for (var i in registro_pagos[x]) {
+                    if (registro_pagos[x][i]) {
+                        arr = registro_pagos[x][i];
+                        arr = arr.toString();
+                        arr = arr.toLowerCase();
+                        if (arr.indexOf($scope.page.filter.value) >= 0) {
+                            tmpdata[tmpdata.length] = registro_pagos[x];
+                            break;
+                        }
+                    }
+                }
+            }
+            $scope.registros = tmpdata.length;
+            $scope.pagination.numPages = Math.ceil(tmpdata.length / $scope.pagination.perPage);
+            if (tmpdata.length > 0)
+                $scope.tabledata = tmpdata;
+            else
+                $scope.tabledata = [];
         }
     }
     $scope.pagos.tabYearActive = $scope.pagos.periodos.length - 1;

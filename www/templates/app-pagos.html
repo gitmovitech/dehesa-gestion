@@ -32,7 +32,7 @@
             <label class="sr-only" for="buscador"></label>
             <div class="input-group">
                 <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
-                <input placeholder="Buscar aquí" type="text" class="form-control" ng-keyup="search()" ng-model="page.filter.value" id="buscador">
+                <input placeholder="Buscar aquí" type="text" class="form-control" ng-keyup="pagos.search()" ng-model="page.filter.value" id="buscador">
             </div>
         </div>
 
@@ -44,7 +44,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="(index,trdata) in tabledata  | startFrom: pagination.page * pagination.perPage | limitTo: pagination.perPage">
+                <tr ng-repeat="(index,trdata) in tabledata  | startFrom: pagination.page * pagination.perPage | limitTo: pagination.perPage track by trdata._id">
                     <td ng-repeat="(key,tddata) in trdata" ng-if="key != '_id' && key != 'month' && key != 'year' && key != 'type'">
                         <span class="text-success" ng-if="key == 'tarifa'">
                             {{::tddata| currency}} 
