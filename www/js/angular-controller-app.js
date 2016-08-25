@@ -561,12 +561,12 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                 setTimeout(function () {
                     jQuery('.popover-tarifa').each(function () {
                         var detalle = jQuery(this).data('popover-content');
-                        var text = 'ADT: ' + detalle.adt + ' UF - (' + $filter('currency')(parseFloat(detalle.adt) * valoruf) + ')<br>';
+                        var text = '<p>ADT: ' + detalle.adt + ' UF - (' + $filter('currency')(parseFloat(detalle.adt) * valoruf) + ')</p>';
                         if (detalle.modelo)
-                            text += detalle.modelo.nombre + ': ' + detalle.modelo.valor + ' UF - (' + $filter('currency')(detalle.servicios[x].valor.replace(',','.') * valoruf) + ')<br>';
+                            text += '<p>'+detalle.modelo.nombre + ': ' + detalle.modelo.valor + ' UF - (' + $filter('currency')(detalle.modelo.valor.replace(',','.') * valoruf) + ')</p>';
                         if (detalle.servicios) {
                             for (var x in detalle.servicios) {
-                                text += detalle.servicios[x].nombre + ': ' + detalle.servicios[x].valor + ' UF - (' + $filter('currency')(detalle.servicios[x].valor.replace(',','.') * valoruf) + ')<br>';
+                                text += '<p>'+detalle.servicios[x].nombre + ': ' + detalle.servicios[x].valor + ' UF - (' + $filter('currency')(detalle.servicios[x].valor.replace(',','.') * valoruf) + ')</p>';
                             }
                         }
                         jQuery(this).popover({
