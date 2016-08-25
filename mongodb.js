@@ -109,7 +109,10 @@ exports.getCollection = function (collection, callback, data, join) {
                                                 }
                                             }
                                         }
-                                        callback(firstResponse);
+                                        if (collection == 'pagos') {
+                                            dehesaPagos.obtenerCobrosIndividualesAsociados(database, firstResponse, 0, callback);
+                                        } else
+                                            callback(firstResponse);
 
                                     });
                                 } else

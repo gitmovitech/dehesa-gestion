@@ -16,18 +16,18 @@
                     <a href="#" ng-click="pagos.changeTab($index, item.year, month)" role="tab" data-toggle="tab">{{month}}</a>
                 </li>
             </ul>
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane" ng-class="{'active': pagos.tabMonthActive == $index}" ng-repeat="month in item.months">
+                    <h3>Registros de {{month}}:</h3>
+                    <button ng-if="pagos.showUploadExcel" class="btn btn-sm btn-primary" ng-click="showModal(page.fields, null, {month: month, year: item.year})">
+                        <i class="glyphicon glyphicon-cloud-upload"></i> Subir archivo excel de {{month}}
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
     <div>
-        <h3>Registros:</h3>
-        <button ng-if="pagos.showUploadExcel" class="btn btn-sm btn-primary" ng-click="showModal(page.fields, null, {month: month, year: item.year})">
-            <i class="glyphicon glyphicon-cloud-upload"></i> Subir archivo excel del mes
-        </button>
-        <button class="btn btn-sm btn-primary" ng-if="uploaded_csv.length > 0">
-            <i class="glyphicon glyphicon-ok-sign"></i> Confirmar datos
-        </button>
-
         <div class="form-group" style="margin-top:10px;">
             <label class="sr-only" for="buscador"></label>
             <div class="input-group">
@@ -47,8 +47,10 @@
                 <tr ng-repeat="(index,trdata) in tabledata  | startFrom: pagination.page * pagination.perPage | limitTo: pagination.perPage track by trdata._id">
                     <td ng-repeat="(key,tddata) in trdata" ng-if="key != '_id' && key != 'month' && key != 'year' && key != 'type'">
                         <span class="text-success" ng-if="key == 'tarifa'">
-                            {{::tddata| currency}} 
-                            <a href="javascript:" data-id="{{::trdata._id}}" class="popover-tarifa btn btn-xs btn-success">DETALLE</a>
+                            {{::tddata.total| currency}}
+                            <a href="javascript:" data-id="{{::trdata}}" class="popover-tarifa">
+                                <i class="glyphicon glyphicon-tags"></i>
+                            </a>
                         </span>
                         <span ng-class="{'text-danger':key == 'index'}" ng-if="key != 'tarifa'">{{::tddata}}</span>
                     </td>

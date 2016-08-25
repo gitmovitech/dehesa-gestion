@@ -284,14 +284,16 @@ app.post('/api/data/import/excel', function (req, res) {
                             message: 'El archivo excel subido no es válido. Suba el archivo en formato excel y con el formato adecuado.'
                         });
                     }
+                    var thismonth;
                     for (var c in month) {
                         if (month[c] == req.body.params.periodo.month) {
-                            month = parseInt(c);
+                            thismonth = parseInt(c);
                             break;
                         }
                     }
                     if (data[0].data) {
                         data = data[0].data;
+                        
                         if (data[0][0] && data[0][1] && data[0][2] && data[0][3] && data[0][4]) {
                             for (var r in data) {
                                 if (data[r][0] && data[r][1] && data[r][2] && data[r][3] && data[r][4]) {
@@ -303,10 +305,9 @@ app.post('/api/data/import/excel', function (req, res) {
                                             codigo: data[r][3],
                                             tarifa: data[r][4],
                                             status: 'Pendiente',
-                                            month: month,
+                                            month: thismonth,
                                             year: parseInt(req.body.params.periodo.year)
                                         }
-                                        console.info(data[r].month, data[r].year)
                                     }
                                 }
                             }

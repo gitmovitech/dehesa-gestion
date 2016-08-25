@@ -139,36 +139,34 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                 if (!$scope.currentPagosMonth) {
                     $scope.currentPagosMonth = new Date().getMonth();
                 }
-                params.where = {
-                    year: $scope.currentPagosYear,
-                    month: $scope.currentPagosMonth
-                }
-            }
-            $http.get('/api/data', {
-                params: params
-            }).success(function (response) {
-                if (response.success) {
-                    for (var d in response.data) {
-                        if (item.collection == 'pagos') {
-                            response.data[d] = {
-                                index: parseInt(parseInt(d) + parseInt(1)),
-                                _id: response.data[d]._id,
-                                nombre: response.data[d].nombre,
-                                run: RutHelper.format(response.data[d].run),
-                                codigo: response.data[d].codigo,
-                                tarifa: response.data[d].tarifa,
-                                type: response.data[d].type
+                obtenerPagos($scope.currentPagosYear, $scope.currentPagosMonth);
+            } else {
+                $http.get('/api/data', {
+                    params: params
+                }).success(function (response) {
+                    if (response.success) {
+                        for (var d in response.data) {
+                            if (item.collection == 'pagos') {
+                                response.data[d] = {
+                                    index: parseInt(parseInt(d) + parseInt(1)),
+                                    _id: response.data[d]._id,
+                                    nombre: response.data[d].nombre,
+                                    run: RutHelper.format(response.data[d].run),
+                                    codigo: response.data[d].codigo,
+                                    tarifa: response.data[d].tarifa,
+                                    type: response.data[d].type
+                                }
+                            } else {
+                                response.data[d].index = parseInt(parseInt(d) + parseInt(1));
                             }
-                        } else {
-                            response.data[d].index = parseInt(parseInt(d) + parseInt(1));
                         }
+                        $scope.registros = response.data.length;
+                        $scope.pagination.numPages = Math.ceil(response.data.length / $scope.pagination.perPage);
+                        $scope.tabledata = registro_pagos = response.data;
+                        fieldsdata = response.data;
                     }
-                    $scope.registros = response.data.length;
-                    $scope.pagination.numPages = Math.ceil(response.data.length / $scope.pagination.perPage);
-                    $scope.tabledata = registro_pagos = response.data;
-                    fieldsdata = response.data;
-                }
-            });
+                });
+            }
         }
     }
     var excelPeriodo;
@@ -358,7 +356,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                     }
                 }).success(function (response) {
                     if (response.success) {
-
+                        location.reload();
                     } else if (response.message) {
                         alert(response.message);
                         if (response.logout) {
@@ -378,7 +376,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                      }
                      }
                      sessionStorage.uploaded_csv = JSON.stringify(response);*/
-                    location.reload();
+
                 });
             } else {
                 alert('Primero presione el boton subir para cargar el CSV en el sistema');
@@ -520,15 +518,46 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
             params: params
         }).success(function (response) {
             if (response.success) {
+                if (response.data.length == 0) {
+                    $scope.pagos.showUploadExcel = true;
+                } else {
+                    $scope.pagos.showUploadExcel = false;
+                }
                 var registros = [];
+                var valoruf = 1;
+                if ($scope.valoruf) {
+                    valoruf = $scope.valoruf;
+                }
+                var valor;
                 for (var d in response.data) {
+                    valor = valoruf * response.data[d].tarifa;
+                    if (response.data[d].modelo) {
+                        if (response.data[d].modelo.valor)
+                            if (response.data[d].modelo.type == 'UF')
+                                valor += valoruf * parseFloat(response.data[d].modelo.valor);
+                            else
+                                valor += parseFloat(response.data[d].modelo.valor);
+                    }
+                    if (response.data[d].servicios) {
+                        for (var x in response.data[d].servicios) {
+                            if (response.data[d].servicios[x].type == 'UF')
+                                valor += valoruf * parseFloat(response.data[d].servicios[x].valor);
+                            else
+                                valor += parseFloat(response.data[d].servicios[x].valor);
+                        }
+                    }
                     registros[registros.length] = {
                         index: parseInt(parseInt(d) + parseInt(1)),
                         _id: response.data[d]._id,
                         nombre: response.data[d].nombre,
                         run: RutHelper.format(response.data[d].run),
                         codigo: response.data[d].codigo,
-                        tarifa: response.data[d].tarifa,
+                        tarifa: {
+                            adt: response.data[d].tarifa,
+                            total: valor,
+                            servicios: response.data[d].servicios,
+                            modelo: response.data[d].modelo
+                        },
                         type: response.data[d].type
                     }
                 }

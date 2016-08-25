@@ -348,6 +348,11 @@
                                 "files": true,
                                 "comments": true,
                                 "quantity": true
+                            },
+                            {
+                                "key": "No pagado",
+                                "value": "No pagado",
+                                "comments": true
                             }
                         ]
                     }
