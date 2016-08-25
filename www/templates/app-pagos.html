@@ -48,7 +48,7 @@
                     <td ng-repeat="(key,tddata) in trdata" ng-if="key != '_id' && key != 'month' && key != 'year' && key != 'type'">
                         <span class="text-success" ng-if="key == 'tarifa'">
                             {{tddata.total| currency}}
-                            <a href="javascript:" data-popover-content="{{trdata.tarifa}}" class="popover-tarifa">
+                            <a href="javascript:showPopover(this)" data-popover-content="{{trdata.tarifa}}" class="popover-tarifa">
                                 <i class="glyphicon glyphicon-tags"></i>
                             </a>
                         </span>
