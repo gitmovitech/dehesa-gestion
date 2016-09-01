@@ -564,7 +564,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                 $scope.registros = response.data.length;
                 $scope.pagination.numPages = Math.ceil(response.data.length / $scope.pagination.perPage);
                 $scope.tabledata = registro_pagos = registros;
-                
+
                 /**
                  * DETALLE DEL POPOVER
                  */
@@ -588,18 +588,20 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                         });
                     });
                 }, 1000);
-                
+
             }
         });
     }
+    var periodos_months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    var periodos = [];
+    for(var year = 2016; year <= new Date().getFullYear(); year++){
+      periodos[periodos.length] = {
+        year: year,
+        months: periodos_months
+      }
+    }
     $scope.pagos = {
-        periodos: [{
-                months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-                year: 2015
-            }, {
-                months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto'],
-                year: 2016
-            }],
+        periodos: periodos,
         tabYearActive: null,
         yearActive: null,
         tabMonthActive: null,
