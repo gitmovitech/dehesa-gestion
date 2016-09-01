@@ -106,92 +106,82 @@
             ]
         },
         {
-            "icon": "glyphicon glyphicon-hand-right",
-            "name": "Servicios",
-            "collection": "servicios",
-            "fields": [
-                {
-                    "name": "_id",
-                    "type": "text",
-                    "id": true
-                },
-                {
-                    "name": "nombre",
-                    "title": "Nombre",
-                    "type": "text",
-                    "required": true
-                },
-                {
-                    "name": "valor",
-                    "title": "Valor",
-                    "type": "text",
-                    "required": true
-                },
-                {
-                    "name": "type",
-                    "title": "Tipo de valor",
-                    "type": "select",
-                    "data": {
-                        "options": [
-                            {
-                                "key": "UF",
-                                "value": "UF"
-                            },
-                            {
-                                "key": "Pesos",
-                                "value": "Pesos"
-                            }
-                        ]
-                    }
-                }
-            ]
-        },
-        {
             "icon": "glyphicon glyphicon-list-alt",
             "name": "Asociados",
             "collection": "asociados",
             "fields": [
                 {
+                    "name": "id",
+                    "title": "Número de socio",
+                    "type": "number",
+                    "required": true,
+                    "id": true
+                },
+                {
+                    "name": "monitoreo",
+                    "title": "Monitoreo",
+                    "type": "text"
+                },
+                {
+                    "name": "numero_cliente",
+                    "title": "Número cliente",
+                    "type": "number"
+                },
+                {
+                    "name": "tipo_conexion",
+                    "title": "Tipo de conexión",
+                    "type": "text"
+                },
+                {
+                    "name": "fecha_ingreso",
+                    "title": "Fecha ingreso",
+                    "type": "text"
+                },
+                {
+                    "name": "usuario",
+                    "title": "Usuario",
+                    "type": "text"
+                },
+                {
+                    "name": "run",
+                    "title": "RUN",
+                    "type": "rut",
+                    "required": true
+                },
+                {
                     "name": "nombre",
                     "title": "Nombre",
                     "type": "text",
                     "required": true
                 },
                 {
-                    "name": "apellidos",
-                    "title": "Apellidos",
+                    "name": "direccion",
+                    "title": "Dirección",
                     "type": "text",
                     "required": true
                 },
                 {
-                    "name": "email",
-                    "title": "Correo electrónico",
-                    "type": "email",
-                    "required": true
-                },
-                {
-                    "name": "run",
-                    "title": "RUN",
-                    "type": "rut",
-                    "required": true,
-                    "id": true
-                },
-                {
-                    "name": "celular",
-                    "title": "Celular",
-                    "type": "number",
+                    "name": "numeracion",
+                    "title": "Numeración",
+                    "type": "text",
                     "required": true
                 },
                 {
                     "name": "telefono",
                     "title": "Teléfono",
-                    "type": "number"
+                    "type": "number",
+                    "required": true
                 },
                 {
-                    "name": "direccion",
-                    "title": "Dirección",
-                    "type": "textarea",
+                    "name": "correo",
+                    "title": "Correo",
+                    "type": "email",
                     "required": true
+                },
+                {
+                    "name": "correo_alternativo",
+                    "title": "Correo alternativo",
+                    "type": "email"
                 },
                 {
                     "name": "formas_pago",
@@ -216,22 +206,9 @@
                     "required": true
                 },
                 {
-                    "name": "servicios",
-                    "title": "Servicios",
-                    "type": "select",
-                    "multiple": true,
-                    "data": {
-                        "collection": "servicios",
-                        "fields": [
-                            {
-                                "field": "nombre"
-                            },
-                            {
-                                "field": "_id",
-                                "id": true
-                            }
-                        ]
-                    },
+                    "name": "monto",
+                    "title": "Monto",
+                    "type": "number",
                     "required": true
                 },
                 {
@@ -351,40 +328,6 @@
                             }
                         ]
                     }
-                }
-            ]
-        },
-        {
-            "icon": "glyphicon glyphicon-bullhorn",
-            "name": "Mensajes y notificaciones",
-            "collection": "notificaciones",
-            "fields": [
-                {
-                    "name": "fecha",
-                    "title": "Fecha",
-                    "type": "datetime",
-                    "edit": {
-                        "hidden": true
-                    },
-                    "auto": true
-                },
-                {
-                    "name": "asunto",
-                    "title": "Asunto",
-                    "type": "text",
-                    "required": true
-                },
-                {
-                    "name": "destinatario",
-                    "title": "Destinatario",
-                    "type": "text",
-                    "required": true
-                },
-                {
-                    "name": "mensaje",
-                    "title": "Mensaje",
-                    "type": "textarea",
-                    "required": true
                 }
             ]
         }
