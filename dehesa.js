@@ -200,9 +200,18 @@ app.get('/api/session', function (req, res) {
 app.get('/api/config', function (req, res) {
     if (req.query.token) {
         getSession(req.query.token, function (response, err) {
+            var pages = [];
+            for (var x in config.pages) {
+                for (var y in config.pages[x].scope) {
+                    if (response.type == config.pages[x].scope[y]) {
+                        pages[pages.length] = config.pages[x];
+                        break;
+                    }
+                }
+            }
             if (response) {
                 res.send({
-                    pages: config.pages
+                    pages: pages
                 });
             } else {
                 res.send(err);
@@ -273,12 +282,12 @@ app.post('/api/data/import/excel', function (req, res) {
     if (req.body.params.token) {
         getSession(req.body.params.token, function (userdata, err) {
             if (userdata) {
-              importPagos.import(req.body.params, function(response){
-                console.log(response.data);
-                db.addMonthPayment(response.data, function () {
-                    //res.send(response);
+                importPagos.import(req.body.params, function (response) {
+                    console.log(response.data);
+                    db.addMonthPayment(response.data, function () {
+                        //res.send(response);
+                    });
                 });
-              });
             } else {
                 res.send({
                     success: false,
