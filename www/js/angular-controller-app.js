@@ -79,36 +79,37 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         $scope.tabledata = false;
         $scope.registros = false;
 
-        if (sessionStorage.uf) {
+        /*if (sessionStorage.uf) {
             $scope.valoruf = parseFloat(sessionStorage.uf);
-        }
+        }*/
+        $scope.valoruf = false;
         if (item.collection == 'pagos')
             /*$http.get('http://mindicador.cl/api/uf', {}).success(function (response) {
-                $scope.valoruf = response.serie[0].valor;
-                sessionStorage.uf = $scope.valoruf;*/
-                $http.get('/api/data', {
-                    params: {
-                        token: Session.get(),
-                        collection: 'servicios'
-                    }
-                }).success(function (response) {
-                    if (response.success) {
+             $scope.valoruf = response.serie[0].valor;
+             sessionStorage.uf = $scope.valoruf;*/
+            $http.get('/api/data', {
+                params: {
+                    token: Session.get(),
+                    collection: 'servicios'
+                }
+            }).success(function (response) {
+                if (response.success) {
 
-                        $scope.servicios = {
-                            total: 0,
-                            detalle: []
-                        };
-                        for (var t in response.data) {
-                            if (response.data[t].type == 'UF') {
-                                response.data[t].valor = response.data[t].valor.replace(',', '.');
-                                response.data[t].valor = parseFloat(response.data[t].valor) * parseFloat($scope.valoruf);
-                            }
-                            $scope.servicios.detalle[$scope.servicios.detalle.length] = response.data[t];
-                            $scope.servicios.total = $scope.servicios.total + response.data[t].valor;
+                    $scope.servicios = {
+                        total: 0,
+                        detalle: []
+                    };
+                    for (var t in response.data) {
+                        if (response.data[t].type == 'UF') {
+                            response.data[t].valor = response.data[t].valor.replace(',', '.');
+                            response.data[t].valor = parseFloat(response.data[t].valor)// * parseFloat($scope.valoruf);
                         }
+                        $scope.servicios.detalle[$scope.servicios.detalle.length] = response.data[t];
+                        $scope.servicios.total = $scope.servicios.total + response.data[t].valor;
                     }
-                });
-            //});
+                }
+            });
+        //});
 
         if (item) {
             sessionStorage.page = index;
@@ -317,12 +318,12 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                 }
             }
         }
-        if($scope.collection == 'asociados'){
-            for(var x in $scope.fields){
-                if($scope.fields[x].name == 'servicios'){
+        if ($scope.collection == 'asociados') {
+            for (var x in $scope.fields) {
+                if ($scope.fields[x].name == 'servicios') {
                     console.info($scope.fields[x])
                 }
-                if($scope.fields[x].name == 'tipo_casa'){
+                if ($scope.fields[x].name == 'tipo_casa') {
                     console.info($scope.fields[x])
                 }
             }
@@ -534,16 +535,16 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                     if (response.data[d].modelo) {
                         if (response.data[d].modelo.valor)
                             if (response.data[d].modelo.type == 'UF')
-                                valor += valoruf * response.data[d].modelo.valor.replace(',','.');
+                                valor += valoruf * response.data[d].modelo.valor.replace(',', '.');
                             else
-                                valor += response.data[d].modelo.valor.replace(',','.');
+                                valor += response.data[d].modelo.valor.replace(',', '.');
                     }
                     if (response.data[d].servicios) {
                         for (var x in response.data[d].servicios) {
                             if (response.data[d].servicios[x].type == 'UF')
-                                valor += valoruf * response.data[d].servicios[x].valor.replace(',','.');
+                                valor += valoruf * response.data[d].servicios[x].valor.replace(',', '.');
                             else
-                                valor += response.data[d].servicios[x].valor.replace(',','.');
+                                valor += response.data[d].servicios[x].valor.replace(',', '.');
                         }
                     }
                     registros[registros.length] = {
@@ -573,10 +574,10 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                         var detalle = jQuery(this).data('popover-content');
                         var text = '<p>ADT: ' + detalle.adt + ' UF - (' + $filter('currency')(parseFloat(detalle.adt) * valoruf) + ')</p>';
                         if (detalle.modelo)
-                            text += '<p>'+detalle.modelo.nombre + ': ' + detalle.modelo.valor + ' UF - (' + $filter('currency')(detalle.modelo.valor.replace(',','.') * valoruf) + ')</p>';
+                            text += '<p>' + detalle.modelo.nombre + ': ' + detalle.modelo.valor + ' UF - (' + $filter('currency')(detalle.modelo.valor.replace(',', '.') * valoruf) + ')</p>';
                         if (detalle.servicios) {
                             for (var x in detalle.servicios) {
-                                text += '<p>'+detalle.servicios[x].nombre + ': ' + detalle.servicios[x].valor + ' UF - (' + $filter('currency')(detalle.servicios[x].valor.replace(',','.') * valoruf) + ')</p>';
+                                text += '<p>' + detalle.servicios[x].nombre + ': ' + detalle.servicios[x].valor + ' UF - (' + $filter('currency')(detalle.servicios[x].valor.replace(',', '.') * valoruf) + ')</p>';
                             }
                         }
                         jQuery(this).popover({
@@ -594,11 +595,11 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
     }
     var periodos_months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
     var periodos = [];
-    for(var year = 2016; year <= new Date().getFullYear(); year++){
-      periodos[periodos.length] = {
-        year: year,
-        months: periodos_months
-      }
+    for (var year = 2016; year <= new Date().getFullYear(); year++) {
+        periodos[periodos.length] = {
+            year: year,
+            months: periodos_months
+        }
     }
     $scope.pagos = {
         periodos: periodos,
@@ -635,25 +636,25 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
             else
                 $scope.tabledata = [];
             setTimeout(function () {
-                    jQuery('.popover-tarifa').each(function () {
-                        var detalle = jQuery(this).data('popover-content');
-                        var text = '<p>ADT: ' + detalle.adt + ' UF - (' + $filter('currency')(parseFloat(detalle.adt) * $scope.valoruf) + ')</p>';
-                        if (detalle.modelo)
-                            text += '<p>'+detalle.modelo.nombre + ': ' + detalle.modelo.valor + ' UF - (' + $filter('currency')(detalle.modelo.valor.replace(',','.') * $scope.valoruf) + ')</p>';
-                        if (detalle.servicios) {
-                            for (var x in detalle.servicios) {
-                                text += '<p>'+detalle.servicios[x].nombre + ': ' + detalle.servicios[x].valor + ' UF - (' + $filter('currency')(detalle.servicios[x].valor.replace(',','.') * $scope.valoruf) + ')</p>';
-                            }
+                jQuery('.popover-tarifa').each(function () {
+                    var detalle = jQuery(this).data('popover-content');
+                    var text = '<p>ADT: ' + detalle.adt + ' UF - (' + $filter('currency')(parseFloat(detalle.adt) * $scope.valoruf) + ')</p>';
+                    if (detalle.modelo)
+                        text += '<p>' + detalle.modelo.nombre + ': ' + detalle.modelo.valor + ' UF - (' + $filter('currency')(detalle.modelo.valor.replace(',', '.') * $scope.valoruf) + ')</p>';
+                    if (detalle.servicios) {
+                        for (var x in detalle.servicios) {
+                            text += '<p>' + detalle.servicios[x].nombre + ': ' + detalle.servicios[x].valor + ' UF - (' + $filter('currency')(detalle.servicios[x].valor.replace(',', '.') * $scope.valoruf) + ')</p>';
                         }
-                        jQuery(this).popover({
-                            title: 'Detalle de la tarifa',
-                            html: true,
-                            content: text,
-                            placement: 'right',
-                            trigger: 'focus'
-                        });
+                    }
+                    jQuery(this).popover({
+                        title: 'Detalle de la tarifa',
+                        html: true,
+                        content: text,
+                        placement: 'right',
+                        trigger: 'focus'
                     });
-                }, 1000);
+                });
+            }, 1000);
         }
     }
     $scope.pagos.tabYearActive = $scope.pagos.periodos.length - 1;

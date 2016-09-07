@@ -25,9 +25,9 @@ app.config(function ($routeProvider, $locationProvider) {
             });
 });
 app.run(function ($http) {
-    $http.get('http://mindicador.cl/api/uf', {}).success(function (response) {
+    /*$http.get('http://mindicador.cl/api/uf', {}).success(function (response) {
         sessionStorage.uf = response.serie[0].valor;
-    });
+    });*/
 });
 app.filter('originalname', function () {
     return function (input) {
