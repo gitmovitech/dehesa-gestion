@@ -595,10 +595,21 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
     }
     var periodos_months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
     var periodos = [];
-    for (var year = 2016; year <= new Date().getFullYear(); year++) {
+    var tmp_months = [];
+    for (var year = 2010; year <= new Date().getFullYear(); year++) {
+        if(new Date().getFullYear() == year){
+            tmp_months = [];
+            for(var x in periodos_months){
+                if(x <= new Date().getMonth()){
+                    tmp_months[tmp_months.length] = periodos_months[x];
+                }
+            }
+        } else {
+            tmp_months = periodos_months;
+        }
         periodos[periodos.length] = {
             year: year,
-            months: periodos_months
+            months: tmp_months
         }
     }
     $scope.pagos = {
