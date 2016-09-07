@@ -24,7 +24,17 @@ app.config(function ($routeProvider, $locationProvider) {
                 redirectTo: '/'
             });
 });
-app.run(function ($http) {
+app.run(function ($http, Session) {
+    $http.get('/api/data', {
+        params: {
+            token: Session.get(),
+            collection: 'modelos'
+        }
+    }).success(function (response) {
+        if (response.success) {
+            sessionStorage.tiposCasa = JSON.stringify(response.data);
+        }
+    });
     /*$http.get('http://mindicador.cl/api/uf', {}).success(function (response) {
         sessionStorage.uf = response.serie[0].valor;
     });*/
@@ -35,6 +45,19 @@ app.filter('originalname', function () {
         input = input.splice(1);
         return input.join('-');
     };
+});
+app.filter('tipo_casa', function () {
+    return function (input) {
+        if (sessionStorage.tiposCasa) {
+            var tipos_casa = JSON.parse(sessionStorage.tiposCasa);
+            for (var x in tipos_casa) {
+                if (tipos_casa[x]._id == input) {
+                    return tipos_casa[x].nombre;
+                }
+            }
+        }
+        return input;
+    }
 });
 app.filter('convert2UF', function () {
     return function (input) {

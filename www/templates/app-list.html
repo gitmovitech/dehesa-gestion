@@ -5,9 +5,9 @@
         <button ng-if="session.type == 'Administrador' && page.collection != 'pagos'" class="btn btn-sm btn-primary" ng-click="showModal(page.fields)">
             <i class="glyphicon glyphicon-plus-sign"></i> Crear nuevo
         </button>
-        <button ng-if="session.type == 'Administrador' && page.collection == 'asociados' || page.collection == 'pagos'" class="btn btn-sm btn-primary" ng-click="showModal(page.fields)">
+        <!--<button ng-if="session.type == 'Administrador' && page.collection == 'asociados' || page.collection == 'pagos'" class="btn btn-sm btn-primary" ng-click="showModal(page.fields)">
             <i class="glyphicon glyphicon-plus-sign"></i> Exportar registros
-        </button>
+        </button>-->
     </h1>
     <div class="form-group" ng-if="page.collection != 'pagos'">
         <label class="sr-only" for="buscador"></label>

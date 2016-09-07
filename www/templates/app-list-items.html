@@ -15,7 +15,8 @@
             <td ng-repeat="(key,tddata) in trdata" ng-if="key != '_id' && key != 'index' && key != 'password'">
                 <span ng-if="key == 'run'">{{::tddata| rut}}</span>
                 <span ng-if="key == 'fecha_ingreso'">{{::tddata| date}}</span>
-                <span ng-if="key != 'run' && key != 'fecha_ingreso'">{{::tddata}}</span>
+                <span ng-if="key == 'tipo_casa'">{{::tddata | tipo_casa}}</span>
+                <span ng-if="key != 'run' && key != 'fecha_ingreso' && key != 'tipo_casa'">{{::tddata}}</span>
                 <span class="text-success" ng-if="trdata.type == 'UF' && key == 'valor'">{{tddata| convert2UF|currency}}</span>
             </td>
         </tr>
