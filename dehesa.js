@@ -268,73 +268,17 @@ app.get('/descargas/:file', function (req, res) {
 /**
  * IMPORTAR EXCEL
  */
-var month = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+var importPagos = require('./dehesa-import-pagos');
 app.post('/api/data/import/excel', function (req, res) {
     if (req.body.params.token) {
         getSession(req.body.params.token, function (userdata, err) {
             if (userdata) {
-                var file = __dirname + '/uploads/' + req.body.params.filename;
-                if (fs.existsSync(file)) {
-                    var data;
-                    try {
-                        data = xlsx.parse(fs.readFileSync(file));
-                    } catch (e) {
-                        res.send({
-                            success: false,
-                            message: 'El archivo excel subido no es válido. Suba el archivo en formato excel y con el formato adecuado.'
-                        });
-                    }
-                    var thismonth;
-                    for (var c in month) {
-                        if (month[c] == req.body.params.periodo.month) {
-                            thismonth = parseInt(c);
-                            break;
-                        }
-                    }
-                    if (data[0].data) {
-                        data = data[0].data;
-                        
-                        if (data[0][0] && data[0][1] && data[0][2] && data[0][3] && data[0][4]) {
-                            for (var r in data) {
-                                if (data[r][0] && data[r][1] && data[r][2] && data[r][3] && data[r][4]) {
-                                    if (RutJS.isValid(data[r][1])) {
-                                        data[r] = {
-                                            nombre: data[r][0],
-                                            run: RutJS.cleanRut(data[r][1]),
-                                            direccion: data[r][2],
-                                            codigo: data[r][3],
-                                            tarifa: data[r][4],
-                                            status: 'Pendiente',
-                                            month: thismonth,
-                                            year: parseInt(req.body.params.periodo.year)
-                                        }
-                                    }
-                                }
-                            }
-                            db.addMonthPayment(data, function () {
-                                res.send({
-                                    success: true
-                                });
-                            });
-                        } else {
-                            res.send({
-                                success: false,
-                                message: 'El archivo excel subido no se encuentra correctamente formateado con los campos requeridos. Suba el archivo nuevamente y con el formato adecuado.'
-                            });
-                        }
-                    } else {
-                        res.send({
-                            success: false,
-                            message: 'El archivo excel subido no se encuentra correctamente formateado. Suba el archivo nuevamente y con el formato adecuado.'
-                        });
-                    }
-
-                } else {
-                    res.send({
-                        success: false,
-                        message: 'El archivo no fue encontrado en el servidor. Si el error persiste comuníquese con soporte'
-                    });
-                }
+              importPagos.import(req.body.params, function(response){
+                console.log(response.data);
+                db.addMonthPayment(response.data, function () {
+                    //res.send(response);
+                });
+              });
             } else {
                 res.send({
                     success: false,

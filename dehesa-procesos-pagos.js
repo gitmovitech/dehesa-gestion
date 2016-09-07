@@ -39,7 +39,7 @@ var obtenerServicioAsociado = function (collection, data, index, cb) {
 var obtenerCobrosIndividualesAsociados = function (database, data, index, cb) {
     if (data[index]) {
         database.collection('asociados').findOne({run: data[index].run}, function (err, asociados) {
-            if (asociados.modelo) {
+            /*if (asociados.modelo) {
                 database.collection('modelos').findOne({_id: ObjectID(asociados.modelo)}, function (err, modelo) {
                     data[index].modelo = modelo;
                     if (asociados.servicios) {
@@ -54,9 +54,9 @@ var obtenerCobrosIndividualesAsociados = function (database, data, index, cb) {
                     data[index].servicios = servicios;
                     obtenerCobrosIndividualesAsociados(database, data, index + 1, cb);
                 });
-            } else {
+            } else {*/
                 obtenerCobrosIndividualesAsociados(database, data, index + 1, cb);
-            }
+            //}
         });
     } else {
         serviciosAsociados = [];

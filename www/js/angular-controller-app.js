@@ -83,9 +83,9 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
             $scope.valoruf = parseFloat(sessionStorage.uf);
         }
         if (item.collection == 'pagos')
-            $http.get('http://mindicador.cl/api/uf', {}).success(function (response) {
+            /*$http.get('http://mindicador.cl/api/uf', {}).success(function (response) {
                 $scope.valoruf = response.serie[0].valor;
-                sessionStorage.uf = $scope.valoruf;
+                sessionStorage.uf = $scope.valoruf;*/
                 $http.get('/api/data', {
                     params: {
                         token: Session.get(),
@@ -108,7 +108,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                         }
                     }
                 });
-            });
+            //});
 
         if (item) {
             sessionStorage.page = index;
@@ -334,7 +334,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                 fields: $scope.fields
             }
         }).success(function (response) {
-            //jQuery('#modalEdit').modal('hide');
+            jQuery('#modalEdit').modal('hide');
             if (reload) {
                 setTimeout(function () {
                     location.reload();

@@ -5,6 +5,10 @@ if(process.argv[2]){
   var filename = process.argv[2];
   var xlsx = require('node-xlsx');
   var fs = require('fs');
+  var dateFormat = function(number){
+      var fecha = new Date(1900, 0,number -1);
+      fecha
+  }
   if (fs.existsSync(filename)) {
     MongoClient.connect(url, function (err, db) {
         if (!err) {
@@ -37,7 +41,7 @@ if(process.argv[2]){
                     monitoreo: data[x][1],
                     numero_cliente: data[x][2],
                     tipo_conexion: data[x][3],
-                    fecha_ingreso: data[x][4],
+                    fecha_ingreso: new Date(1900, 0,data[x][4] -1).getTime(),
                     usuario: data[x][5],
                     run: data[x][6],
                     nombre: data[x][7],

@@ -288,33 +288,13 @@ exports.editCollectionById = function (collection, data, id, callback) {
 /**
  * PAGOS
  */
-var checkAndInsertAsociado = function (asociados, data, index, cb) {
-    if (data[index]) {
-        asociados.findOne({
-            "run": data[index].run
-        }, function (err, response) {
-            if (!response) {
-                if (data[index].run)
-                    asociados.insert({
-                        nombre: data[index].nombre,
-                        apellidos: '',
-                        email: '',
-                        run: data[index].run,
-                        celular: '',
-                        telefono: '',
-                        direccion: data[index].direccion
-                    });
-            }
-            checkAndInsertAsociado(asociados, data, index + 1, cb);
-        });
-    } else {
-        cb();
-    }
-}
 
 exports.addMonthPayment = function (data, cb) {
     if (database) {
-        checkAndInsertAsociado(database.collection('asociados'), data, 0, function () {
+      database.collection('asociados').find({}).toArray(function (err, response) {
+          cb(response);
+      });
+        /*getAsociados(database.collection('asociados'), function () {
             database.collection('pagos').findOne({
                 month: data.month,
                 year: data.year
@@ -325,7 +305,7 @@ exports.addMonthPayment = function (data, cb) {
                     dehesaPagos.procesar(database.collection('pagos'), data, 0, cb);
                 }
             });
-        });
+        });*/
     }
 }
 

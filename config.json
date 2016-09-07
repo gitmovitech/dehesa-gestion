@@ -111,11 +111,15 @@
             "collection": "asociados",
             "fields": [
                 {
+                    "name": "_id",
+                    "type": "text",
+                    "id": true
+                },
+                {
                     "name": "id",
                     "title": "Número de socio",
                     "type": "number",
-                    "required": true,
-                    "id": true
+                    "required": true
                 },
                 {
                     "name": "monitoreo",
@@ -169,8 +173,7 @@
                 {
                     "name": "telefono",
                     "title": "Teléfono",
-                    "type": "number",
-                    "required": true
+                    "type": "number"
                 },
                 {
                     "name": "correo",
@@ -190,16 +193,16 @@
                     "data": {
                         "options": [
                             {
-                                "key": "Efectivo",
-                                "value": "Efectivo"
+                                "key": "PAC",
+                                "value": "PAC"
                             },
                             {
-                                "key": "Cheque",
-                                "value": "Cheque"
+                                "key": "PAT",
+                                "value": "PAT"
                             },
                             {
-                                "key": "Pac-Pat",
-                                "value": "Pac-Pat"
+                                "key": "P/OFICINA",
+                                "value": "P/OFICINA"
                             }
                         ]
                     },
@@ -208,7 +211,7 @@
                 {
                     "name": "monto",
                     "title": "Monto",
-                    "type": "number",
+                    "type": "text",
                     "required": true
                 },
                 {

@@ -19,7 +19,7 @@
     <b class="text-primary" ng-if="registros">Mostrando {{registros}} registros.</b>
 
     <div ng-include="'templates/app-pagos.html'" ng-if="page.collection == 'pagos'"></div>
-    <div ng-include="'templates/app-list-items.html'" ng-if="page.collection != 'pagos'"></div>
+    <div style="overflow-x:auto" ng-include="'templates/app-list-items.html'" ng-if="page.collection != 'pagos'"></div>
 
     <nav class="text-center" ng-if="pagination.numPages > 1">
         <ul class="pagination">
