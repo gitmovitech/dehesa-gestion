@@ -69,7 +69,7 @@
         },
         {
             "icon": "glyphicon glyphicon-home",
-            "name": "Modelos",
+            "name": "Modelos (Cobro total)",
             "scope": [
                 "Administrador",
                 "Editor"
@@ -344,6 +344,51 @@
                                 "files": true,
                                 "comments": true,
                                 "quantity": true
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "icon": "glyphicon glyphicon-hand-right",
+            "name": "Servicios prorateados",
+            "scope": [
+                "Administrador",
+                "Editor"
+            ],
+            "collection": "servicios",
+            "fields": [
+                {
+                    "name": "_id",
+                    "type": "text",
+                    "id": true
+                },
+                {
+                    "name": "nombre",
+                    "title": "Nombre",
+                    "type": "text",
+                    "required": true
+                },
+                {
+                    "name": "valor",
+                    "title": "Valor",
+                    "type": "text",
+                    "required": true
+                },
+                {
+                    "name": "type",
+                    "title": "Tipo de valor",
+                    "type": "select",
+                    "data": {
+                        "options": [
+                            {
+                                "key": "UF",
+                                "value": "UF"
+                            },
+                            {
+                                "key": "Pesos",
+                                "value": "Pesos"
                             }
                         ]
                     }

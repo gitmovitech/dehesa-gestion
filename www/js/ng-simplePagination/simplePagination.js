@@ -49,7 +49,7 @@
                 if (typeof input.slice == 'function')
                     return input.slice(+start);
                 else {
-                    console.info(input);
+                    //console.info(input);
                     return input;
                 }
             }
