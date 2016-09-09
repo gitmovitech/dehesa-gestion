@@ -18,7 +18,7 @@
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane" ng-class="{'active': pagos.tabMonthActive == $index}" ng-repeat="month in item.months">
                     <h3>Registros de {{month}}:</h3>
-                    <button ng-if="pagos.showUploadExcel" class="btn btn-sm btn-primary" ng-click="showModal(page.fields, null, {month: month, year: item.year})">
+                    <button class="btn btn-sm btn-primary" ng-click="showModal(page.fields, null, {month: month, year: item.year})">
                         <i class="glyphicon glyphicon-cloud-upload"></i> Subir archivo excel de {{month}}
                     </button>
                 </div>

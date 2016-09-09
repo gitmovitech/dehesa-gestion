@@ -14,6 +14,8 @@ var formatRut = function (_value) {
 var validateRut = function (_value) {
     if (typeof _value !== 'string')
         return false;
+    _value = _value.toUpperCase();
+    _value = cleanRut(_value);
     var t = parseInt(_value.slice(0, -1), 10), m = 0, s = 1;
     while (t > 0) {
         s = (s + t % 10 * (9 - m++ % 6)) % 11;

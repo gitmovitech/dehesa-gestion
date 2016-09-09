@@ -1,17 +1,40 @@
 var ObjectID = require('mongodb').ObjectID;
+var RutJS = require('./RutJS');
 var procesar = function (collection, data, index, cb) {
-    if (data[index]) {
+    if (typeof data[index] == 'object') {
         if (data[index].run) {
-            collection.insert({
-                run: data[index].run,
-                codigo: data[index].codigo,
-                tarifa: data[index].tarifa,
-                type: data[index].status,
+            collection.findOne({
                 month: data[index].month,
-                year: data[index].year
+                year: data[index].year,
+                run: RutJS.cleanRut(data[index].run)
+            }, function (err, response) {
+                if (!response) {
+                    collection.insert({
+                        run: RutJS.cleanRut(data[index].run),
+                        codigo: data[index].codigo,
+                        tarifa: data[index].tarifa,
+                        type: data[index].status,
+                        month: data[index].month,
+                        year: data[index].year
+                    });
+                } else {
+                    collection.update({
+                        run: RutJS.cleanRut(data[index].run),
+                        month: data[index].month,
+                        year: data[index].year
+                    }, {
+                        $set: {
+                            codigo: data[index].codigo,
+                            tarifa: data[index].tarifa,
+                            type: data[index].status
+                        }
+                    });
+                }
+                procesar(collection, data, index + 1, cb);
             });
+        } else {
+            procesar(collection, data, index + 1, cb);
         }
-        procesar(collection, data, index + 1, cb);
     } else {
         cb();
     }
@@ -40,22 +63,22 @@ var obtenerCobrosIndividualesAsociados = function (database, data, index, cb) {
     if (data[index]) {
         database.collection('asociados').findOne({run: data[index].run}, function (err, asociados) {
             /*if (asociados.modelo) {
-                database.collection('modelos').findOne({_id: ObjectID(asociados.modelo)}, function (err, modelo) {
-                    data[index].modelo = modelo;
-                    if (asociados.servicios) {
-                        obtenerServicioAsociado(database.collection('servicios'), asociados.servicios, 0, function (servicios) {
-                            data[index].servicios = servicios;
-                            obtenerCobrosIndividualesAsociados(database, data, index + 1, cb);
-                        });
-                    }
-                });
-            } else if (asociados.servicios) {
-                obtenerServicioAsociado(database.collection('servicios'), asociados.servicios, 0, function (servicios) {
-                    data[index].servicios = servicios;
-                    obtenerCobrosIndividualesAsociados(database, data, index + 1, cb);
-                });
-            } else {*/
-                obtenerCobrosIndividualesAsociados(database, data, index + 1, cb);
+             database.collection('modelos').findOne({_id: ObjectID(asociados.modelo)}, function (err, modelo) {
+             data[index].modelo = modelo;
+             if (asociados.servicios) {
+             obtenerServicioAsociado(database.collection('servicios'), asociados.servicios, 0, function (servicios) {
+             data[index].servicios = servicios;
+             obtenerCobrosIndividualesAsociados(database, data, index + 1, cb);
+             });
+             }
+             });
+             } else if (asociados.servicios) {
+             obtenerServicioAsociado(database.collection('servicios'), asociados.servicios, 0, function (servicios) {
+             data[index].servicios = servicios;
+             obtenerCobrosIndividualesAsociados(database, data, index + 1, cb);
+             });
+             } else {*/
+            obtenerCobrosIndividualesAsociados(database, data, index + 1, cb);
             //}
         });
     } else {
