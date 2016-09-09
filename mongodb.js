@@ -289,23 +289,64 @@ exports.editCollectionById = function (collection, data, id, callback) {
  * PAGOS
  */
 
-exports.addMonthPayment = function (data, cb) {
+exports.addMonthPayment = function (pagos, cb) {
     if (database) {
-      database.collection('asociados').find({}).toArray(function (err, response) {
-          cb(response);
-      });
-        /*getAsociados(database.collection('asociados'), function () {
-            database.collection('pagos').findOne({
-                month: data.month,
-                year: data.year
-            }, function (err, response) {
-                if (response) {
-                    cb(false, 'Los datos de este mes ya se encuentran cargados');
+        database.collection('asociados').find({}).toArray(function (err, asociados) {
+            var pagos_importados = [];
+            var asociados_no_existentes = [];
+            var run_asociado, run_pago;
+            for (var x in asociados) {
+                run_asociado = asociados[x].run;
+                if (typeof run_asociado == 'string') {
+                    run_asociado = run_asociado.replace(/./g, '');
+                    run_asociado = run_asociado.replace(/-/g, '');
                 } else {
-                    dehesaPagos.procesar(database.collection('pagos'), data, 0, cb);
+                    var out = '';
+                    for(var t in asociados[x]){
+                        out += t.toUpperCase()+': '+asociados[x][t]+'\n';
+                    }
+                    cb({
+                        success:false,
+                        message: 'Se ha encontrado un registro de asociado sin RUT.\n Se ha interrumpido la importación de pagos favor corrija el registro en la sección de Asociados:\nRespuesta del servidor:\n\n'+out
+                    });
                 }
-            });
-        });*/
+                for (var y in pagos) {
+                    run_pago = pagos[y].run;
+                    if (typeof run_pago == 'string') {
+                        run_pago = run_pago.replace(/./g, '');
+                        run_pago = run_pago.replace(/-/g, '');
+                    } else {
+                        console.log(run_pago);
+                    }
+                    if (run_asociado == run_pago) {
+                        pagos_importados[pagos_importados.length] = {
+                            nombre: asociados[x].nombre,
+                            run: asociados[x].run,
+                            codigo: pagos[y].codigo,
+                            tarifa: pagos[y].tarifa,
+                            status: 'Pendiente',
+                            month: pagos[y].month,
+                            year: pagos[y].year
+                        }
+                        break;
+                    }
+                }
+            }
+            console.log(pagos_importados.length);
+            //cb(response);
+        });
+        /*getAsociados(database.collection('asociados'), function () {
+         database.collection('pagos').findOne({
+         month: data.month,
+         year: data.year
+         }, function (err, response) {
+         if (response) {
+         cb(false, 'Los datos de este mes ya se encuentran cargados');
+         } else {
+         dehesaPagos.procesar(database.collection('pagos'), data, 0, cb);
+         }
+         });
+         });*/
     }
 }
 

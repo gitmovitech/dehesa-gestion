@@ -283,9 +283,8 @@ app.post('/api/data/import/excel', function (req, res) {
         getSession(req.body.params.token, function (userdata, err) {
             if (userdata) {
                 importPagos.import(req.body.params, function (response) {
-                    console.log(response.data);
-                    db.addMonthPayment(response.data, function () {
-                        //res.send(response);
+                    db.addMonthPayment(response.data, function (response) {
+                        res.send(response);
                     });
                 });
             } else {
