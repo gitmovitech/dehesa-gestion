@@ -338,6 +338,41 @@ app.get('/api/pagos', function (req, res) {
     }
 });
 
+app.post('/api/notiticar-contador', function (req, res) {
+    if (req.body.params.token) {
+        getSession(req.body.params.token, function (response, err) {
+            if (response) {
+                var contador = false
+                db.getCollection('users', function (response) {
+                    for (var x in response) {
+                        if (response[x].type == 'Contable') {
+                            contador = response[x];
+                            break;
+                        }
+                    }
+                    if (typeof contador == 'object') {
+                        sendmail.notificarContador({
+                            toname: contador.name,
+                            month: req.body.params.month,
+                            url: config.url,
+                            to: contador.email,
+                            year: req.body.params.year
+                        });
+                        res.send({
+                            success: true
+                        });
+                    } else {
+                        res.send({
+                            success: false,
+                            message: 'No existe un contador ingresado en el sistema en la seccion Usuarios'
+                        });
+                    }
+                });
+            }
+        });
+    }
+});
+
 app.use(express.static(__dirname + '/www'));
 app.get('/*', function (req, res) {
     var serverpath = __dirname;

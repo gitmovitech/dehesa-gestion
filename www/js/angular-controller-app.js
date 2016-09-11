@@ -517,64 +517,91 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
             }
         }
         $http.get('/api/data', {
-            params: params
+            params: {
+                token: Session.get(),
+                collection: 'valoresuf'
+            }
         }).success(function (response) {
             if (response.success) {
-                if (response.data.length == 0) {
-                    $scope.pagos.showUploadExcel = true;
-                } else {
-                    $scope.pagos.showUploadExcel = false;
-                }
-                var registros = [];
-                var valoruf = 1;
-                if ($scope.valoruf) {
-                    valoruf = $scope.valoruf;
-                }
-                var tarifa;
-                var total;
-                for (var d in response.data) {
-                    tarifa = {
-                        detalle: response.data[d].tarifa
-                    }
-                    total = 0;
-                    for (var v in tarifa.detalle) {
-                        total += tarifa.detalle[v].valor;
-                    }
-                    tarifa.total = total;
-                    registros[registros.length] = {
-                        index: parseInt(parseInt(d) + parseInt(1)),
-                        _id: response.data[d]._id,
-                        nombre: response.data[d].nombre,
-                        run: RutHelper.format(response.data[d].run),
-                        codigo: response.data[d].codigo,
-                        tarifa: tarifa,
-                        type: response.data[d].type
-                    }
-                }
-                $scope.registros = response.data.length;
-                $scope.pagination.numPages = Math.ceil(response.data.length / $scope.pagination.perPage);
-                $scope.tabledata = registro_pagos = registros;
-
-                /**
-                 * DETALLE DEL POPOVER
-                 */
-                setTimeout(function () {
-                    jQuery('.popover-tarifa').each(function () {
-                        var data = jQuery(this).data('popover-content');
-                        var text = '<p><b>TOTAL: ' + data.total + '</b></p>';
-                        for (var x in data.detalle) {
-                            text += '<p>' + data.detalle[x].nombre + ': ' + data.detalle[x].valor + '</p>';
+                if (response.data.length > 0) {
+                    var valor = false;
+                    for (var x in response.data) {
+                        if (periodos_months[month] == response.data[x].mes && year == response.data[x].year) {
+                            valor = response.data[x].valor;
+                            break;
                         }
-                        jQuery(this).popover({
-                            title: 'Detalle de la tarifa',
-                            html: true,
-                            content: text,
-                            placement: 'right',
-                            trigger: 'focus'
-                        });
-                    });
-                }, 1000);
+                    }
+                    if (valor) {
+                        $scope.valoruf = valor;
 
+                        $http.get('/api/data', {
+                            params: params
+                        }).success(function (response) {
+                            if (response.success) {
+                                /*if (response.data.length == 0) {
+                                 $scope.pagos.showUploadExcel = true;
+                                 } else {
+                                 $scope.pagos.showUploadExcel = false;
+                                 }*/
+                                var registros = [];
+                                var tarifa;
+                                var total;
+                                for (var d in response.data) {
+                                    tarifa = {
+                                        detalle: response.data[d].tarifa
+                                    }
+                                    total = 0;
+                                    for (var v in tarifa.detalle) {
+                                        total += tarifa.detalle[v].valor;
+                                    }
+                                    tarifa.total = total;
+                                    tarifa.totalpesos = total * parseFloat($scope.valoruf);
+                                    registros[registros.length] = {
+                                        index: parseInt(parseInt(d) + parseInt(1)),
+                                        _id: response.data[d]._id,
+                                        nombre: response.data[d].nombre,
+                                        run: RutHelper.format(response.data[d].run),
+                                        codigo: response.data[d].codigo,
+                                        tarifa: tarifa,
+                                        type: response.data[d].type
+                                    }
+                                }
+                                $scope.registros = response.data.length;
+                                $scope.pagination.numPages = Math.ceil(response.data.length / $scope.pagination.perPage);
+                                $scope.tabledata = registro_pagos = registros;
+
+                                /**
+                                 * DETALLE DEL POPOVER
+                                 */
+                                setTimeout(function () {
+                                    jQuery('.popover-tarifa').each(function () {
+                                        var data = jQuery(this).data('popover-content');
+                                        var text = '<p><b>TOTAL: ' + data.total + '</b></p>';
+                                        for (var x in data.detalle) {
+                                            text += '<p><b>' + data.detalle[x].nombre + ': ' + (Math.round(data.detalle[x].valor * 100) / 100) + '</b> UF - ' + ($filter('currency')(data.detalle[x].valor * parseFloat($scope.valoruf))) + '</p>';
+                                        }
+                                        jQuery(this).popover({
+                                            title: 'Detalle de la tarifa',
+                                            html: true,
+                                            content: text,
+                                            placement: 'right',
+                                            trigger: 'focus'
+                                        });
+                                    });
+                                }, 1000);
+
+                            }
+                        });
+
+                    } else {
+                        $scope.valoruf = false;
+                        alert('No hay valores UF cargados de ' + month);
+                    }
+                } else {
+                    alert('No hay valores UF cargados');
+                }
+            } else {
+                alert('No hay valores UF cargados');
             }
         });
     }
@@ -604,6 +631,23 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         tabMonthActive: null,
         monthActive: null,
         showUploadExcel: false,
+        notificarContador: function (month, year) {
+            if (confirm('¿Desea notificar al contador que la carga de cobros se encuentra lista?')) {
+                $http.post('/api/notiticar-contador', {
+                    params: {
+                        token: Session.get(),
+                        year: year,
+                        month: month
+                    }
+                }).success(function (response) {
+                    if (response.success) {
+                        alert('Se ha enviado una notificación por correo al contador correctamente');
+                    } else {
+                        alert(response.message);
+                    }
+                });
+            }
+        },
         changeTab: function (index, year, month) {
             this.tabMonthActive = index;
             this.monthActive = month;

@@ -308,14 +308,20 @@
                                 "value": "Pendiente"
                             },
                             {
-                                "key": "Pagado con Pac Pat",
-                                "value": "Pagado con Pac Pat",
+                                "key": "Cargado con PAC PAT",
+                                "value": "Cargado con PAC PAT",
                                 "files": true,
                                 "comments": true
                             },
                             {
-                                "key": "Pac Pat Rechazado",
-                                "value": "Pac Pat Rechazado",
+                                "key": "Pagado con PAC PAT",
+                                "value": "Pagado con PAC PAT",
+                                "files": true,
+                                "comments": true
+                            },
+                            {
+                                "key": "PAC PAT rechazado",
+                                "value": "PAC PAT rechazado",
                                 "comments": true
                             },
                             {
@@ -392,6 +398,98 @@
                             }
                         ]
                     }
+                }
+            ]
+        },
+        {
+            "icon": "glyphicon glyphicon-stats",
+            "name": "Valores UF",
+            "scope": [
+                "Administrador",
+                "Editor"
+            ],
+            "collection": "valoresuf",
+            "fields": [
+                {
+                    "name": "_id",
+                    "type": "text",
+                    "id": true
+                },
+                {
+                    "name": "dia",
+                    "title": "Día",
+                    "type": "number",
+                    "required": true
+                },
+                {
+                    "name": "mes",
+                    "title": "Mes",
+                    "type": "select",
+                    "data": {
+                        "options": [
+                            {
+                                "key": "Enero",
+                                "value": "Enero"
+                            },
+                            {
+                                "key": "Febrero",
+                                "value": "Febrero"
+                            },
+                            {
+                                "key": "Marzo",
+                                "value": "Marzo"
+                            },
+                            {
+                                "key": "Abril",
+                                "value": "Abril"
+                            },
+                            {
+                                "key": "Mayo",
+                                "value": "Mayo"
+                            },
+                            {
+                                "key": "Junio",
+                                "value": "Junio"
+                            },
+                            {
+                                "key": "Julio",
+                                "value": "Julio"
+                            },
+                            {
+                                "key": "Agosto",
+                                "value": "Agosto"
+                            },
+                            {
+                                "key": "Septiembre",
+                                "value": "Septiembre"
+                            },
+                            {
+                                "key": "Octubre",
+                                "value": "Octubre"
+                            },
+                            {
+                                "key": "Noviembre",
+                                "value": "Noviembre"
+                            },
+                            {
+                                "key": "Diciembre",
+                                "value": "Diciembre"
+                            }
+                        ]
+                    },
+                    "required": true
+                },
+                {
+                    "name": "year",
+                    "title": "Año",
+                    "type": "number",
+                    "required": true
+                },
+                {
+                    "name": "valor",
+                    "title": "Valor",
+                    "type": "text",
+                    "required": true
                 }
             ]
         }

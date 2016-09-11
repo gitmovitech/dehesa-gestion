@@ -21,6 +21,9 @@
                     <button class="btn btn-sm btn-primary" ng-click="showModal(page.fields, null, {month: month, year: item.year})">
                         <i class="glyphicon glyphicon-cloud-upload"></i> Subir archivo excel de {{month}}
                     </button>
+                    <button class="btn btn-sm btn-primary" ng-click="pagos.notificarContador(month, item.year)">
+                        <i class="glyphicon glyphicon-copy"></i> Notificar al contador
+                    </button>
                 </div>
             </div>
         </div>
@@ -46,11 +49,13 @@
                 <tr ng-repeat="(index,trdata) in tabledata  | startFrom: pagination.page * pagination.perPage | limitTo: pagination.perPage track by trdata._id">
                     <td ng-repeat="(key,tddata) in trdata" ng-if="key != '_id' && key != 'month' && key != 'year' && key != 'type'">
                         <span class="text-success" ng-if="key == 'tarifa'">
-                            {{tddata.total}}
                             <a href="javascript:" data-popover-content="{{tddata}}" class="popover-tarifa">
                                 <i class="glyphicon glyphicon-tags"></i>
-                            </a>
+                            </a>&nbsp;
+                            <b>{{tddata.total}} UF:&nbsp;</b> 
                         </span>
+                        {{tddata.totalpesos| currency}}
+
                         <span ng-class="{'text-danger':key == 'index'}" ng-if="key != 'tarifa'">{{tddata}}</span>
                     </td>
                     <td ng-repeat="(key,item) in trdata" ng-if="key == 'type'">
