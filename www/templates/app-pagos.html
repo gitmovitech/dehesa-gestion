@@ -46,8 +46,8 @@
                 <tr ng-repeat="(index,trdata) in tabledata  | startFrom: pagination.page * pagination.perPage | limitTo: pagination.perPage track by trdata._id">
                     <td ng-repeat="(key,tddata) in trdata" ng-if="key != '_id' && key != 'month' && key != 'year' && key != 'type'">
                         <span class="text-success" ng-if="key == 'tarifa'">
-                            {{tddata.total| currency}}
-                            <a href="javascript:" data-popover-content="{{trdata.tarifa}}" class="popover-tarifa">
+                            {{tddata.total}}
+                            <a href="javascript:" data-popover-content="{{tddata}}" class="popover-tarifa">
                                 <i class="glyphicon glyphicon-tags"></i>
                             </a>
                         </span>

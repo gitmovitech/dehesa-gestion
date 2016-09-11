@@ -80,35 +80,36 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         $scope.registros = false;
 
         /*if (sessionStorage.uf) {
-            $scope.valoruf = parseFloat(sessionStorage.uf);
-        }*/
+         $scope.valoruf = parseFloat(sessionStorage.uf);
+         }*/
         $scope.valoruf = false;
-        if (item.collection == 'pagos')
-            /*$http.get('http://mindicador.cl/api/uf', {}).success(function (response) {
-             $scope.valoruf = response.serie[0].valor;
-             sessionStorage.uf = $scope.valoruf;*/
-            $http.get('/api/data', {
-                params: {
-                    token: Session.get(),
-                    collection: 'servicios'
-                }
-            }).success(function (response) {
-                if (response.success) {
-
-                    $scope.servicios = {
-                        total: 0,
-                        detalle: []
-                    };
-                    for (var t in response.data) {
-                        if (response.data[t].type == 'UF') {
-                            response.data[t].valor = response.data[t].valor.replace(',', '.');
-                            response.data[t].valor = parseFloat(response.data[t].valor)// * parseFloat($scope.valoruf);
-                        }
-                        $scope.servicios.detalle[$scope.servicios.detalle.length] = response.data[t];
-                        $scope.servicios.total = $scope.servicios.total + response.data[t].valor;
-                    }
-                }
-            });
+        /*if (item.collection == 'pagos')
+         /*$http.get('http://mindicador.cl/api/uf', {}).success(function (response) {
+         $scope.valoruf = response.serie[0].valor;
+         sessionStorage.uf = $scope.valoruf;
+         console.log(item)
+         $http.get('/api/data', {
+         params: {
+         token: Session.get(),
+         collection: 'servicios'
+         }
+         }).success(function (response) {
+         if (response.success) {
+         
+         $scope.servicios = {
+         total: 0,
+         detalle: []
+         };
+         for (var t in response.data) {
+         if (response.data[t].type == 'UF') {
+         response.data[t].valor = response.data[t].valor.replace(',', '.');
+         response.data[t].valor = parseFloat(response.data[t].valor)// * parseFloat($scope.valoruf);
+         }
+         $scope.servicios.detalle[$scope.servicios.detalle.length] = response.data[t];
+         $scope.servicios.total = $scope.servicios.total + response.data[t].valor;
+         }
+         }
+         });*/
         //});
 
         if (item) {
@@ -529,36 +530,24 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                 if ($scope.valoruf) {
                     valoruf = $scope.valoruf;
                 }
-                var valor;
+                var tarifa;
+                var total;
                 for (var d in response.data) {
-                    valor = valoruf * response.data[d].tarifa;
-                    if (response.data[d].modelo) {
-                        if (response.data[d].modelo.valor)
-                            if (response.data[d].modelo.type == 'UF')
-                                valor += valoruf * response.data[d].modelo.valor.replace(',', '.');
-                            else
-                                valor += response.data[d].modelo.valor.replace(',', '.');
+                    tarifa = {
+                        detalle: response.data[d].tarifa
                     }
-                    if (response.data[d].servicios) {
-                        for (var x in response.data[d].servicios) {
-                            if (response.data[d].servicios[x].type == 'UF')
-                                valor += valoruf * response.data[d].servicios[x].valor.replace(',', '.');
-                            else
-                                valor += response.data[d].servicios[x].valor.replace(',', '.');
-                        }
+                    total = 0;
+                    for (var v in tarifa.detalle) {
+                        total += tarifa.detalle[v].valor;
                     }
+                    tarifa.total = total;
                     registros[registros.length] = {
                         index: parseInt(parseInt(d) + parseInt(1)),
                         _id: response.data[d]._id,
                         nombre: response.data[d].nombre,
                         run: RutHelper.format(response.data[d].run),
                         codigo: response.data[d].codigo,
-                        tarifa: {
-                            adt: response.data[d].tarifa,
-                            total: valor,
-                            servicios: response.data[d].servicios,
-                            modelo: response.data[d].modelo
-                        },
+                        tarifa: tarifa,
                         type: response.data[d].type
                     }
                 }
@@ -571,14 +560,10 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                  */
                 setTimeout(function () {
                     jQuery('.popover-tarifa').each(function () {
-                        var detalle = jQuery(this).data('popover-content');
-                        var text = '<p>ADT: ' + detalle.adt + ' UF - (' + $filter('currency')(parseFloat(detalle.adt) * valoruf) + ')</p>';
-                        if (detalle.modelo)
-                            text += '<p>' + detalle.modelo.nombre + ': ' + detalle.modelo.valor + ' UF - (' + $filter('currency')(detalle.modelo.valor.replace(',', '.') * valoruf) + ')</p>';
-                        if (detalle.servicios) {
-                            for (var x in detalle.servicios) {
-                                text += '<p>' + detalle.servicios[x].nombre + ': ' + detalle.servicios[x].valor + ' UF - (' + $filter('currency')(detalle.servicios[x].valor.replace(',', '.') * valoruf) + ')</p>';
-                            }
+                        var data = jQuery(this).data('popover-content');
+                        var text = '<p><b>TOTAL: ' + data.total + '</b></p>';
+                        for (var x in data.detalle) {
+                            text += '<p>' + data.detalle[x].nombre + ': ' + data.detalle[x].valor + '</p>';
                         }
                         jQuery(this).popover({
                             title: 'Detalle de la tarifa',
@@ -597,10 +582,10 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
     var periodos = [];
     var tmp_months = [];
     for (var year = 2010; year <= new Date().getFullYear(); year++) {
-        if(new Date().getFullYear() == year){
+        if (new Date().getFullYear() == year) {
             tmp_months = [];
-            for(var x in periodos_months){
-                if(x <= new Date().getMonth()){
+            for (var x in periodos_months) {
+                if (x <= new Date().getMonth()) {
                     tmp_months[tmp_months.length] = periodos_months[x];
                 }
             }
