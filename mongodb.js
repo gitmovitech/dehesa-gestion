@@ -91,9 +91,6 @@ var valoresUFHistorialPagos = function (months, response, x, cb, deudapesos) {
                         answer.valor = answer.valor.replace(/,/g,'.');
                     }
                     deudapesos += deuda * answer.valor;
-                    console.log('UF del mes ' + months[response[x].month], answer.valor);
-                    console.log('SUMA deuda pesos', deudapesos);
-                    console.log('-----------------------------');
                 }
                 valoresUFHistorialPagos(months, response, x + 1, cb, deudapesos);
             });
@@ -128,9 +125,7 @@ var getResumenHistorialPagos = function (data, index, cb, months) {
                     database.collection('pagos').find({
                         run: data[index].run
                     }).toArray(function (err, response) {
-                        /**
-                         * BUSCAR MES PARA OBTENER EL VALOR UF Y PROCESAR LA DEUDA
-                         */
+                        
                         valoresUFHistorialPagos(months, response, 0, function (deuda) {
                             data[index].debe += deuda - data[index].haber;
                             data[index].haber -= deuda;
