@@ -60,18 +60,23 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         messageText: '',
         allMessages: []
     }
-    $scope.uploader = new FileUploader({
-        url: '/api/upload'
-    });
-    $scope.filestosave = [];
-    $scope.uploader.onCompleteItem = function (fileItem, response, status, headers) {
-        $scope.filestosave[$scope.filestosave.length] = response.filename;
-        console.log(fileItem)
-        console.info($scope.filestosave);
-        console.log(status)
-        console.info(headers);
-    };
-    $scope.readyToUpload = false;
+
+    var setUploader = function () {
+        $scope.uploader = new FileUploader({
+            url: '/api/upload'
+        });
+        $scope.filestosave = [];
+        $scope.uploader.onCompleteItem = function (fileItem, response, status, headers) {
+            $scope.filestosave[$scope.filestosave.length] = response.filename;
+            console.log(fileItem)
+            console.info($scope.filestosave);
+            console.log(status)
+            console.info(headers);
+        };
+        $scope.readyToUpload = false;
+    }
+    setUploader();
+
     $scope.load = function (item, index) {
         if (typeof $scope.page != 'undefined')
             if (typeof $scope.page.filter != 'undefined')
@@ -367,7 +372,13 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                     }
                 }).success(function (response) {
                     if (response.success) {
-                        location.reload();
+                        jQuery('#modalCSVpagos').modal('hide');
+                        setTimeout(function () {
+                            $scope.uploader.destroy();
+                            delete $scope.uploader;
+                            setUploader();
+                        }, 500);
+                        $scope.load($scope.page);
                     } else if (response.message) {
                         alert(response.message);
                         if (response.logout) {
@@ -505,7 +516,6 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
     var months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
     var registro_pagos = [];
     var obtenerPagos = function (year, month) {
-        console.info($scope.fields)
         for (var c in months) {
             if (months[c] == month) {
                 month = parseInt(c);
@@ -575,7 +585,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                                         run: RutHelper.format(response.data[d].run),
                                         codigo: response.data[d].codigo,
                                         tarifa: tarifa,
-                                        type: response.data[d].type, 
+                                        type: response.data[d].type,
                                         debe: response.data[d].debe,
                                         haber: response.data[d].haber
                                     }
