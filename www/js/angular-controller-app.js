@@ -656,26 +656,45 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         monthActive: null,
         showUploadExcel: false,
         changeStatus: function (select, data) {
-            console.log(data);
             var pagado = 0;
             if (select != 'Carga PAC PAT realizada' && select != 'PAC PAT rechazado' && select != 'Pendiente' && select != 'Cheque recibido') {
                 pagado = prompt('Total a pagar', Math.round(data.tarifa.totalpesos));
-            }
-            $http.post('/api/pagar', {
-                params: {
-                    token: Session.get(),
-                    data: {
-                        run: data.run,
-                        pago: pagado,
-                        month: this.tabMonthActive,
-                        year: this.yearActive,
-                        status: select,
-                        cobrodelmes: Math.round(data.tarifa.totalpesos)
-                    }
+                if (pagado) {
+                    $http.post('/api/pagar', {
+                        params: {
+                            token: Session.get(),
+                            data: {
+                                run: data.run,
+                                pago: pagado,
+                                month: this.tabMonthActive,
+                                year: this.yearActive,
+                                status: select,
+                                cobrodelmes: Math.round(data.tarifa.totalpesos)
+                            }
+                        }
+                    }).success(function (response) {
+                        $scope.load($scope.page);
+                    });
+                } else {
+                    $scope.load($scope.page);
                 }
-            }).success(function (response) {
-                $scope.load($scope.page);
-            });
+            } else {
+                $http.post('/api/pagar', {
+                    params: {
+                        token: Session.get(),
+                        data: {
+                            run: data.run,
+                            pago: pagado,
+                            month: this.tabMonthActive,
+                            year: this.yearActive,
+                            status: select,
+                            cobrodelmes: Math.round(data.tarifa.totalpesos)
+                        }
+                    }
+                }).success(function (response) {
+                    $scope.load($scope.page);
+                });
+            }
         },
         modalEditarDetalles: function (data) {
             $scope.showModal([{
