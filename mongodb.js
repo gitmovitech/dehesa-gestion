@@ -132,7 +132,14 @@ var getResumenHistorialPagos = function (data, index, cb, months) {
                          * BUSCAR MES PARA OBTENER EL VALOR UF Y PROCESAR LA DEUDA
                          */
                         valoresUFHistorialPagos(months, response, 0, function (deuda) {
-                            data[index].debe += deuda;
+                            data[index].debe += deuda - data[index].haber;
+                            data[index].haber -= deuda;
+                            if(data[index].debe < 0){
+                                data[index].debe = 0;
+                            }
+                            if(data[index].haber < 0){
+                                data[index].haber = 0;
+                            }
                             getResumenHistorialPagos(data, index + 1, cb, months);
                         }, 0);
                     });
