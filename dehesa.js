@@ -14,6 +14,7 @@ var path = require('path');
 var mime = require('mime');
 var sendmail = require('./sendmail');
 var config = require('./config');
+var meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 var getSession = function (token, callback) {
     var session = jwt.decode(token);
     if (session) {
@@ -84,7 +85,7 @@ app.get('/api/data', function (req, res) {
                                     });
                                 }
                             }
-                        });
+                        }, meses);
                     } else {
                         if (response) {
                             if (req.query.databack) {
@@ -344,7 +345,6 @@ app.get('/api/pagos', function (req, res) {
         getSession(req.query.token, function (response, err) {
             if (response) {
                 if (req.query.month && req.query.year) {
-                    var meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
                     var mes = null;
                     for (var x in meses) {
                         if (meses[x] == req.query.month) {

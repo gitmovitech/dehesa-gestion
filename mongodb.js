@@ -65,7 +65,44 @@ exports.getUserByEmail = function (email, callback) {
         }
     });
 }
-var getResumenHistorialPagos = function (data, index, cb) {
+var valoresUFHistorialPagos = function (months, response, x, cb, deudapesos) {
+    if (response[x]) {
+        var deuda = 0;
+        var sumauf = 0;
+        switch (response[x].type) {
+            case 'Pendiente':
+            case 'PAC PAT rechazado':
+            case 'Cheque recibido':
+                for (var t in response[x].tarifa) {
+                    sumauf += response[x].tarifa[t].valor;
+                }
+                deuda += sumauf;
+                break;
+        }
+        if (deuda == 0) {
+            valoresUFHistorialPagos(months, response, x + 1, cb, deudapesos);
+        } else {
+            database.collection('valoresuf').findOne({
+                mes: months[response[x].month],
+                year: response[x].year
+            }, function (err, answer) {
+                if (answer) {
+                    if(answer.valor.indexOf(',') >=0){
+                        answer.valor = answer.valor.replace(/,/g,'.');
+                    }
+                    deudapesos += deuda * answer.valor;
+                    console.log('UF del mes ' + months[response[x].month], answer.valor);
+                    console.log('SUMA deuda pesos', deudapesos);
+                    console.log('-----------------------------');
+                }
+                valoresUFHistorialPagos(months, response, x + 1, cb, deudapesos);
+            });
+        }
+    } else {
+        cb(deudapesos);
+    }
+}
+var getResumenHistorialPagos = function (data, index, cb, months) {
     if (data[index]) {
         if (typeof data[index].run != 'undefined') {
             database.collection('pagos_historial').find({
@@ -91,40 +128,21 @@ var getResumenHistorialPagos = function (data, index, cb) {
                     database.collection('pagos').find({
                         run: data[index].run
                     }).toArray(function (err, response) {
-                        var deuda = 0;
-                        var sumauf = 0;
-                        for (var x in response) {
-                            switch (response[x].type) {
-                                case 'Pendiente':
-                                case 'PAC PAT rechazado':
-                                case 'Cheque recibido':
-                                    sumauf = 0;
-                                    for (var t in response[x].tarifa) {
-                                        sumauf += response[x].tarifa[t].valor;
-                                    }
-                                    deuda += sumauf;
-                                    break;
-                            }
-                        }
-                        console.log('valoruf', response[x].year);
                         /**
                          * BUSCAR MES PARA OBTENER EL VALOR UF Y PROCESAR LA DEUDA
                          */
-                        /*database.collection('valoresuf').findOne({
-                            month: months[response[x].month],
-                            year: response[x].year
-                        }, function(err, response){
-                            
-                        });*/
-                        console.log(deuda);
+                        valoresUFHistorialPagos(months, response, 0, function (deuda) {
+                            data[index].debe += deuda;
+                            getResumenHistorialPagos(data, index + 1, cb, months);
+                        }, 0);
                     });
-                    getResumenHistorialPagos(data, index + 1, cb);
+
                 } else {
-                    getResumenHistorialPagos(data, index + 1, cb);
+                    getResumenHistorialPagos(data, index + 1, cb, months);
                 }
             });
         } else {
-            getResumenHistorialPagos(data, index + 1, cb);
+            getResumenHistorialPagos(data, index + 1, cb, months);
         }
     } else {
         cb(data);
