@@ -110,12 +110,12 @@ var getResumenHistorialPagos = function (data, index, cb) {
                         /**
                          * BUSCAR MES PARA OBTENER EL VALOR UF Y PROCESAR LA DEUDA
                          */
-                        database.collection('valoresuf').findOne({
+                        /*database.collection('valoresuf').findOne({
                             month: months[response[x].month],
                             year: response[x].year
                         }, function(err, response){
                             
-                        });
+                        });*/
                         console.log(deuda);
                     });
                     getResumenHistorialPagos(data, index + 1, cb);
