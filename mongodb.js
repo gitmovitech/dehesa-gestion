@@ -438,10 +438,14 @@ exports.pagar = function (data, cb) {
                 haber: data.haber,
                 debe: data.debe,
                 fecha: new Date().getTime(),
+                month: data.month,
+                year: data.year,
                 usuario: data.usuario.email
             });
             database.collection('pagos').update({
-                run: data.run
+                run: data.run,
+                month: data.month,
+                year: data.year
             }, {
                 $set: {
                     type: data.status
