@@ -505,12 +505,14 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
     var months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
     var registro_pagos = [];
     var obtenerPagos = function (year, month) {
+        console.info($scope.fields)
         for (var c in months) {
             if (months[c] == month) {
                 month = parseInt(c);
                 break;
             }
         }
+
         var params = {
             token: Session.get(),
             collection: 'pagos',
@@ -523,7 +525,8 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
             where: {
                 year: year,
                 month: month
-            }
+            },
+            historial: true
         }
         $http.get('/api/data', {
             params: {
@@ -572,7 +575,9 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                                         run: RutHelper.format(response.data[d].run),
                                         codigo: response.data[d].codigo,
                                         tarifa: tarifa,
-                                        type: response.data[d].type
+                                        type: response.data[d].type, 
+                                        debe: response.data[d].debe,
+                                        haber: response.data[d].haber
                                     }
                                 }
                                 $scope.registros = response.data.length;
@@ -659,8 +664,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                     }
                 }
             }).success(function (response) {
-                if (response.success)
-                    $scope.load($scope.page);
+                $scope.load($scope.page);
             });
         },
         modalEditarDetalles: function (data) {

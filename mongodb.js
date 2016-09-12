@@ -65,7 +65,44 @@ exports.getUserByEmail = function (email, callback) {
         }
     });
 }
-exports.getCollection = function (collection, callback, data, join) {
+var getResumenHistorialPagos = function (data, index, cb) {
+    if (data[index]) {
+        if (typeof data[index].run != 'undefined') {
+            database.collection('pagos_historial').find({
+                run: data[index].run
+            }).toArray(function (err, response) {
+                if (response.length > 0) {
+                    var debe = 0;
+                    var haber = 0;
+                    for (var x in response) {
+                        debe += response[x].debe;
+                        haber += response[x].haber;
+                    }
+                    if (debe == haber) {
+                        data[index].debe = 0;
+                        data[index].haber = 0;
+                    } else if (debe > haber) {
+                        data[index].debe = debe - haber;
+                        data[index].haber = 0;
+                    } else if (debe < haber) {
+                        data[index].haber = haber - debe;
+                        data[index].debe = 0;
+                    }
+                    console.log(data[index]);
+                    getResumenHistorialPagos(data, index + 1, cb);
+                } else {
+                    getResumenHistorialPagos(data, index + 1, cb);
+                }
+            });
+        } else {
+            getResumenHistorialPagos(data, index + 1, cb);
+        }
+    } else {
+        cb(data);
+    }
+}
+exports.getResumenHistorialPagos = getResumenHistorialPagos;
+var getCollection = function (collection, callback, data, join) {
     if (collection) {
         database.listCollections().toArray(function (err, collections) {
             var perm = false;
@@ -146,6 +183,7 @@ exports.getCollection = function (collection, callback, data, join) {
         callback([]);
     }
 }
+exports.getCollection = getCollection;
 exports.deleteCollection = function (collection, data, callback) {
     if (collection) {
         database.listCollections().toArray(function (err, collections) {
