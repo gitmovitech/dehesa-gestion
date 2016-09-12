@@ -55,7 +55,37 @@ app.get('/api/data', function (req, res) {
                 }
 
                 db.getCollection(req.query.collection, function (response) {
-                    db.getResumenHistorialPagos(response, 0, function (response) {
+                    if (req.query.collection == 'pagos') {
+                        db.getResumenHistorialPagos(response, 0, function (response) {
+                            if (response) {
+                                if (req.query.databack) {
+                                    res.send({
+                                        databack: req.query.databack,
+                                        success: true,
+                                        data: response
+                                    });
+                                } else {
+                                    res.send({
+                                        success: true,
+                                        data: response
+                                    });
+                                }
+                            } else {
+                                if (req.query.databack) {
+                                    res.send({
+                                        databack: req.query.databack,
+                                        success: false,
+                                        message: err
+                                    });
+                                } else {
+                                    res.send({
+                                        success: false,
+                                        message: err
+                                    });
+                                }
+                            }
+                        });
+                    } else {
                         if (response) {
                             if (req.query.databack) {
                                 res.send({
@@ -83,7 +113,7 @@ app.get('/api/data', function (req, res) {
                                 });
                             }
                         }
-                    });
+                    }
                 }, where, joined);
 
             } else {

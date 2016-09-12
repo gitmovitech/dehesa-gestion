@@ -88,7 +88,36 @@ var getResumenHistorialPagos = function (data, index, cb) {
                         data[index].haber = haber - debe;
                         data[index].debe = 0;
                     }
-                    console.log(data[index]);
+                    database.collection('pagos').find({
+                        run: data[index].run
+                    }).toArray(function (err, response) {
+                        var deuda = 0;
+                        var sumauf = 0;
+                        for (var x in response) {
+                            switch (response[x].type) {
+                                case 'Pendiente':
+                                case 'PAC PAT rechazado':
+                                case 'Cheque recibido':
+                                    sumauf = 0;
+                                    for (var t in response[x].tarifa) {
+                                        sumauf += response[x].tarifa[t].valor;
+                                    }
+                                    deuda += sumauf;
+                                    break;
+                            }
+                        }
+                        console.log('valoruf', response[x].year);
+                        /**
+                         * BUSCAR MES PARA OBTENER EL VALOR UF Y PROCESAR LA DEUDA
+                         */
+                        database.collection('valoresuf').findOne({
+                            month: months[response[x].month],
+                            year: response[x].year
+                        }, function(err, response){
+                            
+                        });
+                        console.log(deuda);
+                    });
                     getResumenHistorialPagos(data, index + 1, cb);
                 } else {
                     getResumenHistorialPagos(data, index + 1, cb);
