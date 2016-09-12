@@ -471,7 +471,7 @@ exports.addMonthPayment = function (pagos, cb) {
                     }
                     if (importar_pago) {
                         dehesaPagos.procesar(database.collection('pagos'), pagos_importados, 0, function () {
-                            //cb({success: true});
+                            cb({success: true});
                         });
                     } else {
                         cb({
