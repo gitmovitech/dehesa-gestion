@@ -338,6 +338,9 @@ app.get('/api/pagos', function (req, res) {
     }
 });
 
+/**
+ * NOTIFICAR AL CONTADOR
+ */
 app.post('/api/notiticar-contador', function (req, res) {
     if (req.body.params.token) {
         getSession(req.body.params.token, function (response, err) {
@@ -367,6 +370,25 @@ app.post('/api/notiticar-contador', function (req, res) {
                             message: 'No existe un contador ingresado en el sistema en la seccion Usuarios'
                         });
                     }
+                });
+            }
+        });
+    }
+});
+
+/**
+ * REGISTRO DE LOG DE CAMBIO DE STATUS
+ */
+app.post('/api/pagos/log', function (req, res) {
+    if (req.body.params.token) {
+        getSession(req.body.params.token, function (response, err) {
+            if (response) {
+                var contador = false
+                db.editCollection('pagos', {
+                    _id: req.body.params._id,
+                    log: req.body.params.log
+                }, function(){
+                    res.send([]);
                 });
             }
         });

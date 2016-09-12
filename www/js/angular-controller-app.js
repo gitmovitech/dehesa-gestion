@@ -162,151 +162,160 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         }
     }
     var excelPeriodo;
+    $scope.showModalImportPagos = function (fields, data, object) {
+        excelPeriodo = object;
+        $scope.fields = [{
+                name: 'csv_pagos',
+                title: 'Cargar Excel',
+                type: 'file'
+            }]
+        jQuery('#modalCSVpagos').modal('show');
+    }
     $scope.showModal = function (fields, data, object) {
-        if ($scope.collection == 'pagos') {
-            excelPeriodo = object;
-            $scope.fields = [{
-                    name: 'csv_pagos',
-                    title: 'Cargar Excel',
-                    type: 'file'
-                }]
-            jQuery('#modalCSVpagos').modal('show');
-        } else {
-            //console.info(fields);
-            $scope.fields = fields;
-            /**
-             * Opciones para el dropdown en caso que deba conectarse a datos externos
-             */
-            for (var x in fields) {
-                if (typeof fields[x].data != 'undefined') {
-                    if (fields[x].data.source == 'function') {
-                        $http.get('/api/data/function', {
-                            params: {
-                                token: Session.get(),
-                                function: fields[x].data.function,
-                                databack: x
-                            }
-                        }).success(function (response) {
-                            if (response.success) {
-                                $scope.fields[response.databack].value = '';
-                                $scope.fields[response.databack].data.options = response.data;
-                            }
-                        });
-                    } else
-                    if (typeof fields[x].data.collection != 'undefined') {
-                        $http.get('/api/data', {
-                            params: {
-                                token: Session.get(),
-                                collection: fields[x].data.collection,
-                                databack: x
-                            }
-                        }).success(function (response) {
-                            if (response.success) {
-                                /**
-                                 * Busqueda a traves de filtro
-                                 */
-                                var data = [];
-                                var add = true;
-                                for (var y in response.data) {
-                                    //console.info(response.data[y]);
-                                    for (var key in response.data[y]) {
-                                        if ($scope.fields[response.databack].data.filter) {
-                                            for (var filtro in $scope.fields[response.databack].data.filter) {
-                                                if (key == $scope.fields[response.databack].data.filter[filtro].key) {
-                                                    if ($scope.fields[response.databack].data.filter[filtro].value == response.data[y][key]) {
-                                                        data[data.length] = response.data[y];
-                                                    }
-                                                }
-                                            }
-                                        } else {
-                                            for (var n in data) {
-                                                add = true;
-                                                if (data[n]._id == response.data[y]._id) {
-                                                    add = false;
-                                                    break;
-                                                }
-                                            }
-                                            if (add)
-                                                data[data.length] = response.data[y];
-                                        }
-                                    }
-                                }
-
-                                /**
-                                 * Seleccion de campos
-                                 */
-                                if (data.length > 0) {
-                                    var option = [];
-                                    for (var y in data) {
-                                        option[y] = [];
-                                        for (var field in $scope.fields[response.databack].data.fields) {
-                                            for (var key in data[y]) {
-                                                if ($scope.fields[response.databack].data.fields[field].field == key) {
-                                                    id = false;
-                                                    if ($scope.fields[response.databack].data.fields[field].id) {
-                                                        id = true;
-                                                    }
-                                                    option[y][option[y].length] = {
-                                                        field: $scope.fields[response.databack].data.fields[field].field,
-                                                        id: id,
-                                                        value: data[y][key]
-                                                    };
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                                /**
-                                 * Formateo de option > value
-                                 */
-                                var key = [];
-                                var value = []
-                                data = []
-                                for (var x in option) {
-                                    key[x] = [];
-                                    value[x] = [];
-                                    for (var z in option[x]) {
-                                        if (option[x][z].id) {
-                                            key[x][key[x].length] = option[x][z].value;
-                                        } else {
-                                            value[x][value[x].length] = option[x][z].value;
-                                        }
-                                    }
-                                    data[data.length] = {
-                                        key: key[x].join(' '),
-                                        value: value[x].join(' ')
-                                    }
-                                }
-                                $scope.fields[response.databack].data.options = data;
-
-                            }
-                        });
-                    }
-                }
-            }
-
-            if (data) {
-                for (var x in $scope.fields) {
-                    for (var key in data) {
-                        if (key == $scope.fields[x].name) {
-                            if (data[key])
-                                $scope.fields[x].value = data[key];
+        /*if ($scope.collection == 'pagos') {
+         excelPeriodo = object;
+         $scope.fields = [{
+         name: 'csv_pagos',
+         title: 'Cargar Excel',
+         type: 'file'
+         }]
+         jQuery('#modalCSVpagos').modal('show');
+         } else {*/
+        //console.info(fields);
+        $scope.fields = fields;
+        /**
+         * Opciones para el dropdown en caso que deba conectarse a datos externos
+         */
+        for (var x in fields) {
+            if (typeof fields[x].data != 'undefined') {
+                if (fields[x].data.source == 'function') {
+                    $http.get('/api/data/function', {
+                        params: {
+                            token: Session.get(),
+                            function: fields[x].data.function,
+                            databack: x
                         }
-                    }
-                }
-            } else {
-                for (var x in $scope.fields) {
-                    $scope.fields[x].value = '';
+                    }).success(function (response) {
+                        if (response.success) {
+                            $scope.fields[response.databack].value = '';
+                            $scope.fields[response.databack].data.options = response.data;
+                        }
+                    });
+                } else
+                if (typeof fields[x].data.collection != 'undefined') {
+                    $http.get('/api/data', {
+                        params: {
+                            token: Session.get(),
+                            collection: fields[x].data.collection,
+                            databack: x
+                        }
+                    }).success(function (response) {
+                        if (response.success) {
+                            /**
+                             * Busqueda a traves de filtro
+                             */
+                            var data = [];
+                            var add = true;
+                            for (var y in response.data) {
+                                //console.info(response.data[y]);
+                                for (var key in response.data[y]) {
+                                    if ($scope.fields[response.databack].data.filter) {
+                                        for (var filtro in $scope.fields[response.databack].data.filter) {
+                                            if (key == $scope.fields[response.databack].data.filter[filtro].key) {
+                                                if ($scope.fields[response.databack].data.filter[filtro].value == response.data[y][key]) {
+                                                    data[data.length] = response.data[y];
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        for (var n in data) {
+                                            add = true;
+                                            if (data[n]._id == response.data[y]._id) {
+                                                add = false;
+                                                break;
+                                            }
+                                        }
+                                        if (add)
+                                            data[data.length] = response.data[y];
+                                    }
+                                }
+                            }
+
+                            /**
+                             * Seleccion de campos
+                             */
+                            if (data.length > 0) {
+                                var option = [];
+                                for (var y in data) {
+                                    option[y] = [];
+                                    for (var field in $scope.fields[response.databack].data.fields) {
+                                        for (var key in data[y]) {
+                                            if ($scope.fields[response.databack].data.fields[field].field == key) {
+                                                id = false;
+                                                if ($scope.fields[response.databack].data.fields[field].id) {
+                                                    id = true;
+                                                }
+                                                option[y][option[y].length] = {
+                                                    field: $scope.fields[response.databack].data.fields[field].field,
+                                                    id: id,
+                                                    value: data[y][key]
+                                                };
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            /**
+                             * Formateo de option > value
+                             */
+                            var key = [];
+                            var value = []
+                            data = []
+                            for (var x in option) {
+                                key[x] = [];
+                                value[x] = [];
+                                for (var z in option[x]) {
+                                    if (option[x][z].id) {
+                                        key[x][key[x].length] = option[x][z].value;
+                                    } else {
+                                        value[x][value[x].length] = option[x][z].value;
+                                    }
+                                }
+                                data[data.length] = {
+                                    key: key[x].join(' '),
+                                    value: value[x].join(' ')
+                                }
+                            }
+                            $scope.fields[response.databack].data.options = data;
+
+                        }
+                    });
                 }
             }
-            jQuery('#modalEdit').modal('show');
-            setTimeout(function () {
-                jQuery('.chosen-select').each(function () {
-                    console.info('#' + jQuery(this).attr('id'));
-                    jQuery('#' + jQuery(this).attr('id')).chosen();
-                });
-            }, 800);
         }
+
+        if (data) {
+            for (var x in $scope.fields) {
+                for (var key in data) {
+                    if (key == $scope.fields[x].name) {
+                        if (data[key])
+                            $scope.fields[x].value = data[key];
+                    }
+                }
+            }
+        } else {
+            for (var x in $scope.fields) {
+                $scope.fields[x].value = '';
+            }
+        }
+        jQuery('#modalEdit').modal('show');
+        setTimeout(function () {
+            jQuery('.chosen-select').each(function () {
+                console.info('#' + jQuery(this).attr('id'));
+                jQuery('#' + jQuery(this).attr('id')).chosen();
+            });
+        }, 800);
+        //}
     }
     $scope.sendForm = function () {
         var reload = false;
@@ -605,7 +614,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
             }
         });
     }
-    var periodos_months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    var periodos_months = months;
     var periodos = [];
     var tmp_months = [];
     for (var year = 2010; year <= new Date().getFullYear(); year++) {
@@ -631,6 +640,34 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         tabMonthActive: null,
         monthActive: null,
         showUploadExcel: false,
+        changeStatus: function (item, _id) {
+            console.log($scope.fields);
+            /*$http.post('/api/data', {
+             params: {
+             token: Session.get(),
+             collection: $scope.collection,
+             fields: $scope.fields
+             }
+             }).success(function (response) {
+             $scope.load($scope.page);
+             });*/
+        },
+        modalEditarDetalles: function (data) {
+            $scope.showModal([{
+                    "name": "_id",
+                    "type": "hidden"
+                }, {
+                    name: 'files',
+                    title: 'Documentos',
+                    type: 'file'
+                }, {
+                    name: 'comentarios',
+                    title: 'Comentarios',
+                    type: 'textarea'
+                }], {
+                _id: data._id
+            });
+        },
         notificarContador: function (month, year) {
             if (confirm('¿Desea notificar al contador que la carga de cobros se encuentra lista?')) {
                 $http.post('/api/notiticar-contador', {

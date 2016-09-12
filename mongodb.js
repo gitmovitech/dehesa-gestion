@@ -240,21 +240,30 @@ exports.editCollection = function (collection, data, callback) {
                             }
                         } else {
                             if (data[z].value >= 0 && data[z].value != '') {
-                                insertdata[z] = [JSON.stringify(data[z].name), JSON.stringify(data[z].value)].join(':');
+                                insertdata[insertdata.length] = [JSON.stringify(data[z].name), JSON.stringify(data[z].value)].join(':');
                             } else {
                                 if (data[z].name == 'files') {
-                                    insertdata[z] = [JSON.stringify(data[z].name), JSON.stringify(data[z].value.join(','))].join(':');
+                                    try {
+                                        insertdata[insertdata.length] = [JSON.stringify(data[z].name), JSON.stringify(data[z].value.join(','))].join(':');
+                                    } catch (e) {
+
+                                    }
                                 } else if (data[z].value != '' && typeof data[z].value != 'undefined') {
-                                    insertdata[z] = [JSON.stringify(data[z].name), JSON.stringify(data[z].value)].join(':');
+                                    insertdata[insertdata.length] = [JSON.stringify(data[z].name), JSON.stringify(data[z].value)].join(':');
                                 } else {
-                                    insertdata[z] = [JSON.stringify(data[z].name), '""'].join(':');
+                                    insertdata[insertdata.length] = [JSON.stringify(data[z].name), '""'].join(':');
                                 }
                             }
                         }
                     }
-                    insertdata.splice(0, 1);
+                    console.log(JSON.parse('{' + insertdata.join(',') + '}'))
+                    /*insertdata.splice(0, 1);*/
                     if (update) {
-                        query.update(update, JSON.parse('{' + insertdata.join(',') + '}'));
+                        try {
+                            query.update(update, {$set: JSON.parse('{' + insertdata.join(',') + '}')});
+                        } catch (e) {
+
+                        }
                     } else {
                         query.insert(JSON.parse('{' + insertdata.join(',') + '}'));
                     }

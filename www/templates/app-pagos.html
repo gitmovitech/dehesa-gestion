@@ -18,12 +18,14 @@
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane" ng-class="{'active': pagos.tabMonthActive == $index}" ng-repeat="month in item.months">
                     <h3>Registros de {{month}}:</h3>
-                    <button class="btn btn-sm btn-primary" ng-click="showModal(page.fields, null, {month: month, year: item.year})">
-                        <i class="glyphicon glyphicon-cloud-upload"></i> Subir archivo excel de {{month}}
-                    </button>
-                    <button class="btn btn-sm btn-primary" ng-click="pagos.notificarContador(month, item.year)">
-                        <i class="glyphicon glyphicon-copy"></i> Notificar al contador
-                    </button>
+                    <div ng-if="session.type != 'Contable'">
+                        <button class="btn btn-sm btn-primary" ng-click="showModalImportPagos(page.fields, null, {month: month, year: item.year})">
+                            <i class="glyphicon glyphicon-cloud-upload"></i> Subir archivo excel de {{month}}
+                        </button>
+                        <button class="btn btn-sm btn-primary" ng-click="pagos.notificarContador(month, item.year)">
+                            <i class="glyphicon glyphicon-copy"></i> Notificar al contador
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -42,12 +44,15 @@
             <thead>
                 <tr>
                     <th></th>
-                    <th ng-repeat="field in page.fields track by field.name" ng-if="field.name != '_id'">{{field.title}}</th>
+                    <th ng-repeat="field in page.fields track by field.name" ng-if="field.name != '_id'">
+                        <span ng-if="session.type != 'Contable'">{{field.title}}</span>
+                        <span ng-if="session.type == 'Contable' && field.name != 'nombre' && field.name != 'log'">{{field.title}}</span>
+                    </th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="(index,trdata) in tabledata  | startFrom: pagination.page * pagination.perPage | limitTo: pagination.perPage track by trdata._id">
-                    <td ng-repeat="(key,tddata) in trdata" ng-if="key != '_id' && key != 'month' && key != 'year' && key != 'type'">
+                    <td ng-repeat="(key,tddata) in trdata" ng-if="key != '_id' && key != 'month' && key != 'year' && key != 'type' && key != 'log'">
                         <span class="text-success" ng-if="key == 'tarifa'">
                             <a href="javascript:" data-popover-content="{{tddata}}" class="popover-tarifa">
                                 <i class="glyphicon glyphicon-tags"></i>
@@ -56,14 +61,20 @@
                         </span>
                         {{tddata.totalpesos| currency}}
 
-                        <span ng-class="{'text-danger':key == 'index'}" ng-if="key != 'tarifa'">{{tddata}}</span>
+                        <span ng-class="{'text-danger':key == 'index'}" ng-if="key != 'tarifa' && session.type != 'Contable'">{{tddata}}</span>
+                        <span class="text-danger" ng-if="session.type == 'Contable' && key == 'index'">{{trdata.index}}</span>
+                        <span ng-if="(key == 'run' || key == 'codigo') && session.type == 'Contable'">{{tddata}}</span>
                     </td>
                     <td ng-repeat="(key,item) in trdata" ng-if="key == 'type'">
-                        <div ng-repeat="field in page.fields track by field.name" ng-if="field.name == 'type'">
-                            <select>
+                        <div ng-repeat="field in page.fields track by field.name" ng-if="field.name == 'type'" style="float:left">
+                            <select ng-model="item" ng-change="pagos.changeStatus(item, trdata._id)">
                                 <option ng-repeat="option in field.data.options" value="{{option.value}}" ng-selected="item == option.value">{{option.key}}</option>
                             </select>
                         </div>
+                        <button style="float:left;margin-left:5px;" class="btn btn-default btn-xs" ng-click="pagos.modalEditarDetalles(trdata)">
+                            <i class="glyphicon glyphicon-font"></i> Documentos y comentarios
+                        </button>
+                        <div style="clear:both"></div>
                     </td>
                 </tr>
             </tbody>

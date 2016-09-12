@@ -309,50 +309,50 @@
                             },
                             {
                                 "key": "Cargado con PAC PAT",
-                                "value": "Cargado con PAC PAT",
-                                "files": true,
-                                "comments": true
+                                "value": "Cargado con PAC PAT"
                             },
                             {
                                 "key": "Pagado con PAC PAT",
-                                "value": "Pagado con PAC PAT",
-                                "files": true,
-                                "comments": true
+                                "value": "Pagado con PAC PAT"
                             },
                             {
                                 "key": "PAC PAT rechazado",
-                                "value": "PAC PAT rechazado",
-                                "comments": true
+                                "value": "PAC PAT rechazado"
                             },
                             {
                                 "key": "Pagado con transferencia",
-                                "value": "Pagado con transferencia",
-                                "files": true,
-                                "comments": true,
-                                "quantity": true
+                                "value": "Pagado con transferencia"
                             },
                             {
                                 "key": "Cheque recibido",
-                                "value": "Cheque recibido",
-                                "files": true,
-                                "comments": true,
-                                "quantity": true
+                                "value": "Cheque recibido"
                             },
                             {
                                 "key": "Pagado con cheque",
-                                "value": "Pagado con cheque",
-                                "files": true,
-                                "comments": true
+                                "value": "Pagado con cheque"
                             },
                             {
                                 "key": "Pagado en efectivo",
-                                "value": "Pagado en efectivo",
-                                "files": true,
-                                "comments": true,
-                                "quantity": true
+                                "value": "Pagado en efectivo"
                             }
                         ]
                     }
+                },
+                {
+                    "name": "comentarios",
+                    "title": "Comentarios",
+                    "type": "textarea"
+                },
+                {
+                    "name": "files",
+                    "title": "Archivos",
+                    "type": "file"
+                },
+                {
+                    "name": "log",
+                    "title": "Historial de eventos",
+                    "type": "textarea",
+                    "readonly": true
                 }
             ]
         },
