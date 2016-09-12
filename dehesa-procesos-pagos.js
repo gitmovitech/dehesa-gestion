@@ -40,6 +40,13 @@ var procesar = function (collection, data, index, cb) {
     }
 }
 exports.procesar = procesar;
+
+
+var pagar = function(){
+    
+}
+exports.pagar = pagar;
+
 var serviciosAsociados = [];
 var obtenerServicioAsociado = function (collection, data, index, cb) {
     if (data[index]) {

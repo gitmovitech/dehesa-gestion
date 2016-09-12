@@ -308,12 +308,12 @@
                                 "value": "Pendiente"
                             },
                             {
-                                "key": "Cargado con PAC PAT",
-                                "value": "Cargado con PAC PAT"
+                                "key": "PAC PAT realizado",
+                                "value": "PAC PAT realizado"
                             },
                             {
-                                "key": "Pagado con PAC PAT",
-                                "value": "Pagado con PAC PAT"
+                                "key": "PAC PAT confirmado",
+                                "value": "PAC PAT confirmado"
                             },
                             {
                                 "key": "PAC PAT rechazado",
@@ -321,22 +321,50 @@
                             },
                             {
                                 "key": "Pagado con transferencia",
-                                "value": "Pagado con transferencia"
+                                "value": "Pagado con transferencia",
+                                "scope": [
+                                    "Administrador",
+                                    "Editor"
+                                ]
                             },
                             {
                                 "key": "Cheque recibido",
-                                "value": "Cheque recibido"
+                                "value": "Cheque recibido",
+                                "scope": [
+                                    "Administrador",
+                                    "Editor"
+                                ]
                             },
                             {
                                 "key": "Pagado con cheque",
-                                "value": "Pagado con cheque"
+                                "value": "Pagado con cheque",
+                                "scope": [
+                                    "Administrador",
+                                    "Editor"
+                                ]
                             },
                             {
                                 "key": "Pagado en efectivo",
-                                "value": "Pagado en efectivo"
+                                "value": "Pagado en efectivo",
+                                "scope": [
+                                    "Administrador",
+                                    "Editor"
+                                ]
                             }
                         ]
                     }
+                },
+                {
+                    "name": "debe",
+                    "title": "Debe",
+                    "type": "text",
+                    "onfly": true
+                },
+                {
+                    "name": "excedente",
+                    "title": "Excedente",
+                    "type": "text",
+                    "onfly": true
                 },
                 {
                     "name": "comentarios",
@@ -347,12 +375,6 @@
                     "name": "files",
                     "title": "Archivos",
                     "type": "file"
-                },
-                {
-                    "name": "log",
-                    "title": "Historial de eventos",
-                    "type": "textarea",
-                    "readonly": true
                 }
             ]
         },

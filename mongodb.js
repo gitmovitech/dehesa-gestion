@@ -409,8 +409,45 @@ exports.getPayments = function (params, cb) {
             if (response) {
                 cb(response);
             } else {
-                cb(false)
+                cb(false);
             }
+        });
+    }
+}
+
+exports.pagar = function (data, cb) {
+    if (database) {
+        database.collection('pagos_historial').find({
+            run: data.run
+        }).toArray(function (err, response) {
+            if (response) {
+
+            }
+            if (data.cobrodelmes == data.pago) {
+                data.haber = 0;
+                data.debe = 0;
+            } else if (data.cobrodelmes > data.pago) {
+                data.haber = 0;
+                data.debe = data.cobrodelmes - data.pago;
+            } else if (data.cobrodelmes < data.pago) {
+                data.haber = data.pago - data.cobrodelmes;
+                data.debe = 0;
+            }
+            database.collection('pagos_historial').insert({
+                run: data.run,
+                haber: data.haber,
+                debe: data.debe,
+                fecha: new Date().getTime(),
+                usuario: data.usuario.email
+            });
+            database.collection('pagos').update({
+                run: data.run
+            }, {
+                $set: {
+                    type: data.status
+                }
+            });
+            cb();
         });
     }
 }

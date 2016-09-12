@@ -67,7 +67,7 @@
                     </td>
                     <td ng-repeat="(key,item) in trdata" ng-if="key == 'type'">
                         <div ng-repeat="field in page.fields track by field.name" ng-if="field.name == 'type'" style="float:left">
-                            <select ng-model="item" ng-change="pagos.changeStatus(item, trdata._id)">
+                            <select ng-model="item" ng-change="pagos.changeStatus(item, trdata)">
                                 <option ng-repeat="option in field.data.options" value="{{option.value}}" ng-selected="item == option.value">{{option.key}}</option>
                             </select>
                         </div>

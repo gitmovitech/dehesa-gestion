@@ -377,6 +377,24 @@ app.post('/api/notiticar-contador', function (req, res) {
 });
 
 /**
+ * PAGAR Y CAMBIO DE STATUS
+ */
+app.post('/api/pagar', function (req, res) {
+    if (req.body.params.token) {
+        getSession(req.body.params.token, function (response, err) {
+            if (response) {
+                var data = req.body.params.data;
+                data.usuario = response;
+                data.run = RutJS.cleanRut(data.run);
+                db.pagar(data, function () {
+                    res.send('OK');
+                });
+            }
+        });
+    }
+});
+
+/**
  * REGISTRO DE LOG DE CAMBIO DE STATUS
  */
 app.post('/api/pagos/log', function (req, res) {
@@ -387,7 +405,7 @@ app.post('/api/pagos/log', function (req, res) {
                 db.editCollection('pagos', {
                     _id: req.body.params._id,
                     log: req.body.params.log
-                }, function(){
+                }, function () {
                     res.send([]);
                 });
             }

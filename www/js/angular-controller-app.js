@@ -604,7 +604,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
 
                     } else {
                         $scope.valoruf = false;
-                        alert('No hay valores UF cargados de ' + month);
+                        alert('No hay valores UF cargados de ' + months[month]);
                     }
                 } else {
                     alert('No hay valores UF cargados');
@@ -640,17 +640,26 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         tabMonthActive: null,
         monthActive: null,
         showUploadExcel: false,
-        changeStatus: function (item, _id) {
-            console.log($scope.fields);
-            /*$http.post('/api/data', {
-             params: {
-             token: Session.get(),
-             collection: $scope.collection,
-             fields: $scope.fields
-             }
-             }).success(function (response) {
-             $scope.load($scope.page);
-             });*/
+        changeStatus: function (select, data) {
+            console.log(select, data);
+            var pagado = 0;
+            if (select != 'Carga PAC PAT realizada' && select != 'PAC PAT rechazado' && select != 'Pendiente' && select != 'Cheque recibido') {
+                pagado = prompt('Total a pagar', Math.round(data.tarifa.totalpesos));
+            }
+            $http.post('/api/pagar', {
+                params: {
+                    token: Session.get(),
+                    data: {
+                        run: data.run,
+                        pago: pagado,
+                        status: select,
+                        cobrodelmes: Math.round(data.tarifa.totalpesos)
+                    }
+                }
+            }).success(function (response) {
+                if (response.success)
+                    $scope.load($scope.page);
+            });
         },
         modalEditarDetalles: function (data) {
             $scope.showModal([{
