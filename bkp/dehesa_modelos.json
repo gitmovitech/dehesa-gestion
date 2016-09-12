@@ -1,0 +1,4 @@
+{"_id":{"$oid":"57a8b8dc4bb8510345f7e40c"},"nombre":"Casa condominio","valor":"2,27","type":"UF"}
+{"_id":{"$oid":"57a8b8fe4bb8510345f7e40d"},"nombre":"Casa calle","valor":"2,32","type":"UF"}
+{"_id":{"$oid":"57a8b9264bb8510345f7e40e"},"nombre":"Departamentos individuales","valor":"1,89","type":"UF"}
+{"_id":{"$oid":"57a8b93f4bb8510345f7e40f"},"nombre":"Departamento en condominio","valor":"4,33","type":"UF"}

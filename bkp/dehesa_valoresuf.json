@@ -1,0 +1,4 @@
+{"_id":{"$oid":"57d55af6baf02e1993fb8517"},"dia":5,"mes":"Junio","year":2016,"valor":"26005,61"}
+{"_id":{"$oid":"57d55b3fbaf02e1993fb8518"},"dia":5,"mes":"Julio","year":2016,"valor":"26060,75"}
+{"_id":{"$oid":"57d55b6fbaf02e1993fb8519"},"dia":5,"mes":"Agosto","year":2016,"valor":"26158,48"}
+{"_id":{"$oid":"57d55b98baf02e1993fb851a"},"dia":5,"mes":"Septiembre","year":2016,"valor":"26217,54"}

@@ -1,0 +1,3 @@
+{"_id":{"$oid":"579f6ec2dce36a07460c8a05"},"name":"Victor Vargas","email":"vvargas@movitech.cl","password":"f561aaf6ef0bf14d4208bb46a4ccb3ad","type":"Administrador"}
+{"_id":{"$oid":"57d008342c80160bb44d8924"},"name":"Laura Escudero","email":"haschen77@gmail.com","password":"9df62e693988eb4e1e1444ece0578579","type":"Editor"}
+{"_id":{"$oid":"57d008a12c80160bb44d8925"},"name":"Guillermo Imilmaqui","email":"victorandresv@gmail.com","password":"4786f3282f04de5b5c7317c490c6d922","type":"Contable"}
