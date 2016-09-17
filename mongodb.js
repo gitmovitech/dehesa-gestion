@@ -464,7 +464,8 @@ exports.addMonthPayment = function (pagos, cb) {
                                         tarifa: servicios_agregados,
                                         status: 'Pendiente',
                                         month: pagos[y].month,
-                                        year: pagos[y].year
+                                        year: pagos[y].year,
+                                        comentarios: pagos[y].comentarios
                                     }
                                 }
                                 break;
