@@ -125,7 +125,7 @@ var getResumenHistorialPagos = function (data, index, cb, months) {
                     database.collection('pagos').find({
                         run: data[index].run
                     }).toArray(function (err, response) {
-                        
+
                         valoresUFHistorialPagos(months, response, 0, function (deuda) {
                             data[index].debe += deuda - data[index].haber;
                             data[index].haber -= deuda;
@@ -509,9 +509,9 @@ exports.pagar = function (data, cb) {
             run: data.run
         }).toArray(function (err, response) {
             if (response) {
-
+              console.log(response);
             }
-            if (data.cobrodelmes == data.pago) {
+            /*if (data.cobrodelmes == data.pago) {
                 data.haber = 0;
                 data.debe = 0;
             } else if (data.cobrodelmes > data.pago) {
@@ -539,7 +539,7 @@ exports.pagar = function (data, cb) {
                     type: data.status
                 }
             });
-            cb();
+            cb();*/
         });
     }
 }

@@ -100,7 +100,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
          }
          }).success(function (response) {
          if (response.success) {
-         
+
          $scope.servicios = {
          total: 0,
          detalle: []
@@ -676,7 +676,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                         $scope.load($scope.page);
                     });
                 } else {
-                    $scope.load($scope.page);
+                  obtenerPagos($scope.pagos.tabMonthActive, $scope.pagos.monthActive);
                 }
             } else {
                 $http.post('/api/pagar', {
@@ -692,7 +692,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                         }
                     }
                 }).success(function (response) {
-                    $scope.load($scope.page);
+                  obtenerPagos($scope.pagos.tabMonthActive, $scope.pagos.monthActive);
                 });
             }
         },
