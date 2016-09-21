@@ -1,4 +1,4 @@
-app.controller('app', function ($scope, Session, $http, $location, FileUploader, Pagination, RutHelper, $filter) {
+app.controller('app', function ($scope, Session, $http, $location, FileUploader, Pagination, RutHelper, $filter, randomPass) {
 
     //var socket = io.connect();
     $scope.pagination = Pagination.getNew(15);
@@ -655,6 +655,15 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         tabMonthActive: null,
         monthActive: null,
         showUploadExcel: false,
+        randomPassCheckboxValue: false,
+        randomPassCheckbox:function(index, item){
+          if(this.randomPassCheckboxValue){
+            if(confirm('¿Desea generar una contraseña aleatoria para este usuario?')){
+              $scope.fields[index].value = randomPass.generate();
+              console.info(item.value);
+            }
+          }
+        },
         changeStatus: function (select, data) {
             var pagado = 0;
             if (select != 'Carga PAC PAT realizada' && select != 'PAC PAT rechazado' && select != 'Pendiente' && select != 'Cheque recibido') {

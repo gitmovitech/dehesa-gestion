@@ -71,10 +71,14 @@
                                 </table>
                             </div>
 
-                            <input ng-class="{'hidden':item.name == '_id'}" ng-model="item.value" type="{{item.type}}" 
-                                class="form-control" name="{{item.name}}" id="{{item.name}}" 
-                                ng-if="item.name != '_id' && item.type != 'textarea' && item.type != 'select' && item.type != 'rut' && item.type != 'file'" 
+                            <input ng-class="{'hidden':item.name == '_id'}" ng-model="item.value" type="{{item.type}}"
+                                class="form-control" name="{{item.name}}" id="{{item.name}}"
+                                ng-if="item.name != '_id' && item.type != 'textarea' && item.type != 'select' && item.type != 'rut' && item.type != 'file'"
                                 placeholder="Escriba aquí" ng-required="{{item.required}}">
+
+                              <label ng-if="item.type == 'password'">
+                                <input ng-model="pagos.randomPassCheckboxValue" ng-click="pagos.randomPassCheckbox(key,item)" type="checkbox"/> Crear y enviar una contraseña aleatoria
+                              </label>
 
                             <select id="select-{{item.name}}" onchange="angular.element(this).scope().chosenSelect(this)" data-placeholder="Seleccione" class="form-control chosen-select" ng-if="item.type == 'select' && item.multiple" multiple="multiple" ng-model="item.value">
                                 <option value="{{option.key}}" ng-repeat="option in item.data.options" ng-if="item.data">{{option.value}}</option>
