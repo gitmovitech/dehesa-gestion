@@ -661,6 +661,8 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
             if(confirm('¿Desea generar una contraseña aleatoria para este usuario?')){
               $scope.fields[index].value = randomPass.generate();
               console.info(item.value);
+            } else {
+              this.randomPassCheckboxValue = false;
             }
           }
         },
