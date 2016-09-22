@@ -322,6 +322,7 @@ exports.editCollection = function (collection, data, callback) {
                     var insertdata = [];
                     var update = false;
                     var id, year, month;
+                    var archivosPorGuardar = [];
                     /**
                     BUSCAR ID, YEAR Y MES
                     **/
@@ -360,16 +361,14 @@ exports.editCollection = function (collection, data, callback) {
                                             fs.mkdirSync(__dirname + '/uploads/documents/'+id+'/'+year+'/'+month, 0777);
                                         }
                                         for(var k in data[z].value){
-                                          fs.rename(__dirname + '/uploads/'+data[z].value[k], __dirname + '/uploads/documents/'+id+'/'+year+'/'+month+'/'+data[z].value[k]);
+                                          fs.renameSync(__dirname + '/uploads/'+data[z].value[k], __dirname + '/uploads/documents/'+id+'/'+year+'/'+month+'/'+data[z].value[k]);
                                         }
-                                        var dir = fs.readdirSync(__dirname + '/uploads/documents/'+id+'/'+year+'/'+month);
-                                        var archivosPorGuardar = [];
-                                        for(var p in dir){
-                                          if(dir[p] != '.DS_Store'){
-                                            archivosPorGuardar[archivosPorGuardar.length] = dir[p];
-                                          }
+                                        dir = fs.readdirSync(__dirname + '/uploads/documents/'+id+'/'+year+'/'+month);
+                                        console.log('archivos', dir)
+                                        if(dir.length == 0){
+                                          dir = '-';
                                         }
-                                        insertdata[insertdata.length] = [JSON.stringify(data[z].name), JSON.stringify(archivosPorGuardar)].join(':');
+                                        insertdata[insertdata.length] = [JSON.stringify(data[z].name), JSON.stringify(dir)].join(':');
                                     } catch (e) {
 
                                     }
