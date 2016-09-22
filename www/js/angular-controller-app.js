@@ -301,9 +301,6 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                         if (data[key])
                             $scope.fields[x].value = data[key];
                     }
-                    if($scope.fields[x].name == 'archivos'){
-                      $scope.fields[x].value = $scope.fields[x].value.split(',');
-                    }
                 }
             }
         } else {

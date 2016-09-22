@@ -369,7 +369,7 @@ exports.editCollection = function (collection, data, callback) {
                                             archivosPorGuardar[archivosPorGuardar.length] = dir[p];
                                           }
                                         }
-                                        insertdata[insertdata.length] = [JSON.stringify(data[z].name), JSON.stringify(archivosPorGuardar.join(','))].join(':');
+                                        insertdata[insertdata.length] = [JSON.stringify(data[z].name), JSON.stringify(archivosPorGuardar)].join(':');
                                     } catch (e) {
 
                                     }
@@ -403,8 +403,6 @@ exports.editCollection = function (collection, data, callback) {
 exports.dropFile = function(data, files, cb){
   if(files.length == 0){
     files = '-';
-  } else {
-    files = files.join(',');
   }
   database.collection('pagos').update({
     id: parseInt(data.id),
