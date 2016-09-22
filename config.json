@@ -296,11 +296,7 @@
                         "options": [
                           {
                               "key": "No importado",
-                              "value": "No importado",
-                              "scope": [
-                                  "Administrador",
-                                  "Editor"
-                              ]
+                              "value": "No importado"
                           },
                             {
                                 "key": "Pendiente",
@@ -345,6 +341,14 @@
                             {
                                 "key": "Pagado en efectivo",
                                 "value": "Pagado en efectivo",
+                                "scope": [
+                                    "Administrador",
+                                    "Editor"
+                                ]
+                            },
+                            {
+                                "key": "Pagado con excedentes",
+                                "value": "Pagado con excedentes",
                                 "scope": [
                                     "Administrador",
                                     "Editor"

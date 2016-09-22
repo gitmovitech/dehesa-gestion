@@ -357,10 +357,13 @@ app.post('/api/data/import/excel', function (req, res) {
                               debe: '-',
                               excedentes: '-',
                               comentarios:'-',
-                              archivos: '-'
+                              archivos: '-',
+                              year: req.body.params.periodo.year,
+                              month: ''
                             }
                             for(var i in importacion.data){
                               if(importacion.data[i].run == run){
+                                registros_importados[x].month = importacion.data[i].month
                                 registros_importados[x].codigo = importacion.data[i].codigo;
                                 registros_importados[x].estado = 'Pendiente';
                                 registros_importados[x].pagado = 0;
@@ -390,7 +393,7 @@ app.post('/api/data/import/excel', function (req, res) {
                               month: month,
                               year: req.body.params.periodo.year
                             }, function (response) {
-                                res.send(response);
+                                res.send({success:true});
                             });
                           });
                         });

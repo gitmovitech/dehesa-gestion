@@ -406,8 +406,18 @@ exports.getAsociados = function(cb){
 var obtenerExcedentes = function(registros_importados, x, cb){
   if(registros_importados[x]){
     if(registros_importados[x].estado == 'Pendiente'){
+      var mes = registros_importados[x].month - 1;
+      var year = registros_importados[x].year;
+      if(mes < 0){
+        mes = 11;
+        year = year - 1;
+      }
       database.collection('pagos').findOne({
-        $query:{},
+        $query:{
+          id: registros_importados[x].id,
+          year: year,
+          month: mes
+        },
         $orderby: {$natural:-1}
       },function(err, response){
         if(response){
@@ -427,7 +437,8 @@ var obtenerExcedentes = function(registros_importados, x, cb){
 exports.obtenerExcedentes = obtenerExcedentes;
 exports.guardarImportacionPagos = function(pagos, cb){
   database.collection('pagos').find({
-    year:pagos.year, month: pagos.month
+    year:pagos.year,
+    month: pagos.month
   }).toArray(function(err, response){
     if(response.length > 0){
       for(var x in pagos.data){
@@ -467,6 +478,7 @@ exports.guardarImportacionPagos = function(pagos, cb){
         });
       }
     }
+    cb();
   });
 }
 exports.getPayments = function (params, cb) {
