@@ -385,7 +385,90 @@ exports.editCollectionById = function (collection, data, id, callback) {
 /**
  * PAGOS
  */
-
+exports.getModelos = function(cb){
+  database.collection('modelos').find({}).toArray(function (err, modelos) {
+    cb(modelos);
+  });
+}
+exports.getServicios = function(cb){
+  database.collection('servicios').find({}).toArray(function (err, servicios) {
+    cb(servicios);
+  });
+}
+exports.getAsociados = function(cb){
+  database.collection('asociados').find({
+    $query:{},
+    $orderby:{id:1}
+  }).toArray(function (err, asociados) {
+    cb(asociados);
+  });
+}
+var obtenerExcedentes = function(registros_importados, x, cb){
+  if(registros_importados[x]){
+    if(registros_importados[x].estado == 'Pendiente'){
+      database.collection('pagos').findOne({
+        $query:{},
+        $orderby: {$natural:-1}
+      },function(err, response){
+        if(response){
+          registros_importados[x].excedentes = response.excedentes;
+        } else {
+          registros_importados[x].excedentes = 0;
+        }
+        obtenerExcedentes(registros_importados, x + 1, cb);
+      })
+    } else {
+      obtenerExcedentes(registros_importados, x + 1, cb);
+    }
+  } else {
+    cb(registros_importados);
+  }
+}
+exports.obtenerExcedentes = obtenerExcedentes;
+exports.guardarImportacionPagos = function(pagos, cb){
+  database.collection('pagos').find({
+    year:pagos.year, month: pagos.month
+  }).toArray(function(err, response){
+    if(response.length > 0){
+      for(var x in pagos.data){
+        database.collection('pagos').update({
+          run: pagos.data[x].run
+        }, {
+          $set: {
+            id: pagos.data[x].id,
+            nombre: pagos.data[x].nombre,
+            codigo: pagos.data[x].codigo,
+            tarifa: pagos.data[x].tarifa,
+            type: pagos.data[x].estado,
+            pagado: pagos.data[x].pagado,
+            debe: pagos.data[x].debe,
+            excedentes: pagos.data[x].excedentes,
+            comentarios: pagos.data[x].comentarios,
+            archivos: pagos.data[x].archivos
+          }
+        });
+      }
+    } else {
+      for(var x in pagos.data){
+        database.collection('pagos').insert({
+          id: pagos.data[x].id,
+          nombre: pagos.data[x].nombre,
+          run: pagos.data[x].run,
+          codigo: pagos.data[x].codigo,
+          tarifa: pagos.data[x].tarifa,
+          type: pagos.data[x].estado,
+          pagado: pagos.data[x].pagado,
+          debe: pagos.data[x].debe,
+          excedentes: pagos.data[x].excedentes,
+          comentarios: pagos.data[x].comentarios,
+          archivos: pagos.data[x].archivos,
+          month: pagos.month,
+          year: pagos.year
+        });
+      }
+    }
+  });
+}
 exports.addMonthPayment = function (pagos, cb) {
     if (database) {
         database.collection('modelos').find({}).toArray(function (err, modelos) {
@@ -460,22 +543,19 @@ exports.addMonthPayment = function (pagos, cb) {
                                     pagos_importados[pagos_importados.length] = {
                                         nombre: asociados[x].nombre,
                                         run: RutJS.cleanRut(asociados[x].run),
-                                        codigo: pagos[y].codigo,
                                         tarifa: servicios_agregados,
-                                        status: 'Pendiente',
-                                        month: pagos[y].month,
-                                        year: pagos[y].year,
-                                        comentarios: pagos[y].comentarios
+                                        status: 'Pendiente'
                                     }
                                 }
-                                break;
                             }
+                            break;
                         }
                     }
                     if (importar_pago) {
-                        dehesaPagos.procesar(database.collection('pagos'), pagos_importados, 0, function () {
+                      cb(pagos_importados);
+                        /*dehesaPagos.procesar(database.collection('pagos'), pagos_importados, 0, function () {
                             cb({success: true});
-                        });
+                        });*/
                     } else {
                         cb({
                             success: false,
@@ -511,25 +591,32 @@ exports.pagar = function (data, cb) {
             if (response) {
               console.log(response);
             }
-            /*if (data.cobrodelmes == data.pago) {
-                data.haber = 0;
-                data.debe = 0;
-            } else if (data.cobrodelmes > data.pago) {
-                data.haber = 0;
-                data.debe = data.cobrodelmes - data.pago;
-            } else if (data.cobrodelmes < data.pago) {
-                data.haber = data.pago - data.cobrodelmes;
-                data.debe = 0;
+            switch(data.status){
+              case 'Pagado con transferencia':
+              case 'Pagado en efectivo':
+              case 'Pagado con cheque':
+              case 'PAC PAT confirmado':
+                if (data.cobrodelmes == data.pago) {
+                    data.haber = 0;
+                    data.debe = 0;
+                } else if (data.cobrodelmes > data.pago) {
+                    data.haber = 0;
+                    data.debe = data.cobrodelmes - data.pago;
+                } else if (data.cobrodelmes < data.pago) {
+                    data.haber = data.pago - data.cobrodelmes;
+                    data.debe = 0;
+                }
+                database.collection('pagos_historial').insert({
+                    run: data.run,
+                    haber: data.haber,
+                    debe: data.debe,
+                    fecha: new Date().getTime(),
+                    month: data.month,
+                    year: data.year,
+                    usuario: data.usuario.email
+                });
+              break;
             }
-            database.collection('pagos_historial').insert({
-                run: data.run,
-                haber: data.haber,
-                debe: data.debe,
-                fecha: new Date().getTime(),
-                month: data.month,
-                year: data.year,
-                usuario: data.usuario.email
-            });
             database.collection('pagos').update({
                 run: data.run,
                 month: data.month,
@@ -539,7 +626,7 @@ exports.pagar = function (data, cb) {
                     type: data.status
                 }
             });
-            cb();*/
+            cb();
         });
     }
 }

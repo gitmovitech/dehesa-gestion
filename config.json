@@ -15,6 +15,139 @@
         "name": "dehesa"
     },
     "pages": [
+      {
+          "icon": "glyphicon glyphicon-list-alt",
+          "name": "Asociados",
+          "scope": [
+              "Administrador",
+              "Editor"
+          ],
+          "collection": "asociados",
+          "fields": [
+              {
+                  "name": "_id",
+                  "type": "text",
+                  "id": true
+              },
+              {
+                  "name": "id",
+                  "title": "Nº Socio",
+                  "type": "number",
+                  "required": true
+              },
+              {
+                  "name": "monitoreo",
+                  "title": "Monitoreo",
+                  "type": "text"
+              },
+              {
+                  "name": "numero_cliente",
+                  "title": "Nº Cliente",
+                  "type": "number"
+              },
+              {
+                  "name": "tipo_conexion",
+                  "title": "Tipo de conexión",
+                  "type": "text"
+              },
+              {
+                  "name": "fecha_ingreso",
+                  "title": "Fecha ingreso",
+                  "type": "text"
+              },
+              {
+                  "name": "usuario",
+                  "title": "Asociado",
+                  "type": "text"
+              },
+              {
+                  "name": "run",
+                  "title": "RUN",
+                  "type": "rut",
+                  "required": true
+              },
+              {
+                  "name": "nombre",
+                  "title": "Nombre",
+                  "type": "text",
+                  "required": true
+              },
+              {
+                  "name": "direccion",
+                  "title": "Dirección",
+                  "type": "text",
+                  "required": true
+              },
+              {
+                  "name": "numeracion",
+                  "title": "Numeración",
+                  "type": "text",
+                  "required": true
+              },
+              {
+                  "name": "telefono",
+                  "title": "Teléfono",
+                  "type": "number"
+              },
+              {
+                  "name": "correo",
+                  "title": "Correo",
+                  "type": "email",
+                  "required": true
+              },
+              {
+                  "name": "correo_alternativo",
+                  "title": "Correo alternativo",
+                  "type": "email"
+              },
+              {
+                  "name": "formas_pago",
+                  "title": "Formas de pago",
+                  "type": "select",
+                  "data": {
+                      "options": [
+                          {
+                              "key": "PAC",
+                              "value": "PAC"
+                          },
+                          {
+                              "key": "PAT",
+                              "value": "PAT"
+                          },
+                          {
+                              "key": "P/OFICINA",
+                              "value": "P/OFICINA"
+                          }
+                      ]
+                  },
+                  "required": true
+              },
+              {
+                  "name": "monto",
+                  "title": "Monto",
+                  "type": "text",
+                  "required": true
+              },
+              {
+                  "name": "tipo_casa",
+                  "title": "Tipo de casa",
+                  "type": "select",
+                  "data": {
+                      "collection": "modelos",
+                      "fields": [
+                          {
+                              "field": "nombre"
+                          },
+                          {
+                              "field": "_id",
+                              "id": true
+                          }
+                      ]
+                  },
+                  "required": true
+              }
+          ]
+      },
         {
             "icon": "glyphicon glyphicon-user",
             "name": "Cuentas de usuario",
@@ -113,139 +246,6 @@
             ]
         },
         {
-            "icon": "glyphicon glyphicon-list-alt",
-            "name": "Asociados",
-            "scope": [
-                "Administrador",
-                "Editor"
-            ],
-            "collection": "asociados",
-            "fields": [
-                {
-                    "name": "_id",
-                    "type": "text",
-                    "id": true
-                },
-                {
-                    "name": "id",
-                    "title": "Número de socio",
-                    "type": "number",
-                    "required": true
-                },
-                {
-                    "name": "monitoreo",
-                    "title": "Monitoreo",
-                    "type": "text"
-                },
-                {
-                    "name": "numero_cliente",
-                    "title": "Número cliente",
-                    "type": "number"
-                },
-                {
-                    "name": "tipo_conexion",
-                    "title": "Tipo de conexión",
-                    "type": "text"
-                },
-                {
-                    "name": "fecha_ingreso",
-                    "title": "Fecha ingreso",
-                    "type": "text"
-                },
-                {
-                    "name": "usuario",
-                    "title": "Usuario",
-                    "type": "text"
-                },
-                {
-                    "name": "run",
-                    "title": "RUN",
-                    "type": "rut",
-                    "required": true
-                },
-                {
-                    "name": "nombre",
-                    "title": "Nombre",
-                    "type": "text",
-                    "required": true
-                },
-                {
-                    "name": "direccion",
-                    "title": "Dirección",
-                    "type": "text",
-                    "required": true
-                },
-                {
-                    "name": "numeracion",
-                    "title": "Numeración",
-                    "type": "text",
-                    "required": true
-                },
-                {
-                    "name": "telefono",
-                    "title": "Teléfono",
-                    "type": "number"
-                },
-                {
-                    "name": "correo",
-                    "title": "Correo",
-                    "type": "email",
-                    "required": true
-                },
-                {
-                    "name": "correo_alternativo",
-                    "title": "Correo alternativo",
-                    "type": "email"
-                },
-                {
-                    "name": "formas_pago",
-                    "title": "Formas de pago",
-                    "type": "select",
-                    "data": {
-                        "options": [
-                            {
-                                "key": "PAC",
-                                "value": "PAC"
-                            },
-                            {
-                                "key": "PAT",
-                                "value": "PAT"
-                            },
-                            {
-                                "key": "P/OFICINA",
-                                "value": "P/OFICINA"
-                            }
-                        ]
-                    },
-                    "required": true
-                },
-                {
-                    "name": "monto",
-                    "title": "Monto",
-                    "type": "text",
-                    "required": true
-                },
-                {
-                    "name": "tipo_casa",
-                    "title": "Tipo de casa",
-                    "type": "select",
-                    "data": {
-                        "collection": "modelos",
-                        "fields": [
-                            {
-                                "field": "nombre"
-                            },
-                            {
-                                "field": "_id",
-                                "id": true
-                            }
-                        ]
-                    },
-                    "required": true
-                }
-            ]
-        },
-        {
             "icon": "glyphicon glyphicon-usd",
             "name": "Pagos",
             "scope": [
@@ -254,19 +254,6 @@
                 "Contable"
             ],
             "collection": "pagos",
-            "joined": {
-                "collection": [
-                    {
-                        "fields": [
-                            "nombre",
-                            "apellidos"
-                        ],
-                        "name": "asociados",
-                        "localField": "run",
-                        "foreignField": "run"
-                    }
-                ]
-            },
             "fields": [
                 {
                     "name": "_id",
@@ -274,10 +261,14 @@
                     "id": true
                 },
                 {
+                    "name": "id",
+                    "title": "ID",
+                    "type": "text"
+                },
+                {
                     "name": "nombre",
                     "title": "Titular",
-                    "type": "text",
-                    "onfly": true
+                    "type": "text"
                 },
                 {
                     "name": "run",
@@ -303,6 +294,10 @@
                     "type": "select",
                     "data": {
                         "options": [
+                          {
+                              "key": "No importado",
+                              "value": "No importado"
+                          },
                             {
                                 "key": "Pendiente",
                                 "value": "Pendiente"
@@ -350,21 +345,32 @@
                                     "Administrador",
                                     "Editor"
                                 ]
+                            },
+                            {
+                                "key": "Pagado fuera de plazo (+ 20%)",
+                                "value": "Pagado fuera de plazo (+ 20%)",
+                                "scope": [
+                                    "Administrador",
+                                    "Editor"
+                                ]
                             }
                         ]
                     }
                 },
                 {
-                    "name": "debe",
-                    "title": "Debe",
-                    "type": "text",
-                    "onfly": true
+                    "name": "pagado",
+                    "title": "Pagado",
+                    "type": "text"
                 },
                 {
-                    "name": "haber",
-                    "title": "Excedente",
-                    "type": "text",
-                    "onfly": true
+                    "name": "debe",
+                    "title": "Debe",
+                    "type": "text"
+                },
+                {
+                    "name": "excedentes",
+                    "title": "Excedentes",
+                    "type": "text"
                 },
                 {
                     "name": "comentarios",
@@ -372,7 +378,7 @@
                     "type": "textarea"
                 },
                 {
-                    "name": "files",
+                    "name": "archivos",
                     "title": "Archivos",
                     "type": "file"
                 }

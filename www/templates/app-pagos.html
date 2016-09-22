@@ -43,7 +43,6 @@
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th></th>
                     <th ng-repeat="field in page.fields track by field.name" ng-if="field.name != '_id'">
                         <span ng-if="session.type != 'Contable'">{{field.title}}</span>
                         <span ng-if="session.type == 'Contable' && field.name != 'nombre' && field.name != 'log'">{{field.title}}</span>
@@ -57,7 +56,7 @@
                             <a href="javascript:" data-popover-content="{{tddata}}" class="popover-tarifa">
                                 <i class="glyphicon glyphicon-tags"></i>
                             </a>&nbsp;
-                            <b>{{tddata.total}} UF:&nbsp;</b> 
+                            <b>{{tddata.total}} UF:&nbsp;</b>
                         </span>
                         {{tddata.totalpesos| currency}}
 
@@ -72,7 +71,7 @@
                             </select>
                         </div>
                         <button style="float:left;margin-left:5px;" class="btn btn-default btn-xs" ng-click="pagos.modalEditarDetalles(trdata)">
-                            <i class="glyphicon glyphicon-font"></i> Documentos y comentarios
+                            Documentos y comentarios
                         </button>
                         <div style="clear:both"></div>
                     </td>

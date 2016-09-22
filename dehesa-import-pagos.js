@@ -26,16 +26,20 @@ exports.import = function(params, cb){
       }
 
       var registros = [];
+      var run = '';
       for(var x in data){
         if(x > 0){
           if (data[x][0] && data[x][1] && data[x][2]){
+            run = data[x][0];
+            run = run.toString();
+            run = run.replace(/,/,'');
+            run = run.replace(/./,'');
+            run = run.replace('-','');
             registros[registros.length] = {
-              run: data[x][0],
+              run: run,
               codigo: data[x][1],
               tarifa: data[x][2],
-              status: 'Pendiente',
-              month: thismonth,
-              year: parseInt(params.periodo.year)
+              month: thismonth
             }
           }
         }

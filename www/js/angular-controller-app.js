@@ -667,44 +667,65 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
           }
         },
         changeStatus: function (select, data) {
+          console.info(select);
+          console.warn(data);
             var pagado = 0;
-            if (select != 'Carga PAC PAT realizada' && select != 'PAC PAT rechazado' && select != 'Pendiente' && select != 'Cheque recibido') {
+            var paramsdata = false;
+            switch(select){
+              case 'Pendiente':
+              break;
+              case 'PAC PAT rechazado':
+              case 'Cheque recibido':
+              case 'PAC PAT realizado':
+              paramsdata = {
+                  run: data.run,
+                  month: this.tabMonthActive,
+                  year: this.yearActive,
+                  status: select
+              }
+              break;
+              case 'Pagado con transferencia':
+              case 'Pagado en efectivo':
+              case 'Pagado con cheque':
                 pagado = prompt('Total a pagar', Math.round(data.tarifa.totalpesos));
                 if (pagado) {
-                    $http.post('/api/pagar', {
-                        params: {
-                            token: Session.get(),
-                            data: {
-                                run: data.run,
-                                pago: pagado,
-                                month: this.tabMonthActive,
-                                year: this.yearActive,
-                                status: select,
-                                cobrodelmes: Math.round(data.tarifa.totalpesos)
-                            }
-                        }
-                    }).success(function (response) {
-                        $scope.load($scope.page);
-                    });
+                  paramsdata = {
+                      run: data.run,
+                      pago: pagado,
+                      month: this.tabMonthActive,
+                      year: this.yearActive,
+                      status: select,
+                      cobrodelmes: Math.round(data.tarifa.totalpesos)
+                  }
                 } else {
-                  obtenerPagos($scope.pagos.tabMonthActive, $scope.pagos.monthActive);
+                  obtenerPagos(this.tabMonthActive, this.monthActive);
                 }
-            } else {
-                $http.post('/api/pagar', {
-                    params: {
-                        token: Session.get(),
-                        data: {
-                            run: data.run,
-                            pago: pagado,
-                            month: this.tabMonthActive,
-                            year: this.yearActive,
-                            status: select,
-                            cobrodelmes: Math.round(data.tarifa.totalpesos)
-                        }
-                    }
-                }).success(function (response) {
+              break;
+              case 'PAC PAT confirmado':
+              case 'Pagado fuera de plazo (+ 20%)':
+              pagado = data.tarifa.totalpesos;
+              if(select == 'Pagado fuera de plazo (+ 20%)'){
+                pagado = data.tarifa.totalpesos * 1.2;
+              }
+              paramsdata = {
+                  run: data.run,
+                  pago: pagado,
+                  month: this.tabMonthActive,
+                  year: this.yearActive,
+                  status: select,
+                  cobrodelmes: pagado
+              }
+              break;
+            }
+            if(paramsdata){
+              $http.post('/api/pagar', {
+                  params: {
+                      token: Session.get(),
+                      data: paramsdata
+                  }
+              }).success(function (response) {
                   obtenerPagos($scope.pagos.tabMonthActive, $scope.pagos.monthActive);
-                });
+              });
             }
         },
         modalEditarDetalles: function (data) {

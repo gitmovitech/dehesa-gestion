@@ -57,7 +57,13 @@ app.get('/api/data', function (req, res) {
 
                 db.getCollection(req.query.collection, function (response) {
                     if (req.query.collection == 'pagos') {
-                        db.getResumenHistorialPagos(response, 0, function (response) {
+                      console.log(response);
+                        res.send({
+                            databack: req.query.databack,
+                            success: true,
+                            data: response
+                        });
+                        /*db.getResumenHistorialPagos(response, 0, function (response) {
                             if (response) {
                                 if (req.query.databack) {
                                     res.send({
@@ -85,7 +91,7 @@ app.get('/api/data', function (req, res) {
                                     });
                                 }
                             }
-                        }, meses);
+                        }, meses);*/
                     } else {
                         if (response) {
                             if (req.query.databack) {
@@ -315,10 +321,84 @@ app.post('/api/data/import/excel', function (req, res) {
     if (req.body.params.token) {
         getSession(req.body.params.token, function (userdata, err) {
             if (userdata) {
-                importPagos.import(req.body.params, function (response) {
-                    db.addMonthPayment(response.data, function (response) {
-                        res.send(response);
+              var registros_importados = [];
+              var run = '';
+                importPagos.import(req.body.params, function (importacion) {
+                  if(importacion.success){
+                    db.getModelos(function(modelos){
+                      db.getServicios(function(servicios){
+
+                        var valorservicios = '';
+                        var sumaservicios = 0;
+                        for(var x in servicios){
+                          valorservicios = servicios[x].valor;
+                          valorservicios = valorservicios.toString();
+                          valorservicios = valorservicios.replace(/,/g,'.');
+                          sumaservicios += parseFloat(valorservicios);
+                        }
+
+                        db.getAsociados(function(asociados){
+                          var month = false;
+                          for(var x in asociados){
+                            run = asociados[x].run;
+                            run = run.toString();
+                            run = run.replace(/,/,'');
+                            run = run.replace(/./,'');
+                            run = run.replace('-','');
+                            registros_importados[x] = {
+                              _id: asociados[x]._id,
+                              id: asociados[x].id,
+                              nombre: asociados[x].usuario,
+                              run: run,
+                              codigo: '-',
+                              tarifa:'-',
+                              estado: 'No importado',
+                              pagado:'-',
+                              debe: '-',
+                              excedentes: '-',
+                              comentarios:'-',
+                              archivos: '-'
+                            }
+                            for(var i in importacion.data){
+                              if(importacion.data[i].run == run){
+                                registros_importados[x].codigo = importacion.data[i].codigo;
+                                registros_importados[x].estado = 'Pendiente';
+                                registros_importados[x].pagado = 0;
+                                if(!month){
+                                  month = importacion.data[i].month;
+                                }
+                                for(var t in modelos){
+                                  if(modelos[t]._id == asociados[x].tipo_casa){
+                                    modelos[t].valor = modelos[t].valor.toString();
+                                    modelos[t].valor = modelos[t].valor.replace(/,/,'.');
+                                    registros_importados[x].tarifa = {
+                                      servicios: sumaservicios,
+                                      adt: importacion.data[i].tarifa,
+                                      total: parseFloat(modelos[t].valor)
+                                    }
+                                    registros_importados[x].debe = parseFloat(modelos[t].valor);
+                                    break;
+                                  }
+                                }
+                                break;
+                              }
+                            }
+                          }
+                          db.obtenerExcedentes(registros_importados, 0, function(data){
+                            db.guardarImportacionPagos({
+                              data: data,
+                              month: month,
+                              year: req.body.params.periodo.year
+                            }, function (response) {
+                                res.send(response);
+                            });
+                          });
+                        });
+                      });
                     });
+                  } else {
+                    res.send(importacion);
+                  }
                 });
             } else {
                 res.send({

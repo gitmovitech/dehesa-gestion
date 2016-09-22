@@ -9,10 +9,17 @@ var procesar = function (collection, data, index, cb) {
                 run: RutJS.cleanRut(data[index].run)
             }, function (err, response) {
                 if (!response) {
+                    var deudames = 0;
+                    for(var x in data[index].tarifa){
+                      deudames += data[index].tarifa[x].valor
+                    }
                     collection.insert({
                         run: RutJS.cleanRut(data[index].run),
                         codigo: data[index].codigo,
                         tarifa: data[index].tarifa,
+                        pagado: 0,
+                        debe: deudames,
+                        excedente: 0,
                         type: data[index].status,
                         month: data[index].month,
                         year: data[index].year
@@ -43,7 +50,7 @@ exports.procesar = procesar;
 
 
 var pagar = function(){
-    
+
 }
 exports.pagar = pagar;
 
