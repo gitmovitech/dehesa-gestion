@@ -355,9 +355,9 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                   delete $scope.uploader;
                   setUploader();
               }, 500);
-            } else {
-                $scope.load($scope.page);
             }
+            $scope.load($scope.page);
+
         });
     }
 

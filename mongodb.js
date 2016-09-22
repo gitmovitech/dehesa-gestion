@@ -344,7 +344,6 @@ exports.editCollection = function (collection, data, callback) {
                             } else {
                                 if (data[z].name == 'archivos') {
                                     try {
-                                        insertdata[insertdata.length] = [JSON.stringify(data[z].name), JSON.stringify(data[z].value.join(','))].join(':');
                                         /**
                                         ARCHIVOS
                                         **/
@@ -363,6 +362,14 @@ exports.editCollection = function (collection, data, callback) {
                                         for(var k in data[z].value){
                                           fs.rename(__dirname + '/uploads/'+data[z].value[k], __dirname + '/uploads/documents/'+id+'/'+year+'/'+month+'/'+data[z].value[k]);
                                         }
+                                        var dir = fs.readdirSync(__dirname + '/uploads/documents/'+id+'/'+year+'/'+month);
+                                        var archivosPorGuardar = [];
+                                        for(var p in dir){
+                                          if(dir[p] != '.DS_Store'){
+                                            archivosPorGuardar[archivosPorGuardar.length] = dir[p];
+                                          }
+                                        }
+                                        insertdata[insertdata.length] = [JSON.stringify(data[z].name), JSON.stringify(archivosPorGuardar.join(','))].join(':');
                                     } catch (e) {
 
                                     }

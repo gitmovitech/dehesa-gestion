@@ -57,7 +57,6 @@ app.get('/api/data', function (req, res) {
 
                 db.getCollection(req.query.collection, function (response) {
                     if (req.query.collection == 'pagos') {
-                      console.log(response);
                         res.send({
                             databack: req.query.databack,
                             success: true,
