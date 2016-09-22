@@ -620,6 +620,25 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         monthActive: null,
         showUploadExcel: false,
         randomPassCheckboxValue: false,
+        eliminarDocumento: function(file, fields){
+          if(confirm('¿Está seguro que desea eliminar el archivo "'+file+'"?')){
+            var id, year, month;
+            console.info(fields);
+            for(var x in fields){
+              if(fields[x].name == 'id')
+                id = fields[x].value;
+              if(fields[x].name == 'year')
+                year = fields[x].value;
+              if(fields[x].name == 'month')
+                month = fields[x].value;
+            }
+            file = '/dropfile/'+id+'/'+year+'/'+month+'/'+window.btoa(encodeURI(file));
+            $http.post(file, {}).success(function (response) {
+              obtenerPagos($scope.pagos.yearActive, $scope.pagos.monthActive);
+              jQuery('#modalEdit').modal('hide');
+            });
+          }
+        },
         descargarDocumento : function(file, fields){
           var id, year, month;
           console.info(fields);

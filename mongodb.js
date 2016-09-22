@@ -400,6 +400,23 @@ exports.editCollection = function (collection, data, callback) {
         callback([]);
     }
 }
+exports.dropFile = function(data, files, cb){
+  if(files.length == 0){
+    files = '-';
+  } else {
+    files = files.join(',');
+  }
+  database.collection('pagos').update({
+    id: parseInt(data.id),
+    year: parseInt(data.year),
+    month: parseInt(data.month)
+  }, {
+    $set: {
+      archivos: files
+    }
+  });
+  cb();
+}
 exports.editCollectionById = function (collection, data, id, callback) {
     if (collection) {
         database.listCollections().toArray(function (err, collections) {

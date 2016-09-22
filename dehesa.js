@@ -309,6 +309,24 @@ app.get('/descargas/:id/:year/:month/:file', function (req, res) {
         res.send('El archivo no fue encontrado en el servidor');
     }
 });
+app.post('/dropfile/:id/:year/:month/:file', function (req, res) {
+  var file = __dirname + '/uploads/documents/'+req.params.id+'/'+req.params.year+'/'+req.params.month+'/'+decodeURI(atob(req.params.file));
+    if (fs.existsSync(file)) {
+        fs.unlinkSync(file);
+        var dir = fs.readdirSync(__dirname + '/uploads/documents/'+req.params.id+'/'+req.params.year+'/'+req.params.month);
+        var archivosPorGuardar = [];
+        for(var p in dir){
+          if(dir[p] != '.DS_Store'){
+            archivosPorGuardar[archivosPorGuardar.length] = dir[p];
+          }
+        }
+        db.dropFile(req.params, archivosPorGuardar, function(){
+          res.send('OK');
+        });
+    } else {
+        res.send('El archivo no fue encontrado en el servidor');
+    }
+});
 
 /**
  * IMPORTAR EXCEL
