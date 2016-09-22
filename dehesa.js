@@ -497,7 +497,7 @@ app.post('/api/pagar', function (req, res) {
             if (response) {
                 var data = req.body.params.data;
                 data.usuario = response;
-                data.run = RutJS.cleanRut(data.run);
+                data.run = RutJS.cleanRut(data.run); console.log(data.run);
                 db.pagar(data, function () {
                     res.send('OK');
                 });

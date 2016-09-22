@@ -661,7 +661,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                       cobrodelmes: Math.round(data.tarifa.totalpesos)
                   }
                 } else {
-                  obtenerPagos(this.tabMonthActive, this.monthActive);
+                  obtenerPagos(this.yearActive, this.monthActive);
                 }
               break;
               case 'PAC PAT confirmado':
@@ -687,7 +687,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                       data: paramsdata
                   }
               }).success(function (response) {
-                  obtenerPagos($scope.pagos.tabMonthActive, $scope.pagos.monthActive);
+                  obtenerPagos($scope.pagos.yearActive, $scope.pagos.monthActive);
               });
             }
         },

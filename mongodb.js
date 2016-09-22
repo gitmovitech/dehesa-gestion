@@ -174,7 +174,7 @@ var getCollection = function (collection, callback, data, join) {
                             }
                         });
                     } else {
-                        query.find(JSON.parse(data)).toArray(function (err, response) {
+                        query.find(JSON.parse(data)).sort( { id: 1 } ).toArray(function (err, response) {
                             if (!err) {
                                 for (var x in response) {
                                     for (var y in response[x]) {
@@ -469,105 +469,6 @@ exports.guardarImportacionPagos = function(pagos, cb){
     }
   });
 }
-exports.addMonthPayment = function (pagos, cb) {
-    if (database) {
-        database.collection('modelos').find({}).toArray(function (err, modelos) {
-            database.collection('servicios').find({}).toArray(function (err, servicios) {
-                database.collection('asociados').find({}).toArray(function (err, asociados) {
-                    var pagos_importados = [];
-                    var run_asociado, run_pago;
-                    var importar_pago = true;
-                    var servicios_agregados;
-                    for (var x in asociados) {
-                        run_asociado = asociados[x].run;
-                        if (!RutJS.isValid(run_asociado)) {
-                            importar_pago = false;
-                            var out = '';
-                            for (var t in asociados[x]) {
-                                out += t.toUpperCase() + ': ' + asociados[x][t] + '\n';
-                            }
-                            cb({
-                                success: false,
-                                message: 'Se ha encontrado un registro de asociado sin RUT.\n Se ha interrumpido la importación de pagos favor corrija el registro en la sección de Asociados:\nRespuesta del servidor:\n\n' + out
-                            });
-                        }
-                        var out = '';
-                        for (var y in pagos) {
-                            run_pago = pagos[y].run;
-                            if (!RutJS.isValid(run_pago)) {
-                                importar_pago = false;
-                                out += '\n';
-                                for (var t in pagos[y]) {
-                                    out += t.toUpperCase() + ': ' + pagos[y][t] + '\n';
-                                }
-                                out += 'Linea ' + ((y - 0) + (2 - 0)) + '\n';
-                            } else {
-                                servicios_agregados = [{
-                                        nombre: 'ADT',
-                                        valor: pagos[y].tarifa,
-                                        adm: false
-                                    }
-                                ];
-                                if (typeof servicios == 'object') {
-                                    for (var z in servicios) {
-                                        if (typeof servicios[z].valor == 'string') {
-                                            servicios[z].valor = parseFloat(servicios[z].valor.replace(/,/g, '.'));
-                                        }
-                                        servicios_agregados[servicios_agregados.length] = {
-                                            nombre: servicios[z].nombre,
-                                            valor: servicios[z].valor,
-                                            adm: false
-                                        }
-                                    }
-                                }
-                                if (asociados[x].tipo_casa) {
-                                    for (var z in modelos) {
-                                        if (modelos[z]._id == asociados[x].tipo_casa) {
-                                            if (typeof modelos[z].valor == 'string') {
-                                                modelos[z].valor = parseFloat(modelos[z].valor.replace(/,/g, '.'));
-                                            }
-                                            var admin = 0;
-                                            for (var h in servicios_agregados) {
-                                                if (!servicios_agregados[h].adm) {
-                                                    admin += servicios_agregados[h].valor;
-                                                }
-                                            }
-                                            servicios_agregados[servicios_agregados.length] = {
-                                                nombre: 'Administración',
-                                                valor: modelos[z].valor - admin,
-                                                adm: true
-                                            }
-                                            break;
-                                        }
-                                    }
-                                    pagos_importados[pagos_importados.length] = {
-                                        nombre: asociados[x].nombre,
-                                        run: RutJS.cleanRut(asociados[x].run),
-                                        tarifa: servicios_agregados,
-                                        status: 'Pendiente'
-                                    }
-                                }
-                            }
-                            break;
-                        }
-                    }
-                    if (importar_pago) {
-                      cb(pagos_importados);
-                        /*dehesaPagos.procesar(database.collection('pagos'), pagos_importados, 0, function () {
-                            cb({success: true});
-                        });*/
-                    } else {
-                        cb({
-                            success: false,
-                            message: 'Se han encontrado registros de asociados con RUT inválidos.\n Se ha interrumpido la importación de pagos favor corrija el registro en el archivo de carga de pagos:\n\n' + out
-                        });
-                    }
-                });
-            });
-        });
-    }
-}
-
 exports.getPayments = function (params, cb) {
     if (database) {
         database.collection('pagos').find({
@@ -585,48 +486,54 @@ exports.getPayments = function (params, cb) {
 
 exports.pagar = function (data, cb) {
     if (database) {
-        database.collection('pagos_historial').find({
-            run: data.run
-        }).toArray(function (err, response) {
-            if (response) {
-              console.log(response);
-            }
-            switch(data.status){
-              case 'Pagado con transferencia':
-              case 'Pagado en efectivo':
-              case 'Pagado con cheque':
-              case 'PAC PAT confirmado':
-                if (data.cobrodelmes == data.pago) {
-                    data.haber = 0;
-                    data.debe = 0;
-                } else if (data.cobrodelmes > data.pago) {
-                    data.haber = 0;
-                    data.debe = data.cobrodelmes - data.pago;
-                } else if (data.cobrodelmes < data.pago) {
-                    data.haber = data.pago - data.cobrodelmes;
-                    data.debe = 0;
-                }
-                database.collection('pagos_historial').insert({
-                    run: data.run,
-                    haber: data.haber,
-                    debe: data.debe,
-                    fecha: new Date().getTime(),
-                    month: data.month,
-                    year: data.year,
-                    usuario: data.usuario.email
-                });
-              break;
-            }
-            database.collection('pagos').update({
-                run: data.run,
-                month: data.month,
-                year: data.year
-            }, {
-                $set: {
-                    type: data.status
-                }
-            });
-            cb();
-        });
+      switch(data.status){
+        case 'PAC PAT realizado':
+        case 'PAC PAT rechazado':
+        case 'Cheque recibido':
+          database.collection('pagos').update({
+              run: data.run,
+              month: data.month,
+              year: data.year
+          }, {
+              $set: {
+                  type: data.status
+              }
+          });
+        break;
+        case 'Pagado fuera de plazo (+ 20%)':
+        case 'Pagado con transferencia':
+        case 'Pagado en efectivo':
+        case 'Pagado con cheque':
+        case 'PAC PAT confirmado':
+        console.log({
+            run: data.run,
+            month: data.month,
+            year: data.year
+        })
+          if (data.cobrodelmes == data.pago) {
+              data.excedentes = 0;
+              data.debe = 0;
+          } else if (data.cobrodelmes > data.pago) {
+              data.excedentes = 0;
+              data.debe = data.cobrodelmes - data.pago;
+          } else if (data.cobrodelmes < data.pago) {
+              data.excedentes = data.pago - data.cobrodelmes;
+              data.debe = 0;
+          }
+          database.collection('pagos').update({
+              run: data.run,
+              month: data.month,
+              year: data.year
+          }, {
+              $set: {
+                  type: data.status,
+                  excedentes: data.excedentes,
+                  debe: data.debe,
+                  pagado: data.pago
+              }
+          });
+        break;
+      }
+      cb();
     }
 }
