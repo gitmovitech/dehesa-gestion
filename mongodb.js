@@ -541,7 +541,7 @@ exports.getPayments = function (params, cb) {
         database.collection('pagos').find({
             month: parseInt(params.month),
             year: parseInt(params.year)
-        }).toArray(function (err, response) {
+        }).sort({id:1}).toArray(function (err, response) {
             if (response) {
                 cb(response);
             } else {

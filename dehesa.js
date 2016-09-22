@@ -309,6 +309,65 @@ app.get('/descargas/:id/:year/:month/:file', function (req, res) {
         res.send('El archivo no fue encontrado en el servidor');
     }
 });
+app.get('/pagos/excel/:year/:month', function (req, res) {
+  if(req.params.month && req.params.year){
+    var mes = null;
+    for (var x in meses) {
+        if (meses[x] == req.params.month) {
+            mes = x;
+            break;
+        }
+    }
+    var data = [[
+      'ID',
+      'RUT',
+      'CODIGO',
+      'TARIFA',
+      'ESTADO',
+      'PAGO',
+      'DEUDA',
+      'EXCEDENTES',
+      'COMENTARIOS'
+    ]];
+    db.getPayments({
+        month: mes,
+        year: req.params.year
+    }, function (response) {
+        if (response) {
+            for(var x in response){
+              data[data.length] = [
+                response[x].id,
+                response[x].run,
+                response[x].codigo,
+                response[x].tarifa.total,
+                response[x].type,
+                response[x].pagado,
+                response[x].debe,
+                response[x].excedentes,
+                response[x].comentarios
+              ]
+            }
+            var buffer = xlsx.build([{name: req.params.month+" "+req.params.year, data: data}]);
+            res.setHeader('Content-disposition', 'attachment; filename="' + req.params.month+" "+req.params.year + '.xlsx"');
+            res.setHeader('Content-type', 'application/vnd.ms-excel');
+            res.end(buffer);
+        } else {
+            res.send(false);
+        }
+    });
+  }
+  //var file = __dirname + '/uploads/documents/'+req.params.id+'/'+req.params.year+'/'+req.params.month+'/'+atob(req.params.file);
+    /*if (fs.existsSync(file)) {
+        var mimetype = mime.lookup(file);
+        var filename = atob(req.params.file);
+        res.setHeader('Content-disposition', 'attachment; filename="' + filename + '"');
+        res.setHeader('Content-type', mimetype);
+        var filestream = fs.createReadStream(file);
+        filestream.pipe(res);
+    } else {
+        res.send('El archivo no fue encontrado en el servidor');
+    }*/
+});
 app.post('/dropfile/:id/:year/:month/:file', function (req, res) {
   var file = __dirname + '/uploads/documents/'+req.params.id+'/'+req.params.year+'/'+req.params.month+'/'+decodeURI(atob(req.params.file));
     if (fs.existsSync(file)) {

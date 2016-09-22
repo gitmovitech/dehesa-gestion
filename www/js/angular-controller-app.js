@@ -619,6 +619,9 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         showUploadExcel: false,
         randomPassCheckboxValue: false,
         historialData: [],
+        exportarMesExcel: function(month, year){
+          window.open('/pagos/excel/'+year+'/'+month, '_blank');
+        },
         modalHistorial: function(item){
           $http.get('/api/data', {
             params: {
