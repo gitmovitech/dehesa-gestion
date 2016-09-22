@@ -68,10 +68,6 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         $scope.filestosave = [];
         $scope.uploader.onCompleteItem = function (fileItem, response, status, headers) {
             $scope.filestosave[$scope.filestosave.length] = response.filename;
-            console.log(fileItem)
-            console.info($scope.filestosave);
-            console.log(status)
-            console.info(headers);
         };
         $scope.readyToUpload = false;
     }
@@ -305,6 +301,9 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                         if (data[key])
                             $scope.fields[x].value = data[key];
                     }
+                    if($scope.fields[x].name == 'archivos'){
+                      $scope.fields[x].value = $scope.fields[x].value.split(',');
+                    }
                 }
             }
         } else {
@@ -351,9 +350,11 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         }).success(function (response) {
             jQuery('#modalEdit').modal('hide');
             if (reload) {
-                setTimeout(function () {
-                    location.reload();
-                }, 500);
+              setTimeout(function () {
+                  $scope.uploader.destroy();
+                  delete $scope.uploader;
+                  setUploader();
+              }, 500);
             } else {
                 $scope.load($scope.page);
             }
@@ -710,7 +711,6 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
             }
         },
         modalEditarDetalles: function (data, boton) {
-          console.info(data);
           if(boton == 'comentarios'){
             $scope.showModal([{
                     "name": "_id",
@@ -729,9 +729,22 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                     "name": "_id",
                     "type": "hidden"
                 }, {
-                    name: 'files',
+                    "name": "id",
+                    "type": "hidden",
+                    value: data.id
+                }, {
+                    "name": "year",
+                    "type": "hidden",
+                    value: $scope.pagos.yearActive
+                }, {
+                    "name": "month",
+                    "type": "hidden",
+                    value: $scope.pagos.tabMonthActive
+                }, {
+                    name: 'archivos',
                     title: 'Documentos',
-                    type: 'file'
+                    type: 'file',
+                    value: data.archivos
                 }], {
                 _id: data._id
             });

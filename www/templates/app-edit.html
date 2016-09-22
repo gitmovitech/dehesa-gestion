@@ -7,7 +7,7 @@
                     <h4 class="modal-title" id="modalEditLabel"><b><i class="{{page.icon}}"></i> {{page.name}}</b></h4>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group" ng-repeat="(key,item) in fields" ng-class="{'hidden':item.edit.hidden}">
+                    <div class="form-group" ng-repeat="(key,item) in fields" ng-class="{'hidden':item.edit.hidden, 'hidden': item.type == 'hidden'}">
                         <label for="{{item.name}}" class="col-sm-2 control-label" ng-if="item.name != '_id'">
                             <i class="glyphicon glyphicon-asterisk input-required-asterisk" ng-if="item.required"></i>
                             {{item.title}}
@@ -86,6 +86,24 @@
                             <select data-placeholder="Seleccione" class="form-control" ng-if="item.type == 'select' && !item.multiple" ng-model="item.value">
                                 <option value="{{option.key}}" ng-repeat="option in item.data.options" ng-if="item.data">{{option.value}}</option>
                             </select>
+
+
+
+                              <div ng-if="item.type == 'file' && item.value !='-'">
+                                <br>
+                                <h4 class="text-info">Documentos cargados</h4>
+                                <table class="table">
+                                  <tbody>
+                                    <tr ng-repeat="file in item.value">
+                                      <td>{{file}}</td>
+                                      <td>
+                                        <button class="btn btn-xs btn-success"><i class="glyphicon glyphicon-download"></i> Descargar</button>
+                                        <button class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-remove"></i> Eliminar</button>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
 
                         </div>
                     </div>

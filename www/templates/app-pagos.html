@@ -52,26 +52,6 @@
             </thead>
             <tbody>
                 <tr ng-repeat="(index,trdata) in tabledata  | startFrom: pagination.page * pagination.perPage | limitTo: pagination.perPage track by trdata._id">
-                    <!--<td ng-repeat="(key,tddata) in trdata" ng-if="key != '_id' && key != 'month' && key != 'year' && key != 'type' && key != 'debe' && key != 'haber'">
-
-                        {{tddata.totalpesos| currency}}
-
-                        <span ng-class="{'text-danger':key == 'index'}" ng-if="key != 'tarifa' && session.type != 'Contable'">{{tddata}}</span>
-                        <span class="text-danger" ng-if="session.type == 'Contable' && key == 'index'">{{trdata.index}}</span>
-                        <span ng-if="(key == 'run' || key == 'codigo') && session.type == 'Contable'">{{tddata}}</span>
-                    </td>
-                    <td ng-repeat="(key,item) in trdata" ng-if="key == 'type'">
-                        <div ng-repeat="field in page.fields track by field.name" ng-if="field.name == 'type'" style="float:left">
-                            <select ng-model="item" ng-change="pagos.changeStatus(item, trdata)">
-                                <option ng-repeat="option in field.data.options" value="{{option.value}}" ng-selected="item == option.value">{{option.key}}</option>
-                            </select>
-                        </div>
-                        <button style="float:left;margin-left:5px;" class="btn btn-default btn-xs" ng-click="pagos.modalEditarDetalles(trdata)">
-                            Documentos y comentarios
-                        </button>
-                        <div style="clear:both"></div>
-                    </td>
-                    <td ng-repeat="(key,item) in trdata" ng-if="key == 'debe' || key == 'haber'">{{item| currency}}</td>-->
                     <td ng-repeat="(key, tddata) in trdata">
                       <span class="text-danger" ng-if="key == 'index'"><b>{{tddata}}</b></span>
                       <span ng-if="key == 'id'"><b>{{tddata}}</b></span>
@@ -104,9 +84,12 @@
                         </button>
                         <i style="position: absolute; right: -7px; top: 9px;" class="text-danger glyphicon glyphicon-asterisk" ng-if="tddata != '-'"></i>
                       </span>
-                      <button ng-if="key == 'archivos'" style="float:left;margin-left:5px;" class="btn btn-default btn-xs" ng-click="pagos.modalEditarDetalles(trdata, 'archivos')">
-                          <i class="glyphicon glyphicon-folder-open"></i> Documentos
-                      </button>
+                      <span ng-if="key == 'archivos'" style="position:relative">
+                        <button style="float:left;margin-left:5px;" class="btn btn-default btn-xs" ng-click="pagos.modalEditarDetalles(trdata, 'archivos')">
+                            <i class="glyphicon glyphicon-folder-open"></i> Documentos
+                        </button>
+                        <i style="position: absolute; right: -7px; top: 9px;" class="text-danger glyphicon glyphicon-asterisk" ng-if="tddata != '-'"></i>
+                      </span>
                     </td>
                 </tr>
             </tbody>

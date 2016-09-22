@@ -7,6 +7,7 @@ var database;
 var sendmail = require('./sendmail');
 var dehesaPagos = require('./dehesa-procesos-pagos');
 var RutJS = require('./RutJS');
+var fs = require('fs');
 MongoClient.connect(url, function (err, db) {
     if (!err) {
         console.log("Conectado a " + config.mongo.name + " DB");
@@ -320,6 +321,18 @@ exports.editCollection = function (collection, data, callback) {
                 } else {
                     var insertdata = [];
                     var update = false;
+                    var id, year, month;
+                    /**
+                    BUSCAR ID, YEAR Y MES
+                    **/
+                    for (var z in data) {
+                      if(data[z].name == 'id')
+                        id = data[z].value;
+                      if(data[z].name == 'year')
+                        year = data[z].value;
+                      if(data[z].name == 'month')
+                        month = data[z].value;
+                    }
                     for (var z in data) {
                         if (data[z].name == '_id' && data[z].value != '') {
                             update = {
@@ -329,9 +342,27 @@ exports.editCollection = function (collection, data, callback) {
                             if (data[z].value >= 0 && data[z].value != '') {
                                 insertdata[insertdata.length] = [JSON.stringify(data[z].name), JSON.stringify(data[z].value)].join(':');
                             } else {
-                                if (data[z].name == 'files') {
+                                if (data[z].name == 'archivos') {
                                     try {
                                         insertdata[insertdata.length] = [JSON.stringify(data[z].name), JSON.stringify(data[z].value.join(','))].join(':');
+                                        /**
+                                        ARCHIVOS
+                                        **/
+                                        if (!fs.existsSync(__dirname + '/uploads/documents')) {
+                                            fs.mkdirSync(__dirname + '/uploads/documents', 0777);
+                                        }
+                                        if (!fs.existsSync(__dirname + '/uploads/documents/'+id)) {
+                                            fs.mkdirSync(__dirname + '/uploads/documents/'+id, 0777);
+                                        }
+                                        if (!fs.existsSync(__dirname + '/uploads/documents/'+id+'/'+year)) {
+                                            fs.mkdirSync(__dirname + '/uploads/documents/'+id+'/'+year, 0777);
+                                        }
+                                        if (!fs.existsSync(__dirname + '/uploads/documents/'+id+'/'+year+'/'+month)) {
+                                            fs.mkdirSync(__dirname + '/uploads/documents/'+id+'/'+year+'/'+month, 0777);
+                                        }
+                                        for(var k in data[z].value){
+                                          fs.rename(__dirname + '/uploads/'+data[z].value[k], __dirname + '/uploads/documents/'+id+'/'+year+'/'+month+'/'+data[z].value[k]);
+                                        }
                                     } catch (e) {
 
                                     }
