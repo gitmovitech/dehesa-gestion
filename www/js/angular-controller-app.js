@@ -709,7 +709,22 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
               });
             }
         },
-        modalEditarDetalles: function (data) {
+        modalEditarDetalles: function (data, boton) {
+          console.info(data);
+          if(boton == 'comentarios'){
+            $scope.showModal([{
+                    "name": "_id",
+                    "type": "hidden"
+                }, {
+                    name: 'comentarios',
+                    title: 'Comentarios',
+                    type: 'textarea',
+                    value: data.comentarios
+                }], {
+                _id: data._id
+            });
+          }
+          if(boton == 'archivos'){
             $scope.showModal([{
                     "name": "_id",
                     "type": "hidden"
@@ -717,13 +732,10 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                     name: 'files',
                     title: 'Documentos',
                     type: 'file'
-                }, {
-                    name: 'comentarios',
-                    title: 'Comentarios',
-                    type: 'textarea'
                 }], {
                 _id: data._id
             });
+          }
         },
         notificarContador: function (month, year) {
             if (confirm('¿Desea notificar al contador que la carga de cobros se encuentra lista?')) {

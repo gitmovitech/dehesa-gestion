@@ -75,7 +75,7 @@
                     <td ng-repeat="(key, tddata) in trdata">
                       <span class="text-danger" ng-if="key == 'index'"><b>{{tddata}}</b></span>
                       <span ng-if="key == 'id'"><b>{{tddata}}</b></span>
-                      <span ng-if="key == 'nombre' || key == 'run' || key == 'codigo' || key == 'comentarios'">{{tddata}}</span>
+                      <span ng-if="key == 'nombre' || key == 'run' || key == 'codigo'">{{tddata}}</span>
                       <span  ng-if="key == 'tarifa'">
                           <b class="text-info" ng-if="tddata.total">
                             {{tddata.totalpesos | currency}}
@@ -98,6 +98,15 @@
                       <span class="text-warning" ng-if="key == 'excedentes' && tddata == '-'">{{'0' | currency}}</span>
                       <span class="text-danger" ng-if="key == 'debe' && tddata != '-'">{{(valoruf.replace(',','.')-0)*(tddata-0) | currency}}</span>
                       <span ng-if="key == 'debe' && tddata == '-'">-</span>
+                      <span ng-if="key == 'comentarios'" style="position:relative">
+                        <button style="float:left;margin-left:5px;" class="btn btn-default btn-xs" ng-click="pagos.modalEditarDetalles(trdata, 'comentarios')">
+                            <i class="glyphicon glyphicon-comment"></i> Comentarios
+                        </button>
+                        <i style="position: absolute; right: -7px; top: 9px;" class="text-danger glyphicon glyphicon-asterisk" ng-if="tddata != '-'"></i>
+                      </span>
+                      <button ng-if="key == 'archivos'" style="float:left;margin-left:5px;" class="btn btn-default btn-xs" ng-click="pagos.modalEditarDetalles(trdata, 'archivos')">
+                          <i class="glyphicon glyphicon-folder-open"></i> Documentos
+                      </button>
                     </td>
                 </tr>
             </tbody>
