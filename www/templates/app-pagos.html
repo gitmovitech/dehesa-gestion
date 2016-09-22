@@ -8,12 +8,20 @@
                   <h4 class="modal-title" id="modalHistorial"><b><i class="glyphicon glyphicon-stats"></i> Historial de pagos</b></h4>
               </div>
               <div class="modal-body">
-                <div class="panel panel-default" ng-repeat="item in pagos.historialData">
-                  <div class="panel-heading">{{item.month | monthSpanish}} {{item.year}}</div>
-                  <div class="panel-body">
-
+                <div class=" col-xs-12 col-sm-6" ng-repeat="item in pagos.historialData">
+                  <div class="panel panel-default">
+                    <div class="panel-heading">{{item.month | monthSpanish}} {{item.year}}</div>
+                    <div class="panel-body">
+                      <h4 class="text-success"><b>Tarifa UF: {{item.tarifa.total}}</b></h4>
+                      <p><b>Estado:</b> {{item.type}}</p>
+                      <p><b class="text-info">Pagado:</b> {{item.pagado | currency}}</p>
+                      <p><b class="text-danger">Deuda del mes:</b> {{item.debe | currency}}</p>
+                      <p><b class="text-warning">Excedentes del mes:</b> {{item.excedentes | currency}}</p>
+                      <p ng-if="item.comentarios != '-'" style="color:gray"><i>{{item.comentarios}}</i></p>
+                    </div>
                   </div>
-                </div>
+              </div>
+                <div style="clear:both"></div>
               </div>
               <div class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
