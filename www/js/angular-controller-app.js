@@ -620,6 +620,21 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         monthActive: null,
         showUploadExcel: false,
         randomPassCheckboxValue: false,
+        descargarDocumento : function(file, fields){
+          var id, year, month;
+          console.info(fields);
+          for(var x in fields){
+            if(fields[x].name == 'id')
+              id = fields[x].value;
+            if(fields[x].name == 'year')
+              year = fields[x].value;
+            if(fields[x].name == 'month')
+              month = fields[x].value;
+          }
+          file = '/descargas/'+id+'/'+year+'/'+month+'/'+window.btoa(file);
+          window.open(file, '_blank');
+          //location.href = file;
+        },
         randomPassCheckbox:function(index, item){
           if(this.randomPassCheckboxValue){
             if(confirm('¿Desea generar una contraseña aleatoria para este usuario?')){

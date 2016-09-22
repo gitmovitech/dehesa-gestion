@@ -14,6 +14,7 @@ var path = require('path');
 var mime = require('mime');
 var sendmail = require('./sendmail');
 var config = require('./config');
+var atob = require('atob');
 var meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 var getSession = function (token, callback) {
     var session = jwt.decode(token);
@@ -295,14 +296,11 @@ app.post('/api/upload', upload.single('file'), function (req, res, next) {
     fs.rename(__dirname + '/' + req.file.path, __dirname + '/uploads/' + req.file.originalname);
     res.send({answer: 'Archivo cargado correctamente', filename: req.file.originalname});
 });
-app.get('/descargas/:file', function (req, res) {
-    var file = __dirname + '/causas/' + req.params.file
+app.get('/descargas/:id/:year/:month/:file', function (req, res) {
+  var file = __dirname + '/uploads/documents/'+req.params.id+'/'+req.params.year+'/'+req.params.month+'/'+atob(req.params.file);
     if (fs.existsSync(file)) {
         var mimetype = mime.lookup(file);
-        var filename = req.params.file;
-        filename = filename.split('-');
-        filename = filename.splice(1);
-        filename = filename.join('-');
+        var filename = atob(req.params.file);
         res.setHeader('Content-disposition', 'attachment; filename="' + filename + '"');
         res.setHeader('Content-type', mimetype);
         var filestream = fs.createReadStream(file);

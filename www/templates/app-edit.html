@@ -97,8 +97,8 @@
                                     <tr ng-repeat="file in item.value">
                                       <td>{{file}}</td>
                                       <td>
-                                        <button class="btn btn-xs btn-success"><i class="glyphicon glyphicon-download"></i> Descargar</button>
-                                        <button class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-remove"></i> Eliminar</button>
+                                        <a class="btn btn-xs btn-success" ng-click="pagos.descargarDocumento(file, fields)"><i class="glyphicon glyphicon-download"></i> Descargar</a>
+                                        <a class="btn btn-xs btn-danger" ng-click="pagos.eliminarDocumento(file)"><i class="glyphicon glyphicon-remove"></i> Eliminar</a>
                                       </td>
                                     </tr>
                                   </tbody>
