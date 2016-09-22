@@ -668,6 +668,10 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
               case 'Pagado con transferencia':
               case 'Pagado en efectivo':
               case 'Pagado con cheque':
+              case 'Pagado fuera de plazo (+ 20%)':
+                if(select == 'Pagado fuera de plazo (+ 20%)'){
+                  data.tarifa.totalpesos = data.tarifa.totalpesos * 1.2;
+                }
                 pagado = prompt('Total a pagar', Math.round(data.tarifa.totalpesos));
                 if (pagado) {
                   paramsdata = {
@@ -683,11 +687,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                 }
               break;
               case 'PAC PAT confirmado':
-              case 'Pagado fuera de plazo (+ 20%)':
               pagado = data.tarifa.totalpesos;
-              if(select == 'Pagado fuera de plazo (+ 20%)'){
-                pagado = data.tarifa.totalpesos * 1.2;
-              }
               paramsdata = {
                   run: data.run,
                   pago: pagado,

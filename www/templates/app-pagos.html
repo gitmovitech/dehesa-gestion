@@ -93,9 +93,10 @@
                           </div>
                         </span>
                       </span>
-                      <span ng-if="key == 'pagado' || (key == 'excedentes' && tddata != '-')">{{tddata | currency}}</span>
-                      <span ng-if="key == 'excedentes' && tddata == '-'">{{'0' | currency}}</span>
-                      <span ng-if="key == 'debe' && tddata != '-'">{{(valoruf.replace(',','.')-0)*(tddata-0) | currency}}</span>
+                      <span class="text-info" ng-if="key == 'pagado'">{{tddata | currency}}</span>
+                      <span class="text-warning" ng-if="key == 'excedentes' && tddata != '-'">{{tddata | currency}}</span>
+                      <span class="text-warning" ng-if="key == 'excedentes' && tddata == '-'">{{'0' | currency}}</span>
+                      <span class="text-danger" ng-if="key == 'debe' && tddata != '-'">{{(valoruf.replace(',','.')-0)*(tddata-0) | currency}}</span>
                       <span ng-if="key == 'debe' && tddata == '-'">-</span>
                     </td>
                 </tr>
