@@ -630,8 +630,6 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
           }
         },
         changeStatus: function (select, data) {
-          console.info(select);
-          console.warn(data);
             var pagado = 0;
             var paramsdata = false;
             switch(select){
@@ -645,6 +643,26 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                   month: this.tabMonthActive,
                   year: this.yearActive,
                   status: select
+              }
+              break;
+              case 'Pagado con excedentes':
+              if(data.excedentes <= 0){
+                alert('El asociado no posee excedentes para realizar el pago');
+                obtenerPagos(this.yearActive, this.monthActive);
+              } else{
+                pagado = prompt('Total a pagar', Math.round(data.tarifa.totalpesos));
+                if (pagado) {
+                  paramsdata = {
+                      run: data.run,
+                      pago: pagado,
+                      month: this.tabMonthActive,
+                      year: this.yearActive,
+                      status: select,
+                      cobrodelmes: Math.round(data.tarifa.totalpesos)
+                  }
+                } else {
+                  obtenerPagos(this.yearActive, this.monthActive);
+                }
               }
               break;
               case 'Pagado con transferencia':

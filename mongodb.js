@@ -422,6 +422,9 @@ var obtenerExcedentes = function(registros_importados, x, cb){
       },function(err, response){
         if(response){
           registros_importados[x].excedentes = response.excedentes;
+          if(registros_importados[x].excedentes < 0){
+            registros_importados[x].excedentes = 0;
+          }
         } else {
           registros_importados[x].excedentes = 0;
         }
@@ -511,41 +514,60 @@ exports.pagar = function (data, cb) {
                   type: data.status
               }
           });
+          cb();
         break;
+        case 'Pagado con excedentes':
         case 'Pagado fuera de plazo (+ 20%)':
         case 'Pagado con transferencia':
         case 'Pagado en efectivo':
         case 'Pagado con cheque':
         case 'PAC PAT confirmado':
-        console.log({
-            run: data.run,
-            month: data.month,
-            year: data.year
-        })
-          if (data.cobrodelmes == data.pago) {
-              data.excedentes = 0;
-              data.debe = 0;
-          } else if (data.cobrodelmes > data.pago) {
-              data.excedentes = 0;
-              data.debe = data.cobrodelmes - data.pago;
-          } else if (data.cobrodelmes < data.pago) {
-              data.excedentes = data.pago - data.cobrodelmes;
-              data.debe = 0;
-          }
-          database.collection('pagos').update({
+          database.collection('pagos').findOne({
               run: data.run,
               month: data.month,
               year: data.year
-          }, {
-              $set: {
-                  type: data.status,
-                  excedentes: data.excedentes,
-                  debe: data.debe,
-                  pagado: data.pago
+          }, function(err, response){
+            if(response){
+              data.excedentes = response.excedentes;
+            } else {
+              data.excedentes = 0;
+            }
+            if (data.cobrodelmes == data.pago) {
+              if(data.status == 'Pagado con excedentes'){
+                if(data.pago >= data.excedentes){
+                  data.excedentes =  data.excedentes - data.pago;
+                } else {
+                  data.excedentes = data.excedentes - data.pago;
+                }
               }
+              data.debe = 0;
+            } else if (data.cobrodelmes > data.pago) {
+              //SE PUEDE PAGAR MENOS???
+                data.debe = data.cobrodelmes - data.pago;
+            } else if (data.cobrodelmes < data.pago) {
+              if(data.status == 'Pagado con excedentes'){
+                data.excedentes = data.pago - data.excedentes;
+                if(data.excedentes < 0){
+                  data.excedentes = 0;
+                }
+              }
+              data.debe = 0;
+            }
+            database.collection('pagos').update({
+                run: data.run,
+                month: data.month,
+                year: data.year
+            }, {
+                $set: {
+                    type: data.status,
+                    excedentes: data.excedentes,
+                    debe: data.debe,
+                    pagado: data.pago
+                }
+            });
+            cb();
           });
         break;
       }
-      cb();
     }
 }
