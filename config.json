@@ -296,7 +296,11 @@
                         "options": [
                           {
                               "key": "No importado",
-                              "value": "No importado"
+                              "value": "No importado",
+                              "scope": [
+                                  "Administrador",
+                                  "Editor"
+                              ]
                           },
                             {
                                 "key": "Pendiente",

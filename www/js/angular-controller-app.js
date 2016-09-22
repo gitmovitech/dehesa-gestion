@@ -129,7 +129,6 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                 model: item.model
             }
             if (item.collection == 'pagos') {
-                params.joined = item.joined.collection;
                 if (!$scope.currentPagosYear) {
                     $scope.currentPagosYear = new Date().getFullYear();
                 }
@@ -526,17 +525,10 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         var params = {
             token: Session.get(),
             collection: 'pagos',
-            joined: {
-                "fields": ["nombre", "apellidos"],
-                "name": "asociados",
-                "localField": "run",
-                "foreignField": "run"
-            },
             where: {
                 year: year,
                 month: month
-            },
-            historial: true
+            }
         }
         $http.get('/api/data', {
             params: {
@@ -560,59 +552,30 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                             params: params
                         }).success(function (response) {
                             if (response.success) {
-                                /*if (response.data.length == 0) {
-                                 $scope.pagos.showUploadExcel = true;
-                                 } else {
-                                 $scope.pagos.showUploadExcel = false;
-                                 }*/
                                 var registros = [];
                                 var tarifa;
                                 var total;
                                 for (var d in response.data) {
-                                    tarifa = {
-                                        detalle: response.data[d].tarifa
-                                    }
-                                    total = 0;
-                                    for (var v in tarifa.detalle) {
-                                        total += tarifa.detalle[v].valor;
-                                    }
-                                    tarifa.total = total;
-                                    tarifa.totalpesos = total * parseFloat($scope.valoruf);
+                                    response.data[d].tarifa.totalpesos = response.data[d].tarifa.total * parseFloat($scope.valoruf);
                                     registros[registros.length] = {
-                                        index: parseInt(parseInt(d) + parseInt(1)),
                                         _id: response.data[d]._id,
+                                        index: parseInt(parseInt(d) + parseInt(1)),
+                                        id: response.data[d].id,
                                         nombre: response.data[d].nombre,
                                         run: RutHelper.format(response.data[d].run),
                                         codigo: response.data[d].codigo,
-                                        tarifa: tarifa,
+                                        tarifa: response.data[d].tarifa,
                                         type: response.data[d].type,
+                                        pagado: response.data[d].pagado,
                                         debe: response.data[d].debe,
-                                        haber: response.data[d].haber
+                                        excedentes: response.data[d].excedentes,
+                                        comentarios: response.data[d].comentarios,
+                                        archivos: response.data[d].archivos
                                     }
                                 }
                                 $scope.registros = response.data.length;
                                 $scope.pagination.numPages = Math.ceil(response.data.length / $scope.pagination.perPage);
                                 $scope.tabledata = registro_pagos = registros;
-
-                                /**
-                                 * DETALLE DEL POPOVER
-                                 */
-                                setTimeout(function () {
-                                    jQuery('.popover-tarifa').each(function () {
-                                        var data = jQuery(this).data('popover-content');
-                                        var text = '<p><b>TOTAL: ' + data.total + '</b></p>';
-                                        for (var x in data.detalle) {
-                                            text += '<p><b>' + data.detalle[x].nombre + ': ' + (Math.round(data.detalle[x].valor * 100) / 100) + '</b> UF - ' + ($filter('currency')(data.detalle[x].valor * parseFloat($scope.valoruf))) + '</p>';
-                                        }
-                                        jQuery(this).popover({
-                                            title: 'Detalle de la tarifa',
-                                            html: true,
-                                            content: text,
-                                            placement: 'right',
-                                            trigger: 'focus'
-                                        });
-                                    });
-                                }, 1000);
 
                             }
                         });
