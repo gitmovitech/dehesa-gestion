@@ -1,5 +1,27 @@
 <div>
 
+  <div class="modal fade" id="modalHistorial" tabindex="-1" role="dialog" aria-labelledby="modalEditLabel">
+      <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title" id="modalHistorial"><b><i class="glyphicon glyphicon-stats"></i> Historial de pagos</b></h4>
+              </div>
+              <div class="modal-body">
+                <div class="panel panel-default" ng-repeat="item in pagos.historialData">
+                  <div class="panel-heading">{{item.month | monthSpanish}} {{item.year}}</div>
+                  <div class="panel-body">
+
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+              </div>
+          </div>
+      </div>
+  </div>
+
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">
         <li role="presentation" ng-class="{'active': pagos.tabYearActive == $index}" ng-repeat="item in pagos.periodos">
@@ -53,9 +75,11 @@
             <tbody>
                 <tr ng-repeat="(index,trdata) in tabledata  | startFrom: pagination.page * pagination.perPage | limitTo: pagination.perPage track by trdata._id">
                     <td ng-repeat="(key, tddata) in trdata">
+
                       <span class="text-danger" ng-if="key == 'index'"><b>{{tddata}}</b></span>
                       <span ng-if="key == 'id'"><b>{{tddata}}</b></span>
                       <span ng-if="key == 'nombre' || key == 'run' || key == 'codigo'">{{tddata}}</span>
+
                       <span  ng-if="key == 'tarifa'">
                           <b class="text-info" ng-if="tddata.total">
                             {{tddata.totalpesos | currency}}
@@ -63,6 +87,7 @@
                           </b>
                           <span ng-if="!tddata.total">-</span>
                       </span>
+
                       <span ng-if="key == 'type'">
                         <span ng-if="tddata == 'No importado'">{{tddata}}</span>
                         <span ng-if="tddata != 'No importado'">
@@ -73,23 +98,31 @@
                           </div>
                         </span>
                       </span>
+
                       <span class="text-info" ng-if="key == 'pagado'">{{tddata | currency}}</span>
                       <span class="text-warning" ng-if="key == 'excedentes' && tddata != '-'">{{tddata | currency}}</span>
                       <span class="text-warning" ng-if="key == 'excedentes' && tddata == '-'">{{'0' | currency}}</span>
                       <span class="text-danger" ng-if="key == 'debe' && tddata != '-'">{{(valoruf.replace(',','.')-0)*(tddata-0) | currency}}</span>
                       <span ng-if="key == 'debe' && tddata == '-'">-</span>
+
                       <span ng-if="key == 'comentarios'" style="position:relative">
                         <button style="float:left;margin-left:5px;" class="btn btn-default btn-xs" ng-click="pagos.modalEditarDetalles(trdata, 'comentarios')">
                             <i class="glyphicon glyphicon-comment"></i> Comentarios
                         </button>
                         <i style="position: absolute; right: -7px; top: 9px;" class="text-danger glyphicon glyphicon-asterisk" ng-if="tddata != '-'"></i>
                       </span>
+
                       <span ng-if="key == 'archivos'" style="position:relative">
                         <button style="float:left;margin-left:5px;" class="btn btn-default btn-xs" ng-click="pagos.modalEditarDetalles(trdata, 'archivos')">
                             <i class="glyphicon glyphicon-folder-open"></i> Documentos
                         </button>
                         <i style="position: absolute; right: -7px; top: 9px;" class="text-danger glyphicon glyphicon-asterisk" ng-if="tddata != '-'"></i>
                       </span>
+
+                      <span ng-if="key == '_id'">
+                        <a class="btn btn-success btn-xs glyphicon glyphicon-stats" ng-click="pagos.modalHistorial(trdata)"></a>
+                      </span>
+
                     </td>
                 </tr>
             </tbody>

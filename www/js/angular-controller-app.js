@@ -609,6 +609,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
             months: tmp_months
         }
     }
+
     $scope.pagos = {
         periodos: periodos,
         tabYearActive: null,
@@ -617,6 +618,36 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         monthActive: null,
         showUploadExcel: false,
         randomPassCheckboxValue: false,
+        historialData: [],
+        modalHistorial: function(item){
+          $http.get('/api/data', {
+            params: {
+                token: Session.get(),
+                collection: 'pagos',
+                where: {
+                  id: item.id
+                }
+            }
+          }).success(function (response) {
+            if(response.success){
+              var obj = response.data;
+              var array=[];
+              for (var i in obj){
+                  if (obj.hasOwnProperty(i)){
+                      obj[i].id=i;
+                      array.push(obj[i]);
+                  }
+              }
+              var fieldToSort = "month";
+              array.sort(function(a,b){
+                  return a[fieldToSort] - b[fieldToSort];
+              });
+              array = array.reverse();
+              $scope.pagos.historialData = array;
+              jQuery('#modalHistorial').modal('show');
+            }
+          });
+        },
         eliminarDocumento: function(file, fields){
           if(confirm('¿Está seguro que desea eliminar el archivo "'+file+'"?')){
             var id, year, month;
@@ -629,7 +660,11 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                 month = fields[x].value;
             }
             file = '/dropfile/'+id+'/'+year+'/'+month+'/'+window.btoa(encodeURI(file));
-            $http.post(file, {}).success(function (response) {
+            $http.post(file, {
+              params: {
+                  token: Session.get()
+              }
+            }).success(function (response) {
               obtenerPagos($scope.pagos.yearActive, $scope.pagos.monthActive);
               jQuery('#modalEdit').modal('hide');
             });

@@ -80,3 +80,9 @@ app.service('randomPass', function(){
     return retVal;
   }
 });
+app.filter('monthSpanish', function () {
+    return function (input) {
+      var months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+      return months[input];
+    };
+});
