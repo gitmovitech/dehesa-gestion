@@ -623,7 +623,6 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         eliminarDocumento: function(file, fields){
           if(confirm('¿Está seguro que desea eliminar el archivo "'+file+'"?')){
             var id, year, month;
-            console.info(fields);
             for(var x in fields){
               if(fields[x].name == 'id')
                 id = fields[x].value;
