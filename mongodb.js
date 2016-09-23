@@ -600,25 +600,17 @@ exports.pagar = function (data, cb) {
             }
             if (data.cobrodelmes == data.pago) {
               if(data.status == 'Pagado con excedentes'){
-                if(data.pago >= data.excedentes){
-                  data.excedentes =  data.excedentes - data.pago;
-                } else {
-                  data.excedentes = data.excedentes - data.pago;
-                }
+                data.excedentes = data.excedentes - data.pago;
               }
               data.debe = 0;
             } else if (data.cobrodelmes > data.pago) {
               //SE PUEDE PAGAR MENOS???
                 data.debe = data.cobrodelmes - data.pago;
             } else if (data.cobrodelmes < data.pago) {
-              if(data.status == 'Pagado con excedentes'){
-                data.excedentes = data.pago - data.excedentes;
-                if(data.excedentes < 0){
-                  data.excedentes = 0;
-                }
-              }
+              data.excedentes = data.pago - data.cobrodelmes;
               data.debe = 0;
             }
+            console.log('excedentes', data.excedentes);
             database.collection('pagos').update({
                 run: data.run,
                 month: data.month,
