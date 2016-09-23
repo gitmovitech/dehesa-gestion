@@ -491,49 +491,63 @@ var obtenerExcedentes = function(registros_importados, x, cb){
 }
 exports.obtenerExcedentes = obtenerExcedentes;
 exports.guardarImportacionPagos = function(pagos, cb){
-  database.collection('pagos').find({
-    year:pagos.year,
-    month: pagos.month
-  }).toArray(function(err, response){
-    if(response.length > 0){
-      for(var x in pagos.data){
-        database.collection('pagos').update({
-          run: pagos.data[x].run
-        }, {
-          $set: {
-            id: pagos.data[x].id,
-            nombre: pagos.data[x].nombre,
-            codigo: pagos.data[x].codigo,
-            tarifa: pagos.data[x].tarifa,
-            type: pagos.data[x].estado,
-            pagado: pagos.data[x].pagado,
-            debe: pagos.data[x].debe,
-            excedentes: pagos.data[x].excedentes,
-            comentarios: pagos.data[x].comentarios,
-            archivos: pagos.data[x].archivos
+  database.collection('asociados').find({
+    'activo':true
+  }).toArray(function(err, asociados){
+    database.collection('pagos').find({
+      year:pagos.year,
+      month: pagos.month
+    }).toArray(function(err, response){
+      if(response.length > 0){
+        for(var t in asociados){
+          for(var x in pagos.data){
+            if(asociados[t].id == pagos.data[x].id){
+              database.collection('pagos').update({
+                run: pagos.data[x].run
+              }, {
+                $set: {
+                  id: pagos.data[x].id,
+                  nombre: pagos.data[x].nombre,
+                  codigo: pagos.data[x].codigo,
+                  tarifa: pagos.data[x].tarifa,
+                  type: pagos.data[x].estado,
+                  pagado: pagos.data[x].pagado,
+                  debe: pagos.data[x].debe,
+                  excedentes: pagos.data[x].excedentes,
+                  comentarios: pagos.data[x].comentarios,
+                  archivos: pagos.data[x].archivos
+                }
+              });
+              break;
+            }
           }
-        });
+        }
+      } else {
+        for(var t in asociados){
+          for(var x in pagos.data){
+            if(asociados[t].id == pagos.data[x].id){
+              database.collection('pagos').insert({
+                id: pagos.data[x].id,
+                nombre: pagos.data[x].nombre,
+                run: pagos.data[x].run,
+                codigo: pagos.data[x].codigo,
+                tarifa: pagos.data[x].tarifa,
+                type: pagos.data[x].estado,
+                pagado: pagos.data[x].pagado,
+                debe: pagos.data[x].debe,
+                excedentes: pagos.data[x].excedentes,
+                comentarios: pagos.data[x].comentarios,
+                archivos: pagos.data[x].archivos,
+                month: pagos.month,
+                year: pagos.year
+              });
+              break;
+            }
+          }
+        }
       }
-    } else {
-      for(var x in pagos.data){
-        database.collection('pagos').insert({
-          id: pagos.data[x].id,
-          nombre: pagos.data[x].nombre,
-          run: pagos.data[x].run,
-          codigo: pagos.data[x].codigo,
-          tarifa: pagos.data[x].tarifa,
-          type: pagos.data[x].estado,
-          pagado: pagos.data[x].pagado,
-          debe: pagos.data[x].debe,
-          excedentes: pagos.data[x].excedentes,
-          comentarios: pagos.data[x].comentarios,
-          archivos: pagos.data[x].archivos,
-          month: pagos.month,
-          year: pagos.year
-        });
-      }
-    }
-    cb();
+      cb();
+    });
   });
 }
 exports.getPayments = function (params, cb) {
