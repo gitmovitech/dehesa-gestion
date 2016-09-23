@@ -27,7 +27,7 @@
         </li>
     </ul>
 
-    <b class="text-primary" ng-if="registros">Mostrando {{registros}} registros.</b>
+    <b class="text-primary" ng-if="registros && page.collection != 'pagos'">Mostrando {{registros}} registros.</b>
 
     <div ng-include="'templates/app-pagos.html'" ng-if="page.collection == 'pagos'"></div>
     <div style="overflow-x:auto" ng-include="'templates/app-list-items.html'" ng-if="page.collection != 'pagos'"></div>

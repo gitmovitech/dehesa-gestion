@@ -46,6 +46,32 @@ app.filter('originalname', function () {
         return input.join('-');
     };
 });
+app.filter('pagosPagados', function () {
+    return function (input) {
+      var total = 0;
+      for(var x in input){
+        if(input[x]){
+          if(input[x].pagado > 0)
+            total ++;
+        }
+      }
+      return total;
+    };
+});
+app.filter('pagosPagadosCantidad', function () {
+    return function (input) {
+      var total = 0;
+      for(var x in input){
+        if(input[x]){
+          if(input[x].pagado > 0){
+            console.log(input[x].pagado)
+            total = total + (input[x].pagado*1);
+          }
+        }
+      }
+      return total;
+    };
+});
 app.filter('tipo_casa', function () {
     return function (input) {
         if (sessionStorage.tiposCasa) {

@@ -48,6 +48,11 @@
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane" ng-class="{'active': pagos.tabMonthActive == $index}" ng-repeat="month in item.months">
                     <h3>Registros de {{month}}:</h3>
+                    <p>
+                      <b>Registros:</b> <span class="badge">{{registros}}</span>
+                      <b>Pagados:</b> <span class="badge">{{tabledata | pagosPagados}}</span>
+                      <b>Total de pagos: {{tabledata | pagosPagadosCantidad | currency}}</b>
+                    </p>
                     <div ng-if="session.type != 'Contable'">
                         <button class="btn btn-sm btn-primary" ng-click="showModalImportPagos(page.fields, null, {month: month, year: item.year})">
                             <i class="glyphicon glyphicon-cloud-upload"></i> Subir archivo excel de {{month}}
@@ -100,30 +105,31 @@
                       </span>
 
                       <span ng-if="key == 'type'">
-                        <span ng-if="tddata == 'No importado'">{{tddata}}</span>
+                        <span class="text-warning" ng-if="tddata == 'No importado'">{{tddata}}</span>
                         <span ng-if="tddata != 'No importado'">
                           <div ng-repeat="field in page.fields track by field.name" ng-if="field.name == 'type'" style="float:left">
-                              <select ng-model="tddata" ng-change="pagos.changeStatus(tddata, trdata)">
+                              <select ng-model="tddata" ng-change="pagos.changeStatus(tddata, trdata)" ng-if="trdata.tarifa != '-'">
                                   <option ng-repeat="option in field.data.options" ng-if="option.value != 'No importado'" value="{{option.value}}" ng-selected="tddata == option.value">{{option.key}}</option>
                               </select>
                           </div>
+                          <span class="text-danger" ng-if="trdata.tarifa == '-'">No existe tarifa, revisar asociado.</span>
                         </span>
                       </span>
 
-                      <span class="text-info" ng-if="key == 'pagado'">{{tddata | currency}}</span>
-                      <span class="text-warning" ng-if="key == 'excedentes' && tddata != '-'">{{tddata | currency}}</span>
-                      <span class="text-warning" ng-if="key == 'excedentes' && tddata == '-'">{{'0' | currency}}</span>
-                      <span class="text-danger" ng-if="key == 'debe' && tddata != '-'">{{(valoruf.replace(',','.')-0)*(tddata-0) | currency}}</span>
-                      <span ng-if="key == 'debe' && tddata == '-'">-</span>
+                      <span class="text-info" ng-if="key == 'pagado' && trdata.tarifa != '-'">{{tddata | currency}}</span>
+                      <span class="text-warning" ng-if="key == 'excedentes' && tddata != '-' && trdata.tarifa != '-'">{{tddata | currency}}</span>
+                      <span class="text-warning" ng-if="key == 'excedentes' && tddata == '-' && trdata.tarifa != '-'">{{'0' | currency}}</span>
+                      <span class="text-danger" ng-if="key == 'debe' && tddata != '-' && trdata.tarifa != '-'">{{(valoruf.replace(',','.')-0)*(tddata-0) | currency}}</span>
+                      <span ng-if="key == 'debe' && tddata == '-' && trdata.tarifa != '-'">-</span>
 
-                      <span ng-if="key == 'comentarios'" style="position:relative">
+                      <span ng-if="key == 'comentarios' && trdata.tarifa != '-'" style="position:relative">
                         <button style="float:left;margin-left:5px;" class="btn btn-default btn-xs" ng-click="pagos.modalEditarDetalles(trdata, 'comentarios')">
                             <i class="glyphicon glyphicon-comment"></i> Comentarios
                         </button>
                         <i style="position: absolute; right: -7px; top: 9px;" class="text-danger glyphicon glyphicon-asterisk" ng-if="tddata != '-'"></i>
                       </span>
 
-                      <span ng-if="key == 'archivos'" style="position:relative">
+                      <span ng-if="key == 'archivos' && trdata.tarifa != '-'" style="position:relative">
                         <button style="float:left;margin-left:5px;" class="btn btn-default btn-xs" ng-click="pagos.modalEditarDetalles(trdata, 'archivos')">
                             <i class="glyphicon glyphicon-folder-open"></i> Documentos
                         </button>
