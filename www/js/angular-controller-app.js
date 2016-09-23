@@ -7,6 +7,8 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         $scope.pageIndex = sessionStorage.page;
     }
 
+    var activos = true;
+
     var fieldsdata;
     $http.get('/api/session', {
         params: {
@@ -133,6 +135,11 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                 }
                 obtenerPagos($scope.currentPagosYear, $scope.currentPagosMonth);
             } else {
+              if(item.collection == 'asociados'){
+                params.where = {
+                  activo: activos
+                }
+              }
                 $http.get('/api/data', {
                     params: params
                 }).success(function (response) {
@@ -888,5 +895,50 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
     $scope.pagos.yearActive = $scope.pagos.periodos[$scope.pagos.periodos.length - 1].year;
     $scope.pagos.tabMonthActive = $scope.pagos.periodos[$scope.pagos.periodos.length - 1].months.length - 1;
     $scope.pagos.monthActive = $scope.pagos.periodos[$scope.pagos.periodos.length - 1].months[$scope.pagos.periodos[$scope.pagos.periodos.length - 1].months.length - 1];
+
+    $scope.showAsociados = function(data){
+      activos = data;
+      $scope.load($scope.page);
+    }
+
+    $scope.suspenderAsociado = function(asociado){
+      if(confirm('¿Está seguro que desea suspender al socio "' + asociado.usuario + '"?')){
+        $http.post('/api/data', {
+            params: {
+                token: Session.get(),
+                collection: $scope.collection,
+                fields: [{
+                    name: '_id',
+                    value: asociado._id
+                },{
+                    name: 'activo',
+                    value: false
+                }]
+            }
+        }).success(function (response) {
+          $scope.load($scope.page);
+        });
+      }
+    }
+
+    $scope.activarAsociado = function(asociado){
+      if(confirm('¿Activar al socio "' + asociado.usuario + '"?')){
+        $http.post('/api/data', {
+            params: {
+                token: Session.get(),
+                collection: $scope.collection,
+                fields: [{
+                    name: '_id',
+                    value: asociado._id
+                },{
+                    name: 'activo',
+                    value: true
+                }]
+            }
+        }).success(function (response) {
+          $scope.load($scope.page);
+        });
+      }
+    }
 
 });

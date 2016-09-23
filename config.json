@@ -123,10 +123,10 @@
                   "required": true
               },
               {
-                  "name": "monto",
-                  "title": "Monto",
+                  "name": "activo",
+                  "title": "Activo",
                   "type": "text",
-                  "required": true
+                  "hiddenlist": true
               },
               {
                   "name": "tipo_casa",

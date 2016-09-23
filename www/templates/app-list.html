@@ -16,6 +16,17 @@
             <input placeholder="Buscar aquí" type="text" class="form-control" ng-keyup="search()" ng-model="page.filter.value" id="buscador">
         </div>
     </div>
+
+    <!-- ACTIVADO / SUSPENDIDOS -->
+    <ul class="nav nav-tabs" role="tablist" ng-if="page.collection == 'asociados'" style="margin-bottom:10px;">
+        <li role="presentation" class="active">
+            <a href="#" role="tab" data-toggle="tab" ng-click="showAsociados(true)">Activos</a>
+        </li>
+        <li role="presentation">
+            <a href="#" role="tab" data-toggle="tab" ng-click="showAsociados('')">Suspendidos</a>
+        </li>
+    </ul>
+
     <b class="text-primary" ng-if="registros">Mostrando {{registros}} registros.</b>
 
     <div ng-include="'templates/app-pagos.html'" ng-if="page.collection == 'pagos'"></div>

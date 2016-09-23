@@ -30,7 +30,7 @@ if (process.argv[2]) {
                     correo: data[x][11],
                     correo_alternativo: data[x][12],
                     formas_pago: data[x][13],
-                    monto: data[x][14]
+                    activo: true
                 }
                 db.collection('asociados').insert(json);
             }
