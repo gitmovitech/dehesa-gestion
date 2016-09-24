@@ -64,7 +64,6 @@ app.filter('pagosPagadosCantidad', function () {
       for(var x in input){
         if(input[x]){
           if(input[x].pagado > 0){
-            console.log(input[x].pagado)
             total = total + (input[x].pagado*1);
           }
         }
@@ -110,5 +109,20 @@ app.filter('monthSpanish', function () {
     return function (input) {
       var months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
       return months[input];
+    };
+});
+app.filter('scope', function () {
+    return function (input, session) {
+      var out = true;
+      if(input.scope){
+        out = false;
+        for(var x in input.scope){
+          if(input.scope[x] == session){
+            out = true;
+            break;
+          }
+        }
+      }
+      return out;
     };
 });

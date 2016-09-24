@@ -568,8 +568,17 @@ exports.getPayments = function (params, cb) {
 exports.pagar = function (data, cb) {
     if (database) {
       switch(data.status){
-        case 'PAC PAT realizado':
-        case 'PAC PAT rechazado':
+        case 'PAC Cargado':
+        case 'PAT Cargado':
+        case 'Mandato Anulado en Banco':
+        case 'Falta de Fondos':
+        case 'Monto a Pagar Excede el Máximo Permitido':
+        case 'Cuenta con Orden de Cierre':
+        case 'Rechazo por Tarjeta Bloqueada':
+        case 'Rechazo Tarjeta no Existe':
+        case 'Rechazo Tarjeta Perdida o Robada':
+        case 'Rechazo Tarjeta con Problemas':
+        case 'Rechazo Tarjeta Vencida':
         case 'Cheque recibido':
           database.collection('pagos').update({
               run: data.run,
@@ -587,7 +596,8 @@ exports.pagar = function (data, cb) {
         case 'Pagado con transferencia':
         case 'Pagado en efectivo':
         case 'Pagado con cheque':
-        case 'PAC PAT confirmado':
+        case "Pagos Procesados":
+        case "Aprobada":
           database.collection('pagos').findOne({
               run: data.run,
               month: data.month,

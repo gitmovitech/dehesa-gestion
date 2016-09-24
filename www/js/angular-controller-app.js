@@ -520,6 +520,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
     var months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
     var registro_pagos = [];
     var obtenerPagos = function (year, month) {
+      if(typeof month == 'string')
         for (var c in months) {
             if (months[c] == month) {
                 month = parseInt(c);
@@ -711,9 +712,18 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
             switch(select){
               case 'Pendiente':
               break;
-              case 'PAC PAT rechazado':
+              case 'PAC Cargado':
+              case 'PAT Cargado':
+              case 'Mandato Anulado en Banco':
+              case 'Falta de Fondos':
+              case 'Monto a Pagar Excede el Máximo Permitido':
+              case 'Cuenta con Orden de Cierre':
+              case 'Rechazo por Tarjeta Bloqueada':
+              case 'Rechazo Tarjeta no Existe':
+              case 'Rechazo Tarjeta Perdida o Robada':
+              case 'Rechazo Tarjeta con Problemas':
+              case 'Rechazo Tarjeta Vencida':
               case 'Cheque recibido':
-              case 'PAC PAT realizado':
               paramsdata = {
                   run: data.run,
                   month: this.tabMonthActive,
@@ -762,7 +772,8 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                   obtenerPagos(this.yearActive, this.monthActive);
                 }
               break;
-              case 'PAC PAT confirmado':
+              case "Pagos Procesados":
+              case "Aprobada":
               pagado = data.tarifa.totalpesos;
               paramsdata = {
                   run: data.run,

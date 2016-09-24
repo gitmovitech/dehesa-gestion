@@ -303,16 +303,62 @@
                                 "value": "Pendiente"
                             },
                             {
-                                "key": "PAC PAT realizado",
-                                "value": "PAC PAT realizado"
+                                "group": "PAC",
+                                "options": [{
+                                    "key": "PAC Cargado",
+                                    "value": "PAC Cargado"
+                                },
+                                {
+                                    "key": "Pagos Procesados",
+                                    "value": "Pagos Procesados"
+                                },
+                                {
+                                    "key": "Mandato Anulado en Banco",
+                                    "value": "Mandato Anulado en Banco"
+                                },
+                                {
+                                    "key": "Falta de Fondos",
+                                    "value": "Falta de Fondos"
+                                },
+                                {
+                                    "key": "Monto a Pagar Excede el Máximo Permitido",
+                                    "value": "Monto a Pagar Excede el Máximo Permitido"
+                                },
+                                {
+                                    "key": "Cuenta con Orden de Cierre",
+                                    "value": "Cuenta con Orden de Cierre"
+                                }]
                             },
                             {
-                                "key": "PAC PAT confirmado",
-                                "value": "PAC PAT confirmado"
-                            },
-                            {
-                                "key": "PAC PAT rechazado",
-                                "value": "PAC PAT rechazado"
+                                "group": "PAT",
+                                "options":[{
+                                    "key": "PAT Cargado",
+                                    "value": "PAT Cargado"
+                                },
+                                {
+                                    "key": "Aprobada",
+                                    "value": "Aprobada"
+                                },
+                                {
+                                    "key": "Rechazo por Tarjeta Bloqueada",
+                                    "value": "Rechazo por Tarjeta Bloqueada"
+                                },
+                                {
+                                    "key": "Rechazo Tarjeta no Existe",
+                                    "value": "Rechazo Tarjeta no Existe"
+                                },
+                                {
+                                    "key": "Rechazo Tarjeta Perdida o Robada",
+                                    "value": "Rechazo Tarjeta Perdida o Robada"
+                                },
+                                {
+                                    "key": "Rechazo Tarjeta con Problemas",
+                                    "value": "Rechazo Tarjeta con Problemas"
+                                },
+                                {
+                                    "key": "Rechazo Tarjeta Vencida",
+                                    "value": "Rechazo Tarjeta Vencida"
+                                }]
                             },
                             {
                                 "key": "Pagado con transferencia",
