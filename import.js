@@ -11,8 +11,10 @@ if (process.argv[2]) {
         fecha
     }
     var findiInsertRut = function (db, data, x) {
+      var rut = data[x][6];
+      rut = rut.toString();
         db.collection('asociados').findOne({
-            run: RutJS.cleanRut(data[x][6])
+            run: RutJS.cleanRut(rut)
         }, function (err, response) {
             if (!response) {
                 var json = {
@@ -22,7 +24,7 @@ if (process.argv[2]) {
                     tipo_conexion: data[x][3],
                     fecha_ingreso: new Date(1900, 0, data[x][4] - 1).getTime(),
                     usuario: data[x][5],
-                    run: RutJS.cleanRut(data[x][6]),
+                    run: RutJS.cleanRut(rut),
                     nombre: data[x][7],
                     direccion: data[x][8],
                     numeracion: data[x][9],
@@ -51,9 +53,9 @@ if (process.argv[2]) {
                 for (var x in data) {
                     if (x > 0) {
                         if (data[x][0]) {
-                            if (!RutJS.isValid(data[x][6])) {
+                            /*if (!RutJS.isValid(data[x][6])) {
                                 console.log('EL RUT:' + data[x][6] + ' es inválido');
-                            } else {
+                            } else {*/
                                 for (var i in data[x]) {
                                     if (!data[x][i]) {
                                         data[x][i] = '';
@@ -66,7 +68,7 @@ if (process.argv[2]) {
                                     }
                                 }
                                 findiInsertRut(db, data, x);
-                            }
+                            //}
                         }
                     }
                 }
