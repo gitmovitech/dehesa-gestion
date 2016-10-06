@@ -340,6 +340,9 @@ exports.editCollection = function (collection, data, callback) {
                                 "_id": ObjectID(data[z].value)
                             }
                         } else {
+                          if (data[z].name == '_id' && data[z].value == '') {
+                            data.splice(z, 1);
+                          }
                             if (data[z].value >= 0 && data[z].value != '') {
                                 insertdata[insertdata.length] = [JSON.stringify(data[z].name), JSON.stringify(data[z].value)].join(':');
                             } else {
