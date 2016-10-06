@@ -601,7 +601,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
     var periodos_months = months;
     var periodos = [];
     var tmp_months = [];
-    for (var year = 2010; year <= new Date().getFullYear(); year++) {
+    for (var year = 2016; year <= new Date().getFullYear(); year++) {
         if (new Date().getFullYear() == year) {
             tmp_months = [];
             for (var x in periodos_months) {
