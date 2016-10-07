@@ -432,7 +432,6 @@ app.post('/api/data/import/excel', function (req, res) {
                               month: ''
                             }
                             for(var i in importacion.data){
-                              console.log(importacion.data[i].run , run)
                               if(importacion.data[i].run == run){
                                 registros_importados[x].month = importacion.data[i].month
                                 registros_importados[x].codigo = importacion.data[i].codigo;
