@@ -415,10 +415,6 @@ app.post('/api/data/import/excel', function (req, res) {
                           var month = false;
                           for(var x in asociados){
                             run = asociados[x].run;
-                            run = run.toString();
-                            run = run.replace(/,/,'');
-                            run = run.replace(/./,'');
-                            run = run.replace('-','');
                             registros_importados[x] = {
                               _id: asociados[x]._id,
                               id: asociados[x].id,
