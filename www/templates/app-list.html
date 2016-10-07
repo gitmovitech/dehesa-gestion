@@ -9,7 +9,7 @@
             <i class="glyphicon glyphicon-plus-sign"></i> Exportar registros
         </button>-->
     </h1>
-    <div class="form-group" ng-if="page.collection != 'pagos'">
+    <div class="form-group" ng-if="page.collection != 'pagos' && registros">
         <label class="sr-only" for="buscador"></label>
         <div class="input-group">
             <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
@@ -32,7 +32,7 @@
     <div ng-include="'templates/app-pagos.html'" ng-if="page.collection == 'pagos'"></div>
     <div style="overflow-x:auto" ng-include="'templates/app-list-items.html'" ng-if="page.collection != 'pagos'"></div>
 
-    <nav class="text-center" ng-if="pagination.numPages > 1">
+    <nav class="text-center" ng-if="pagination.numPages > 1 && registros">
         <ul class="pagination">
             <li><a href="javascript:" ng-click="pagination.toPageId(0)"><i class="glyphicon glyphicon-fast-backward"></i></a></li>
             <li><a ng-hide="pagination.page == 0" href="javascript:" ng-click="pagination.prevPage()"><i class="glyphicon glyphicon-arrow-left"></i></a></li>
