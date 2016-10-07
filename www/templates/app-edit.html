@@ -8,7 +8,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group" ng-repeat="(key,item) in fields" ng-class="{'hidden':item.edit.hidden, 'hidden': item.type == 'hidden'}">
-                        <label for="{{item.name}}" class="col-sm-2 control-label" ng-if="item.name != '_id'">
+                        <label for="{{item.name}}" class="col-sm-2 control-label" ng-if="item.name != '_id' && !item.hiddenedit">
                             <i class="glyphicon glyphicon-asterisk input-required-asterisk" ng-if="item.required"></i>
                             {{item.title}}
                         </label>
@@ -73,7 +73,7 @@
 
                             <input ng-class="{'hidden':item.name == '_id'}" ng-model="item.value" type="{{item.type}}"
                                 class="form-control" name="{{item.name}}" id="{{item.name}}"
-                                ng-if="item.name != '_id' && item.type != 'textarea' && item.type != 'select' && item.type != 'rut' && item.type != 'file'"
+                                ng-if="item.name != '_id' && item.type != 'textarea' && item.type != 'select' && item.type != 'rut' && item.type != 'file' && !item.hiddenedit"
                                 placeholder="Escriba aquí" ng-required="{{item.required}}">
 
                               <label ng-if="item.type == 'password'">
@@ -83,7 +83,8 @@
                             <select id="select-{{item.name}}" onchange="angular.element(this).scope().chosenSelect(this)" data-placeholder="Seleccione" class="form-control chosen-select" ng-if="item.type == 'select' && item.multiple" multiple="multiple" ng-model="item.value">
                                 <option value="{{option.key}}" ng-repeat="option in item.data.options" ng-if="item.data">{{option.value}}</option>
                             </select>
-                            <select data-placeholder="Seleccione" class="form-control" ng-if="item.type == 'select' && !item.multiple" ng-model="item.value">
+                            <select data-placeholder="Seleccione" class="select form-control" ng-if="item.type == 'select' && !item.multiple" ng-model="item.value">
+                                <option value="">Seleccione</option>
                                 <option value="{{option.key}}" ng-repeat="option in item.data.options" ng-if="item.data">{{option.value}}</option>
                             </select>
 

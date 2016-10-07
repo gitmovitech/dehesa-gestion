@@ -64,7 +64,7 @@ app.filter('pagosPagadosCantidad', function () {
       for(var x in input){
         if(input[x]){
           if(input[x].pagado > 0){
-            total = total + (input[x].pagado*1);
+            total = total + (input[x].pagado-0);
           }
         }
       }

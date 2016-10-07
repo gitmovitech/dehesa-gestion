@@ -43,7 +43,7 @@
               {
                   "name": "numero_cliente",
                   "title": "Nº Cliente",
-                  "type": "number"
+                  "type": "text"
               },
               {
                   "name": "tipo_conexion",
@@ -87,12 +87,12 @@
               {
                   "name": "telefono",
                   "title": "Teléfono",
-                  "type": "number"
+                  "type": "text"
               },
               {
                   "name": "correo",
                   "title": "Correo",
-                  "type": "email",
+                  "type": "text",
                   "required": true
               },
               {
@@ -126,7 +126,8 @@
                   "name": "activo",
                   "title": "Activo",
                   "type": "text",
-                  "hiddenlist": true
+                  "hiddenlist": true,
+                  "hiddenedit": true
               },
               {
                   "name": "tipo_casa",

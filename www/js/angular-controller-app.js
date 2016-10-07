@@ -8,7 +8,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
     }
 
     var activos = true;
-
+    var fieldsReset = [];
     var fieldsdata;
     $http.get('/api/session', {
         params: {
@@ -118,6 +118,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         if (item) {
             sessionStorage.page = index;
             $scope.pageIndex = index;
+            fieldsReset = item.fields;
             $scope.page = item;
             $scope.collection = item.collection;
 
@@ -167,6 +168,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                 });
             }
         }
+
     }
     var excelPeriodo;
     $scope.showModalImportPagos = function (fields, data, object) {
@@ -178,6 +180,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
             }]
         jQuery('#modalCSVpagos').modal('show');
     }
+
     $scope.showModal = function (fields, data, object) {
         /*if ($scope.collection == 'pagos') {
          excelPeriodo = object;
@@ -189,6 +192,9 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
          jQuery('#modalCSVpagos').modal('show');
          } else {*/
         //console.info(fields);
+        $scope.fields = [];
+
+        jQuery('#modalEdit').modal('show');
         $scope.fields = fields;
         /**
          * Opciones para el dropdown en caso que deba conectarse a datos externos
@@ -315,7 +321,6 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                 $scope.fields[x].value = '';
             }
         }
-        jQuery('#modalEdit').modal('show');
         setTimeout(function () {
             jQuery('.chosen-select').each(function () {
                 console.info('#' + jQuery(this).attr('id'));
@@ -587,14 +592,14 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                         });
 
                     } else {
-                        $scope.valoruf = false;
-                        alert('No hay valores UF cargados de ' + months[month]);
+                        $scope.tabledata = $scope.valoruf = $scope.registros = false;
+                        alert('No hay valores UF cargados de ' + months[month]+ '. \nVaya a la sección "Valores UF" y agregue el valor UF del mes');
                     }
                 } else {
-                    alert('No hay valores UF cargados');
+                    alert('No hay valores UF cargados de ' + months[month]+ '. \nVaya a la sección "Valores UF" y agregue el valor UF del mes');
                 }
             } else {
-                alert('No hay valores UF cargados');
+                alert('No hay valores UF cargados de ' + months[month]+ '. \nVaya a la sección "Valores UF" y agregue el valor UF del mes');
             }
         });
     }

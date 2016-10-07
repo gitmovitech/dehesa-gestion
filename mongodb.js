@@ -500,27 +500,37 @@ exports.guardarImportacionPagos = function(pagos, cb){
     database.collection('pagos').find({
       year:pagos.year,
       month: pagos.month
-    }).toArray(function(err, response){
+    }).toArray(function(err, response){num=0;
       if(response.length > 0){
         for(var t in asociados){
           for(var x in pagos.data){
             if(asociados[t].id == pagos.data[x].id){
-              database.collection('pagos').update({
-                run: pagos.data[x].run
-              }, {
-                $set: {
-                  id: pagos.data[x].id,
-                  nombre: pagos.data[x].nombre,
-                  codigo: pagos.data[x].codigo,
-                  tarifa: pagos.data[x].tarifa,
-                  type: pagos.data[x].estado,
-                  pagado: pagos.data[x].pagado,
-                  debe: pagos.data[x].debe,
-                  excedentes: pagos.data[x].excedentes,
-                  comentarios: pagos.data[x].comentarios,
-                  archivos: pagos.data[x].archivos
+              for(var z in response){
+                if(response[z].id == pagos.data[x].id){
+                  if(response[z].type != 'No importado'){
+                    
+                    if(response[z].pagado == 0){
+                      database.collection('pagos').update({
+                        run: pagos.data[x].run
+                      }, {
+                        $set: {
+                          id: pagos.data[x].id,
+                          nombre: pagos.data[x].nombre,
+                          codigo: pagos.data[x].codigo,
+                          tarifa: pagos.data[x].tarifa,
+                          type: pagos.data[x].estado,
+                          pagado: pagos.data[x].pagado,
+                          debe: pagos.data[x].debe,
+                          excedentes: pagos.data[x].excedentes,
+                          comentarios: pagos.data[x].comentarios,
+                          archivos: pagos.data[x].archivos
+                        }
+                      });
+                      break;
+                    }
+                  }
                 }
-              });
+              }
               break;
             }
           }

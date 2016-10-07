@@ -48,19 +48,19 @@
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane" ng-class="{'active': pagos.tabMonthActive == $index}" ng-repeat="month in item.months">
                     <h3>Registros de {{month}}:</h3>
-                    <p>
+                    <p ng-if="registros">
                       <b>Registros:</b> <span class="badge">{{registros}}</span>
                       <b>Pagados:</b> <span class="badge">{{tabledata | pagosPagados}}</span>
                       <b>Total de pagos: {{tabledata | pagosPagadosCantidad | currency}}</b>
                     </p>
                     <div ng-if="session.type != 'Contable'">
-                        <button class="btn btn-sm btn-primary" ng-click="showModalImportPagos(page.fields, null, {month: month, year: item.year})">
+                        <button ng-disabled="!valoruf" class="btn btn-sm btn-primary" ng-click="showModalImportPagos(page.fields, null, {month: month, year: item.year})">
                             <i class="glyphicon glyphicon-cloud-upload"></i> Subir archivo excel de {{month}}
                         </button>
-                        <button class="btn btn-sm btn-primary" ng-click="pagos.notificarContador(month, item.year)">
+                        <button ng-disabled="!registros" class="btn btn-sm btn-primary" ng-click="pagos.notificarContador(month, item.year)">
                             <i class="glyphicon glyphicon-copy"></i> Notificar al contador
                         </button>
-                        <button class="btn btn-sm btn-primary" ng-click="pagos.exportarMesExcel(month, item.year)">
+                        <button ng-disabled="!registros" class="btn btn-sm btn-primary" ng-click="pagos.exportarMesExcel(month, item.year)">
                             <i class="glyphicon glyphicon-export"></i> Exportar {{month}} a Excel
                         </button>
                     </div>
@@ -106,7 +106,7 @@
 
                       <!--ESTADOS DE PAGOS-->
                       <span ng-if="key == 'type'">
-                        <span class="text-warning" ng-if="tddata == 'No importado'">{{tddata}}</span>
+                        <div class="alert alert-danger" ng-if="tddata == 'No importado'">{{tddata}}. El registro no existe en la carga de excel de ADT.</div>
                         <span class="text-success" ng-if="tddata == 'Pagos Procesados' || tddata == 'Aprobada' || tddata.indexOf('Pagado') >= 0">{{tddata}}</span>
                         <span ng-if="tddata != 'No importado' && tddata != 'Pagos Procesados' && tddata != 'Aprobada' && !tddata.match('Pagado')">
                           <div ng-repeat="field in page.fields track by field.name" ng-if="field.name == 'type'" style="float:left">
@@ -119,7 +119,7 @@
 
                               </select>
                           </div>
-                          <span class="text-danger" ng-if="trdata.tarifa == '-'">No existe tarifa, revisar asociado e importar de nuevo.</span>
+                          <div class="alert alert-warning" ng-if="trdata.tarifa == '-'">No existe tarifa. Revisar que el asociado tenga la opción "Tipo de casa" en la sección "Asociados" e importar de nuevo.</div>
                         </span>
                       </span>
 
