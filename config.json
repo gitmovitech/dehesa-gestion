@@ -203,7 +203,7 @@
         },
         {
             "icon": "glyphicon glyphicon-home",
-            "name": "Modelos (Cobro total)",
+            "name": "Tarifas",
             "scope": [
                 "Administrador",
                 "Editor"
