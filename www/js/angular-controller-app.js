@@ -10,6 +10,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
     var activos = true;
     var fieldsReset = [];
     var fieldsdata;
+    jQuery('body').loader('show');
     $http.get('/api/session', {
         params: {
             token: Session.get()
@@ -165,6 +166,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                         $scope.tabledata = registro_pagos = response.data;
                         fieldsdata = response.data;
                     }
+                    jQuery('body').loader('hide');
                 });
             }
         }
@@ -589,16 +591,20 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                                 $scope.tabledata = registro_pagos = registros;
 
                             }
+                            jQuery('body').loader('hide');
                         });
 
                     } else {
+                      jQuery('body').loader('hide');
                         $scope.tabledata = $scope.valoruf = $scope.registros = false;
                         alert('No hay valores UF cargados de ' + months[month]+ '. \nVaya a la sección "Valores UF" y agregue el valor UF del mes');
                     }
                 } else {
+                  jQuery('body').loader('hide');
                     alert('No hay valores UF cargados de ' + months[month]+ '. \nVaya a la sección "Valores UF" y agregue el valor UF del mes');
                 }
             } else {
+              jQuery('body').loader('hide');
                 alert('No hay valores UF cargados de ' + months[month]+ '. \nVaya a la sección "Valores UF" y agregue el valor UF del mes');
             }
         });
