@@ -865,6 +865,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
             }
         },
         changeTab: function (index, year, month) {
+          jQuery('body').loader('show');
             this.tabMonthActive = index;
             this.monthActive = month;
             obtenerPagos(year, month);
