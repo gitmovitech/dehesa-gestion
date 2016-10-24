@@ -131,7 +131,7 @@
               },
               {
                   "name": "tipo_casa",
-                  "title": "Tipo de casa",
+                  "title": "Tarifa",
                   "type": "select",
                   "data": {
                       "collection": "modelos",
