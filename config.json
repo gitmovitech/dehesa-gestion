@@ -38,7 +38,8 @@
               {
                   "name": "monitoreo",
                   "title": "Monitoreo",
-                  "type": "text"
+                  "type": "text",
+                  "hiddenlist": true
               },
               {
                   "name": "numero_cliente",
@@ -48,7 +49,8 @@
               {
                   "name": "tipo_conexion",
                   "title": "Tipo de conexión",
-                  "type": "text"
+                  "type": "text",
+                  "hiddenlist": true
               },
               {
                   "name": "fecha_ingreso",
@@ -98,7 +100,8 @@
               {
                   "name": "correo_alternativo",
                   "title": "Correo alternativo",
-                  "type": "email"
+                  "type": "email",
+                  "hiddenlist": true
               },
               {
                   "name": "formas_pago",
