@@ -136,6 +136,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                         fieldsdata = response.data;
                     }
                     jQuery('body').loader('hide');
+
                 });
             }
         }
@@ -285,12 +286,16 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                         if (data[key])
                             $scope.fields[x].value = data[key];
                     }
+                    if($scope.fields[x].name == 'preguntas'){
+                      $scope.encuestas.preguntas = $scope.fields[x].value;
+                    }
                 }
             }
         } else {
             for (var x in $scope.fields) {
                 $scope.fields[x].value = '';
             }
+            $scope.encuestas.preguntas = [];
         }
         setTimeout(function () {
             jQuery('.chosen-select').each(function () {
@@ -320,6 +325,14 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                     console.info($scope.fields[x])
                 }
             }
+        }
+        if($scope.collection == 'encuestas'){
+          for(var p in $scope.fields){
+            if($scope.fields[p].name == 'preguntas'){
+              $scope.fields[p].value = JSON.parse(JSON.stringify($scope.encuestas.preguntas));
+              console.log($scope.fields[p].value);
+            }
+          }
         }
         $http.post('/api/data', {
             params: {
@@ -947,6 +960,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
     $scope.encuestas = {
       preguntas: [],
       agregarPregunta: function(){
+        var pregunta =
         this.preguntas[this.preguntas.length] = {
           nombre: '',
           respuestas: [],
@@ -954,6 +968,9 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
             this.respuestas[this.respuestas.length] = {
               nombre: ''
             }
+            setTimeout(function () {
+              $scope.$apply();
+            }, 0);
           },
           removerRespuesta: function(index){
             if(confirm('¿Seguro que desea eliminar esta respuesta?')){
@@ -961,6 +978,8 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
             }
           }
         }
+        this.preguntas.reverse();
+        $scope.$apply();
       },
       removerPregunta: function(index){
         if(confirm('¿Seguro que desea eliminar esta pregunta?')){
