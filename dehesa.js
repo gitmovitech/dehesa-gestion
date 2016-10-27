@@ -598,6 +598,28 @@ app.post('/api/pagos/log', function (req, res) {
     }
 });
 
+/**
+* REST DE ENCUESTAS
+**/
+app.get('/api/encuestas/:eid/:uid', function (req, res) {
+    if(req.params.eid){
+      db.getCollection('encuestas', function(encuesta){
+        if(req.params.uid){
+          db.getCollection('asociados', function(asociado){
+            if(asociado._id){
+              res.send(encuesta);
+            }
+          }, {
+            id: req.params.uid
+          });
+        }
+      }, {
+        id: req.params.eid
+      });
+    }
+});
+
+
 app.use(express.static(__dirname + '/www'));
 app.get('/*', function (req, res) {
     var serverpath = __dirname;
