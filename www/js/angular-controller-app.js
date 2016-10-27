@@ -964,4 +964,16 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
       }
     }
 
+    $scope.validateUF = function(event){
+      var key = event.keyCode || event.charCode;
+      if(key != 8){
+        key = String.fromCharCode(key);
+        key = key.toString();
+        if(!key.match(/[0-9]{1}|\,/g)){
+          event.preventDefault();
+        }
+      }
+
+    }
+
 });

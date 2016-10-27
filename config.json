@@ -574,9 +574,8 @@
                 {
                     "name": "valor",
                     "title": "Valor",
-                    "type": "text",
-                    "required": true,
-                    "regex": "/^[0-9]*\\.?[0-9]*$/"
+                    "type": "uf",
+                    "required": true
                 }
             ]
         }
