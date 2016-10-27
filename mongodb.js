@@ -227,6 +227,8 @@ var getCollection = function (collection, callback, data, join) {
                         }
                     });
                 }
+            } else {
+              callback([]);
             }
         });
     } else {
@@ -508,7 +510,7 @@ exports.guardarImportacionPagos = function(pagos, cb){
               for(var z in response){
                 if(response[z].id == pagos.data[x].id){
                   if(response[z].type != 'No importado'){
-                    
+
                     if(response[z].pagado == 0){
                       database.collection('pagos').update({
                         run: pagos.data[x].run

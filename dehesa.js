@@ -619,6 +619,27 @@ app.get('/api/encuestas/:eid/:uid', function (req, res) {
     }
 });
 
+app.post('/api/encuestas/:eid/:uid', function (req, res) {
+    if(req.params.eid && req.params.uid){
+      db.getCollection('encuestas_respuestas', function(respuestas){
+        if(respuestas.length > 0){
+          res.send(0)
+        } else{
+          db.editCollection('encuestas_respuestas',{
+            id_encuesta: req.params.eid,
+            id_asociado: req.params.uid,
+            data: req.body.params
+          }, function(){
+            res.send(1);
+          });
+        }
+      }, {
+        id_encuesta: req.params.eid,
+        id_asociado: req.params.uid
+      });
+    }
+});
+
 
 app.use(express.static(__dirname + '/www'));
 app.get('/*', function (req, res) {
