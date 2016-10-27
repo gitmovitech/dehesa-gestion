@@ -83,38 +83,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         $scope.tabledata = false;
         $scope.registros = false;
 
-        /*if (sessionStorage.uf) {
-         $scope.valoruf = parseFloat(sessionStorage.uf);
-         }*/
         $scope.valoruf = false;
-        /*if (item.collection == 'pagos')
-         /*$http.get('http://mindicador.cl/api/uf', {}).success(function (response) {
-         $scope.valoruf = response.serie[0].valor;
-         sessionStorage.uf = $scope.valoruf;
-         console.log(item)
-         $http.get('/api/data', {
-         params: {
-         token: Session.get(),
-         collection: 'servicios'
-         }
-         }).success(function (response) {
-         if (response.success) {
-
-         $scope.servicios = {
-         total: 0,
-         detalle: []
-         };
-         for (var t in response.data) {
-         if (response.data[t].type == 'UF') {
-         response.data[t].valor = response.data[t].valor.replace(',', '.');
-         response.data[t].valor = parseFloat(response.data[t].valor)// * parseFloat($scope.valoruf);
-         }
-         $scope.servicios.detalle[$scope.servicios.detalle.length] = response.data[t];
-         $scope.servicios.total = $scope.servicios.total + response.data[t].valor;
-         }
-         }
-         });*/
-        //});
 
         if (item) {
             sessionStorage.page = index;
@@ -973,7 +942,31 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
           event.preventDefault();
         }
       }
+    }
 
+    $scope.encuestas = {
+      preguntas: [],
+      agregarPregunta: function(){
+        this.preguntas[this.preguntas.length] = {
+          nombre: '',
+          respuestas: [],
+          agregarRespuesta: function(){
+            this.respuestas[this.respuestas.length] = {
+              nombre: ''
+            }
+          },
+          removerRespuesta: function(index){
+            if(confirm('¿Seguro que desea eliminar esta respuesta?')){
+              this.respuestas.splice(index,1);
+            }
+          }
+        }
+      },
+      removerPregunta: function(index){
+        if(confirm('¿Seguro que desea eliminar esta pregunta?')){
+          this.preguntas.splice(index,1);
+        }
+      }
     }
 
 });

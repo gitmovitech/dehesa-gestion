@@ -73,8 +73,10 @@
 
                             <input ng-class="{'hidden':item.name == '_id'}" ng-model="item.value" type="{{item.type}}"
                                 class="form-control" name="{{item.name}}" id="{{item.name}}"
-                                ng-if="item.type != 'uf' && item.name != '_id' && item.type != 'textarea' && item.type != 'select' && item.type != 'rut' && item.type != 'file' && !item.hiddenedit"
+                                ng-if="item.type != 'uf' && item.name != '_id' && item.type != 'textarea' && item.type != 'checkbox' && item.type != 'question' && item.type != 'select' && item.type != 'rut' && item.type != 'file' && !item.hiddenedit"
                                 placeholder="Escriba aquí" ng-required="{{item.required}}">
+
+                            <div ng-if="item.type == 'question'"><div ng-include="'templates/app-preguntas.html'"></div></div>
 
                             <input ng-keypress="validateUF($event)" ng-model="item.value" type="text" class="form-control" name="{{item.name}}" id="{{item.name}}" ng-if="item.type == 'uf'" placeholder="Valor UF aquí" ng-required="{{item.required}}">
 

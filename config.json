@@ -227,7 +227,7 @@
                 {
                     "name": "valor",
                     "title": "Valor",
-                    "type": "text",
+                    "type": "uf",
                     "required": true
                 },
                 {
@@ -575,6 +575,34 @@
                     "name": "valor",
                     "title": "Valor",
                     "type": "uf",
+                    "required": true
+                }
+            ]
+        },
+        {
+            "icon": "glyphicon glyphicon-th-list",
+            "name": "Encuestas",
+            "scope": [
+                "Administrador",
+                "Editor"
+            ],
+            "collection": "encuestas",
+            "fields": [
+                {
+                    "name": "_id",
+                    "type": "text",
+                    "id": true
+                },
+                {
+                    "name": "nombre",
+                    "title": "Nombre de la encuesta",
+                    "type": "text",
+                    "required": true
+                },
+                {
+                    "name": "preguntas",
+                    "title": "Preguntas",
+                    "type": "question",
                     "required": true
                 }
             ]
