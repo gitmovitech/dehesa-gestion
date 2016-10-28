@@ -711,15 +711,15 @@ app.post('/api/encuestas/enviar', function (req, res) {
               }
 
               if(contador_con_correo > 0 && contador_sin_correo > 0){
-                res.send('Se envió la encuesta a '+contador_con_correo+ ' asociados, pero '+contador_sin_correo+' registros no poseen correo electrónico.');
+                res.send({mensaje:'Se envió la encuesta a '+contador_con_correo+ ' asociados, pero '+contador_sin_correo+' registros no poseen correo electrónico.'});
               } else if(contador_con_correo > 0){
-                res.send('Se envió la encuesta a '+contador_con_correo+ ' asociados');
+                res.send({mensaje:'Se envió la encuesta a '+contador_con_correo+ ' asociados'});
               } else {
-                res.send('No se pudo enviar la encuesta debido a que no se encontraron correos válidos de los asociados');
+                res.send({mensaje:'No se pudo enviar la encuesta debido a que no se encontraron correos válidos de los asociados'});
               }
 
             } else{
-              res.send('No hay asociados a quien enviar la encuesta');
+              res.send({mensaje:'No hay asociados a quien enviar la encuesta'});
             }
           });
 
