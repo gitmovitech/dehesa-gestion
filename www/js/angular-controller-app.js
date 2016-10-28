@@ -959,10 +959,17 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
 
     $scope.encuestas = {
       preguntas: [],
+      tipos_respuestas:[{
+        nombre: 'Selección simple',
+        selected: true
+      },{
+        nombre: 'Selección múltiple',
+        selected: false
+      }],
       agregarPregunta: function(){
-        var pregunta =
         this.preguntas[this.preguntas.length] = {
           nombre: '',
+          tipo: 'Selección simple',
           respuestas: [],
           agregarRespuesta: function(){
             this.respuestas[this.respuestas.length] = {
@@ -979,7 +986,6 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
           }
         }
         this.preguntas.reverse();
-        $scope.$apply();
       },
       removerPregunta: function(index){
         if(confirm('¿Seguro que desea eliminar esta pregunta?')){
