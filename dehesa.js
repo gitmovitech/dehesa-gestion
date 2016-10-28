@@ -651,7 +651,7 @@ app.post('/api/encuestas/:eid/:uid', function (req, res, next) {
     if(req.params.eid && req.params.uid){
       db.getCollection('encuestas_respuestas', function(respuestas){
         if(respuestas.length > 0){
-          res.send(0)
+          res.send({success:false});
         } else{
           db.editCollection('encuestas_respuestas',[
             {
@@ -665,7 +665,7 @@ app.post('/api/encuestas/:eid/:uid', function (req, res, next) {
               "value": req.body
             }
           ], function(){
-            res.send(1);
+            res.send({success:true});
           });
         }
       }, {
