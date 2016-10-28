@@ -623,7 +623,7 @@ app.get('/api/encuestas/:eid/:uid', function (req, res) {
           db.getCollection('asociados', function(asociado){
             if(asociado){
               db.getCollection('encuestas_respuestas', function(respondida){
-                if(respondida){
+                if(respondida.length > 0){
                   res.send(encuesta);
                 } else {
                   res.send({"_id":0});
