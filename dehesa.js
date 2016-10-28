@@ -616,7 +616,7 @@ app.post('/api/pagos/log', function (req, res) {
 /**
 * REST DE ENCUESTAS
 **/
-app.get('/api/encuestas/:eid/:uid', function (req, res) {
+app.get('/api/encuestas/:eid/:uid', function (req, res, next) {
     if(req.params.eid){
       db.getCollection('encuestas', function(encuesta){
         if(req.params.uid){
@@ -648,7 +648,7 @@ app.get('/api/encuestas/:eid/:uid', function (req, res) {
       res.send({"_id":0});
     }
 });
-app.post('/api/encuestas/:eid/:uid', function (req, res) {
+app.post('/api/encuestas/:eid/:uid', function (req, res, next) {
     if(req.params.eid && req.params.uid){
       db.getCollection('encuestas_respuestas', function(respuestas){
         if(respuestas.length > 0){
