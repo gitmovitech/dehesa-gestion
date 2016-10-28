@@ -34,6 +34,7 @@ MongoClient.connect(url, function (err, db) {
                 console.log('Collection ' + config.pages[x].collection + ' creada.');
             }
         }
+        database.createCollection('encuestas_respuestas');
     } else {
         console.log(err);
     }
@@ -175,7 +176,10 @@ var getCollection = function (collection, callback, data, join) {
                             }
                         });
                     } else {
-                        query.find(JSON.parse(data)).sort( { id: 1 } ).toArray(function (err, response) {
+                      if(typeof data == 'string'){
+                        data = JSON.parse(data);
+                      }
+                        query.find(data).sort( { id: 1 } ).toArray(function (err, response) {
                             if (!err) {
                                 for (var x in response) {
                                     for (var y in response[x]) {

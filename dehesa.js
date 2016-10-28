@@ -47,6 +47,13 @@ var validarEmail = function(email) {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 /**
  * Obtiene collections
  */
@@ -632,11 +639,18 @@ app.post('/api/encuestas/:eid/:uid', function (req, res) {
         if(respuestas.length > 0){
           res.send(0)
         } else{
-          db.editCollection('encuestas_respuestas',{
-            id_encuesta: req.params.eid,
-            id_asociado: req.params.uid,
-            data: req.body.params
-          }, function(){
+          db.editCollection('encuestas_respuestas',[
+            {
+              "name": "id_encuesta",
+              "value": req.params.eid
+            }, {
+              "name": "id_asociado",
+              "value": req.params.uid
+            }, {
+              "name": "data",
+              "value": req.body
+            }
+          ], function(){
             res.send(1);
           });
         }
