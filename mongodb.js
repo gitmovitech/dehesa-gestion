@@ -167,6 +167,7 @@ var getCollection = function (collection, callback, data, join) {
                 var query = database.collection(collection);
                 if (data) {
                     if (data.id) {
+                      try{
                         query.findOne({"_id": ObjectID(data.id)}, function (err, response) {
                             if (!err) {
                                 callback(response);
@@ -175,6 +176,9 @@ var getCollection = function (collection, callback, data, join) {
                                 callback([]);
                             }
                         });
+                      } catch(e){
+                        callback([]);
+                      }
                     } else {
                       if(typeof data == 'string'){
                         data = JSON.parse(data);

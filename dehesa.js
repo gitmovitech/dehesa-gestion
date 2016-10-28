@@ -621,16 +621,31 @@ app.get('/api/encuestas/:eid/:uid', function (req, res) {
       db.getCollection('encuestas', function(encuesta){
         if(req.params.uid){
           db.getCollection('asociados', function(asociado){
-            if(asociado._id){
-              res.send(encuesta);
+            if(asociado){
+              db.getCollection('encuestas_respuestas', function(respondida){
+                if(respondida){
+                  res.send(encuesta);
+                } else {
+                  res.send({"_id":0});
+                }
+              }, {
+                id_encuesta: req.params.eid,
+                id_asociado: req.params.uid
+              });
+            } else {
+              res.send({"_id":0});
             }
           }, {
             id: req.params.uid
           });
+        } else {
+          res.send({"_id":0});
         }
       }, {
         id: req.params.eid
       });
+    } else {
+      res.send({"_id":0});
     }
 });
 app.post('/api/encuestas/:eid/:uid', function (req, res) {
