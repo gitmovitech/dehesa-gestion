@@ -1003,6 +1003,11 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
             alert(response);
           });
         }
+      },
+      exportarRespuestas: function(eid){
+        if(confirm('¿Desea exportar las respuestas de esta encuesta?')){
+          location.href = '/api/encuestas/exportar/'+eid+'/'+Session.get();
+        }
       }
     }
 

@@ -727,6 +727,95 @@ app.post('/api/encuestas/enviar', function (req, res) {
     });
   }
 });
+app.get('/api/encuestas/exportar/:eid/:token', function (req, res, next) {
+  if(req.params.eid && req.params.token){
+    getSession(req.params.token, function (response, err) {
+      if(response){
+        db.getCollection('asociados', function(response){
+          var asociados = [];
+          for(var x in response){
+            if(validarEmail(response[x].correo) || validarEmail(response[x].correo_alternativo)){
+              asociados[asociados.length] = {
+                _id: response[x]._id,
+                id: response[x].id,
+                usuario: response[x].usuario
+              }
+            }
+          }
+          db.getCollection('encuestas_respuestas', function(respuestas){
+            var data = [[
+              'ID',
+              'Nombre del asociado'
+            ]];
+            var nombre_encuesta = 'Encuesta';
+            for(var x in asociados){
+              for(var i in respuestas){
+                if(asociados[x]._id == respuestas[i].id_asociado){
+                  if(data.length == 1){
+                    nombre_encuesta = respuestas[i].data.nombre;
+                    for(var t in respuestas[i].data.preguntas){
+                      data[0][data[0].length] = respuestas[i].data.preguntas[t].nombre;
+                    }
+                  }
+                  var add = true;
+                  for(var j in data){
+                    if(data[j][0] == asociados[x].id){
+                      add = false;
+                      break;
+                    }
+                  }
+                  if(add){
+                    data[data.length] = [asociados[x].id, asociados[x].usuario];
+                  }
+                  delete add;
+
+                  for(var t in respuestas[i].data.preguntas){
+                    //console.log(respuestas[i].data.preguntas[t]);
+                    if(respuestas[i].data.preguntas[t].tipo == 'Selección simple'){
+                      for(var g in respuestas[i].data.preguntas[t].respuestas){
+                        if(respuestas[i].data.preguntas[t].respuestas[g].valor){
+                          data[data.length-1].push(respuestas[i].data.preguntas[t].respuestas[g].nombre);
+                          break;
+                        }
+                      }
+                    }
+                    if(respuestas[i].data.preguntas[t].tipo == 'Selección múltiple'){
+                      var respuestas_multiples = [];
+                      for(var g in respuestas[i].data.preguntas[t].respuestas){
+                        if(respuestas[i].data.preguntas[t].respuestas[g].valor){
+                          respuestas_multiples.push(respuestas[i].data.preguntas[t].respuestas[g].nombre);
+                        }
+                      }
+                      data[data.length-1].push(respuestas_multiples.join(', '));
+                      delete respuestas_multiples;
+                    }
+                  }
+                  break;
+                }
+              }
+            }
+            var buffer = xlsx.build([{name: nombre_encuesta, data: data}]);
+            res.setHeader('Content-disposition', 'attachment; filename="encuesta.xlsx"');
+            res.setHeader('Content-type', 'application/vnd.ms-excel');
+            res.end(buffer);
+          }, {
+            id_encuesta: req.params.eid
+          });
+        });
+      } else {
+        var buffer = xlsx.build([{name: 'encuesta', data: [['Sin respuestas']]}]);
+        res.setHeader('Content-disposition', 'attachment; filename="encuesta.xlsx"');
+        res.setHeader('Content-type', 'application/vnd.ms-excel');
+        res.end(buffer);
+      }
+    });
+  } else {
+    var buffer = xlsx.build([{name: 'encuesta', data: [['Sin respuestas']]}]);
+    res.setHeader('Content-disposition', 'attachment; filename="encuesta.xlsx"');
+    res.setHeader('Content-type', 'application/vnd.ms-excel');
+    res.end(buffer);
+  }
+});
 
 
 
