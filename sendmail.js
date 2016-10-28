@@ -43,3 +43,24 @@ var notificarContador = function (params, callback) {
     });
 }
 exports.notificarContador = notificarContador;
+
+var notificarEncuesta = function (params, callback) {
+    var html;
+    html = '<p>Estimado(a) ' + params.usuario + '.</p>';
+    html += '<p>Por parte de la Junta de Vecinos Jardín La Dehesa le hacemos llegar una encuesta que espero nos pueda responder pronto.</p>';
+    html += '<p>Para poder acceder a la encuesta por favor dirigase a este link: ' + params.url + '</p>'
+    html += '<br><br><p>Atte. Junta de Vecinos Jardín La Dehesa.</p>';
+    mail.sendMail({
+        fromname: 'Junta de Vecinos Jardín La Dehesa',
+        from: 'no-reply@jvdehesa.cl',
+        toname: params.usuario,
+        to: params.correo,
+        subject: 'Encuesta JVDehesa: '+params.titulo,
+        text: false,
+        html: html
+    }, function (response, err) {
+        if (typeof callback == 'function')
+            callback(response, err);
+    });
+}
+exports.notificarEncuesta = notificarEncuesta;

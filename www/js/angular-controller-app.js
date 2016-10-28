@@ -991,6 +991,18 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         if(confirm('¿Seguro que desea eliminar esta pregunta?')){
           this.preguntas.splice(index,1);
         }
+      },
+      enviar: function(eid){
+        if(confirm('¿Está seguro que desea enviar esta encuesta a sus asociados ahora?')){
+          $http.post('/api/encuestas/enviar', {
+              params: {
+                  token: Session.get(),
+                  eid: eid
+              }
+          }).success(function (response) {
+            alert(response);
+          });
+        }
       }
     }
 

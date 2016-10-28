@@ -37,6 +37,14 @@ var getSession = function (token, callback) {
     }
 }
 
+var validarEmail = function(email) {
+    var expr = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    if (!expr.test(email))
+      return false;
+    else
+      return true;
+}
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 /**
@@ -618,7 +626,6 @@ app.get('/api/encuestas/:eid/:uid', function (req, res) {
       });
     }
 });
-
 app.post('/api/encuestas/:eid/:uid', function (req, res) {
     if(req.params.eid && req.params.uid){
       db.getCollection('encuestas_respuestas', function(respuestas){
@@ -639,6 +646,60 @@ app.post('/api/encuestas/:eid/:uid', function (req, res) {
       });
     }
 });
+app.post('/api/encuestas/enviar', function (req, res) {
+  if (req.body.params.token && req.body.params.eid) {
+    getSession(req.body.params.token, function (response, err) {
+      if(response){
+        db.getCollection('encuestas', function(encuesta){
+
+          db.getCollection('asociados', function(respuestas){
+            if(respuestas.length > 0){
+              var contador_con_correo = 0;
+              var contador_sin_correo = 0;
+              var correo_segundos = 0;
+              for(var x in respuestas){
+                if(validarEmail(respuestas[x].correo) || validarEmail(respuestas[x].correo_alternativo)){
+                  var correo;
+                  if(validarEmail(respuestas[x].correo)){
+                    correo = respuestas[x].correo;
+                  } else {
+                    correo = respuestas[x].correo_alternativo;
+                  }
+                  correo_segundos += 1000;
+                  //if(contador_con_correo == 0)
+                  //setTimeout(function(){
+                    sendmail.notificarEncuesta({
+                      usuario: respuestas[x].usuario,
+                      correo: 'vvargas@movitech.cl',//correo
+                      titulo: encuesta.nombre,
+                      url: 'http://www.jvdehesa.cl/encuestas?eid='+req.body.params.eid+'&uid='+respuestas[x]._id
+                    });
+                  //},correo_segundos);
+                  contador_con_correo++;
+                } else {
+                  contador_sin_correo++;
+                }
+              }
+
+              if(contador_con_correo > 0 && contador_sin_correo > 0){
+                res.send('Se envió la encuesta a '+contador_con_correo+ ' asociados, pero '+contador_sin_correo+' registros no poseen correo electrónico.');
+              } else if(contador_con_correo > 0){
+                res.send('Se envió la encuesta a '+contador_con_correo+ ' asociados');
+              } else {
+                res.send('No se pudo enviar la encuesta debido a que no se encontraron correos válidos de los asociados');
+              }
+
+            } else{
+              res.send('No hay asociados a quien enviar la encuesta');
+            }
+          });
+
+        }, {id: req.body.params.eid});
+      }
+    });
+  }
+});
+
 
 
 app.use(express.static(__dirname + '/www'));

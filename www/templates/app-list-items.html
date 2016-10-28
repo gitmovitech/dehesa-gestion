@@ -15,6 +15,8 @@
 
                 <button ng-if="page.collection == 'asociados' && trdata.activo" class="btn btn-warning btn-xs" ng-click="suspenderAsociado(trdata)"><i class="glyphicon glyphicon-remove"></i> Suspender</button>
                 <button ng-if="page.collection == 'asociados' && !trdata.activo" class="btn btn-info btn-xs" ng-click="activarAsociado(trdata)"><i class="glyphicon glyphicon-ok"></i> Activar</button>
+
+                <button ng-if="page.collection == 'encuestas'" class="btn btn-info btn-xs" ng-click="encuestas.enviar(tddata)"><i class="glyphicon glyphicon-envelope"></i> Enviar encuesta</button>
             </td>
             <td ng-repeat="(key,tddata) in trdata" ng-if="key != '_id' && key != 'index' && key != 'password' && key != 'activo'">
                 <span ng-if="key == 'run'">{{::tddata| rut}}</span>
