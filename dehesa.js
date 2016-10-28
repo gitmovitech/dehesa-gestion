@@ -47,6 +47,11 @@ var validarEmail = function(email) {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 /**
  * Obtiene collections
@@ -611,9 +616,6 @@ app.post('/api/pagos/log', function (req, res) {
 * REST DE ENCUESTAS
 **/
 app.get('/api/encuestas/:eid/:uid', function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
     if(req.params.eid){
       db.getCollection('encuestas', function(encuesta){
         if(req.params.uid){
@@ -646,9 +648,6 @@ app.get('/api/encuestas/:eid/:uid', function (req, res, next) {
     }
 });
 app.post('/api/encuestas/:eid/:uid', function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
     if(req.params.eid && req.params.uid){
       db.getCollection('encuestas_respuestas', function(respuestas){
         if(respuestas.length > 0){
