@@ -699,7 +699,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
             }
           }
         },
-        changeStatus: function (select, data) {
+        changeStatus: function (select, data, index) {
             var pagado = 0;
             var paramsdata = false;
             switch(select){
@@ -724,6 +724,12 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                     year: this.yearActive,
                     status: select
                 }
+              } else {
+                $scope.tabledata[index] = null;
+                setTimeout(function(){
+                  $scope.tabledata[index] = data;
+                  $scope.$apply();
+                },0);
               }
               break;
               case 'Pagado con excedentes':
@@ -742,7 +748,11 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                       cobrodelmes: Math.round(data.tarifa.totalpesos)
                   }
                 } else {
-                  obtenerPagos(this.yearActive, this.monthActive);
+                  $scope.tabledata[index] = null;
+                  setTimeout(function(){
+                    $scope.tabledata[index] = data;
+                    $scope.$apply();
+                  },0);
                 }
               }
               break;
@@ -766,7 +776,11 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                       cobrodelmes: Math.round(data.tarifa.totalpesos)
                   }
                 } else {
-                  obtenerPagos(this.yearActive, this.monthActive);
+                  $scope.tabledata[index] = null;
+                  setTimeout(function(){
+                    $scope.tabledata[index] = data;
+                    $scope.$apply();
+                  },0);
                 }
               break;
             }
