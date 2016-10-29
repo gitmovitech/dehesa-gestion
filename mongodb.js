@@ -166,7 +166,20 @@ var getCollection = function (collection, callback, data, join) {
             if (perm) {
                 var query = database.collection(collection);
                 if (data) {
-                    if (data.id) {
+                  if (data.uid && collection == 'asociados') {
+                    try{
+                      query.findOne({"id": data.uid}, function (err, response) {
+                          if (!err) {
+                              callback(response);
+                          } else {
+                              console.log(err)
+                              callback([]);
+                          }
+                      });
+                    } catch(e){
+                      callback([]);
+                    }
+                  } else if (data.id) {
                       try{
                         query.findOne({"_id": ObjectID(data.id)}, function (err, response) {
                             if (!err) {

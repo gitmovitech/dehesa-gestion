@@ -64,3 +64,23 @@ var notificarEncuesta = function (params, callback) {
     });
 }
 exports.notificarEncuesta = notificarEncuesta;
+
+var notificarCobroAsociado = function (params, callback) {
+    var html;
+    html = '<p>Estimado(a) ' + params.toname + '.</p>';
+    html += '<p>Le informamos que registramos una deuda pendiente de $'+ params.cobro +' correspondiente al pago de la cuota de la Junta de Vecinos del mes de '+ params.month +'.</p>';
+    html += '<br><br><p>Atte. Junta de Vecinos Jardín La Dehesa.</p>';
+    mail.sendMail({
+        fromname: 'Junta de Vecinos Jardín La Dehesa',
+        from: 'no-reply@jvdehesa.cl',
+        toname: params.toname,
+        to: params.to,
+        subject: 'Pago pendiente ' + params.month + ' ' + params.year,
+        text: false,
+        html: html
+    }, function (response, err) {
+        if (typeof callback == 'function')
+            callback(response, err);
+    });
+}
+exports.notificarCobroAsociado = notificarCobroAsociado;

@@ -77,35 +77,6 @@ app.get('/api/data', function (req, res) {
                             success: true,
                             data: response
                         });
-                        /*db.getResumenHistorialPagos(response, 0, function (response) {
-                            if (response) {
-                                if (req.query.databack) {
-                                    res.send({
-                                        databack: req.query.databack,
-                                        success: true,
-                                        data: response
-                                    });
-                                } else {
-                                    res.send({
-                                        success: true,
-                                        data: response
-                                    });
-                                }
-                            } else {
-                                if (req.query.databack) {
-                                    res.send({
-                                        databack: req.query.databack,
-                                        success: false,
-                                        message: err
-                                    });
-                                } else {
-                                    res.send({
-                                        success: false,
-                                        message: err
-                                    });
-                                }
-                            }
-                        }, meses);*/
                     } else {
                         if (response) {
                             if (req.query.databack) {
@@ -370,17 +341,6 @@ app.get('/pagos/excel/:year/:month', function (req, res) {
         }
     });
   }
-  //var file = __dirname + '/uploads/documents/'+req.params.id+'/'+req.params.year+'/'+req.params.month+'/'+atob(req.params.file);
-    /*if (fs.existsSync(file)) {
-        var mimetype = mime.lookup(file);
-        var filename = atob(req.params.file);
-        res.setHeader('Content-disposition', 'attachment; filename="' + filename + '"');
-        res.setHeader('Content-type', mimetype);
-        var filestream = fs.createReadStream(file);
-        filestream.pipe(res);
-    } else {
-        res.send('El archivo no fue encontrado en el servidor');
-    }*/
 });
 app.post('/dropfile/:id/:year/:month/:file', function (req, res) {
   var file = __dirname + '/uploads/documents/'+req.params.id+'/'+req.params.year+'/'+req.params.month+'/'+decodeURI(atob(req.params.file));
@@ -569,6 +529,42 @@ app.post('/api/notiticar-contador', function (req, res) {
                             message: 'No existe un contador ingresado en el sistema en la seccion Usuarios'
                         });
                     }
+                });
+            }
+        });
+    }
+});
+
+/**
+ * NOTIFICAR DE COBRO AL ASOCIADO
+ */
+app.post('/api/notiticar-cobro-asociado', function (req, res) {
+    if (req.body.params.token) {
+        getSession(req.body.params.token, function (response, err) {
+            if (response) {
+              db.getCollection('asociados', function (response) {
+                  var correo = false;
+                  if(validarEmail(response.correo)){
+                    correo = response.correo
+                  } else if(validarEmail(response.correo_alternativo)){
+                    correo = response.correo_alternativo
+                  }
+                  if(correo){
+                    sendmail.notificarCobroAsociado({
+                        toname: response.usuario,
+                        to: 'vvargas@movitech.cl',//correo,
+                        cobro: req.body.params.data.tarifa.totalpesos,
+                        month: req.body.params.month,
+                        year: req.body.params.year
+                    });
+                    res.send({
+                        success: true
+                    });
+                  } else {
+                    res.send({'success': false, 'message': 'Este asociado no tiene registrado correo electrónico'});
+                  }
+                }, {
+                  uid: req.body.params.data.id
                 });
             }
         });

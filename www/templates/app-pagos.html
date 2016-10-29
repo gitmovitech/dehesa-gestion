@@ -144,7 +144,8 @@
                       </span>
 
                       <span ng-if="key == '_id'">
-                        <a class="btn btn-success btn-xs glyphicon glyphicon-stats" ng-click="pagos.modalHistorial(trdata)"></a>
+                        <a ng-if="trdata.tarifa != '-'" class="btn btn-success btn-xs glyphicon glyphicon-stats" ng-click="pagos.modalHistorial(trdata)"></a>
+                        <a ng-if="trdata.debe != '0' && trdata.tarifa != '-'" class="btn btn-info btn-xs glyphicon glyphicon-send" ng-click="pagos.notificarAsociado(trdata)"></a>
                       </span>
 
                     </td>

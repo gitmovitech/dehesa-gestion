@@ -852,6 +852,24 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                 });
             }
         },
+        notificarAsociado: function(data){
+          if(confirm('¿Notificar cobro a "'+ data.nombre +'"?')){
+            $http.post('/api/notiticar-cobro-asociado', {
+                params: {
+                    token: Session.get(),
+                    data: data,
+                    year: this.yearActive,
+                    month: this.monthActive
+                }
+            }).success(function (response) {
+                if (response.success) {
+                    alert('El correo ha sido enviado');
+                } else {
+                    alert(response.message);
+                }
+            });
+          }
+        },
         changeTab: function (index, year, month) {
           jQuery('body').loader('show');
             this.tabMonthActive = index;
@@ -963,6 +981,10 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
       }
     }
 
+
+    /**
+    * ENCUESTAS
+    **/
     $scope.encuestas = {
       preguntas: [],
       tipos_respuestas:[{
