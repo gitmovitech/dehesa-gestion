@@ -19,7 +19,7 @@
                 <button ng-if="page.collection == 'encuestas'" class="btn btn-info btn-xs" ng-click="encuestas.enviar(tddata)"><i class="glyphicon glyphicon-envelope"></i> Enviar encuesta</button>
                 <button ng-if="page.collection == 'encuestas'" class="btn btn-warning btn-xs" ng-click="encuestas.exportarRespuestas(tddata)"><i class="glyphicon glyphicon-saved"></i> Exportar respuestas</button>
             </td>
-            <td ng-repeat="(key,tddata) in trdata" ng-if="key != '_id' && key != 'index' && key != 'password' && key != 'activo'">
+            <td ng-repeat="(key,tddata) in trdata" ng-if="key != '_id' && key != 'index' && key != 'password' && key != 'activo' && key != 'correo_alternativo' && key != 'tipo_conexion'  && key != 'monitoreo'">
                 <span ng-if="key == 'run'">{{::tddata| rut}}</span>
                 <span ng-if="key == 'fecha_ingreso'">{{::tddata| date}}</span>
                 <span ng-if="key == 'tipo_casa'">{{::tddata | tipo_casa}}</span>
