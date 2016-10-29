@@ -717,11 +717,13 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
               case 'Rechazo Tarjeta con Problemas':
               case 'Rechazo Tarjeta Vencida':
               case 'Cheque recibido':
-              paramsdata = {
-                  run: data.run,
-                  month: this.tabMonthActive,
-                  year: this.yearActive,
-                  status: select
+              if(confirm('¿Desea cambiar el estado de este pago a "'+ select +'"?')){
+                paramsdata = {
+                    run: data.run,
+                    month: this.tabMonthActive,
+                    year: this.yearActive,
+                    status: select
+                }
               }
               break;
               case 'Pagado con excedentes':
@@ -748,6 +750,8 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
               case 'Pagado en efectivo':
               case 'Pagado con cheque':
               case 'Pagado fuera de plazo (+ 20%)':
+              case "Pagos Procesados":
+              case "Aprobada":
                 if(select == 'Pagado fuera de plazo (+ 20%)'){
                   data.tarifa.totalpesos = data.tarifa.totalpesos * 1.2;
                 }
@@ -764,18 +768,6 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                 } else {
                   obtenerPagos(this.yearActive, this.monthActive);
                 }
-              break;
-              case "Pagos Procesados":
-              case "Aprobada":
-              pagado = data.tarifa.totalpesos;
-              paramsdata = {
-                  run: data.run,
-                  pago: pagado,
-                  month: this.tabMonthActive,
-                  year: this.yearActive,
-                  status: select,
-                  cobrodelmes: pagado
-              }
               break;
             }
             if(paramsdata){
