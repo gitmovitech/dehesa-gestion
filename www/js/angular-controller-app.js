@@ -1036,6 +1036,9 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         if(confirm('¿Desea exportar las respuestas de esta encuesta?')){
           location.href = '/api/encuestas/exportar/'+eid+'/'+Session.get();
         }
+      },
+      previsualizar: function(item){
+        window.open('http://www.jvdehesa.cl/encuestas?eid='+item+'&uid=a69c4a8625296f2b12a05cad4eb5aaea','_blank');
       }
     }
 
