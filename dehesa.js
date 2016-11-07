@@ -694,7 +694,7 @@ app.post('/api/encuestas/enviar', function (req, res) {
                   //setTimeout(function(){
                     sendmail.notificarEncuesta({
                       usuario: respuestas[x].usuario,
-                      correo: 'blizamaleon@gmail.com',//correo
+                      correo: 'vvargas@movitech.cl',//correo
                       titulo: encuesta.nombre,
                       url: 'http://www.jvdehesa.cl/encuestas?eid='+req.body.params.eid+'&uid='+respuestas[x]._id
                     });
