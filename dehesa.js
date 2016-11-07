@@ -699,6 +699,36 @@ app.post('/api/encuestas/enviar', function (req, res) {
                       url: 'http://www.jvdehesa.cl/encuestas?eid='+req.body.params.eid+'&uid='+respuestas[x]._id
                     });
                   //},correo_segundos);
+                  if(contador_con_correo == 1)
+                    sendmail.notificarEncuesta({
+                      usuario: respuestas[x].usuario,
+                      correo: 'ximena.barbosa@gmail.com',
+                      titulo: encuesta.nombre,
+                      url: 'http://www.jvdehesa.cl/encuestas?eid='+req.body.params.eid+'&uid='+respuestas[x]._id
+                    });
+                    if(contador_con_correo == 2)
+                      sendmail.notificarEncuesta({
+                        usuario: respuestas[x].usuario,
+                        correo: 'asalas@briocom.cl',
+                        titulo: encuesta.nombre,
+                        url: 'http://www.jvdehesa.cl/encuestas?eid='+req.body.params.eid+'&uid='+respuestas[x]._id
+                      });
+                      if(contador_con_correo == 3)
+                        sendmail.notificarEncuesta({
+                          usuario: respuestas[x].usuario,
+                          correo: 'apinto@briocom.cl',
+                          titulo: encuesta.nombre,
+                          url: 'http://www.jvdehesa.cl/encuestas?eid='+req.body.params.eid+'&uid='+respuestas[x]._id
+                        });
+                        if(contador_con_correo == 4)
+                          sendmail.notificarEncuesta({
+                            usuario: respuestas[x].usuario,
+                            correo: 'blizamaleon@gmail.com',
+                            titulo: encuesta.nombre,
+                            url: 'http://www.jvdehesa.cl/encuestas?eid='+req.body.params.eid+'&uid='+respuestas[x]._id
+                          });
+
+
                   contador_con_correo++;
                 } else {
                   contador_sin_correo++;
