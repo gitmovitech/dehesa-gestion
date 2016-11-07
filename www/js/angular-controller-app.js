@@ -287,7 +287,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                             $scope.fields[x].value = data[key];
                     }
                     if($scope.fields[x].name == 'preguntas'){
-                      $scope.encuestas.preguntas = $scope.fields[x].value;
+                      $scope.encuestas.preguntas = $scope.encuestas.agregarFunciones($scope.fields[x].value);
                     }
                 }
             }
@@ -1064,6 +1064,24 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
       },
       previsualizar: function(item){
         window.open('http://www.jvdehesa.cl/encuestas?eid='+item+'&uid=a69c4a8625296f2b12a05cad4eb5aaea','_blank');
+      },
+      agregarFunciones: function(preguntas){
+        for(var item in preguntas){
+          preguntas[item].agregarRespuesta = function(){
+            this.respuestas[this.respuestas.length] = {
+              nombre: ''
+            }
+            setTimeout(function () {
+              $scope.$apply();
+            }, 0);
+          }
+          preguntas[item].removerRespuesta = function(index){
+            if(confirm('¿Seguro que desea eliminar esta respuesta?')){
+              this.respuestas.splice(index,1);
+            }
+          }
+        }
+        return preguntas;
       }
     }
 
