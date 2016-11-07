@@ -993,7 +993,32 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
       },{
         nombre: 'Selección múltiple',
         selected: false
+      },{
+        nombre: 'Calificación',
+        selected: false,
+        respuestas:[{
+          nombre: 1
+        },{
+          nombre: 2
+        },{
+          nombre: 3
+        },{
+          nombre: 4
+        },{
+          nombre: 5
+        },{
+          nombre: 6
+        },{
+          nombre: 7
+        }]
       }],
+      cambioTipo: function(item){
+        if(item.tipo == 'Calificación'){
+          item.respuestas = this.tipos_respuestas[2].respuestas;
+        } else {
+          item.respuestas = [];
+        }
+      },
       agregarPregunta: function(){
         this.preguntas[this.preguntas.length] = {
           nombre: '',

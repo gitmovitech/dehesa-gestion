@@ -21,7 +21,7 @@
           Tipo de respuesta
       </label>
       <div class="col-sm-10">
-        <select class="form-control" ng-model="item.tipo">
+        <select class="form-control" ng-model="item.tipo" ng-change="encuestas.cambioTipo(item)">
           <option ng-repeat="option in encuestas.tipos_respuestas">{{option.nombre}}</option>
         </select>
       </div>
