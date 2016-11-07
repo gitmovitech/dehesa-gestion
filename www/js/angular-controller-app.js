@@ -1053,7 +1053,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                   eid: eid
               }
           }).success(function (response) {
-            alert(response);
+            alert(response.mensaje);
           });
         }
       },
