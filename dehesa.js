@@ -789,10 +789,10 @@ app.get('/api/encuestas/exportar/:eid/:token', function (req, res, next) {
                       var respuestas_calificacion = [];
                       for(var g in respuestas[i].data.preguntas[t].respuestas){
                         if(respuestas[i].data.preguntas[t].respuestas[g].valor){
-                          respuestas_calificacion.push(respuestas[i].data.preguntas[t].respuestas[g].nombre +' = '+ respuestas[i].data.preguntas[t].respuestas[g]);
+                          respuestas_calificacion.push(respuestas[i].data.preguntas[t].respuestas[g].nombre +' = '+ respuestas[i].data.preguntas[t].respuestas[g].valor);
                         }
                       }
-                      data[data.length-1].push(respuestas_calificacion.join('\n'));
+                      data[data.length-1].push(respuestas_calificacion.join(', '));
                       delete respuestas_calificacion;
                     }
                   }
