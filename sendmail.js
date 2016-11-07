@@ -55,7 +55,7 @@ var notificarEncuesta = function (params, callback) {
     html += '<br><br><p>Atte. Junta de Vecinos Jardín La Dehesa.</p>';*/
     mail.sendMail({
         fromname: 'Junta de Vecinos Jardín La Dehesa',
-        from: 'no-reply@jvdehesa.cl',
+        from: 'encuestas@jvdehesa.cl',
         toname: params.usuario,
         to: params.correo,
         subject: 'Encuesta JVDehesa: '+params.titulo,
