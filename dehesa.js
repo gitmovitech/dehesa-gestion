@@ -785,6 +785,16 @@ app.get('/api/encuestas/exportar/:eid/:token', function (req, res, next) {
                       data[data.length-1].push(respuestas_multiples.join(', '));
                       delete respuestas_multiples;
                     }
+                    if(respuestas[i].data.preguntas[t].tipo == 'Calificación'){
+                      var respuestas_calificacion = [];
+                      for(var g in respuestas[i].data.preguntas[t].respuestas){
+                        if(respuestas[i].data.preguntas[t].respuestas[g].valor){
+                          respuestas_calificacion.push(respuestas[i].data.preguntas[t].respuestas[g].nombre +' = '+ respuestas[i].data.preguntas[t].respuestas[g]);
+                        }
+                      }
+                      data[data.length-1].push(respuestas_calificacion.join('\n'));
+                      delete respuestas_calificacion;
+                    }
                   }
                   break;
                 }
