@@ -995,7 +995,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         selected: false
       },{
         nombre: 'Calificación',
-        selected: false,
+        selected: false/*,
         respuestas:[{
           nombre: 1
         },{
@@ -1010,14 +1010,14 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
           nombre: 6
         },{
           nombre: 7
-        }]
+        }]*/
       }],
       cambioTipo: function(item){
-        if(item.tipo == 'Calificación'){
+        /*if(item.tipo == 'Calificación'){
           item.respuestas = this.tipos_respuestas[2].respuestas;
         } else {
           item.respuestas = [];
-        }
+        }*/
       },
       agregarPregunta: function(){
         this.preguntas[this.preguntas.length] = {
