@@ -1,0 +1,19 @@
+<div>
+  <div class="col-xs-12">
+    <a ng-click="item.agregarRespuesta()" class="btn btn-xs btn-info"><i class="glyphicon glyphicon-plus"></i>  Agregar respuesta</a>
+  </div>
+</div>
+<div ng-if="item.respuestas.length > 0">
+  <br><br>
+  <div ng-repeat="it in item.respuestas">
+    <div class="form-group">
+      <label class="col-sm-1 control-label">
+          <a ng-click="item.removerRespuesta($index)" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-remove"></i></a>
+      </label>
+      <div class="col-sm-11">
+        <input ng-model="it.nombre" type="text" placeholder="Escriba aquí la respuesta" class="form-control"/>
+      </div>
+    </div>
+  </div>
+
+</div>

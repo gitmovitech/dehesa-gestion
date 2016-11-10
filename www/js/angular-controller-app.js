@@ -83,38 +83,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         $scope.tabledata = false;
         $scope.registros = false;
 
-        /*if (sessionStorage.uf) {
-         $scope.valoruf = parseFloat(sessionStorage.uf);
-         }*/
         $scope.valoruf = false;
-        /*if (item.collection == 'pagos')
-         /*$http.get('http://mindicador.cl/api/uf', {}).success(function (response) {
-         $scope.valoruf = response.serie[0].valor;
-         sessionStorage.uf = $scope.valoruf;
-         console.log(item)
-         $http.get('/api/data', {
-         params: {
-         token: Session.get(),
-         collection: 'servicios'
-         }
-         }).success(function (response) {
-         if (response.success) {
-
-         $scope.servicios = {
-         total: 0,
-         detalle: []
-         };
-         for (var t in response.data) {
-         if (response.data[t].type == 'UF') {
-         response.data[t].valor = response.data[t].valor.replace(',', '.');
-         response.data[t].valor = parseFloat(response.data[t].valor)// * parseFloat($scope.valoruf);
-         }
-         $scope.servicios.detalle[$scope.servicios.detalle.length] = response.data[t];
-         $scope.servicios.total = $scope.servicios.total + response.data[t].valor;
-         }
-         }
-         });*/
-        //});
 
         if (item) {
             sessionStorage.page = index;
@@ -167,6 +136,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                         fieldsdata = response.data;
                     }
                     jQuery('body').loader('hide');
+
                 });
             }
         }
@@ -316,12 +286,16 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                         if (data[key])
                             $scope.fields[x].value = data[key];
                     }
+                    if($scope.fields[x].name == 'preguntas'){
+                      $scope.encuestas.preguntas = $scope.encuestas.agregarFunciones($scope.fields[x].value);
+                    }
                 }
             }
         } else {
             for (var x in $scope.fields) {
                 $scope.fields[x].value = '';
             }
+            $scope.encuestas.preguntas = [];
         }
         setTimeout(function () {
             jQuery('.chosen-select').each(function () {
@@ -351,6 +325,14 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                     console.info($scope.fields[x])
                 }
             }
+        }
+        if($scope.collection == 'encuestas'){
+          for(var p in $scope.fields){
+            if($scope.fields[p].name == 'preguntas'){
+              $scope.fields[p].value = JSON.parse(JSON.stringify($scope.encuestas.preguntas));
+              console.log($scope.fields[p].value);
+            }
+          }
         }
         $http.post('/api/data', {
             params: {
@@ -717,7 +699,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
             }
           }
         },
-        changeStatus: function (select, data) {
+        changeStatus: function (select, data, index) {
             var pagado = 0;
             var paramsdata = false;
             switch(select){
@@ -735,11 +717,19 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
               case 'Rechazo Tarjeta con Problemas':
               case 'Rechazo Tarjeta Vencida':
               case 'Cheque recibido':
-              paramsdata = {
-                  run: data.run,
-                  month: this.tabMonthActive,
-                  year: this.yearActive,
-                  status: select
+              if(confirm('¿Desea cambiar el estado de este pago a "'+ select +'"?')){
+                paramsdata = {
+                    run: data.run,
+                    month: this.tabMonthActive,
+                    year: this.yearActive,
+                    status: select
+                }
+              } else {
+                $scope.tabledata[index] = null;
+                setTimeout(function(){
+                  $scope.tabledata[index] = data;
+                  $scope.$apply();
+                },0);
               }
               break;
               case 'Pagado con excedentes':
@@ -758,7 +748,11 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                       cobrodelmes: Math.round(data.tarifa.totalpesos)
                   }
                 } else {
-                  obtenerPagos(this.yearActive, this.monthActive);
+                  $scope.tabledata[index] = null;
+                  setTimeout(function(){
+                    $scope.tabledata[index] = data;
+                    $scope.$apply();
+                  },0);
                 }
               }
               break;
@@ -766,6 +760,8 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
               case 'Pagado en efectivo':
               case 'Pagado con cheque':
               case 'Pagado fuera de plazo (+ 20%)':
+              case "Pagos Procesados":
+              case "Aprobada":
                 if(select == 'Pagado fuera de plazo (+ 20%)'){
                   data.tarifa.totalpesos = data.tarifa.totalpesos * 1.2;
                 }
@@ -780,20 +776,12 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                       cobrodelmes: Math.round(data.tarifa.totalpesos)
                   }
                 } else {
-                  obtenerPagos(this.yearActive, this.monthActive);
+                  $scope.tabledata[index] = null;
+                  setTimeout(function(){
+                    $scope.tabledata[index] = data;
+                    $scope.$apply();
+                  },0);
                 }
-              break;
-              case "Pagos Procesados":
-              case "Aprobada":
-              pagado = data.tarifa.totalpesos;
-              paramsdata = {
-                  run: data.run,
-                  pago: pagado,
-                  month: this.tabMonthActive,
-                  year: this.yearActive,
-                  status: select,
-                  cobrodelmes: pagado
-              }
               break;
             }
             if(paramsdata){
@@ -863,6 +851,24 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                     }
                 });
             }
+        },
+        notificarAsociado: function(data){
+          if(confirm('¿Notificar cobro a "'+ data.nombre +'"?')){
+            $http.post('/api/notiticar-cobro-asociado', {
+                params: {
+                    token: Session.get(),
+                    data: data,
+                    year: this.yearActive,
+                    month: this.monthActive
+                }
+            }).success(function (response) {
+                if (response.success) {
+                    alert('El correo ha sido enviado');
+                } else {
+                    alert(response.message);
+                }
+            });
+          }
         },
         changeTab: function (index, year, month) {
           jQuery('body').loader('show');
@@ -961,6 +967,121 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         }).success(function (response) {
           $scope.load($scope.page);
         });
+      }
+    }
+
+    $scope.validateUF = function(event){
+      var key = event.keyCode || event.charCode;
+      if(key != 8){
+        key = String.fromCharCode(key);
+        key = key.toString();
+        if(!key.match(/[0-9]{1}|\,/g)){
+          event.preventDefault();
+        }
+      }
+    }
+
+
+    /**
+    * ENCUESTAS
+    **/
+    $scope.encuestas = {
+      preguntas: [],
+      tipos_respuestas:[{
+        nombre: 'Selección simple',
+        selected: true
+      },{
+        nombre: 'Selección múltiple',
+        selected: false
+      },{
+        nombre: 'Calificación',
+        selected: false/*,
+        respuestas:[{
+          nombre: 1
+        },{
+          nombre: 2
+        },{
+          nombre: 3
+        },{
+          nombre: 4
+        },{
+          nombre: 5
+        },{
+          nombre: 6
+        },{
+          nombre: 7
+        }]*/
+      }],
+      cambioTipo: function(item){
+        /*if(item.tipo == 'Calificación'){
+          item.respuestas = this.tipos_respuestas[2].respuestas;
+        } else {
+          item.respuestas = [];
+        }*/
+      },
+      agregarPregunta: function(){
+        this.preguntas[this.preguntas.length] = {
+          nombre: '',
+          tipo: 'Selección simple',
+          respuestas: [],
+          agregarRespuesta: function(){
+            this.respuestas[this.respuestas.length] = {
+              nombre: ''
+            }
+            setTimeout(function () {
+              $scope.$apply();
+            }, 0);
+          },
+          removerRespuesta: function(index){
+            if(confirm('¿Seguro que desea eliminar esta respuesta?')){
+              this.respuestas.splice(index,1);
+            }
+          }
+        }
+        this.preguntas.reverse();
+      },
+      removerPregunta: function(index){
+        if(confirm('¿Seguro que desea eliminar esta pregunta?')){
+          this.preguntas.splice(index,1);
+        }
+      },
+      enviar: function(eid){
+        if(confirm('¿Está seguro que desea enviar esta encuesta a sus asociados ahora?')){
+          $http.post('/api/encuestas/enviar', {
+              params: {
+                  token: Session.get(),
+                  eid: eid
+              }
+          }).success(function (response) {
+            alert(response.mensaje);
+          });
+        }
+      },
+      exportarRespuestas: function(eid){
+        if(confirm('¿Desea exportar las respuestas de esta encuesta?')){
+          location.href = '/api/encuestas/exportar/'+eid+'/'+Session.get();
+        }
+      },
+      previsualizar: function(item){
+        window.open('http://www.jvdehesa.cl/encuestas?eid='+item+'&uid=a69c4a8625296f2b12a05cad4eb5aaea','_blank');
+      },
+      agregarFunciones: function(preguntas){
+        for(var item in preguntas){
+          preguntas[item].agregarRespuesta = function(){
+            this.respuestas[this.respuestas.length] = {
+              nombre: ''
+            }
+            setTimeout(function () {
+              $scope.$apply();
+            }, 0);
+          }
+          preguntas[item].removerRespuesta = function(index){
+            if(confirm('¿Seguro que desea eliminar esta respuesta?')){
+              this.respuestas.splice(index,1);
+            }
+          }
+        }
+        return preguntas;
       }
     }
 

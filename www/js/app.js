@@ -126,3 +126,17 @@ app.filter('scope', function () {
       return out;
     };
 });
+app.filter('preguntas', function () {
+    return function (input) {
+      var out = '';
+      for(var x in input){
+        out += input[x].nombre+"\n";
+      }
+      if(input.length == 0){
+        return 'No hay preguntas ingresadas';
+      } else if(input.length == 1){
+        return 'Existe 1 pregunta ingresada';
+      }
+      return 'Hay '+input.length+' preguntas ingresadas';
+    };
+});

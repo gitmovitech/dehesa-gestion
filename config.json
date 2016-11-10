@@ -36,11 +36,29 @@
                   "required": true
               },
               {
+<<<<<<< HEAD
+=======
+                  "name": "monitoreo",
+                  "title": "Monitoreo",
+                  "type": "text",
+                  "hiddenlist": true
+              },
+              {
+>>>>>>> 6e9cda83a9abd33fba03032be990c8103f67c35f
                   "name": "numero_cliente",
                   "title": "Nº Cliente",
                   "type": "text"
               },
               {
+<<<<<<< HEAD
+=======
+                  "name": "tipo_conexion",
+                  "title": "Tipo de conexión",
+                  "type": "text",
+                  "hiddenlist": true
+              },
+              {
+>>>>>>> 6e9cda83a9abd33fba03032be990c8103f67c35f
                   "name": "fecha_ingreso",
                   "title": "Fecha ingreso",
                   "type": "text"
@@ -86,6 +104,15 @@
                   "required": true
               },
               {
+<<<<<<< HEAD
+=======
+                  "name": "correo_alternativo",
+                  "title": "Correo alternativo",
+                  "type": "email",
+                  "hiddenlist": true
+              },
+              {
+>>>>>>> 6e9cda83a9abd33fba03032be990c8103f67c35f
                   "name": "formas_pago",
                   "title": "Formas de pago",
                   "type": "select",
@@ -209,7 +236,7 @@
                 {
                     "name": "valor",
                     "title": "Valor",
-                    "type": "text",
+                    "type": "uf",
                     "required": true
                 },
                 {
@@ -556,9 +583,36 @@
                 {
                     "name": "valor",
                     "title": "Valor",
+                    "type": "uf",
+                    "required": true
+                }
+            ]
+        },
+        {
+            "icon": "glyphicon glyphicon-th-list",
+            "name": "Encuestas",
+            "scope": [
+                "Administrador",
+                "Editor"
+            ],
+            "collection": "encuestas",
+            "fields": [
+                {
+                    "name": "_id",
                     "type": "text",
-                    "required": true,
-                    "regex": "/^[0-9]*\\.?[0-9]*$/"
+                    "id": true
+                },
+                {
+                    "name": "nombre",
+                    "title": "Nombre de la encuesta",
+                    "type": "text",
+                    "required": true
+                },
+                {
+                    "name": "preguntas",
+                    "title": "Preguntas",
+                    "type": "question",
+                    "required": true
                 }
             ]
         }

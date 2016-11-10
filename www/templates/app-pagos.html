@@ -110,7 +110,7 @@
                         <span class="text-success" ng-if="tddata == 'Pagos Procesados' || tddata == 'Aprobada' || tddata.indexOf('Pagado') >= 0">{{tddata}}</span>
                         <span ng-if="tddata != 'No importado' && tddata != 'Pagos Procesados' && tddata != 'Aprobada' && !tddata.match('Pagado')">
                           <div ng-repeat="field in page.fields track by field.name" ng-if="field.name == 'type'" style="float:left">
-                              <select ng-model="tddata" ng-change="pagos.changeStatus(tddata, trdata)" ng-if="trdata.tarifa != '-'">
+                              <select ng-model="tddata" ng-change="pagos.changeStatus(tddata, trdata, index)" ng-if="trdata.tarifa != '-'">
 
                                   <option ng-repeat="option in field.data.options" ng-if="!option.group && option.value != 'No importado' && (option | scope: session.type)" value="{{option.value}}" ng-selected="tddata == option.value">{{option.key}}</option>
                                   <optgroup ng-repeat="options in field.data.options" ng-if="options.group" label="{{options.group}}">
@@ -144,7 +144,8 @@
                       </span>
 
                       <span ng-if="key == '_id'">
-                        <a class="btn btn-success btn-xs glyphicon glyphicon-stats" ng-click="pagos.modalHistorial(trdata)"></a>
+                        <a ng-if="trdata.tarifa != '-'" class="btn btn-success btn-xs glyphicon glyphicon-stats" ng-click="pagos.modalHistorial(trdata)"></a>
+                        <a ng-if="trdata.debe != '0' && trdata.tarifa != '-'" class="btn btn-info btn-xs glyphicon glyphicon-send" ng-click="pagos.notificarAsociado(trdata)"></a>
                       </span>
 
                     </td>

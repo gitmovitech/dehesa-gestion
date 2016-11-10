@@ -34,6 +34,7 @@ MongoClient.connect(url, function (err, db) {
                 console.log('Collection ' + config.pages[x].collection + ' creada.');
             }
         }
+        database.createCollection('encuestas_respuestas');
     } else {
         console.log(err);
     }
@@ -165,7 +166,21 @@ var getCollection = function (collection, callback, data, join) {
             if (perm) {
                 var query = database.collection(collection);
                 if (data) {
-                    if (data.id) {
+                  if (data.uid && collection == 'asociados') {
+                    try{
+                      query.findOne({"id": data.uid}, function (err, response) {
+                          if (!err) {
+                              callback(response);
+                          } else {
+                              console.log(err)
+                              callback([]);
+                          }
+                      });
+                    } catch(e){
+                      callback([]);
+                    }
+                  } else if (data.id) {
+                      try{
                         query.findOne({"_id": ObjectID(data.id)}, function (err, response) {
                             if (!err) {
                                 callback(response);
@@ -174,8 +189,14 @@ var getCollection = function (collection, callback, data, join) {
                                 callback([]);
                             }
                         });
+                      } catch(e){
+                        callback([]);
+                      }
                     } else {
-                        query.find(JSON.parse(data)).sort( { id: 1 } ).toArray(function (err, response) {
+                      if(typeof data == 'string'){
+                        data = JSON.parse(data);
+                      }
+                        query.find(data).sort( { id: 1 } ).toArray(function (err, response) {
                             if (!err) {
                                 for (var x in response) {
                                     for (var y in response[x]) {
@@ -227,6 +248,8 @@ var getCollection = function (collection, callback, data, join) {
                         }
                     });
                 }
+            } else {
+              callback([]);
             }
         });
     } else {
@@ -508,7 +531,7 @@ exports.guardarImportacionPagos = function(pagos, cb){
               for(var z in response){
                 if(response[z].id == pagos.data[x].id){
                   if(response[z].type != 'No importado'){
-                    
+
                     if(response[z].pagado == 0){
                       database.collection('pagos').update({
                         run: pagos.data[x].run
