@@ -36,18 +36,8 @@
                   "required": true
               },
               {
-                  "name": "monitoreo",
-                  "title": "Monitoreo",
-                  "type": "text"
-              },
-              {
                   "name": "numero_cliente",
                   "title": "Nº Cliente",
-                  "type": "text"
-              },
-              {
-                  "name": "tipo_conexion",
-                  "title": "Tipo de conexión",
                   "type": "text"
               },
               {
@@ -94,11 +84,6 @@
                   "title": "Correo",
                   "type": "text",
                   "required": true
-              },
-              {
-                  "name": "correo_alternativo",
-                  "title": "Correo alternativo",
-                  "type": "email"
               },
               {
                   "name": "formas_pago",
