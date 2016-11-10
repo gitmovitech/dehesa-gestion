@@ -36,29 +36,11 @@
                   "required": true
               },
               {
-<<<<<<< HEAD
-=======
-                  "name": "monitoreo",
-                  "title": "Monitoreo",
-                  "type": "text",
-                  "hiddenlist": true
-              },
-              {
->>>>>>> 6e9cda83a9abd33fba03032be990c8103f67c35f
                   "name": "numero_cliente",
                   "title": "Nº Cliente",
                   "type": "text"
               },
               {
-<<<<<<< HEAD
-=======
-                  "name": "tipo_conexion",
-                  "title": "Tipo de conexión",
-                  "type": "text",
-                  "hiddenlist": true
-              },
-              {
->>>>>>> 6e9cda83a9abd33fba03032be990c8103f67c35f
                   "name": "fecha_ingreso",
                   "title": "Fecha ingreso",
                   "type": "text"
@@ -104,15 +86,6 @@
                   "required": true
               },
               {
-<<<<<<< HEAD
-=======
-                  "name": "correo_alternativo",
-                  "title": "Correo alternativo",
-                  "type": "email",
-                  "hiddenlist": true
-              },
-              {
->>>>>>> 6e9cda83a9abd33fba03032be990c8103f67c35f
                   "name": "formas_pago",
                   "title": "Formas de pago",
                   "type": "select",
