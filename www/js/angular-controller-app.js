@@ -1020,6 +1020,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         }*/
       },
       agregarPregunta: function(){
+        //this.preguntas.reverse();
         this.preguntas[this.preguntas.length] = {
           nombre: '',
           tipo: 'Selección simple',
@@ -1038,7 +1039,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
             }
           }
         }
-        this.preguntas.reverse();
+        //this.preguntas.reverse();
       },
       removerPregunta: function(index){
         if(confirm('¿Seguro que desea eliminar esta pregunta?')){
