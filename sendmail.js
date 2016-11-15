@@ -58,7 +58,7 @@ var notificarEncuesta = function (params, callback) {
         from: 'encuestas@jvdehesa.cl',
         toname: params.usuario,
         to: params.correo,
-        subject: 'Encuesta JVDehesa: '+params.titulo,
+        subject: 'Necesitamos tu opinión/ junta de vecinos jardín la dehesa',
         text: false,
         html: html
     }, function (response, err) {
