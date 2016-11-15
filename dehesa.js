@@ -702,7 +702,7 @@ app.post('/api/encuestas/enviar', function (req, res) {
                   if(contador_con_correo == 1)
                     sendmail.notificarEncuesta({
                       usuario: respuestas[x].usuario,
-                      correo: 'ximena.barbosa@gmail.com',
+                      correo: 'mespinoz@gmail.com',
                       titulo: encuesta.nombre,
                       url: 'http://www.jvdehesa.cl/encuestas?eid='+req.body.params.eid+'&uid='+respuestas[x]._id
                     });
