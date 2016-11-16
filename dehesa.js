@@ -702,7 +702,7 @@ app.post('/api/encuestas/enviar', function (req, res) {
                   if(contador_con_correo == 1)
                     sendmail.notificarEncuesta({
                       usuario: respuestas[x].usuario,
-                      correo: 'mespinoz@gmail.com',
+                      correo: 'apinto@briocom.cl',
                       titulo: encuesta.nombre,
                       url: 'http://www.jvdehesa.cl/encuestas?eid='+req.body.params.eid+'&uid='+respuestas[x]._id
                     });
@@ -713,13 +713,6 @@ app.post('/api/encuestas/enviar', function (req, res) {
                         titulo: encuesta.nombre,
                         url: 'http://www.jvdehesa.cl/encuestas?eid='+req.body.params.eid+'&uid='+respuestas[x]._id
                       });
-                      if(contador_con_correo == 3)
-                        sendmail.notificarEncuesta({
-                          usuario: respuestas[x].usuario,
-                          correo: 'apinto@briocom.cl',
-                          titulo: encuesta.nombre,
-                          url: 'http://www.jvdehesa.cl/encuestas?eid='+req.body.params.eid+'&uid='+respuestas[x]._id
-                        });
                         if(contador_con_correo == 4)
                           sendmail.notificarEncuesta({
                             usuario: respuestas[x].usuario,
