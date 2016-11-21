@@ -691,15 +691,15 @@ app.post('/api/encuestas/enviar', function (req, res) {
                   }
                   correo_segundos += 1000;
                   if(contador_con_correo == 0)
-                  //setTimeout(function(){
+                  setTimeout(function(){
                     sendmail.notificarEncuesta({
                       usuario: respuestas[x].usuario,
-                      correo: 'vvargas@movitech.cl',//correo
+                      correo: correo,
                       titulo: encuesta.nombre,
                       url: 'http://www.jvdehesa.cl/encuestas?eid='+req.body.params.eid+'&uid='+respuestas[x]._id
                     });
-                  //},correo_segundos);
-                  if(contador_con_correo == 1)
+                  },correo_segundos);
+                  /*if(contador_con_correo == 1)
                     sendmail.notificarEncuesta({
                       usuario: respuestas[x].usuario,
                       correo: 'apinto@briocom.cl',
@@ -720,7 +720,7 @@ app.post('/api/encuestas/enviar', function (req, res) {
                             titulo: encuesta.nombre,
                             url: 'http://www.jvdehesa.cl/encuestas?eid='+req.body.params.eid+'&uid='+respuestas[x]._id
                           });
-
+			*/
 
                   contador_con_correo++;
                 } else {
