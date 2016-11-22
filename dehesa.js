@@ -690,7 +690,7 @@ app.post('/api/encuestas/enviar', function (req, res) {
                     correo = respuestas[x].correo_alternativo;
                   }
                   correo_segundos += 1000;
-                  if(contador_con_correo == 0)
+                  //if(contador_con_correo == 0)
                   setTimeout(function(){
                     sendmail.notificarEncuesta({
                       usuario: respuestas[x].usuario,
