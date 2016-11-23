@@ -681,6 +681,14 @@ app.post('/api/encuestas/enviar', function (req, res) {
               var contador_con_correo = 0;
               var contador_sin_correo = 0;
               var correo_segundos = 0;
+              function enviarCorreo(usuario, subject, correo){
+                sendmail.notificarEncuesta({
+                  usuario: usuario,
+                  correo: correo,
+                  titulo: subject,
+                  url: 'http://www.jvdehesa.cl/encuestas?eid='+req.body.params.eid+'&uid='+respuestas[x]._id
+                });
+              }
               for(var x in respuestas){
                 if(validarEmail(respuestas[x].correo) || validarEmail(respuestas[x].correo_alternativo)){
                   var correo;
@@ -691,14 +699,7 @@ app.post('/api/encuestas/enviar', function (req, res) {
                   }
                   correo_segundos += 1000;
                   //if(contador_con_correo == 0)
-                  setTimeout(function(){
-                    sendmail.notificarEncuesta({
-                      usuario: respuestas[x].usuario,
-                      correo: correo,
-                      titulo: encuesta.nombre,
-                      url: 'http://www.jvdehesa.cl/encuestas?eid='+req.body.params.eid+'&uid='+respuestas[x]._id
-                    });
-                  },correo_segundos);
+                  setTimeout(enviarCorreo(respuestas[x].usuario, correo, encuesta.nombre), correo_segundos);
                   /*if(contador_con_correo == 1)
                     sendmail.notificarEncuesta({
                       usuario: respuestas[x].usuario,
