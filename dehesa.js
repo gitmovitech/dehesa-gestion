@@ -762,6 +762,8 @@ app.get('/api/encuestas/exportar/:eid/:token', function (req, res, next) {
               }
             }
           }
+
+          var subtitles = [];
           db.getCollection('encuestas_respuestas', function(respuestas){
             var data = [[
               'ID',
@@ -777,6 +779,7 @@ app.get('/api/encuestas/exportar/:eid/:token', function (req, res, next) {
                       data[0][data[0].length] = respuestas[i].data.preguntas[t].nombre;
                     }
                   }
+
                   var add = true;
                   for(var j in data){
                     if(data[j][0] == asociados[x].id){
@@ -787,11 +790,11 @@ app.get('/api/encuestas/exportar/:eid/:token', function (req, res, next) {
                   if(add){
                     data[data.length] = [asociados[x].id, asociados[x].usuario];
                   }
-                  delete add;
 
                   for(var t in respuestas[i].data.preguntas){
                     //console.log(respuestas[i].data.preguntas[t]);
                     if(respuestas[i].data.preguntas[t].tipo == 'Selección simple'){
+                      subtitles[t] = respuestas[i].data.preguntas[t].nombre;
                       for(var g in respuestas[i].data.preguntas[t].respuestas){
                         if(respuestas[i].data.preguntas[t].respuestas[g].valor){
                           data[data.length-1].push(respuestas[i].data.preguntas[t].respuestas[g].nombre);
@@ -800,6 +803,7 @@ app.get('/api/encuestas/exportar/:eid/:token', function (req, res, next) {
                       }
                     }
                     if(respuestas[i].data.preguntas[t].tipo == 'Selección múltiple'){
+                      subtitles[t] = respuestas[i].data.preguntas[t].nombre;
                       var respuestas_multiples = [];
                       for(var g in respuestas[i].data.preguntas[t].respuestas){
                         if(respuestas[i].data.preguntas[t].respuestas[g].valor){
@@ -809,21 +813,52 @@ app.get('/api/encuestas/exportar/:eid/:token', function (req, res, next) {
                       data[data.length-1].push(respuestas_multiples.join(', '));
                       delete respuestas_multiples;
                     }
+
                     if(respuestas[i].data.preguntas[t].tipo == 'Calificación'){
-                      var respuestas_calificacion = [];
+                      subtitles[t] = [];
+                      //var respuestas_calificacion = [];
                       for(var g in respuestas[i].data.preguntas[t].respuestas){
+
+                          add = true;
+                          for(var u in subtitles[t]){
+                            if(subtitles[t][u] == respuestas[i].data.preguntas[t].respuestas[g].nombre){
+                              add = false;
+                              break;
+                            }
+                          }
+                          if(add){
+                            subtitles[t][subtitles[t].length] = respuestas[i].data.preguntas[t].respuestas[g].nombre;
+                          }
+
                         if(respuestas[i].data.preguntas[t].respuestas[g].valor){
-                          respuestas_calificacion.push(respuestas[i].data.preguntas[t].respuestas[g].nombre +' = '+ respuestas[i].data.preguntas[t].respuestas[g].valor);
+                          data[data.length-1].push(respuestas[i].data.preguntas[t].respuestas[g].valor);
+                          //respuestas_calificacion.push(respuestas[i].data.preguntas[t].respuestas[g].nombre +' = '+ respuestas[i].data.preguntas[t].respuestas[g].valor);
+                        } else {
+                          data[data.length-1].push('');
                         }
                       }
-                      data[data.length-1].push(respuestas_calificacion.join(', '));
-                      delete respuestas_calificacion;
+                      //data[data.length-1].push(respuestas_calificacion.join(', '));
+                      //delete respuestas_calificacion;
                     }
+
                   }
                   break;
                 }
               }
             }
+
+            var tmpsubs = [];
+            for(var u in subtitles){
+              if(typeof subtitles[u] == 'object'){
+                for(var s in subtitles[u]){
+                  tmpsubs[tmpsubs.length] = subtitles[u][s];
+                }
+              } else {
+                tmpsubs[tmpsubs.length] = subtitles[u];
+              }
+            }
+            subtitles = tmpsubs;
+            data[0] = [data[0][0],data[0][1]].concat(subtitles);
             var buffer = xlsx.build([{name: nombre_encuesta, data: data}]);
             res.setHeader('Content-disposition', 'attachment; filename="encuesta.xlsx"');
             res.setHeader('Content-type', 'application/vnd.ms-excel');
