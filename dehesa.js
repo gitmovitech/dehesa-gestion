@@ -705,10 +705,12 @@ app.post('/api/encuestas/enviar', function (req, res) {
                     enviar = true;
                     for(var t in encuesta_respuesta){
                       if(encuesta_respuesta[t].id_asociado == respuestas[x]._id){
-                        console.log(respuestas[x])
+                        enviar = false;
+                        break;
                       }
                     }
-                    //setTimeout(enviarCorreo(respuestas[x].usuario, encuesta.nombre, correo), correo_segundos);
+                    if(enviar)
+                      setTimeout(enviarCorreo(respuestas[x].usuario, encuesta.nombre, correo), correo_segundos);
                     contador_con_correo++;
                   } else {
                     contador_sin_correo++;
