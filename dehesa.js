@@ -676,70 +676,58 @@ app.post('/api/encuestas/enviar', function (req, res) {
       if(response){
         db.getCollection('encuestas', function(encuesta){
 
-          db.getCollection('asociados', function(respuestas){
-            if(respuestas.length > 0){
-              var contador_con_correo = 0;
-              var contador_sin_correo = 0;
-              var correo_segundos = 0;
-              function enviarCorreo(usuario, subject, correo){
-                sendmail.notificarEncuesta({
-                  usuario: usuario,
-                  correo: correo,
-                  titulo: subject,
-                  url: 'http://www.jvdehesa.cl/encuestas?eid='+req.body.params.eid+'&uid='+respuestas[x]._id
-                });
-              }
-              for(var x in respuestas){
-                if(validarEmail(respuestas[x].correo) || validarEmail(respuestas[x].correo_alternativo)){
-                  var correo;
-                  if(validarEmail(respuestas[x].correo)){
-                    correo = respuestas[x].correo;
-                  } else {
-                    correo = respuestas[x].correo_alternativo;
-                  }
-                  correo_segundos += 1000;
-                  //if(contador_con_correo == 0)
-                  setTimeout(enviarCorreo(respuestas[x].usuario, encuesta.nombre, correo), correo_segundos);
-                  /*if(contador_con_correo == 1)
-                    sendmail.notificarEncuesta({
-                      usuario: respuestas[x].usuario,
-                      correo: 'apinto@briocom.cl',
-                      titulo: encuesta.nombre,
-                      url: 'http://www.jvdehesa.cl/encuestas?eid='+req.body.params.eid+'&uid='+respuestas[x]._id
-                    });
-                    if(contador_con_correo == 2)
-                      sendmail.notificarEncuesta({
-                        usuario: respuestas[x].usuario,
-                        correo: 'asalas@briocom.cl',
-                        titulo: encuesta.nombre,
-                        url: 'http://www.jvdehesa.cl/encuestas?eid='+req.body.params.eid+'&uid='+respuestas[x]._id
-                      });
-                        if(contador_con_correo == 4)
-                          sendmail.notificarEncuesta({
-                            usuario: respuestas[x].usuario,
-                            correo: 'blizamaleon@gmail.com',
-                            titulo: encuesta.nombre,
-                            url: 'http://www.jvdehesa.cl/encuestas?eid='+req.body.params.eid+'&uid='+respuestas[x]._id
-                          });
-			*/
+          db.getCollection('encuestas_respuestas', function(encuesta_respuesta){
 
-                  contador_con_correo++;
-                } else {
-                  contador_sin_correo++;
+            db.getCollection('asociados', function(respuestas){
+              if(respuestas.length > 0){
+                var contador_con_correo = 0;
+                var contador_sin_correo = 0;
+                var correo_segundos = 0;
+                var enviar = true;
+                function enviarCorreo(usuario, subject, correo){
+                  sendmail.notificarEncuesta({
+                    usuario: usuario,
+                    correo: correo,
+                    titulo: subject,
+                    url: 'http://www.jvdehesa.cl/encuestas?eid='+req.body.params.eid+'&uid='+respuestas[x]._id
+                  });
                 }
-              }
+                for(var x in respuestas){
+                  if(validarEmail(respuestas[x].correo) || validarEmail(respuestas[x].correo_alternativo)){
+                    var correo;
+                    if(validarEmail(respuestas[x].correo)){
+                      correo = respuestas[x].correo;
+                    } else {
+                      correo = respuestas[x].correo_alternativo;
+                    }
+                    correo_segundos += 1000;
+                    //if(contador_con_correo == 0)
+                    enviar = true;
+                    for(var t in encuesta_respuesta){
+                      if(encuesta_respuesta[t].id_asociado == respuestas[x]._id){
+                        console.log(respuestas[x])
+                      }
+                    }
+                    //setTimeout(enviarCorreo(respuestas[x].usuario, encuesta.nombre, correo), correo_segundos);
+                    contador_con_correo++;
+                  } else {
+                    contador_sin_correo++;
+                  }
+                }
 
-              if(contador_con_correo > 0 && contador_sin_correo > 0){
-                res.send({mensaje:'Se envió la encuesta a '+contador_con_correo+ ' asociados, pero '+contador_sin_correo+' registros no poseen correo electrónico.'});
-              } else if(contador_con_correo > 0){
-                res.send({mensaje:'Se envió la encuesta a '+contador_con_correo+ ' asociados'});
-              } else {
-                res.send({mensaje:'No se pudo enviar la encuesta debido a que no se encontraron correos válidos de los asociados'});
-              }
+                if(contador_con_correo > 0 && contador_sin_correo > 0){
+                  res.send({mensaje:'Se envió la encuesta a '+contador_con_correo+ ' asociados, pero '+contador_sin_correo+' registros no poseen correo electrónico.'});
+                } else if(contador_con_correo > 0){
+                  res.send({mensaje:'Se envió la encuesta a '+contador_con_correo+ ' asociados'});
+                } else {
+                  res.send({mensaje:'No se pudo enviar la encuesta debido a que no se encontraron correos válidos de los asociados'});
+                }
 
-            } else{
-              res.send({mensaje:'No hay asociados a quien enviar la encuesta'});
-            }
+              } else{
+                res.send({mensaje:'No hay asociados a quien enviar la encuesta'});
+              }
+            });
+
           });
 
         }, {id: req.body.params.eid});
