@@ -741,122 +741,140 @@ app.get('/api/encuestas/exportar/:eid/:token', function (req, res, next) {
   if(req.params.eid && req.params.token){
     getSession(req.params.token, function (response, err) {
       if(response){
-        db.getCollection('asociados', function(response){
-          var asociados = [];
-          for(var x in response){
-            if(validarEmail(response[x].correo) || validarEmail(response[x].correo_alternativo)){
-              asociados[asociados.length] = {
-                _id: response[x]._id,
-                id: response[x].id,
-                usuario: response[x].usuario
+
+        db.getCollection('encuestas_respuestas', function(encuesta_respuesta){
+
+          db.getCollection('asociados', function(response){
+            var asociados = [];
+            for(var x in response){
+              if(validarEmail(response[x].correo) || validarEmail(response[x].correo_alternativo)){
+                asociados[asociados.length] = {
+                  _id: response[x]._id,
+                  id: response[x].id,
+                  usuario: response[x].usuario
+                }
               }
             }
-          }
 
-          var subtitles = [];
-          db.getCollection('encuestas_respuestas', function(respuestas){
-            var data = [[
-              'ID',
-              'Nombre del asociado'
-            ]];
-            var nombre_encuesta = 'Encuesta';
-            for(var x in asociados){
-              for(var i in respuestas){
-                if(asociados[x]._id == respuestas[i].id_asociado){
-                  if(data.length == 1){
-                    nombre_encuesta = respuestas[i].data.nombre;
-                    for(var t in respuestas[i].data.preguntas){
-                      data[0][data[0].length] = respuestas[i].data.preguntas[t].nombre;
-                    }
-                  }
+            var subtitles = [];
+            db.getCollection('encuestas_respuestas', function(respuestas){
+              var data = [[
+                'ID',
+                'Nombre del asociado'
+              ]];
+              var nombre_encuesta = 'Encuesta';
+              var exportar = false;
 
-                  var add = true;
-                  for(var j in data){
-                    if(data[j][0] == asociados[x].id){
-                      add = false;
-                      break;
-                    }
+              for(var t in encuesta_respuesta){
+                for(var x in asociados){
+                  exportar = false;
+                  if(encuesta_respuesta[t].id_asociado == asociados[x]._id){
+                    exportar = true;
                   }
-                  if(add){
-                    data[data.length] = [asociados[x].id, asociados[x].usuario];
-                  }
-
-                  for(var t in respuestas[i].data.preguntas){
-                    //console.log(respuestas[i].data.preguntas[t]);
-                    if(respuestas[i].data.preguntas[t].tipo == 'Selección simple'){
-                      subtitles[t] = respuestas[i].data.preguntas[t].nombre;
-                      for(var g in respuestas[i].data.preguntas[t].respuestas){
-                        if(respuestas[i].data.preguntas[t].respuestas[g].valor){
-                          data[data.length-1].push(respuestas[i].data.preguntas[t].respuestas[g].nombre);
-                          break;
+                  if(exportar){
+                    for(var i in respuestas){
+                      if(asociados[x]._id == respuestas[i].id_asociado){
+                        if(data.length == 1){
+                          nombre_encuesta = respuestas[i].data.nombre;
+                          for(var t in respuestas[i].data.preguntas){
+                            data[0][data[0].length] = respuestas[i].data.preguntas[t].nombre;
+                          }
                         }
-                      }
-                    }
-                    if(respuestas[i].data.preguntas[t].tipo == 'Selección múltiple'){
-                      subtitles[t] = respuestas[i].data.preguntas[t].nombre;
-                      var respuestas_multiples = [];
-                      for(var g in respuestas[i].data.preguntas[t].respuestas){
-                        if(respuestas[i].data.preguntas[t].respuestas[g].valor){
-                          respuestas_multiples.push(respuestas[i].data.preguntas[t].respuestas[g].nombre);
+
+                        var add = true;
+                        for(var j in data){
+                          if(data[j][0] == asociados[x].id){
+                            add = false;
+                            break;
+                          }
                         }
-                      }
-                      data[data.length-1].push(respuestas_multiples.join(', '));
-                      delete respuestas_multiples;
-                    }
+                        if(add){
+                          data[data.length] = [asociados[x].id, asociados[x].usuario];
+                        }
 
-                    if(respuestas[i].data.preguntas[t].tipo == 'Calificación'){
-                      subtitles[t] = [];
-                      //var respuestas_calificacion = [];
-                      for(var g in respuestas[i].data.preguntas[t].respuestas){
-
-                          add = true;
-                          for(var u in subtitles[t]){
-                            if(subtitles[t][u] == respuestas[i].data.preguntas[t].respuestas[g].nombre){
-                              add = false;
-                              break;
+                        for(var t in respuestas[i].data.preguntas){
+                          //console.log(respuestas[i].data.preguntas[t]);
+                          if(respuestas[i].data.preguntas[t].tipo == 'Selección simple'){
+                            subtitles[t] = respuestas[i].data.preguntas[t].nombre;
+                            for(var g in respuestas[i].data.preguntas[t].respuestas){
+                              if(respuestas[i].data.preguntas[t].respuestas[g].valor){
+                                data[data.length-1].push(respuestas[i].data.preguntas[t].respuestas[g].nombre);
+                                break;
+                              }
                             }
                           }
-                          if(add){
-                            subtitles[t][subtitles[t].length] = respuestas[i].data.preguntas[t].respuestas[g].nombre;
+                          if(respuestas[i].data.preguntas[t].tipo == 'Selección múltiple'){
+                            subtitles[t] = respuestas[i].data.preguntas[t].nombre;
+                            var respuestas_multiples = [];
+                            for(var g in respuestas[i].data.preguntas[t].respuestas){
+                              if(respuestas[i].data.preguntas[t].respuestas[g].valor){
+                                respuestas_multiples.push(respuestas[i].data.preguntas[t].respuestas[g].nombre);
+                              }
+                            }
+                            data[data.length-1].push(respuestas_multiples.join(', '));
+                            delete respuestas_multiples;
                           }
 
-                        if(respuestas[i].data.preguntas[t].respuestas[g].valor){
-                          data[data.length-1].push(respuestas[i].data.preguntas[t].respuestas[g].valor);
-                          //respuestas_calificacion.push(respuestas[i].data.preguntas[t].respuestas[g].nombre +' = '+ respuestas[i].data.preguntas[t].respuestas[g].valor);
-                        } else {
-                          data[data.length-1].push('');
+                          if(respuestas[i].data.preguntas[t].tipo == 'Calificación'){
+                            subtitles[t] = [];
+                            //var respuestas_calificacion = [];
+                            for(var g in respuestas[i].data.preguntas[t].respuestas){
+
+                                add = true;
+                                for(var u in subtitles[t]){
+                                  if(subtitles[t][u] == respuestas[i].data.preguntas[t].respuestas[g].nombre){
+                                    add = false;
+                                    break;
+                                  }
+                                }
+                                if(add){
+                                  subtitles[t][subtitles[t].length] = respuestas[i].data.preguntas[t].respuestas[g].nombre;
+                                }
+
+                              if(respuestas[i].data.preguntas[t].respuestas[g].valor){
+                                data[data.length-1].push(respuestas[i].data.preguntas[t].respuestas[g].valor);
+                                //respuestas_calificacion.push(respuestas[i].data.preguntas[t].respuestas[g].nombre +' = '+ respuestas[i].data.preguntas[t].respuestas[g].valor);
+                              } else {
+                                data[data.length-1].push('');
+                              }
+                            }
+                            //data[data.length-1].push(respuestas_calificacion.join(', '));
+                            //delete respuestas_calificacion;
+                          }
+
                         }
+                        break;
                       }
-                      //data[data.length-1].push(respuestas_calificacion.join(', '));
-                      //delete respuestas_calificacion;
                     }
 
                   }
-                  break;
-                }
-              }
-            }
 
-            var tmpsubs = [];
-            for(var u in subtitles){
-              if(typeof subtitles[u] == 'object'){
-                for(var s in subtitles[u]){
-                  tmpsubs[tmpsubs.length] = subtitles[u][s];
                 }
-              } else {
-                tmpsubs[tmpsubs.length] = subtitles[u];
               }
-            }
-            subtitles = tmpsubs;
-            data[0] = [data[0][0],data[0][1]].concat(subtitles);
-            var buffer = xlsx.build([{name: nombre_encuesta, data: data}]);
-            res.setHeader('Content-disposition', 'attachment; filename="encuesta.xlsx"');
-            res.setHeader('Content-type', 'application/vnd.ms-excel');
-            res.end(buffer);
-          }, {
-            id_encuesta: req.params.eid
+
+              var tmpsubs = [];
+              for(var u in subtitles){
+                if(typeof subtitles[u] == 'object'){
+                  for(var s in subtitles[u]){
+                    tmpsubs[tmpsubs.length] = subtitles[u][s];
+                  }
+                } else {
+                  tmpsubs[tmpsubs.length] = subtitles[u];
+                }
+              }
+              subtitles = tmpsubs;
+              data[0] = [data[0][0],data[0][1]].concat(subtitles);
+              var buffer = xlsx.build([{name: nombre_encuesta, data: data}]);
+              res.setHeader('Content-disposition', 'attachment; filename="encuesta.xlsx"');
+              res.setHeader('Content-type', 'application/vnd.ms-excel');
+              res.end(buffer);
+            }, {
+              id_encuesta: req.params.eid
+            });
           });
+
         });
+
       } else {
         var buffer = xlsx.build([{name: 'encuesta', data: [['Sin respuestas']]}]);
         res.setHeader('Content-disposition', 'attachment; filename="encuesta.xlsx"');
