@@ -769,6 +769,7 @@ app.get('/api/encuestas/exportar/:eid/:token', function (req, res, next) {
                 for(var x in asociados){
                   exportar = false;
                   if(encuesta_respuesta[t].id_asociado == asociados[x]._id){
+                    console.log(encuesta_respuesta[t].id_asociado, asociados[x]._id);
                     exportar = true;
                   }
                   if(exportar){
@@ -846,7 +847,7 @@ app.get('/api/encuestas/exportar/:eid/:token', function (req, res, next) {
                         break;
                       }
                     }
-
+                    break;
                   }
 
                 }
