@@ -370,10 +370,10 @@ app.post('/api/data/import/excel', function (req, res) {
         getSession(req.body.params.token, function (userdata, err) {
             if (userdata) {
               var registros_importados = [];
-              var run = '';
+              var id = '';
                 importPagos.import(req.body.params, function (importacion) {
                   if(importacion.success){
-                    db.getModelos(function(modelos){
+                    /*db.getModelos(function(modelos){
                       db.getServicios(function(servicios){
 
                         var valorservicios = '';
@@ -384,16 +384,16 @@ app.post('/api/data/import/excel', function (req, res) {
                           valorservicios = valorservicios.replace(/,/g,'.');
                           sumaservicios += parseFloat(valorservicios);
                         }
-
+*/
                         db.getAsociados(function(asociados){
                           var month = false;
                           for(var x in asociados){
-                            run = asociados[x].run;
+                            id = asociados[x].id;
                             registros_importados[x] = {
                               _id: asociados[x]._id,
                               id: asociados[x].id,
                               nombre: asociados[x].usuario,
-                              run: run,
+                              run: asociados[x].run,
                               codigo: '-',
                               tarifa:'-',
                               estado: 'No importado',
@@ -406,15 +406,16 @@ app.post('/api/data/import/excel', function (req, res) {
                               month: ''
                             }
                             for(var i in importacion.data){
-                              if(importacion.data[i].run == run){
+                              if(importacion.data[i].id == id){
                                 registros_importados[x].month = importacion.data[i].month
                                 registros_importados[x].codigo = importacion.data[i].codigo;
                                 registros_importados[x].estado = 'Pendiente';
                                 registros_importados[x].pagado = 0;
+                                registros_importados[x].tarifa = parseFloat(modelos[t].valor);
                                 if(!month){
                                   month = importacion.data[i].month;
                                 }
-                                for(var t in modelos){
+                                /*for(var t in modelos){
                                   if(modelos[t]._id == asociados[x].tipo_casa){
                                     modelos[t].valor = modelos[t].valor.toString();
                                     modelos[t].valor = modelos[t].valor.replace(/,/,'.');
@@ -426,7 +427,7 @@ app.post('/api/data/import/excel', function (req, res) {
                                     registros_importados[x].debe = parseFloat(modelos[t].valor);
                                     break;
                                   }
-                                }
+                                }*/
                                 break;
                               }
                             }
@@ -441,8 +442,8 @@ app.post('/api/data/import/excel', function (req, res) {
                             });
                           });
                         });
-                      });
-                    });
+                      /*});
+                    });*/
                   } else {
                     res.send(importacion);
                   }
