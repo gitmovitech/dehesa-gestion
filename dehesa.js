@@ -414,26 +414,28 @@ app.post('/api/data/import/excel', function (req, res) {
                                 if(!month){
                                   month = importacion.data[i].month;
                                 }
-                                if(importacion.data[i].pago.toString().toUpperCase() == 'PAT' || importacion.data[i].pago.toString().toUpperCase() == 'PAT ANUAL'){
-                                  registros_importados[x].cobrodelmes = importacion.data[i].tarifa * req.body.params.uf;
-                                  registros_importados[x].month = month;
-                                  registros_importados[x].pagado = registros_importados[x].cobrodelmes;
-                                  registros_importados[x].debe = 0;
-                                  registros_importados[x].estado = 'Aprobada';
-                                }
-                                if(importacion.data[i].pago.toString().toUpperCase() == 'PAC'){
-                                  registros_importados[x].cobrodelmes = importacion.data[i].tarifa * req.body.params.uf;
-                                  registros_importados[x].month = month;
-                                  registros_importados[x].pagado = registros_importados[x].cobrodelmes;
-                                  registros_importados[x].debe = 0;
-                                  registros_importados[x].estado = 'Pagos Procesados';
-                                }
-                                if(importacion.data[i].pago.toString().toUpperCase() == 'P/OFICINA' || importacion.data[i].pago.toString().toUpperCase() == 'OFICINA'){
-                                  registros_importados[x].cobrodelmes = importacion.data[i].tarifa * req.body.params.uf;
-                                  registros_importados[x].month = month;
-                                  registros_importados[x].pagado = registros_importados[x].cobrodelmes;
-                                  registros_importados[x].debe = 0;
-                                  registros_importados[x].estado = 'Pagado en efectivo';
+                                if(importacion.data[i].pago){
+                                  if(importacion.data[i].pago.toString().toUpperCase() == 'PAT' || importacion.data[i].pago.toString().toUpperCase() == 'PAT ANUAL'){
+                                    registros_importados[x].cobrodelmes = importacion.data[i].tarifa * req.body.params.uf;
+                                    registros_importados[x].month = month;
+                                    registros_importados[x].pagado = registros_importados[x].cobrodelmes;
+                                    registros_importados[x].debe = 0;
+                                    registros_importados[x].estado = 'Aprobada';
+                                  }
+                                  if(importacion.data[i].pago.toString().toUpperCase() == 'PAC'){
+                                    registros_importados[x].cobrodelmes = importacion.data[i].tarifa * req.body.params.uf;
+                                    registros_importados[x].month = month;
+                                    registros_importados[x].pagado = registros_importados[x].cobrodelmes;
+                                    registros_importados[x].debe = 0;
+                                    registros_importados[x].estado = 'Pagos Procesados';
+                                  }
+                                  if(importacion.data[i].pago.toString().toUpperCase() == 'P/OFICINA' || importacion.data[i].pago.toString().toUpperCase() == 'OFICINA'){
+                                    registros_importados[x].cobrodelmes = importacion.data[i].tarifa * req.body.params.uf;
+                                    registros_importados[x].month = month;
+                                    registros_importados[x].pagado = registros_importados[x].cobrodelmes;
+                                    registros_importados[x].debe = 0;
+                                    registros_importados[x].estado = 'Pagado en efectivo';
+                                  }
                                 }
                                 /*for(var t in modelos){
                                   if(modelos[t]._id == asociados[x].tipo_casa){
