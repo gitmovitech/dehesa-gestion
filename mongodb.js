@@ -523,7 +523,8 @@ exports.guardarImportacionPagos = function(pagos, cb){
     database.collection('pagos').find({
       year:pagos.year,
       month: pagos.month
-    }).toArray(function(err, response){num=0;
+    }).toArray(function(err, response){
+      num=0;
       if(response.length > 0){
         for(var t in asociados){
           for(var x in pagos.data){
@@ -534,12 +535,11 @@ exports.guardarImportacionPagos = function(pagos, cb){
 
                     if(response[z].pagado == 0){
                       database.collection('pagos').update({
-                        run: pagos.data[x].run
+                        id: pagos.data[x].id
                       }, {
                         $set: {
                           id: pagos.data[x].id,
                           nombre: pagos.data[x].nombre,
-                          codigo: pagos.data[x].codigo,
                           tarifa: pagos.data[x].tarifa,
                           type: pagos.data[x].estado,
                           pagado: pagos.data[x].pagado,
@@ -565,8 +565,6 @@ exports.guardarImportacionPagos = function(pagos, cb){
               database.collection('pagos').insert({
                 id: pagos.data[x].id,
                 nombre: pagos.data[x].nombre,
-                run: pagos.data[x].run,
-                codigo: pagos.data[x].codigo,
                 tarifa: pagos.data[x].tarifa,
                 type: pagos.data[x].estado,
                 pagado: pagos.data[x].pagado,
@@ -617,7 +615,7 @@ exports.pagar = function (data, cb) {
         case 'Rechazo Tarjeta Vencida':
         case 'Cheque recibido':
           database.collection('pagos').update({
-              run: data.run,
+              id: data.id,
               month: data.month,
               year: data.year
           }, {
@@ -635,7 +633,7 @@ exports.pagar = function (data, cb) {
         case "Pagos Procesados":
         case "Aprobada":
           database.collection('pagos').findOne({
-              run: data.run,
+              id: data.id,
               month: data.month,
               year: data.year
           }, function(err, response){
@@ -656,9 +654,8 @@ exports.pagar = function (data, cb) {
               data.excedentes = data.pago - data.cobrodelmes;
               data.debe = 0;
             }
-            console.log('excedentes', data.excedentes);
             database.collection('pagos').update({
-                run: data.run,
+                id: data.id,
                 month: data.month,
                 year: data.year
             }, {
@@ -666,10 +663,11 @@ exports.pagar = function (data, cb) {
                     type: data.status,
                     excedentes: data.excedentes,
                     debe: data.debe,
-                    pagado: data.pago
+                    pagado: Math.round(data.pago)
                 }
+            }, function(err, response){
+              cb();
             });
-            cb();
           });
         break;
       }

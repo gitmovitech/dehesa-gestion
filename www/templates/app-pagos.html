@@ -94,14 +94,13 @@
 
                       <span class="text-danger" ng-if="key == 'index'"><b>{{tddata}}</b></span>
                       <span ng-if="key == 'id'"><b>{{tddata}}</b></span>
-                      <span ng-if="key == 'nombre' || key == 'run' || key == 'codigo'">{{tddata}}</span>
+                      <span ng-if="key == 'nombre'">{{tddata}}</span>
 
                       <span ng-if="key == 'tarifa'">
-                          <b class="text-info" ng-if="tddata.total">
-                            {{tddata.totalpesos | currency}}
-                            <span class="text-success"> ({{tddata.total}} UF)</span>
+                          <b class="text-info">
+                            {{pagos.currentUF * tddata | currency}}
+                            <span class="text-success"> ({{tddata}} UF)</span>
                           </b>
-                          <span ng-if="!tddata.total">-</span>
                       </span>
 
                       <!--ESTADOS DE PAGOS-->

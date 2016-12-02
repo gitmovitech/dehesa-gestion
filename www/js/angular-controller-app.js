@@ -121,8 +121,6 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                                     index: parseInt(parseInt(d) + parseInt(1)),
                                     _id: response.data[d]._id,
                                     nombre: response.data[d].nombre,
-                                    run: RutHelper.format(response.data[d].run),
-                                    codigo: response.data[d].codigo,
                                     tarifa: response.data[d].tarifa,
                                     type: response.data[d].type
                                 }
@@ -361,17 +359,19 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                     params: {
                         token: Session.get(),
                         filename: $scope.uploader.queue[0].file.name,
-                        periodo: excelPeriodo
+                        periodo: excelPeriodo,
+                        uf: $scope.pagos.currentUF
                     }
                 }).success(function (response) {
                     if (response.success) {
-                        jQuery('#modalCSVpagos').modal('hide');
-                        setTimeout(function () {
-                            $scope.uploader.destroy();
-                            delete $scope.uploader;
-                            setUploader();
-                        }, 500);
-                        $scope.load($scope.page);
+
+                      jQuery('#modalCSVpagos').modal('hide');
+                      setTimeout(function () {
+                          $scope.uploader.destroy();
+                          delete $scope.uploader;
+                          setUploader();
+                      }, 500);
+                      $scope.load($scope.page);
                     } else if (response.message) {
                         alert(response.message);
                         if (response.logout) {
@@ -533,6 +533,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         }).success(function (response) {
             if (response.success) {
                 if (response.data.length > 0) {
+                  $scope.pagos.valoresuf = response.data;
                     var valor = false;
                     for (var x in response.data) {
                         if (periodos_months[month] == response.data[x].mes && year == response.data[x].year) {
@@ -542,6 +543,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                     }
                     if (valor) {
                         $scope.valoruf = valor;
+                        $scope.pagos.currentUF = valor.toString().replace(',','.');
 
                         $http.get('/api/data', {
                             params: params
@@ -551,14 +553,12 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                                 var tarifa;
                                 var total;
                                 for (var d in response.data) {
-                                    response.data[d].tarifa.totalpesos = response.data[d].tarifa.total * parseFloat($scope.valoruf);
+                                    //response.data[d].tarifa.totalpesos = response.data[d].tarifa.total * parseFloat($scope.valoruf);
                                     registros[registros.length] = {
                                         _id: response.data[d]._id,
                                         index: parseInt(parseInt(d) + parseInt(1)),
                                         id: response.data[d].id,
                                         nombre: response.data[d].nombre,
-                                        run: RutHelper.format(response.data[d].run),
-                                        codigo: response.data[d].codigo,
                                         tarifa: response.data[d].tarifa,
                                         type: response.data[d].type,
                                         pagado: response.data[d].pagado,
@@ -578,7 +578,6 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
 
                     } else {
                       jQuery('body').loader('hide');
-                        $scope.tabledata = $scope.valoruf = $scope.registros = false;
                         alert('No hay valores UF cargados de ' + months[month]+ '. \nVaya a la sección "Valores UF" y agregue el valor UF del mes');
                     }
                 } else {
@@ -612,6 +611,8 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
     }
 
     $scope.pagos = {
+      valoresuf:[],
+      currentUF:'',
         periodos: periodos,
         tabYearActive: null,
         yearActive: null,
@@ -719,7 +720,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
               case 'Cheque recibido':
               if(confirm('¿Desea cambiar el estado de este pago a "'+ select +'"?')){
                 paramsdata = {
-                    run: data.run,
+                    id: data.id,
                     month: this.tabMonthActive,
                     year: this.yearActive,
                     status: select
@@ -737,15 +738,15 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                 alert('El asociado no posee excedentes para realizar el pago');
                 obtenerPagos(this.yearActive, this.monthActive);
               } else{
-                pagado = prompt('Total a pagar', Math.round(data.tarifa.totalpesos));
+                pagado = prompt('Total a pagar', Math.round(data.tarifa*$scope.pagos.currentUF));
                 if (pagado) {
                   paramsdata = {
-                      run: data.run,
+                      id: data.id,
                       pago: pagado,
                       month: this.tabMonthActive,
                       year: this.yearActive,
                       status: select,
-                      cobrodelmes: Math.round(data.tarifa.totalpesos)
+                      cobrodelmes: Math.round(data.tarifa*$scope.pagos.currentUF)
                   }
                 } else {
                   $scope.tabledata[index] = null;
@@ -763,17 +764,17 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
               case "Pagos Procesados":
               case "Aprobada":
                 if(select == 'Pagado fuera de plazo (+ 20%)'){
-                  data.tarifa.totalpesos = data.tarifa.totalpesos * 1.2;
+                  data.tarifa = data.tarifa*$scope.pagos.currentUF * 1.2;
                 }
-                pagado = prompt('Total a pagar', Math.round(data.tarifa.totalpesos));
+                pagado = prompt('Total a pagar', Math.round(data.tarifa*$scope.pagos.currentUF));
                 if (pagado) {
                   paramsdata = {
-                      run: data.run,
+                      id: data.id,
                       pago: pagado,
                       month: this.tabMonthActive,
                       year: this.yearActive,
                       status: select,
-                      cobrodelmes: Math.round(data.tarifa.totalpesos)
+                      cobrodelmes: Math.round(data.tarifa*$scope.pagos.currentUF)
                   }
                 } else {
                   $scope.tabledata[index] = null;
@@ -874,6 +875,16 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
           jQuery('body').loader('show');
             this.tabMonthActive = index;
             this.monthActive = month;
+            var valor = false;
+            for (var x in $scope.pagos.valoresuf) {
+                if (month == $scope.pagos.valoresuf[x].mes && year == $scope.pagos.valoresuf[x].year) {
+                    valor = $scope.pagos.valoresuf[x].valor;
+                    break;
+                }
+            }
+            if (valor) {
+              $scope.pagos.currentUF = valor.toString().replace(',','.');
+            }
             obtenerPagos(year, month);
         },
         search: function () {

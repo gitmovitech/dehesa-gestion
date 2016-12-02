@@ -252,18 +252,6 @@
                     "type": "text"
                 },
                 {
-                    "name": "run",
-                    "title": "RUN",
-                    "type": "text",
-                    "required": true
-                },
-                {
-                    "name": "codigo",
-                    "title": "Código",
-                    "type": "text",
-                    "required": true
-                },
-                {
                     "name": "tarifa",
                     "title": "Tarifa",
                     "type": "text",

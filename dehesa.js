@@ -16,7 +16,9 @@ var sendmail = require('./sendmail');
 var config = require('./config');
 var atob = require('atob');
 var meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+var currentToken = false;
 var getSession = function (token, callback) {
+  currentToken = false;
     var session = jwt.decode(token);
     if (session) {
         db.getUserByEmail(session.email, function (response, err) {
@@ -25,6 +27,7 @@ var getSession = function (token, callback) {
                     if (err) {
                         callback(false, err);
                     } else {
+                      currentToken = token;
                         callback(response);
                     }
                 });
@@ -388,7 +391,6 @@ app.post('/api/data/import/excel', function (req, res) {
                         db.getAsociados(function(asociados){
                           var month = false;
                           for(var x in asociados){
-                            id = asociados[x].id;
                             registros_importados[x] = {
                               _id: asociados[x]._id,
                               id: asociados[x].id,
@@ -404,14 +406,34 @@ app.post('/api/data/import/excel', function (req, res) {
                               month: ''
                             }
                             for(var i in importacion.data){
-                              if(importacion.data[i].id == id){
+                              if(importacion.data[i].id == asociados[x].id){
                                 registros_importados[x].month = importacion.data[i].month
-                                registros_importados[x].codigo = importacion.data[i].codigo;
                                 registros_importados[x].estado = 'Pendiente';
                                 registros_importados[x].pagado = 0;
-                                registros_importados[x].tarifa = parseFloat(modelos[t].valor);
+                                registros_importados[x].tarifa = importacion.data[i].tarifa;
                                 if(!month){
                                   month = importacion.data[i].month;
+                                }
+                                if(importacion.data[i].pago.toString().toUpperCase() == 'PAT' || importacion.data[i].pago.toString().toUpperCase() == 'PAT ANUAL'){
+                                  registros_importados[x].cobrodelmes = importacion.data[i].tarifa * req.body.params.uf;
+                                  registros_importados[x].month = month;
+                                  registros_importados[x].pagado = registros_importados[x].cobrodelmes;
+                                  registros_importados[x].debe = 0;
+                                  registros_importados[x].estado = 'Aprobada';
+                                }
+                                if(importacion.data[i].pago.toString().toUpperCase() == 'PAC'){
+                                  registros_importados[x].cobrodelmes = importacion.data[i].tarifa * req.body.params.uf;
+                                  registros_importados[x].month = month;
+                                  registros_importados[x].pagado = registros_importados[x].cobrodelmes;
+                                  registros_importados[x].debe = 0;
+                                  registros_importados[x].estado = 'Pagos Procesados';
+                                }
+                                if(importacion.data[i].pago.toString().toUpperCase() == 'P/OFICINA' || importacion.data[i].pago.toString().toUpperCase() == 'OFICINA'){
+                                  registros_importados[x].cobrodelmes = importacion.data[i].tarifa * req.body.params.uf;
+                                  registros_importados[x].month = month;
+                                  registros_importados[x].pagado = registros_importados[x].cobrodelmes;
+                                  registros_importados[x].debe = 0;
+                                  registros_importados[x].estado = 'Pagado en efectivo';
                                 }
                                 /*for(var t in modelos){
                                   if(modelos[t]._id == asociados[x].tipo_casa){
@@ -436,7 +458,7 @@ app.post('/api/data/import/excel', function (req, res) {
                               month: month,
                               year: req.body.params.periodo.year
                             }, function (response) {
-                                res.send({success:true});
+                              res.send({success:true});
                             });
                           });
                         });
@@ -579,7 +601,6 @@ app.post('/api/pagar', function (req, res) {
             if (response) {
                 var data = req.body.params.data;
                 data.usuario = response;
-                data.run = RutJS.cleanRut(data.run);
                 db.pagar(data, function () {
                     res.send('OK');
                 });
