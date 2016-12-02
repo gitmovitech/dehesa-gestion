@@ -29,21 +29,21 @@ exports.import = function(params, cb){
       var run = '';
       for(var x in data){
         if(x > 0){
-          if (data[x][0] && data[x][1] && data[x][2]){
+          /*if (data[x][0] && data[x][1] && data[x][2]){
             run = data[x][0];
             run = run.toString();
             run = run.replace('-','');
             run = run.split(',');
             run = run.join('');
             run = run.split('.');
-            run = run.join('');
+            run = run.join('');*/
             registros[registros.length] = {
-              run: run,
-              codigo: data[x][1],
+              id: data[x][0],
+              pago: data[x][1],
               tarifa: data[x][2],
               month: thismonth
             }
-          }
+          //}
         }
       }
       cb({

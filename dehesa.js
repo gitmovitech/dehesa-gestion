@@ -393,8 +393,6 @@ app.post('/api/data/import/excel', function (req, res) {
                               _id: asociados[x]._id,
                               id: asociados[x].id,
                               nombre: asociados[x].usuario,
-                              run: asociados[x].run,
-                              codigo: '-',
                               tarifa:'-',
                               estado: 'No importado',
                               pagado:'-',
