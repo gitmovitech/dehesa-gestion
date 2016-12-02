@@ -22,7 +22,7 @@ if (process.argv[2]) {
                     tipo_conexion: data[x][3],*/
                     fecha_ingreso: new Date(1900, 0, data[x][4] - 1).getTime(),
                     usuario: data[x][5],
-                    run: data[x][6].toUpperCase(),
+                    run: data[x][6].toString().toUpperCase(),
                     nombre: data[x][7],
                     direccion: data[x][8],
                     numeracion: data[x][9],
