@@ -11,10 +11,8 @@ if (process.argv[2]) {
         fecha
     }
     var findiInsertRut = function (db, data, x) {
-      var rut = data[x][6];
-      rut = rut.toString();
         db.collection('asociados').findOne({
-            run: RutJS.cleanRut(rut)
+            id: data[x][0]
         }, function (err, response) {
             if (!response) {
                 var json = {
@@ -24,7 +22,7 @@ if (process.argv[2]) {
                     tipo_conexion: data[x][3],*/
                     fecha_ingreso: new Date(1900, 0, data[x][4] - 1).getTime(),
                     usuario: data[x][5],
-                    run: RutJS.cleanRut(rut),
+                    run: data[x][6].toUpperCase(),
                     nombre: data[x][7],
                     direccion: data[x][8],
                     numeracion: data[x][9],
