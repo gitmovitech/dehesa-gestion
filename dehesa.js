@@ -414,6 +414,7 @@ app.post('/api/data/import/excel', function (req, res) {
                                 if(!month){
                                   month = importacion.data[i].month;
                                 }
+                                registros_importados[x].debe = importacion.data[i].tarifa * req.body.params.uf;
                                 if(importacion.data[i].pago){
                                   if(importacion.data[i].pago.toString().toUpperCase() == 'PAT' || importacion.data[i].pago.toString().toUpperCase() == 'PAT ANUAL'){
                                     registros_importados[x].cobrodelmes = importacion.data[i].tarifa * req.body.params.uf;
@@ -436,8 +437,6 @@ app.post('/api/data/import/excel', function (req, res) {
                                     registros_importados[x].debe = 0;
                                     registros_importados[x].estado = 'Pagado en efectivo';
                                   }
-                                } else {
-                                  registros_importados[x].debe = importacion.data[i].tarifa * req.body.params.uf;
                                 }
                                 /*for(var t in modelos){
                                   if(modelos[t]._id == asociados[x].tipo_casa){
