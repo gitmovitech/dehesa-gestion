@@ -436,6 +436,8 @@ app.post('/api/data/import/excel', function (req, res) {
                                     registros_importados[x].debe = 0;
                                     registros_importados[x].estado = 'Pagado en efectivo';
                                   }
+                                } else {
+                                  registros_importados[x].debe = importacion.data[i].tarifa * req.body.params.uf;
                                 }
                                 /*for(var t in modelos){
                                   if(modelos[t]._id == asociados[x].tipo_casa){
