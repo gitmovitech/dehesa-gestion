@@ -36,11 +36,6 @@
                   "required": true
               },
               {
-                  "name": "numero_cliente",
-                  "title": "Nº Cliente",
-                  "type": "text"
-              },
-              {
                   "name": "fecha_ingreso",
                   "title": "Fecha ingreso",
                   "type": "text"

@@ -53,6 +53,7 @@ if (process.argv[2]) {
                 for (var x in data) {
                     if (x > 0) {
                         if (data[x][0]) {
+                          console.log('Procesando '+data[x][0]);
                             /*if (!RutJS.isValid(data[x][6])) {
                                 console.log('EL RUT:' + data[x][6] + ' es inválido');
                             } else {*/
