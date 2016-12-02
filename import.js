@@ -19,9 +19,9 @@ if (process.argv[2]) {
             if (!response) {
                 var json = {
                     id: data[x][0],
-                    monitoreo: data[x][1],
+                    /*monitoreo: data[x][1],
                     numero_cliente: data[x][2],
-                    tipo_conexion: data[x][3],
+                    tipo_conexion: data[x][3],*/
                     fecha_ingreso: new Date(1900, 0, data[x][4] - 1).getTime(),
                     usuario: data[x][5],
                     run: RutJS.cleanRut(rut),
