@@ -414,7 +414,7 @@ app.post('/api/data/import/excel', function (req, res) {
                                 if(!month){
                                   month = importacion.data[i].month;
                                 }
-                                registros_importados[x].debe = importacion.data[i].tarifa * req.body.params.uf;
+                                registros_importados[x].debe = importacion.data[i].tarifa;
                                 if(importacion.data[i].pago){
                                   if(importacion.data[i].pago.toString().toUpperCase() == 'PAT' || importacion.data[i].pago.toString().toUpperCase() == 'PAT ANUAL'){
                                     registros_importados[x].cobrodelmes = importacion.data[i].tarifa * req.body.params.uf;
