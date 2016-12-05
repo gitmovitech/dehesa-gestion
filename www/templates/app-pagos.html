@@ -26,7 +26,7 @@
                       <td>{{item.tarifa}}</td>
                       <td>{{item.type}}</td>
                       <td>{{item.pagado | currency}}</td>
-                      <td>{{item.debe | transformarUFdelMes:item.month | currency}}</td>
+                      <td>{{item.debe | transformarUFdelMes:item.month:item.year | currency}}</td>
                       <td>{{item.excedentes | currency}}</td>
                       <td>{{item.comentarios}}</td>
                     </tr>

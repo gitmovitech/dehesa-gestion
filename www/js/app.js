@@ -85,7 +85,7 @@ app.filter('tipo_casa', function () {
     }
 });
 app.filter('transformarUFdelMes', function(){
-  return function(input, month){
+  return function(input, month, year){
     if(sessionStorage.valoresuf){
       var periodos_months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
       var ufs = JSON.parse(sessionStorage.valoresuf);
