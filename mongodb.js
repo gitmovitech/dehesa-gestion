@@ -671,7 +671,6 @@ exports.pagar = function (data, cb) {
             ufs.valor = ufs.valor.toString();
             ufs.valor = ufs.valor.replace(',','.');
             ufs.valor = parseFloat(ufs.valor);
-            console.log('ufs', ufs);
 
             //OBTENER DATOS MES ANTERIOR
             var month = data.month - 1;
@@ -680,16 +679,12 @@ exports.pagar = function (data, cb) {
               month == 11;
               year--;
             }
-            console.log({
-                id: data.id,
-                month: month,
-                year: year
-            });
             database.collection('pagos').findOne({
                 id: data.id,
                 month: month,
                 year: year
             }, function(err, pago){
+              console.log('pago', pago)
               var debe = pago.debe * ufs.valor;
               var excedentes = pago.excedentes;
               data.excedentes = excedentes;
