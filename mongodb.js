@@ -672,9 +672,18 @@ exports.pagar = function (data, cb) {
             } else {
               data.excedentes = 0;
             }
-            obtenerDeudasAnteriores(data, 0, function(data){
-              console.log(data);
+
+            database.collection('pagos').find({
+                id: data.id,
+                month: {$lt: data.month},
+                year: data.year
+            }).toArray(function(err, data){
+              obtenerDeudasAnteriores(data, 0, function(data){
+                console.log(data);
+              });
             });
+
+
             if (data.cobrodelmes == data.pago) {
               if(data.status == 'Pagado con excedentes'){
                 data.excedentes = data.excedentes - data.pago;
