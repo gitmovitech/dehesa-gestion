@@ -705,9 +705,9 @@ exports.pagar = function (data, cb) {
                 data.debe = 0;
               }
               console.log(data);
-cb();
+
               //ACTUALIZAR PAGOS
-              /*database.collection('pagos').update({
+              database.collection('pagos').update({
                   id: data.id,
                   month: data.month,
                   year: data.year
@@ -720,7 +720,7 @@ cb();
                   }
               }, function(err, response){
                 cb();
-              });*/
+              });
 
             });
 
