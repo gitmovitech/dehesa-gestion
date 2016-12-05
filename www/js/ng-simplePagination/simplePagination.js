@@ -30,7 +30,7 @@
             };
 
             paginator.toPageId = function (id) {
-                if (id >= 0 && id <= paginator.numPages - 1) {
+                if (id >= 0) {
                     paginator.page = id;
                 }
             };
