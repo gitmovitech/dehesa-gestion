@@ -84,8 +84,8 @@ app.filter('tipo_casa', function () {
         return input;
     }
 });
-app.filter('transformarUFdelMes', function(month){
-  return function(input){
+app.filter('transformarUFdelMes', function(){
+  return function(input, month){
     if(sessionStorage.valoresuf){
       var ufs = JSON.parse(sessionStorage.valoresuf);
       console.info(month);
