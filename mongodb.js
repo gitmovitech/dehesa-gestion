@@ -672,6 +672,7 @@ exports.pagar = function (data, cb) {
             } else {
               data.excedentes = 0;
             }
+            console.log(data.cobrodelmes,data.pago)
             if (data.cobrodelmes == data.pago) {
               if(data.status == 'Pagado con excedentes'){
                 data.excedentes = data.excedentes - data.pago;
