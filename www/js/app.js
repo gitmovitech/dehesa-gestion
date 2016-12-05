@@ -84,6 +84,17 @@ app.filter('tipo_casa', function () {
         return input;
     }
 });
+app.filter('transformarUFdelMes', function(month){
+  return function(input){
+    if(sessionStorage.valoresuf){
+      var ufs = JSON.parse(sessionStorage.valoresuf);
+      console.info(month);
+      return input;
+    } else {
+      return input;
+    }
+  }
+});
 app.filter('convert2UF', function () {
     return function (input) {
         if (sessionStorage.uf) {

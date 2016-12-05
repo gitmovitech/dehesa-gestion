@@ -534,6 +534,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
             if (response.success) {
                 if (response.data.length > 0) {
                   $scope.pagos.valoresuf = response.data;
+                  sessionStorage.valoresuf = JSON.stringify(response.data);
                     var valor = false;
                     for (var x in response.data) {
                         if (periodos_months[month] == response.data[x].mes && year == response.data[x].year) {
