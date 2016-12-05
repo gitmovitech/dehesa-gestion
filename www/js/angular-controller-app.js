@@ -49,9 +49,9 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
             }
         }
         $scope.registros = tmpdata.length;
+        $scope.pagination.toPageId(0);
         $scope.pagination.numPages = Math.ceil(tmpdata.length / $scope.pagination.perPage);
         if (tmpdata.length > 0){
-            $scope.pagination.toPageId(0);
             $scope.tabledata = tmpdata;
         } else
             $scope.tabledata = fieldsdata;
