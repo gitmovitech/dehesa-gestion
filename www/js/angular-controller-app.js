@@ -41,6 +41,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                         arr = arr.toString();
                         arr = arr.toLowerCase();
                         if (arr.indexOf($scope.page.filter.value) >= 0) {
+                          $scope.pagination.toPageId(0);
                             tmpdata[tmpdata.length] = fieldsdata[x];
                             break;
                         }
@@ -52,8 +53,6 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         $scope.pagination.numPages = Math.ceil(tmpdata.length / $scope.pagination.perPage);
         if (tmpdata.length > 0){
             $scope.tabledata = tmpdata;
-            $scope.pagination.toPageId(0);
-            $scope.$apply();
         } else
             $scope.tabledata = fieldsdata;
     }
