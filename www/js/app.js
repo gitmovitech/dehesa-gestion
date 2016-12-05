@@ -88,7 +88,7 @@ app.filter('transformarUFdelMes', function(){
   return function(input, month){
     if(sessionStorage.valoresuf){
       var ufs = JSON.parse(sessionStorage.valoresuf);
-      console.info(month);
+      console.info(ufs);
       return input;
     } else {
       return input;
