@@ -96,6 +96,7 @@ app.filter('transformarUFdelMes', function(){
             break;
         }
       }
+      input = input.toString();
       input = input.replace(',', '.');
       input = parseFloat(input);
       return input * parseFloat(valor);
