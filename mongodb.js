@@ -679,8 +679,8 @@ exports.pagar = function (data, cb) {
                 year: data.year
             }).toArray(function(err, pagos){
               var debe = 0;
-              for(var g in data){
-                debe += data[g].debe;
+              for(var g in pagos){
+                debe += pagos[g].debe;
               }
               data.cobrodelmes = debe;
 
