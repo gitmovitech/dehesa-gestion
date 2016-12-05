@@ -690,7 +690,7 @@ exports.pagar = function (data, cb) {
               if(pago.debe > 0){
                 data.debe = pago.debe * ufs.valor;
               }
-              data.debe += pago.cobrodelmes;
+              data.debe += data.cobrodelmes;
               data.excedentes = pago.excedentes;
               console.log()
               if (data.debe == data.pago) {
