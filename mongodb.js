@@ -686,13 +686,13 @@ exports.pagar = function (data, cb) {
             }, function(err, pago){
               data.debe = 0;
               data.excedentes = 0;
-              
+
               if(pago.debe > 0){
                 data.debe = pago.debe * ufs.valor;
               }
               data.debe += pago.cobrodelmes;
               data.excedentes = pago.excedentes;
-
+              console.log()
               if (data.debe == data.pago) {
                 if(data.status == 'Pagado con excedentes'){
                   data.excedentes = data.excedentes - data.pago;
@@ -704,9 +704,10 @@ exports.pagar = function (data, cb) {
                 data.excedentes = data.pago - data.debe;
                 data.debe = 0;
               }
-
+              console.log(data);
+cb();
               //ACTUALIZAR PAGOS
-              database.collection('pagos').update({
+              /*database.collection('pagos').update({
                   id: data.id,
                   month: data.month,
                   year: data.year
@@ -719,7 +720,7 @@ exports.pagar = function (data, cb) {
                   }
               }, function(err, response){
                 cb();
-              });
+              });*/
 
             });
 
