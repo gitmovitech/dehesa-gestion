@@ -662,90 +662,58 @@ exports.pagar = function (data, cb) {
         case 'Pagado con cheque':
         case "Pagos Procesados":
         case "Aprobada":
-          database.collection('pagos').findOne({
-              id: data.id,
-              month: data.month,
-              year: data.year
-          }, function(err, response){
-            if(response){
-              data.excedentes = response.excedentes;
-            } else {
-              data.excedentes = 0;
+
+          //OBTENER VALORES UF
+          var periodos_months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+          database.collection('valoresuf').findOne({
+            mes: periodos_months[data.month]
+          }, function(err, ufs){
+            ufs.valor = ufs.valor.toString();
+            ufs.valor = ufs.valor.replace(',','.');
+            ufs.valor = parseFloat(ufs.valor);
+
+            //OBTENER DATOS MES ANTERIOR
+            var month = data.month - 1;
+            var year = data.year;
+            if(month < 0){
+              month == 11;
+              year--;
             }
-
-            database.collection('pagos').find({
+            database.collection('pagos').findOne({
                 id: data.id,
-                month: data.month,
-                year: data.year
-            }).toArray(function(err, pagos){
-              var debe = 0;
-              for(var g in pagos){
-                debe += pagos[g].debe;
-              }
-              data.cobrodelmes = debe;
+                month: month,
+                year: year
+            }, function(err, pago){
+              var debe = pago.debe * ufs.valor;
+              var excedentes = pago.excedentes;
 
-              if (data.cobrodelmes == data.pago) {
+              if (data.debe == data.pago) {
                 if(data.status == 'Pagado con excedentes'){
                   data.excedentes = data.excedentes - data.pago;
                 }
                 data.debe = 0;
-                database.collection('pagos').update({
-                    id: data.id,
-                    month: data.month,
-                    year: data.year
-                }, {
-                    $set: {
-                        type: data.status,
-                        excedentes: data.excedentes,
-                        debe: data.debe,
-                        pagado: Math.round(data.pago)
-                    }
-                }, function(err, response){
-                  cb();
-                });
-              } else if (data.cobrodelmes > data.pago) {
-                var periodos_months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-                database.collection('valoresuf').findOne({
-                  mes: periodos_months[data.month],
-                  year: data.year
-                }, function(err, ufs){
-                  ufs.valor = ufs.valor.toString();
-                  ufs.valor = ufs.valor.replace(',','.');
-                  data.debe = (data.cobrodelmes - data.pago) / parseFloat(ufs.valor);
-                  console.log('DEBE', data.debe);
-                  database.collection('pagos').update({
-                      id: data.id,
-                      month: data.month,
-                      year: data.year
-                  }, {
-                      $set: {
-                          type: data.status,
-                          excedentes: data.excedentes,
-                          debe: data.debe,
-                          pagado: Math.round(data.pago)
-                      }
-                  }, function(err, response){
-                    cb();
-                  });
-                });
-              } else if (data.cobrodelmes < data.pago) {
-                data.excedentes = data.pago - data.cobrodelmes;
+              } else if (data.debe > data.pago) {
+                data.debe = (data.debe - data.pago) / ufs.valor;
+              } else if (data.debe < data.pago) {
+                data.excedentes = data.pago - data.debe;
                 data.debe = 0;
-                database.collection('pagos').update({
-                    id: data.id,
-                    month: data.month,
-                    year: data.year
-                }, {
-                    $set: {
-                        type: data.status,
-                        excedentes: data.excedentes,
-                        debe: data.debe,
-                        pagado: Math.round(data.pago)
-                    }
-                }, function(err, response){
-                  cb();
-                });
               }
+
+              //ACTUALIZAR PAGOS
+              database.collection('pagos').update({
+                  id: data.id,
+                  month: data.month,
+                  year: data.year
+              }, {
+                  $set: {
+                      type: data.status,
+                      excedentes: data.excedentes,
+                      debe: data.debe,
+                      pagado: data.pago
+                  }
+              }, function(err, response){
+                cb();
+              });
 
             });
 
