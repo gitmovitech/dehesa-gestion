@@ -684,10 +684,10 @@ exports.pagar = function (data, cb) {
                 month: month,
                 year: year
             }, function(err, pago){
-              console.log('pago', pago)
               var debe = pago.debe * ufs.valor;
               var excedentes = pago.excedentes;
               data.excedentes = excedentes;
+              pago.debe = debe;
               console.log(data.debe , data.pago);
               if (data.debe == data.pago) {
                 if(data.status == 'Pagado con excedentes'){
