@@ -700,6 +700,7 @@ exports.pagar = function (data, cb) {
                 ufs.valor = ufs.valor.toString();
                 ufs.valor = ufs.valor.replace(',','.');
                 data.debe = (data.cobrodelmes - data.pago) / parseFloat(ufs.valor);
+                console.log('DEBE', data.debe);
                 database.collection('pagos').update({
                     id: data.id,
                     month: data.month,
