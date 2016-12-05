@@ -683,9 +683,9 @@ exports.pagar = function (data, cb) {
                 mes: periodos_months[data.month],
                 year: data.year
               }, function(err, ufs){
-                console.log('UFS', ufs);
-                console.log('RESTA', data.cobrodelmes - data.pago);
-                data.debe = (data.cobrodelmes - data.pago) / ufs.valor;
+                ufs.valor = ufs.valor.toString();
+                ufs.valor = ufs.valor.replace(',','.');
+                data.debe = (data.cobrodelmes - data.pago) / parseFloat(ufs.valor);
                 console.log('DEBE', data.debe)
               });
             } else if (data.cobrodelmes < data.pago) {
