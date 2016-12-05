@@ -12,12 +12,12 @@ expect <<- DONE
   expect eof
 DONE
 
-#expect <<- DONE
-#  set timeout -1
-#  spawn ssh root@gestion.jvdehesa.cl "cd /var/www/html/pingon-socket;sh dawn.sh;";
-#  match_max 100000
-#  expect "*?assword:*"
-#  send -- "pinG2016on++\r"
-#  send -- "\r"
-#  expect eof
-#DONE
+expect <<- DONE
+  set timeout -1
+  spawn ssh root@gestion.jvdehesa.cl "cd /usr/share/nginx/gestion-dehesa;sh down.sh;";
+  match_max 100000
+  expect "*?assword:*"
+  send -- "T87pp7cdtg!\r"
+  send -- "\r"
+  expect eof
+DONE
