@@ -678,10 +678,11 @@ exports.pagar = function (data, cb) {
                 month: data.month,
                 year: data.year
             }).toArray(function(err, pagos){
-              data.debe = 0;
+              var debe = 0;
               for(var g in data){
-                data.debe += data[g].debe;
+                debe += data[g].debe;
               }
+              data.cobrodelmes = debe;
 
               if (data.cobrodelmes == data.pago) {
                 if(data.status == 'Pagado con excedentes'){
