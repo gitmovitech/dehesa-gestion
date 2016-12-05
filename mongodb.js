@@ -678,8 +678,13 @@ exports.pagar = function (data, cb) {
               }
               data.debe = 0;
             } else if (data.cobrodelmes > data.pago) {
-              //SE PUEDE PAGAR MENOS???
-                data.debe = data.cobrodelmes - data.pago;
+              var periodos_months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+              database.collection('valoresuf').findOne({
+                mes: periodos_months[data.month],
+                year: data.year
+              }, function(err, ufs){
+                data.debe = (data.cobrodelmes - data.pago) / ufs.valor;
+              });
             } else if (data.cobrodelmes < data.pago) {
               data.excedentes = data.pago - data.cobrodelmes;
               data.debe = 0;
