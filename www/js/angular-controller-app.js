@@ -41,7 +41,6 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                         arr = arr.toString();
                         arr = arr.toLowerCase();
                         if (arr.indexOf($scope.page.filter.value) >= 0) {
-                          $scope.pagination.toPageId(0);
                             tmpdata[tmpdata.length] = fieldsdata[x];
                             break;
                         }
@@ -898,6 +897,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                         arr = arr.toString();
                         arr = arr.toLowerCase();
                         if (arr.indexOf($scope.page.filter.value) >= 0) {
+                          $scope.pagination.toPageId(0);
                             tmpdata[tmpdata.length] = registro_pagos[x];
                             break;
                         }
