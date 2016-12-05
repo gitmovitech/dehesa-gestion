@@ -8,20 +8,30 @@
                   <h4 class="modal-title" id="modalHistorial"><b><i class="glyphicon glyphicon-stats"></i> Historial de pagos</b></h4>
               </div>
               <div class="modal-body">
-                <div class=" col-xs-12 col-sm-6" ng-repeat="item in pagos.historialData">
-                  <div class="panel panel-default">
-                    <div class="panel-heading">{{item.month | monthSpanish}} {{item.year}}</div>
-                    <div class="panel-body">
-                      <h4 class="text-success"><b>Tarifa UF: {{item.tarifa.total}}</b></h4>
-                      <p><b>Estado:</b> {{item.type}}</p>
-                      <p><b class="text-info">Pagado:</b> {{item.pagado | currency}}</p>
-                      <p><b class="text-danger">Deuda del mes:</b> {{item.debe | currency}}</p>
-                      <p><b class="text-warning">Excedentes del mes:</b> {{item.excedentes | currency}}</p>
-                      <p ng-if="item.comentarios != '-'" style="color:gray"><i>{{item.comentarios}}</i></p>
-                    </div>
-                  </div>
-              </div>
-                <div style="clear:both"></div>
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>Fecha</th>
+                      <th>Tarifa UF</th>
+                      <th>Estado</th>
+                      <th>Pagado del mes</th>
+                      <th>Deuda del mes</th>
+                      <th>Excedentes del mes</th>
+                      <th>Comentarios</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="item in pagos.historialData">
+                      <td>{{item.month | monthSpanish}} {{item.year}}</td>
+                      <td>{{item.tarifa}}</td>
+                      <td>{{item.type}}</td>
+                      <td>{{item.pagado | currency}}</td>
+                      <td>{{item.debe | currency}}</td>
+                      <td>{{item.excedentes | currency}}</td>
+                      <td>{{item.comentarios}}</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
               <div class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
