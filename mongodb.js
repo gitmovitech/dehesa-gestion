@@ -685,11 +685,15 @@ exports.pagar = function (data, cb) {
                 year: year
             }, function(err, pago){
               console.log(pago.debe , ufs.valor);
-              var debe = pago.debe * ufs.valor;
-              console.log('debe', debe);
+              if(pago.debe > 0){
+                var debe = pago.debe * ufs.valor;
+                pago.debe = debe;
+              }
+              pago.debe += pago.cobrodelmes;
+              
               var excedentes = pago.excedentes;
               data.excedentes = excedentes;
-              pago.debe = debe;
+
               console.log(data.debe , data.pago);
               if (data.debe == data.pago) {
                 if(data.status == 'Pagado con excedentes'){
