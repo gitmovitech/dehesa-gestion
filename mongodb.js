@@ -491,7 +491,7 @@ var obtenerDeudasAnteriores = function(registros_importados, x, cb){
       mes = 11;
       year = year - 1;
     }
-    database.collection('pagos').findone({
+    database.collection('pagos').findOne({
       $query:{
         id: registros_importados[x].id,
         year: year,
