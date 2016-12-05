@@ -897,7 +897,6 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                         arr = arr.toString();
                         arr = arr.toLowerCase();
                         if (arr.indexOf($scope.page.filter.value) >= 0) {
-                          $scope.pagination.toPageId(0);
                             tmpdata[tmpdata.length] = registro_pagos[x];
                             break;
                         }
@@ -906,9 +905,10 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
             }
             $scope.registros = tmpdata.length;
             $scope.pagination.numPages = Math.ceil(tmpdata.length / $scope.pagination.perPage);
-            if (tmpdata.length > 0)
+            if (tmpdata.length > 0){
+                $scope.pagination.toPageId(0);
                 $scope.tabledata = tmpdata;
-            else
+            } else
                 $scope.tabledata = [];
             setTimeout(function () {
                 jQuery('.popover-tarifa').each(function () {

@@ -33,8 +33,6 @@
                 if (id >= 0 && id <= paginator.numPages - 1) {
                     paginator.page = id;
                 }
-                console.info('page', paginator.page);
-                console.warn('perpage', pagination.perPage);
             };
 
             return paginator;
