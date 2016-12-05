@@ -677,6 +677,20 @@ exports.pagar = function (data, cb) {
                 data.excedentes = data.excedentes - data.pago;
               }
               data.debe = 0;
+              database.collection('pagos').update({
+                  id: data.id,
+                  month: data.month,
+                  year: data.year
+              }, {
+                  $set: {
+                      type: data.status,
+                      excedentes: data.excedentes,
+                      debe: data.debe,
+                      pagado: Math.round(data.pago)
+                  }
+              }, function(err, response){
+                cb();
+              });
             } else if (data.cobrodelmes > data.pago) {
               var periodos_months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
               database.collection('valoresuf').findOne({
@@ -686,26 +700,40 @@ exports.pagar = function (data, cb) {
                 ufs.valor = ufs.valor.toString();
                 ufs.valor = ufs.valor.replace(',','.');
                 data.debe = (data.cobrodelmes - data.pago) / parseFloat(ufs.valor);
-                console.log('DEBE', data.debe)
+                database.collection('pagos').update({
+                    id: data.id,
+                    month: data.month,
+                    year: data.year
+                }, {
+                    $set: {
+                        type: data.status,
+                        excedentes: data.excedentes,
+                        debe: data.debe,
+                        pagado: Math.round(data.pago)
+                    }
+                }, function(err, response){
+                  cb();
+                });
               });
             } else if (data.cobrodelmes < data.pago) {
               data.excedentes = data.pago - data.cobrodelmes;
               data.debe = 0;
+              database.collection('pagos').update({
+                  id: data.id,
+                  month: data.month,
+                  year: data.year
+              }, {
+                  $set: {
+                      type: data.status,
+                      excedentes: data.excedentes,
+                      debe: data.debe,
+                      pagado: Math.round(data.pago)
+                  }
+              }, function(err, response){
+                cb();
+              });
             }
-            database.collection('pagos').update({
-                id: data.id,
-                month: data.month,
-                year: data.year
-            }, {
-                $set: {
-                    type: data.status,
-                    excedentes: data.excedentes,
-                    debe: data.debe,
-                    pagado: Math.round(data.pago)
-                }
-            }, function(err, response){
-              cb();
-            });
+
           });
         break;
       }
