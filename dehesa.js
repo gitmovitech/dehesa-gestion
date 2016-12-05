@@ -455,13 +455,15 @@ app.post('/api/data/import/excel', function (req, res) {
                               }
                             }
                           }
-                          db.obtenerExcedentes(registros_importados, 0, function(data){
-                            db.guardarImportacionPagos({
-                              data: data,
-                              month: month,
-                              year: req.body.params.periodo.year
-                            }, function (response) {
-                              res.send({success:true});
+                          db.obtenerDeudasAnteriores(registros_importados, 0, function(data){
+                            db.obtenerExcedentes(data, 0, function(data){
+                              db.guardarImportacionPagos({
+                                data: data,
+                                month: month,
+                                year: req.body.params.periodo.year
+                              }, function (response) {
+                                res.send({success:true});
+                              });
                             });
                           });
                         });

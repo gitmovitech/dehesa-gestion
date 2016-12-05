@@ -481,6 +481,36 @@ exports.getAsociados = function(cb){
     cb(asociados);
   });
 }
+
+
+var obtenerDeudasAnteriores = function(registros_importados, x, cb){
+  if(registros_importados[x]){
+    var mes = registros_importados[x].month - 1;
+    var year = registros_importados[x].year;
+    if(mes < 0){
+      mes = 11;
+      year = year - 1;
+    }
+    database.collection('pagos').findone({
+      $query:{
+        id: registros_importados[x].id,
+        year: year,
+        month: mes
+      },
+      $orderby: {$natural:-1}
+    }, function(err, response){
+      if(response){
+        registros_importados[x].debe += response.debe;
+      }
+      obtenerDeudasAnteriores(registros_importados, x + 1, cb);
+    })
+  } else {
+    cb(registros_importados);
+  }
+}
+exports.obtenerDeudasAnteriores = obtenerDeudasAnteriores;
+
+
 var obtenerExcedentes = function(registros_importados, x, cb){
   if(registros_importados[x]){
     if(registros_importados[x].estado == 'Pendiente'){
