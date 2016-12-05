@@ -14,7 +14,7 @@ DONE
 
 expect <<- DONE
   set timeout -1
-  spawn ssh root@gestion.jvdehesa.cl "cd /usr/share/nginx/gestion-dehesa;sh down.sh;";
+  spawn ssh root@gestion.jvdehesa.cl "cd /usr/share/nginx/html/gestion-dehesa;sh down.sh;";
   match_max 100000
   expect "*?assword:*"
   send -- "T87pp7cdtg!\r"
