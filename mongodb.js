@@ -687,13 +687,14 @@ exports.pagar = function (data, cb) {
               data.debe = 0;
               data.excedentes = 0;
 
-              if(pago)
+              if(pago){
                 if(pago.debe > 0){
                   data.debe = pago.debe * ufs.valor;
                 }
+                data.excedentes = pago.excedentes;
+              }
               data.debe += data.cobrodelmes;
-              data.excedentes = pago.excedentes;
-
+              
               if (data.debe == data.pago) {
                 if(data.status == 'Pagado con excedentes'){
                   data.excedentes = data.excedentes - data.pago;
