@@ -1,6 +1,6 @@
 var mongo = require('./mongodb');
 var ObjectID = require('mongodb').ObjectID;
-var month = 4;
+var month = 5;
 var valoruf = 25924.05;
 var pagos = [];
 setTimeout(function(){
@@ -32,16 +32,16 @@ var getAsociados = function(data, index, cb){
             mongo.editCollection('pagos',[{
               name: '_id',
               value: ObjectID(pagos[v]._id)
-            }, {
+            }/*, {
               name: 'pagado',
               value: pagos[v].tarifa * valoruf
-            }, {
+            }*/, {
               name: 'debe',
               value: "0"
-            }, {
+            }/*, {
               name: 'type',
               value: estado
-            }], function(){
+            }*/], function(){
               delete estado;
               getAsociados(data, index + 1, cb);
             });
