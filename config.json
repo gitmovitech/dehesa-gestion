@@ -65,7 +65,7 @@
               },
               {
                   "name": "numeracion",
-                  "title": "Numeración",
+                  "title": "Nro",
                   "type": "text",
                   "required": true
               },
@@ -108,24 +108,6 @@
                   "type": "text",
                   "hiddenlist": true,
                   "hiddenedit": true
-              },
-              {
-                  "name": "tipo_casa",
-                  "title": "Tarifa",
-                  "type": "select",
-                  "data": {
-                      "collection": "modelos",
-                      "fields": [
-                          {
-                              "field": "nombre"
-                          },
-                          {
-                              "field": "_id",
-                              "id": true
-                          }
-                      ]
-                  },
-                  "required": true
               }
           ]
       },
