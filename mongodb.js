@@ -358,6 +358,9 @@ exports.editCollection = function (collection, data, callback) {
                         month = data[z].value;
                     }
                     for (var z in data) {
+                      if(data[z].name == "activo" && data[z].value == ""){
+                        data[z].value = true;
+                      }
                         if (data[z].name == '_id' && data[z].value != '') {
                             update = {
                                 "_id": ObjectID(data[z].value)
@@ -406,7 +409,7 @@ exports.editCollection = function (collection, data, callback) {
                             }
                         }
                     }
-                    console.log(JSON.parse('{' + insertdata.join(',') + '}'))
+                    console.log(JSON.parse('{' + insertdata.join(',') + '}'));
                     /*insertdata.splice(0, 1);*/
                     if (update) {
                         try {
@@ -694,7 +697,7 @@ exports.pagar = function (data, cb) {
                 data.excedentes = pago.excedentes;
               }
               data.debe += data.cobrodelmes;
-              
+
               if (data.debe == data.pago) {
                 if(data.status == 'Pagado con excedentes'){
                   data.excedentes = data.excedentes - data.pago;
