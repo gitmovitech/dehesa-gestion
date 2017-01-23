@@ -307,10 +307,7 @@ app.get('/pagos/excel/:year/:month', function (req, res) {
         }
     }
     var data = [[
-      'ID',
-      'RUT',
-      'CODIGO',
-      'TARIFA',
+      'SOCIO',
       'ESTADO',
       'PAGO',
       'DEUDA',
@@ -323,7 +320,7 @@ app.get('/pagos/excel/:year/:month', function (req, res) {
     }, function (response) {
         if (response) {
             for(var x in response){
-              
+
               if(response[x].pagado > 0)
                 response[x].pagado = Math.round(response[x].pagado);
 
@@ -335,9 +332,6 @@ app.get('/pagos/excel/:year/:month', function (req, res) {
 
               data[data.length] = [
                 response[x].id,
-                response[x].run,
-                response[x].codigo,
-                response[x].tarifa.total,
                 response[x].type,
                 response[x].pagado,
                 response[x].debe,
