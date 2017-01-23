@@ -31,7 +31,7 @@ var notificarContador = function (params, callback) {
     html += '<br><br><p>Atte. Junta de Vecinos Jardín La Dehesa.</p>';
     mail.sendMail({
         fromname: 'Junta de Vecinos Jardín La Dehesa',
-        from: 'no-reply@jvdehesa.cl',
+        from: 'administracion@jvdehesa.cl',
         toname: params.toname,
         to: params.to,
         subject: 'Carga de cobros ' + params.month + ' de ' + params.year,
@@ -75,7 +75,7 @@ var notificarCobroAsociado = function (params, callback) {
     html += '<br><br><p>Atte. Junta de Vecinos Jardín La Dehesa.</p>';
     mail.sendMail({
         fromname: 'Junta de Vecinos Jardín La Dehesa',
-        from: 'no-reply@jvdehesa.cl',
+        from: 'administracion@jvdehesa.cl',
         toname: params.toname,
         to: params.to,
         subject: 'Pago pendiente ' + params.month + ' ' + params.year,
