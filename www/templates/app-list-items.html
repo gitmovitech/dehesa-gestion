@@ -8,7 +8,7 @@
     </thead>
     <tbody>
         <tr ng-repeat="(index,trdata) in tabledata| startFrom: pagination.page * pagination.perPage | limitTo: pagination.perPage">
-            <td><b class="text-danger">{{trdata.index}}</b></td>
+            <td><b class="text-danger" ng-if="page.collection != 'asociados'">{{trdata.index}}</b></td>
             <td ng-if="key == '_id' && session.type == 'Administrador'" ng-repeat="(key,tddata) in trdata">
                 <button class="btn btn-success btn-xs" ng-click="showModal(page.fields, trdata)"><i class="glyphicon glyphicon-edit"></i> Editar</button>
                 <button ng-if="page.collection != 'asociados'" class="btn btn-danger btn-xs" ng-click="dropItem(page.fields, trdata)"><i class="glyphicon glyphicon-remove-circle"></i> Eliminar</button>
