@@ -323,15 +323,25 @@ app.get('/pagos/excel/:year/:month', function (req, res) {
     }, function (response) {
         if (response) {
             for(var x in response){
+              
+              if(response[x].pagado > 0)
+                response[x].pagado = Math.round(response[x].pagado);
+
+              if(response[x].debe > 0)
+                response[x].debe = Math.round(response[x].debe);
+
+              if(response[x].excedentes > 0)
+                response[x].excedentes = Math.round(response[x].excedentes);
+
               data[data.length] = [
                 response[x].id,
                 response[x].run,
                 response[x].codigo,
                 response[x].tarifa.total,
                 response[x].type,
-                Math.round(response[x].pagado),
-                Math.round(response[x].debe),
-                Math.round(response[x].excedentes),
+                response[x].pagado,
+                response[x].debe,
+                response[x].excedentes,
                 response[x].comentarios
               ]
             }
