@@ -327,7 +327,7 @@ app.get('/pagos/excel/:year/:month', function (req, res) {
                 response[x].id,
                 response[x].run,
                 response[x].codigo,
-                Math.round(response[x].tarifa.total),
+                response[x].tarifa.total,
                 response[x].type,
                 Math.round(response[x].pagado),
                 Math.round(response[x].debe),
