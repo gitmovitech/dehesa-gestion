@@ -60,7 +60,135 @@
               {
                   "name": "direccion",
                   "title": "Dirección",
-                  "type": "text",
+                  "type": "select",
+                  "data": {
+                      "options": [
+                          {
+                              "key": "AV. FELIPE CUBILLOS SIGALL",
+                              "value": "AV. FELIPE CUBILLOS SIGALL"
+                          },
+                          {
+                              "key": "AV. EL TRANQUE",
+                              "value": "AV. EL TRANQUE"
+                          },
+                          {
+                              "key": "AV. JOSE ALCALDE DELANO",
+                              "value": "AV. JOSE ALCALDE DELANO"
+                          },
+                          {
+                              "key": "AV. SANTA BLANCA",
+                              "value": "AV. SANTA BLANCA"
+                          },
+                          {
+                              "key": "CAMINO CERRO LARGO",
+                              "value": "CAMINO CERRO LARGO"
+                          },
+                          {
+                              "key": "CAMINO DE LA AGUADA",
+                              "value": "CAMINO DE LA AGUADA"
+                          },
+                          {
+                              "key": "CAMINO DE LA VILLA",
+                              "value": "CAMINO DE LA VILLA"
+                          },
+                          {
+                              "key": "CAMINO DE LAS ARDILLAS",
+                              "value": "CAMINO DE LAS ARDILLAS"
+                          },
+                          {
+                              "key": "CAMINO DE LAS LIEBRES",
+                              "value": "CAMINO DE LAS LIEBRES"
+                          },
+                          {
+                              "key": "CAMINO DE LOS CASTORES",
+                              "value": "CAMINO DE LOS CASTORES"
+                          },
+                          {
+                              "key": "CAMINO DE LOS CIERVOS",
+                              "value": "CAMINO DE LOS CIERVOS"
+                          },
+                          {
+                              "key": "CAMINO DEL ALARIFE",
+                              "value": "CAMINO DEL ALARIFE"
+                          },
+                          {
+                              "key": "CAMINO DEL LABRADOR",
+                              "value": "CAMINO DEL LABRADOR"
+                          },
+                          {
+                              "key": "CAMINO EL ATAJO",
+                              "value": "CAMINO EL ATAJO"
+                          },
+                          {
+                              "key": "CAMINO ENTRE LOMAS",
+                              "value": "CAMINO ENTRE LOMAS"
+                          },
+                          {
+                              "key": "CAMINO LA CAPELLANIA",
+                              "value": "CAMINO LA CAPELLANIA"
+                          },
+                          {
+                              "key": "CAMINO TURISTICO",
+                              "value": "CAMINO TURISTICO"
+                          },
+                          {
+                              "key": "CAMINO TURISTICO INT.",
+                              "value": "CAMINO TURISTICO INT."
+                          },
+                          {
+                              "key": "CONTRALM. FDEZ.VIAL",
+                              "value": "CONTRALM. FDEZ.VIAL"
+                          },
+                          {
+                              "key": "CONTRALM. FDEZ.VIAL INT",
+                              "value": "CONTRALM. FDEZ.VIAL INT"
+                          },
+                          {
+                              "key": "EL MAYORAZGO",
+                              "value": "EL MAYORAZGO"
+                          },
+                          {
+                              "key": "EL MONASTERIO",
+                              "value": "EL MONASTERIO"
+                          },
+                          {
+                              "key": "LOS PORTONES DE LA DEHESA",
+                              "value": "LOS PORTONES DE LA DEHESA"
+                          },
+                          {
+                              "key": "MANUEL GUZMAN MATURANA",
+                              "value": "MANUEL GUZMAN MATURANA"
+                          },
+                          {
+                              "key": "PASAJE EL RACO",
+                              "value": "PASAJE EL RACO"
+                          },
+                          {
+                              "key": "RIHUE",
+                              "value": "RIHUE"
+                          },
+                          {
+                              "key": "RIO LIUCURA",
+                              "value": "RIO LIUCURA"
+                          },
+                          {
+                              "key": "RIO TRANCURA",
+                              "value": "RIO TRANCURA"
+                          },
+                          {
+                              "key": "RUCAMANQUI",
+                              "value": "RUCAMANQUI"
+                          },
+                          {
+                              "key": "SENDERO DEL MONTE",
+                              "value": "SENDERO DEL MONTE"
+                          },
+                          {
+                              "key": "SENDERO ENTRE LOMAS",
+                              "value": "SENDERO ENTRE LOMAS"
+                          }
+                      ]
+                  },
                   "required": true
               },
               {
