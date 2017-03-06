@@ -59,7 +59,7 @@
               },
               {
                   "name": "direccion",
-                  "title": "Dirección",
+                  "title": "Dirección / Calle",
                   "type": "select",
                   "data": {
                       "options": [
