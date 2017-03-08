@@ -20,10 +20,13 @@
     <!-- ACTIVADO / SUSPENDIDOS -->
     <ul class="nav nav-tabs" role="tablist" ng-if="page.collection == 'asociados'" style="margin-bottom:10px;">
         <li role="presentation" class="active">
-            <a href="#" role="tab" data-toggle="tab" ng-click="showAsociados(true)">Activos</a>
+            <a href="#" role="tab" data-toggle="tab" ng-click="showAsociados(1)">Activos</a>
         </li>
         <li role="presentation">
-            <a href="#" role="tab" data-toggle="tab" ng-click="showAsociados('')">Suspendidos</a>
+            <a href="#" role="tab" data-toggle="tab" ng-click="showAsociados(0)">Suspendidos</a>
+        </li>
+        <li role="presentation">
+            <a href="#" role="tab" data-toggle="tab" ng-click="showAsociados(-1)">No socios</a>
         </li>
     </ul>
 

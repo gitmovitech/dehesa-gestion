@@ -7,7 +7,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         $scope.pageIndex = sessionStorage.page;
     }
 
-    var activos = true;
+    var activos = 1;
     var fieldsReset = [];
     var fieldsdata;
     jQuery('body').loader('show');
@@ -75,6 +75,20 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         $scope.readyToUpload = false;
     }
     setUploader();
+
+    $scope.onChangeSelect = function(data){
+      var css = jQuery(data).attr('class');
+      css = css.split(' ');
+      for(var x in css){
+        switch(css[x]){
+          case 'on-select-persona':
+            if(jQuery(data).val() == 'PERSONA NATURAL'){
+              //ver persona natural o juridica
+            }
+          break;
+        }
+      }
+    }
 
     $scope.load = function (item, index) {
         if (typeof $scope.page != 'undefined')
