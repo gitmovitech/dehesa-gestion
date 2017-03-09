@@ -987,7 +987,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
     }
 
     $scope.activarAsociado = function(asociado){
-      if(confirm('¿Activar al socio "' + asociado.usuario + '"?')){
+      if(confirm('¿Activar al socio "' + asociado.first_name +' '+ asociado.last_name + '"?')){
         $http.post('/api/data', {
             params: {
                 token: Session.get(),
@@ -997,7 +997,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                     value: asociado._id
                 },{
                     name: 'activo',
-                    value: true
+                    value: 1
                 }]
             }
         }).success(function (response) {
