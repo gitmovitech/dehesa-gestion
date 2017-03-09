@@ -957,8 +957,17 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
       $scope.load($scope.page);
     }
 
-    $scope.suspenderAsociado = function(asociado){
-      if(confirm('¿Está seguro que desea suspender al socio "' + asociado.first_name +' '+ asociado.last_name + '"?')){
+    $scope.suspenderAsociado = function(asociado, value){
+      if(value == 0){
+        text = 'suspender';
+      }
+      if(value == -1){
+        text = 'eliminar';
+      }
+      if(value == -2){
+        text = 'cambiar estado a "No socio"';
+      }
+      if(confirm('¿Está seguro que desea '+text+' al socio "' + asociado.first_name +' '+ asociado.last_name + '"?')){
         $http.post('/api/data', {
             params: {
                 token: Session.get(),
@@ -968,7 +977,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                     value: asociado._id
                 },{
                     name: 'activo',
-                    value: -1
+                    value: value
                 }]
             }
         }).success(function (response) {
