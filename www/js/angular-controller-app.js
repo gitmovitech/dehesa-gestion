@@ -958,7 +958,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
     }
 
     $scope.suspenderAsociado = function(asociado){
-      if(confirm('¿Está seguro que desea suspender al socio "' + asociado.usuario + '"?')){
+      if(confirm('¿Está seguro que desea suspender al socio "' + asociado.first_name +' '+ asociado.last_name + '"?')){
         $http.post('/api/data', {
             params: {
                 token: Session.get(),
