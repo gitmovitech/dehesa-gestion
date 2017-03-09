@@ -968,7 +968,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                     value: asociado._id
                 },{
                     name: 'activo',
-                    value: false
+                    value: -1
                 }]
             }
         }).success(function (response) {
