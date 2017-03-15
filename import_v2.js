@@ -45,21 +45,32 @@ if (process.argv[2]) {
 
                           db.collection('asociados').insert({
                               id: item[0],
+                              fecha_ingreso: item[1],
                               run: item[13],
                               persona: 'PERSONA NATURAL',
                               razon_social: '',
-                              first_name: item[6],
-                              second_name: item[7],
-                              last_name: item[8],
-                              second_last_name: item[9],
+                              first_name: item[14],
+                              second_name: item[15],
+                              last_name: item[16],
+                              second_last_name: item[17],
+                              correo11: correos[0],
+                              correo12: correos[1],
+                              telefono11: '',
+                              telefono12: '',
+                              first_name2: item[6],
+                              second_name2: item[7],
+                              last_name2: item[8],
+                              second_last_name2: item[9],
+                              correo21: '',
+                              correo22: '',
+                              telefono21: '',
+                              telefono22: '',
                               direccion: item[2],
                               numeracion: item[3],
                               depto_casa: item[4],
-                              telefono1: '',
-                              telefono2: '',
-                              correo1: correos[0],
-                              correo2: correos[1],
-                              activo: 1
+                              forma_de_pago: item[21],
+                              activo: 1,
+
                           });
                         }
                       });

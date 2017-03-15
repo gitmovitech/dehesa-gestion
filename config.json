@@ -36,6 +36,16 @@
                   "required": true
               },
               {
+                  "name": "fecha_ingreso",
+                  "title": "Fecha de ingreso",
+                  "type": "date"
+              },
+              {
+                  "title": "ASOCIADO",
+                  "type": "title",
+                  "hiddenlist": true
+              },
+              {
                   "name": "run",
                   "title": "RUN",
                   "type": "rut",
@@ -64,40 +74,109 @@
                   "name": "razon_social",
                   "title": "Razón Social",
                   "type": "text",
-                  "required": true,
-                  "hiddenedit": true
+                  "required": true
               },
               {
                   "name": "first_name",
                   "title": "Primer Nombre",
                   "type": "text",
-                  "required": true,
-                  "hiddenedit": true
+                  "required": true
               },
               {
                   "name": "second_name",
                   "title": "Segundo Nombre",
-                  "type": "text",
-                  "required": true,
-                  "hiddenedit": true
+                  "type": "text"
               },
               {
                   "name": "last_name",
                   "title": "Primer Apellido",
                   "type": "text",
-                  "required": true,
-                  "hiddenedit": true
+                  "required": true
               },
               {
                   "name": "second_last_name",
                   "title": "Segundo Apellido",
+                  "type": "text"
+              },
+              {
+                  "name": "correo11",
+                  "title": "Correo 1",
+                  "type": "email",
+                  "required": true
+              },
+              {
+                  "name": "correo12",
+                  "title": "Correo 2",
+                  "type": "email"
+              },
+              {
+                  "name": "telefono11",
+                  "title": "Teléfono 1",
+                  "type": "number",
+                  "required": true
+              },
+              {
+                  "name": "telefono12",
+                  "title": "Teléfono 2",
+                  "type": "number"
+              },
+              {
+                  "title": "CONTACTO",
+                  "type": "title",
+                  "hiddenlist": true
+              },
+              {
+                  "name": "first_name2",
+                  "title": "Primer Nombre",
                   "type": "text",
-                  "required": true,
-                  "hiddenedit": true
+                  "required": true
+              },
+              {
+                  "name": "second_name2",
+                  "title": "Segundo Nombre",
+                  "type": "text"
+              },
+              {
+                  "name": "last_name2",
+                  "title": "Primer Apellido",
+                  "type": "text",
+                  "required": true
+              },
+              {
+                  "name": "second_last_name2",
+                  "title": "Segundo Apellido",
+                  "type": "text"
+              },
+              {
+                  "name": "correo21",
+                  "title": "Correo 1",
+                  "type": "email",
+                  "required": true
+              },
+              {
+                  "name": "correo22",
+                  "title": "Correo 2",
+                  "type": "email"
+              },
+              {
+                  "name": "telefono21",
+                  "title": "Teléfono 1",
+                  "type": "number",
+                  "required": true
+              },
+              {
+                  "name": "telefono22",
+                  "title": "Teléfono 2",
+                  "type": "number"
+              },
+              {
+                  "title": "DIRECCIÓN",
+                  "type": "title",
+                  "hiddenlist": true
               },
               {
                   "name": "direccion",
-                  "title": "Dirección / Calle",
+                  "title": "Calle",
                   "type": "select",
                   "data": {
                       "options": [
@@ -241,26 +320,30 @@
                   "type": "text"
               },
               {
-                  "name": "telefono1",
-                  "title": "Teléfono 1",
-                  "type": "number",
+                  "name": "forma_de_pago",
+                  "title": "Forma de pago",
+                  "type": "select",
+                  "data": {
+                      "options": [
+                          {
+                              "key": "PAT",
+                              "value": "PAT"
+                          },
+                          {
+                              "key": "PAC",
+                              "value": "PAC"
+                          },
+                          {
+                              "key": "P/OFICINA",
+                              "value": "P/OFICINA"
+                          },
+                          {
+                              "key": "COSTO CERO",
+                              "value": "COSTO CERO"
+                          }
+                      ]
+                  },
                   "required": true
-              },
-              {
-                  "name": "telefono2",
-                  "title": "Teléfono 2",
-                  "type": "number"
-              },
-              {
-                  "name": "correo1",
-                  "title": "Correo 1",
-                  "type": "email",
-                  "required": true
-              },
-              {
-                  "name": "correo2",
-                  "title": "Correo 2",
-                  "type": "email"
               },
               {
                   "name": "activo",
