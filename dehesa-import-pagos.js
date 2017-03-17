@@ -38,36 +38,14 @@ exports.import = function(params, cb){
       } else if(filename.match(/PAC/gi)){
         console.log('Procesando PAC');
         procesarPAC(data, thismonth, params.periodo.year, function(data){
-          //console.log(data);
+          cb({
+              success: true
+          });
         });
       } else if(filename.match(/PAT/gi)){
         console.log('PAT');
       }
-      /*for(var x in data){
-        if(x > 0){
-          /*if (data[x][0] && data[x][1] && data[x][2]){
-            run = data[x][0];
-            run = run.toString();
-            run = run.replace('-','');
-            run = run.split(',');
-            run = run.join('');
-            run = run.split('.');
-            run = run.join('');*
-            registros[registros.length] = {
-              id: data[x][0],
-              pago: data[x][1],
-              tarifa: data[x][2],
-              month: thismonth
-            }
-          //}
-        }
-      }*/
-      /*cb({
-          success: true,
-          data: registros
-      });*/
 
-      //console.log(registros);
   } else {
       cb({
           success: false,
@@ -91,14 +69,20 @@ console.log('REGISTROS: '+data.length);
   registros.forEach(function(item, i){
     mongo.getUserByRun(item.run, function(asociado){
       try{
+        if(item.estado != 'Pagos Procesados'){
+          item.estado = 'Pendiente';
+          item.debe = item.pago;
+          item.pago = 0;
+        } else {
+          item.debe = 0
+        }
         mongo.savePayment({
           id: asociado.id,
           nombre: [asociado.first_name, asociado.second_name, asociado.last_name, asociado.second_last_name].join(' '),
           tarifa: item.tarifa,
-          status: item.estado,
+          type: item.estado,
           pagado: item.pago,
           debe: 0,
-          excedentes: 0,
           month: month,
           year: year
         });
