@@ -38,7 +38,7 @@
               {
                   "name": "fecha_ingreso",
                   "title": "Fecha de ingreso",
-                  "type": "date"
+                  "type": "text"
               },
               {
                   "title": "ASOCIADO",

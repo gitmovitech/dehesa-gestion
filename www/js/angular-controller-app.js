@@ -967,6 +967,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
       if(value == -2){
         text = 'cambiar estado a "No socio"';
       }
+
       if(confirm('¿Está seguro que desea '+text+' al socio "' + asociado.first_name +' '+ asociado.last_name + '"?')){
         $http.post('/api/data', {
             params: {

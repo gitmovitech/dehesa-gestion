@@ -13,7 +13,7 @@
                 <button class="btn btn-success btn-xs" ng-click="showModal(page.fields, trdata)"><i class="glyphicon glyphicon-edit"></i> Editar</button>
                 <button ng-if="page.collection != 'asociados'" class="btn btn-danger btn-xs" ng-click="dropItem(page.fields, trdata)"><i class="glyphicon glyphicon-remove-circle"></i> Eliminar</button>
 
-                <button ng-if="page.collection == 'asociados' && trdata.activo == 1" class="btn btn-warning btn-xs" ng-click="suspenderAsociado(trdata,0)"><i class="glyphicon glyphicon-remove"></i> Suspender</button>
+                <button ng-if="page.collection == 'asociados' && trdata.activo == 1" class="btn btn-warning btn-xs" ng-click="suspenderAsociado(trdata, 0)"><i class="glyphicon glyphicon-remove"></i> Suspender</button>
                 <button ng-if="page.collection == 'asociados' && trdata.activo == 1" class="btn btn-warning btn-xs" ng-click="suspenderAsociado(trdata,-1)"><i class="glyphicon glyphicon-remove"></i> Eliminar</button>
                 <button ng-if="page.collection == 'asociados' && trdata.activo == 1" class="btn btn-warning btn-xs" ng-click="suspenderAsociado(trdata,-2)"><i class="glyphicon glyphicon-remove"></i> No socios</button>
                 <button ng-if="page.collection == 'asociados' && !trdata.activo != 1" class="btn btn-info btn-xs" ng-click="activarAsociado(trdata)"><i class="glyphicon glyphicon-ok"></i> Activar</button>

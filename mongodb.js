@@ -358,9 +358,6 @@ exports.editCollection = function (collection, data, callback) {
                         month = data[z].value;
                     }
                     for (var z in data) {
-                      if(data[z].name == "activo" && data[z].value == ""){
-                        data[z].value = true;
-                      }
                         if (data[z].name == '_id' && data[z].value != '') {
                             update = {
                                 "_id": ObjectID(data[z].value)
@@ -403,12 +400,15 @@ exports.editCollection = function (collection, data, callback) {
                                     }
                                 } else if (data[z].value != '' && typeof data[z].value != 'undefined') {
                                     insertdata[insertdata.length] = [JSON.stringify(data[z].name), JSON.stringify(data[z].value)].join(':');
+                                } else if(data[z].name == 'activo'){
+                                  insertdata[insertdata.length] = [JSON.stringify(data[z].name), data[z].value].join(':');
                                 } else {
                                     insertdata[insertdata.length] = [JSON.stringify(data[z].name), '""'].join(':');
                                 }
                             }
                         }
                     }
+                    console.log('UPDATE ASOCIADOS')
                     console.log(JSON.parse('{' + insertdata.join(',') + '}'));
                     /*insertdata.splice(0, 1);*/
                     if (update) {
