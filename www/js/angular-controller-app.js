@@ -394,17 +394,6 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                             $location.path('/');
                         }
                     }
-                    /*for (var r in response) {
-                     response[r] = {
-                     titular: response[r][0],
-                     rut: response[r][1],
-                     direccion: response[r][2],
-                     numeracion: response[r][3],
-                     tarifa: response[r][4],
-                     status: 'Pendiente'
-                     }
-                     }
-                     sessionStorage.uploaded_csv = JSON.stringify(response);*/
 
                 });
             } else {
@@ -595,7 +584,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                       jQuery('body').loader('hide');
                         alert('No hay valores UF cargados de ' + months[month]+ '. \nVaya a la sección "Valores UF" y agregue el valor UF del mes');
                     }
-                } else {
+               } else {
                   jQuery('body').loader('hide');
                     alert('No hay valores UF cargados de ' + months[month]+ '. \nVaya a la sección "Valores UF" y agregue el valor UF del mes');
                 }

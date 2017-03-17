@@ -734,3 +734,14 @@ exports.pagar = function (data, cb) {
       }
     }
 }
+
+exports.getUserByRun = function(run, cb){
+  database.collection('asociados').findOne({
+    run: run
+  }, function(er, response){
+    cb(response);
+  });
+}
+exports.savePayment = function(data){
+  database.collection('pagos').insert(data);
+}

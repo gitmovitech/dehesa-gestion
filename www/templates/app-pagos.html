@@ -67,9 +67,9 @@
                         <button ng-disabled="!valoruf" class="btn btn-sm btn-primary" ng-click="showModalImportPagos(page.fields, null, {month: month, year: item.year})">
                             <i class="glyphicon glyphicon-cloud-upload"></i> Subir archivo excel de {{month}}
                         </button>
-                        <button ng-disabled="!registros" class="btn btn-sm btn-primary" ng-click="pagos.notificarContador(month, item.year)">
+                        <!--<button ng-disabled="!registros" class="btn btn-sm btn-primary" ng-click="pagos.notificarContador(month, item.year)">
                             <i class="glyphicon glyphicon-copy"></i> Notificar al contador
-                        </button>
+                        </button>-->
                         <button ng-disabled="!registros" class="btn btn-sm btn-primary" ng-click="pagos.exportarMesExcel(month, item.year)">
                             <i class="glyphicon glyphicon-export"></i> Exportar {{month}} a Excel
                         </button>
@@ -108,8 +108,7 @@
 
                       <span ng-if="key == 'tarifa'">
                           <b class="text-info">
-                            {{pagos.currentUF * tddata | currency}}
-                            <span class="text-success"> ({{tddata}} UF)</span>
+                            {{tddata | currency}}
                           </b>
                       </span>
 
