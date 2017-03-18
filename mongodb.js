@@ -742,6 +742,15 @@ exports.getUserByRun = function(run, cb){
     cb(response);
   });
 }
+
 exports.savePayment = function(data){
-  database.collection('pagos').insert(data);
+  database.collection('pagos').findOne({
+    id: data.id,
+    month: data.month,
+    year: data.year
+  }, function(err, response){
+    if(!response){
+      database.collection('pagos').insert(data);
+    }
+  });
 }

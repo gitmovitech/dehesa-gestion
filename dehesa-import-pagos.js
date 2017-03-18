@@ -12,7 +12,7 @@ exports.import = function(params, cb){
     var filename = file;
     filename = filename.split('/');
     filename = filename[filename.length -1];
-      var data;
+      var data = false;
       try {
           data = xlsx.parse(fs.readFileSync(file));
           var thismonth;
@@ -22,8 +22,6 @@ exports.import = function(params, cb){
                   break;
               }
           }
-          data = data[0].data;
-
       } catch (e) {
           cb({
               success: false,
@@ -31,20 +29,50 @@ exports.import = function(params, cb){
           });
       }
 
+    if(data){
       var run = '';
       filename = filename.toUpperCase();
       if(filename.match(/PAC/gi) && filename.match(/PAT/gi)){
-        console.log('PACPAT');
+        var pac = false;
+        var pat = false;
+        for(var t in data){
+          if(data[t].name.match(/PAC/gi)){
+            procesarPAC(data[t].data, thismonth, params.periodo.year, function(data){
+              pac = true;
+              if(pat){
+                cb({
+                    success: true
+                });
+              }
+            });
+          }
+          if(data[t].name.match(/PAT/gi)){
+            procesarPAT(data[t].data, thismonth, params.periodo.year, function(data){
+              pat = true;
+              if(pac){
+                cb({
+                    success: true
+                });
+              }
+            });
+          }
+        }
       } else if(filename.match(/PAC/gi)){
-        console.log('Procesando PAC');
+        data = data[0].data;
         procesarPAC(data, thismonth, params.periodo.year, function(data){
           cb({
               success: true
           });
         });
       } else if(filename.match(/PAT/gi)){
-        console.log('PAT');
+        data = data[0].data;
+        procesarPAT(data, thismonth, params.periodo.year, function(data){
+          cb({
+              success: true
+          });
+        });
       }
+    }
 
   } else {
       cb({
@@ -54,8 +82,28 @@ exports.import = function(params, cb){
   }
 }
 
+var procesarPAT = function(data, month, year, cb){
+  console.log('REGISTROS PAT: '+data.length);
+  registros = [];
+  for(var i in data){
+    registros[registros.length] = {
+      run: data[i][1],
+      pago: data[i][0],
+      tarifa: data[i][0],
+      estado: data[i][4]
+    }
+  }
+  guardarRegistros(registros, month, year, cb);
+}
+
+var procesarPACPAT = function(data, month, year, cb){
+  console.log('REGISTROS PAC y PAT: '+data.length);
+  console.log(data.length);
+}
+
 var procesarPAC = function(data, month, year, cb){
-console.log('REGISTROS: '+data.length);
+  console.log('REGISTROS PAC: '+data.length);
+  registros = [];
   for(var i in data){
     if(i >= 11){
       registros[registros.length] = {
@@ -66,15 +114,22 @@ console.log('REGISTROS: '+data.length);
       }
     }
   }
+  guardarRegistros(registros, month, year, cb);
+}
+
+var guardarRegistros = function(registros, month, year, cb){
   registros.forEach(function(item, i){
     mongo.getUserByRun(item.run, function(asociado){
       try{
-        if(item.estado != 'Pagos Procesados'){
+        if(item.estado != 'Pagos Procesados' && item.estado != 'APROBADA'){
           item.estado = 'Pendiente';
           item.debe = item.pago;
           item.pago = 0;
         } else {
           item.debe = 0
+        }
+        if(item.estado == 'APROBADA'){
+          item.estado = 'Aprobada';
         }
         mongo.savePayment({
           id: asociado.id,
@@ -82,12 +137,14 @@ console.log('REGISTROS: '+data.length);
           tarifa: item.tarifa,
           type: item.estado,
           pagado: item.pago,
-          debe: 0,
+          debe: item.debe,
           month: month,
           year: year
         });
-      } catch(e){}
+      } catch(e){
+        console.log(e);
+      }
     });
   });
-  cb(registros);
+  cb();
 }

@@ -26,7 +26,7 @@
                       <td>{{item.tarifa}}</td>
                       <td>{{item.type}}</td>
                       <td>{{item.pagado | currency}}</td>
-                      <td>{{item.debe | transformarUFdelMes:item.month:item.year | currency}}</td>
+                      <td>{{item.debe | currency}}</td>
                       <td>{{item.excedentes | currency}}</td>
                       <td>{{item.comentarios}}</td>
                     </tr>
@@ -134,7 +134,7 @@
                       <span class="text-info" ng-if="key == 'pagado' && trdata.tarifa != '-'">{{tddata | currency}}</span>
                       <span class="text-warning" ng-if="key == 'excedentes' && tddata != '-' && trdata.tarifa != '-'">{{tddata | currency}}</span>
                       <span class="text-warning" ng-if="key == 'excedentes' && tddata == '-' && trdata.tarifa != '-'">{{'0' | currency}}</span>
-                      <span class="text-danger" ng-if="key == 'debe' && tddata != '-' && trdata.tarifa != '-'">{{(valoruf.replace(',','.')-0)*(tddata-0) | currency}}</span>
+                      <span class="text-danger" ng-if="key == 'debe' && tddata != '-' && trdata.tarifa != '-'">{{(tddata-0) | currency}}</span>
                       <span ng-if="key == 'debe' && tddata == '-' && trdata.tarifa != '-'">-</span>
 
                       <span ng-if="key == 'comentarios' && trdata.tarifa != '-'" style="position:relative">
