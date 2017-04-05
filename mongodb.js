@@ -409,6 +409,15 @@ exports.editCollection = function (collection, data, callback) {
                         }
                     }
                     console.log('UPDATE ASOCIADOS')
+                    for(var x in insertdata){
+                      if(insertdata[x].charAt(0) ==':'){
+                        insertdata.splice(x,1);
+                      }
+                      if(insertdata[x].charAt(insertdata[x].length-1) == ':'){
+                        insertdata.splice(x,1);
+                      }
+                    }
+                    console.log(insertdata);
                     console.log(JSON.parse('{' + insertdata.join(',') + '}'));
                     /*insertdata.splice(0, 1);*/
                     if (update) {
@@ -418,6 +427,8 @@ exports.editCollection = function (collection, data, callback) {
 
                         }
                     } else {
+                      insertdata.push('"activo":1');
+                      console.log(insertdata);
                         query.insert(JSON.parse('{' + insertdata.join(',') + '}'));
                     }
                     callback(true);
