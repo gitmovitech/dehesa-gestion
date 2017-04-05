@@ -5,7 +5,7 @@
         <button ng-if="session.type == 'Administrador' && page.collection != 'pagos' && page.collection != 'asociados'" class="btn btn-sm btn-primary" ng-click="showModal(page.fields)">
             <i class="glyphicon glyphicon-plus-sign"></i> Crear nuevo
         </button>
-        <button ng-if="session.type == 'Administrador' && page.collection != 'pagos'" class="btn btn-sm btn-primary" ng-click="showModalAsociados(page.fields)">
+        <button ng-if="session.type == 'Administrador' && page.collection == 'asociados'" class="btn btn-sm btn-primary" ng-click="showModalAsociados(page.fields)">
             <i class="glyphicon glyphicon-plus-sign"></i> Crear nuevo
         </button>
         <!--<button ng-if="session.type == 'Administrador' && page.collection == 'asociados' || page.collection == 'pagos'" class="btn btn-sm btn-primary" ng-click="showModal(page.fields)">
@@ -35,6 +35,12 @@
             <a href="#" role="tab" data-toggle="tab" ng-click="showAsociados(-2)">No socios</a>
         </li>
     </ul>
+
+    <p>
+      <button class="btn btn-sm btn-primary" ng-click="exportarAsociados(asociadosTabActivo)" ng-if="page.collection == 'asociados' && asociadosTabActivo">
+        <i class="glyphicon glyphicon-export"></i> {{asociadosTabActivo}}
+      </button>
+    </p>
 
     <b class="text-primary" ng-if="registros && page.collection != 'pagos'">Mostrando {{registros}} registros.</b>
 

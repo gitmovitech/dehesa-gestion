@@ -1,4 +1,4 @@
-app.controller('app', function ($scope, Session, $http, $location, FileUploader, Pagination, RutHelper, $filter, randomPass) {
+app.controller('app', function ($scope, Session, $http, $location, FileUploader, Pagination, RutHelper, $filter, randomPass, Dialog) {
 
     //var socket = io.connect();
     $scope.pagination = Pagination.getNew(15);
@@ -409,7 +409,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                       }, 500);
                       $scope.load($scope.page);
                     } else if (response.message) {
-                        alert(response.message);
+                        Dialog.alert(response.message);
                         if (response.logout) {
                             sessionStorage.clear();
                             localStorage.clear();
@@ -419,10 +419,10 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
 
                 });
             } else {
-                alert('Primero presione el boton subir para cargar el CSV en el sistema');
+                Dialog.alert('Primero presione el boton subir para cargar el CSV en el sistema');
             }
         } else {
-            alert('Primero seleccione un archivo CSV para cargar al sistema');
+            Dialog.alert('Primero seleccione un archivo CSV para cargar al sistema');
         }
     }
 
@@ -524,7 +524,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                 $scope.load($scope.page);
             });
         } else {
-            alert('Debe escribir un mensaje antes de enviar el mensaje');
+            Dialog.alert('Debe escribir un mensaje antes de enviar el mensaje');
         }
     }
     $scope.chosenSelect = function (name, item) {
@@ -604,15 +604,15 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
 
                     } else {
                       jQuery('body').loader('hide');
-                        alert('No hay valores UF cargados de ' + months[month]+ '. \nVaya a la sección "Valores UF" y agregue el valor UF del mes');
+                        Dialog.alert('No hay valores UF cargados de ' + months[month]+ '. \nVaya a la sección "Valores UF" y agregue el valor UF del mes');
                     }
                } else {
                   jQuery('body').loader('hide');
-                    alert('No hay valores UF cargados de ' + months[month]+ '. \nVaya a la sección "Valores UF" y agregue el valor UF del mes');
+                    Dialog.alert('No hay valores UF cargados de ' + months[month]+ '. \nVaya a la sección "Valores UF" y agregue el valor UF del mes');
                 }
             } else {
               jQuery('body').loader('hide');
-                alert('No hay valores UF cargados de ' + months[month]+ '. \nVaya a la sección "Valores UF" y agregue el valor UF del mes');
+                Dialog.alert('No hay valores UF cargados de ' + months[month]+ '. \nVaya a la sección "Valores UF" y agregue el valor UF del mes');
             }
         });
     }
@@ -761,7 +761,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
               break;
               case 'Pagado con excedentes':
               if(data.excedentes <= 0){
-                alert('El asociado no posee excedentes para realizar el pago');
+                Dialog.alert('El asociado no posee excedentes para realizar el pago');
                 obtenerPagos(this.yearActive, this.monthActive);
               } else{
                 pagado = prompt('Total a pagar', Math.round(data.tarifa*$scope.pagos.currentUF));
@@ -872,9 +872,9 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                     }
                 }).success(function (response) {
                     if (response.success) {
-                        alert('Se ha enviado una notificación por correo al contador correctamente');
+                        Dialog.alert('Se ha enviado una notificación por correo al contador correctamente');
                     } else {
-                        alert(response.message);
+                        Dialog.alert(response.message);
                     }
                 });
             }
@@ -890,9 +890,9 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                 }
             }).success(function (response) {
                 if (response.success) {
-                    alert('El correo ha sido enviado');
+                    Dialog.alert('El correo ha sido enviado');
                 } else {
-                    alert(response.message);
+                    Dialog.alert(response.message);
                 }
             });
           }
@@ -963,8 +963,29 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
     $scope.pagos.tabMonthActive = $scope.pagos.periodos[$scope.pagos.periodos.length - 1].months.length - 1;
     $scope.pagos.monthActive = $scope.pagos.periodos[$scope.pagos.periodos.length - 1].months[$scope.pagos.periodos[$scope.pagos.periodos.length - 1].months.length - 1];
 
+
+    $scope.exportarAsociados = function(tab){
+      if($scope.registros > 0){
+
+      } else {
+        Dialog.alert('No hay registros para exportar');
+      }
+    }
+    $scope.asociadosTabActivo = "Exportar activos";
     $scope.showAsociados = function(data){
       activos = data;
+      switch(data){
+        case 0:
+            $scope.asociadosTabActivo = "Exportar suspendidos";
+            break;
+        case -1:
+        case -2:
+            $scope.asociadosTabActivo = false;
+            break;
+        default:
+          $scope.asociadosTabActivo = "Exportar activos";
+        break;
+      }
       $scope.load($scope.page);
     }
 
@@ -1102,7 +1123,7 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                   eid: eid
               }
           }).success(function (response) {
-            alert(response.mensaje);
+            Dialog.alert(response.mensaje);
           });
         }
       },

@@ -161,3 +161,9 @@ app.filter('preguntas', function () {
       return 'Hay '+input.length+' preguntas ingresadas';
     };
 });
+app.service('Dialog',function(){
+  this.alert = function(message){
+    jQuery('#dialog_alert_message').html(message);
+    jQuery('#dialog_alert').modal('show');
+  }
+});

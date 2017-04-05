@@ -17,7 +17,7 @@ app.service('Session', function () {
         sessionStorage.pages = JSON.stringify(data);
     }
 });
-app.controller('auth-init', function ($scope, $http, $location, Session) {
+app.controller('auth-init', function ($scope, $http, $location, Session,Dialog) {
     if (Session.get()) {
         $http.get('/api/config', {
             params: {
@@ -28,14 +28,14 @@ app.controller('auth-init', function ($scope, $http, $location, Session) {
                 Session.setPages(response);
                 $location.path('app');
             } else {
-                alert(err)
+                Dialog.alert(err)
             }
         });
     } else {
         $location.path('signin');
     }
 });
-app.controller('auth-signin', function ($scope, $location, $http, Session) {
+app.controller('auth-signin', function ($scope, $location, $http, Session,Dialog) {
     if (Session.get()) {
         $location.path('home');
     }
@@ -55,10 +55,10 @@ app.controller('auth-signin', function ($scope, $location, $http, Session) {
                     }
                     $location.path('/');
                 } else {
-                    alert(response.message);
+                    Dialog.alert(response.message);
                 }
             }).error(function () {
-                alert('Error inesperado de conexión: signin')
+                Dialog.alert('Error inesperado de conexión: signin')
             });
         }
         return false;
