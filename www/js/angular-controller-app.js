@@ -165,6 +165,21 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         jQuery('#modalCSVpagos').modal('show');
     }
 
+    /**
+    * BOTON NUEVO ASOCIADO
+    */
+    $scope.nuevoSocio = false;
+    $scope.showModalAsociados = function(fields){
+      $scope.nuevoSocio = 0;
+      for(var x in $scope.tabledata){
+        if($scope.tabledata[x].id > $scope.nuevoSocio){
+          $scope.nuevoSocio = $scope.tabledata[x].id;
+        }
+      }
+      $scope.nuevoSocio++;
+      $scope.showModal(fields);
+    }
+
     $scope.showModal = function (fields, data, object) {
         /*if ($scope.collection == 'pagos') {
          excelPeriodo = object;

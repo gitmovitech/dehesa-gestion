@@ -5,6 +5,7 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="modalEditLabel"><b><i class="{{page.icon}}"></i> {{page.name}}</b></h4>
+                    <h5 ng-if="nuevoSocio">Próximo número de socio sugerido: <b>{{nuevoSocio}}</b></h5>
                 </div>
                 <div class="modal-body">
                     <div class="form-group" ng-repeat="(key,item) in fields" ng-class="{'hidden':item.edit.hidden, 'hidden': item.type == 'hidden'}">
@@ -13,7 +14,7 @@
                             <span ng-if="item.type != 'title'">{{item.title}}</span>
                         </label>
                         <div class="col-sm-10" ng-if="item.type == 'title'">
-                          <h3 style="color:green">{{item.title}}</h3>
+                          <h3 style="color:green">{{item.title}} </h3>
                         </div>
                         <div class="col-sm-10" ng-if="item.type != 'title'">
 
