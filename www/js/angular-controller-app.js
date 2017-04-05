@@ -179,6 +179,13 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
       $scope.nuevoSocio++;
       $scope.showModal(fields);
     }
+    /**
+    * BOTON EDITAR ASOCIADO
+    */
+    $scope.showModalAsociadosEdit = function(fields, data){
+      $scope.nuevoSocio = false;
+      $scope.showModal(fields, data);
+    }
 
     $scope.showModal = function (fields, data, object) {
         /*if ($scope.collection == 'pagos') {
