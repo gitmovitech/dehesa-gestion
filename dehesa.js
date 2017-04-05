@@ -297,6 +297,84 @@ app.get('/descargas/:id/:year/:month/:file', function (req, res) {
         res.send('El archivo no fue encontrado en el servidor');
     }
 });
+app.get('/asociados/excel/:itab',function(req, res){
+  if(req.params.itab){
+    if(req.params.itab == 1 || req.params.itab == 0){
+      var data = [[
+        'NÚMERO DE SOCIO',
+        'FECHA DE INGRESO',
+        'RUN',
+        'PERSONALIDAD JURIDICA',
+        'RAZÓN SOCIAL',
+        'PRIMER NOMBRE',
+        'SEGUNDO NOMBRE',
+        'PRIMER APELLIDO',
+        'SEGUNDO APELLIDO',
+        'CORREO 1',
+        'CORREO 2',
+        'TELÉFONO 1',
+        'TELÉFONO 2',
+        'PRIMER NOMBRE',
+        'SEGUNDO NOMBRE',
+        'PRIMER APELLIDO',
+        'SEGUNDO APELLIDO',
+        'CORREO 1',
+        'CORREO 2',
+        'TELÉFONO 1',
+        'TELÉFONO 2',
+        'CALLE',
+        'NÚMERO',
+        'DEPTO / CASA',
+        'FORMA DE PAGO'
+      ]];
+      db.getAsociados(function(response){
+        for(var x in response){
+          if(response[x].activo == req.params.itab){
+            data.push([
+              response[x].id,
+              response[x].fecha_ingreso,
+              response[x].run,
+              response[x].persona,
+              response[x].razon_social,
+              response[x].first_name,
+              response[x].second_name,
+              response[x].last_name,
+              response[x].second_last_name,
+              response[x].correo11,
+              response[x].correo12,
+              response[x].telefono11,
+              response[x].telefono12,
+              response[x].first_name2,
+              response[x].second_name2,
+              response[x].last_name2,
+              response[x].second_last_name2,
+              response[x].correo21,
+              response[x].correo22,
+              response[x].telefono21,
+              response[x].telefono22,
+              response[x].direccion,
+              response[x].numeracion,
+              response[x].depto_casa,
+              response[x].forma_de_pago
+            ]);
+          }
+        }
+        if(req.params.itab == 1){
+          tab = "Asociados Activos";
+          file = "asociados-activos"
+        }
+        if(req.params.itab == 0){
+          tab = "Asociados Suspendidos";
+          file = "asociados-suspendidos"
+        }
+        var buffer = xlsx.build([{name: tab, data: data}]);
+        res.setHeader('Content-disposition', 'attachment; filename="' + file + '.xlsx"');
+        res.setHeader('Content-type', 'application/vnd.ms-excel');
+        res.end(buffer);
+      });
+    }
+  }
+});
 app.get('/pagos/excel/:year/:month', function (req, res) {
   if(req.params.month && req.params.year){
     var mes = null;

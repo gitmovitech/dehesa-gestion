@@ -965,8 +965,17 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
 
 
     $scope.exportarAsociados = function(tab){
-      if($scope.registros > 0){
-
+      var itab = false;
+      switch(tab){
+        case "Exportar activos":
+          itab = 1;
+        break;
+        case "Exportar suspendidos":
+          itab = 0;
+        break;
+      }
+      if($scope.registros > 0 && itab){
+        window.open('/asociados/excel/'+itab, '_blank');
       } else {
         Dialog.alert('No hay registros para exportar');
       }
