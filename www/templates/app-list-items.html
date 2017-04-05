@@ -16,7 +16,7 @@
                 <button ng-if="page.collection == 'asociados' && trdata.activo == 1" class="btn btn-warning btn-xs" ng-click="suspenderAsociado(trdata, 0)"><i class="glyphicon glyphicon-remove"></i> Suspender</button>
                 <button ng-if="page.collection == 'asociados' && trdata.activo == 1" class="btn btn-warning btn-xs" ng-click="suspenderAsociado(trdata,-1)"><i class="glyphicon glyphicon-remove"></i> Eliminar</button>
                 <button ng-if="page.collection == 'asociados' && trdata.activo == 1" class="btn btn-warning btn-xs" ng-click="suspenderAsociado(trdata,-2)"><i class="glyphicon glyphicon-remove"></i> No socios</button>
-                <button ng-if="page.collection == 'asociados' && !trdata.activo != 1" class="btn btn-info btn-xs" ng-click="activarAsociado(trdata)"><i class="glyphicon glyphicon-ok"></i> Activar</button>
+                <button ng-if="page.collection == 'asociados' && trdata.activo != 1" class="btn btn-info btn-xs" ng-click="activarAsociado(trdata)"><i class="glyphicon glyphicon-ok"></i> Activar</button>
 
                 <button ng-if="page.collection == 'encuestas'" class="btn btn-default btn-xs" ng-click="encuestas.previsualizar(tddata)"><i class="glyphicon glyphicon-eye-open"></i> Previsualizar</button>
                 <button ng-if="page.collection == 'encuestas'" class="btn btn-info btn-xs" ng-click="encuestas.enviar(tddata)"><i class="glyphicon glyphicon-envelope"></i> Enviar encuesta</button>
