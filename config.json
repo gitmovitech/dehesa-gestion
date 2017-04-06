@@ -38,7 +38,8 @@
               {
                   "name": "fecha_ingreso",
                   "title": "Fecha de ingreso",
-                  "type": "text"
+                  "type": "text",
+                  "hiddenedit": true
               },
               {
                   "title": "ASOCIADO",
