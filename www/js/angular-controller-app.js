@@ -973,24 +973,28 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         case "Exportar suspendidos":
           itab = 0;
         break;
+        case "Exportar eliminados":
+          itab = -1;
+        break;
+        case "Exportar no socios":
+          itab = -2;
+        break;
       }
-      if($scope.registros > 0 && itab){
-        window.open('/asociados/excel/'+itab, '_blank');
-      } else {
-        Dialog.alert('No hay registros para exportar');
-      }
+      window.open('/asociados/excel/'+itab, '_blank');
     }
     $scope.asociadosTabActivo = "Exportar activos";
     $scope.showAsociados = function(data){
       activos = data;
       switch(data){
         case 0:
-            $scope.asociadosTabActivo = "Exportar suspendidos";
-            break;
+          $scope.asociadosTabActivo = "Exportar suspendidos";
+          break;
         case -1:
+          $scope.asociadosTabActivo = "Exportar eliminados";
+          break;
         case -2:
-            $scope.asociadosTabActivo = false;
-            break;
+          $scope.asociadosTabActivo = "Exportar no socios";
+          break;
         default:
           $scope.asociadosTabActivo = "Exportar activos";
         break;

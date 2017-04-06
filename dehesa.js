@@ -299,7 +299,7 @@ app.get('/descargas/:id/:year/:month/:file', function (req, res) {
 });
 app.get('/asociados/excel/:itab',function(req, res){
   if(req.params.itab){
-    if(req.params.itab == 1 || req.params.itab == 0){
+    if(req.params.itab == 1 || req.params.itab == 0 || req.params.itab == -1 || req.params.itab == -2){
       var data = [[
         'NÚMERO DE SOCIO',
         'FECHA DE INGRESO',
@@ -366,6 +366,14 @@ app.get('/asociados/excel/:itab',function(req, res){
         if(req.params.itab == 0){
           tab = "Asociados Suspendidos";
           file = "asociados-suspendidos"
+        }
+        if(req.params.itab == -1){
+          tab = "Asociados Eliminados";
+          file = "asociados-eliminados"
+        }
+        if(req.params.itab == -2){
+          tab = "Asociados no socios";
+          file = "asociados-no-socios"
         }
         var buffer = xlsx.build([{name: tab, data: data}]);
         res.setHeader('Content-disposition', 'attachment; filename="' + file + '.xlsx"');
