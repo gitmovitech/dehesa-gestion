@@ -74,8 +74,7 @@
               {
                   "name": "razon_social",
                   "title": "Razón Social",
-                  "type": "text",
-                  "required": true
+                  "type": "text"
               },
               {
                   "name": "first_name",
@@ -345,6 +344,12 @@
                       ]
                   },
                   "required": true
+              },
+              {
+                  "name": "uf",
+                  "title": "Monto mensual (UF)",
+                  "type": "text",
+                  "required":true
               },
               {
                   "name": "activo",

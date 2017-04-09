@@ -30,22 +30,36 @@ if (process.argv[2]) {
                           id: item[0]
                       }, function (err, response) {
                         if(!response){
-                          var correos = item[10];
-                          if(correos){
-                            correos = correos.split(';');
-                            if(!correos[0]){
-                              correos[0] = '';
+
+                          var correos1 = item[18];
+                          if(correos1){
+                            correos1 = correos1.split(';');
+                            if(!correos1[0]){
+                              correos1[0] = '';
                             }
-                            if(!correos[1]){
-                              correos[1] = '';
+                            if(!correos1[1]){
+                              correos1[1] = '';
                             }
                           } else{
-                            correos = ['',''];
+                            correos1 = ['',''];
+                          }
+
+                          var correos2 = item[10];
+                          if(correos2){
+                            correos2 = correos2.split(';');
+                            if(!correos2[0]){
+                              correos2[0] = '';
+                            }
+                            if(!correos2[1]){
+                              correos2[1] = '';
+                            }
+                          } else{
+                            correos2 = ['',''];
                           }
 
                           db.collection('asociados').insert({
                               id: item[0],
-                              fecha_ingreso: item[1],
+                              fecha_ingreso: "",
                               run: item[13],
                               persona: 'PERSONA NATURAL',
                               razon_social: '',
@@ -53,22 +67,23 @@ if (process.argv[2]) {
                               second_name: item[15],
                               last_name: item[16],
                               second_last_name: item[17],
-                              correo11: correos[0],
-                              correo12: correos[1],
+                              correo11: correos1[0],
+                              correo12: correos1[1],
                               telefono11: '',
                               telefono12: '',
                               first_name2: item[6],
                               second_name2: item[7],
                               last_name2: item[8],
                               second_last_name2: item[9],
-                              correo21: '',
-                              correo22: '',
+                              correo21: correos2[0],
+                              correo22: correos2[1],
                               telefono21: '',
                               telefono22: '',
                               direccion: item[2],
                               numeracion: item[3],
                               depto_casa: item[4],
                               forma_de_pago: item[21],
+                              uf: item[22],
                               activo: 1,
 
                           });
