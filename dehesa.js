@@ -127,6 +127,22 @@ app.post('/api/data', function (req, res) {
     if (req.body.params.token) {
         getSession(req.body.params.token, function (userdata, err) {
             if (userdata) {
+              // PASA ASOCIADOS A MAYUSCULAS
+              if(req.body.params.collection == 'asociados'){
+                var valor = '';
+                for(var x in req.body.params.fields){
+                  if(typeof req.body.params.fields[x].type != "undefined"){
+                    if(req.body.params.fields[x].name != "_id"
+                    && req.body.params.fields[x].name != "uf"
+                    && req.body.params.fields[x].type == 'text'
+                    && typeof req.body.params.fields[x].value != "undefined"){
+                      valor = req.body.params.fields[x].value;
+                      req.body.params.fields[x].value = valor.toUpperCase();
+                    }
+                  }
+                }
+              }
+              console.log(req.body.params.fields);
                 db.editCollection(req.body.params.collection, req.body.params.fields, function (response) {
                     if (response) {
                         res.send({

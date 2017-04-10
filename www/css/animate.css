@@ -86,3 +86,6 @@
     color:red;
     font-size:10px;
 }
+.asociados{
+  text-transform: uppercase !important;
+}
