@@ -75,7 +75,7 @@
                                 </table>
                             </div>
 
-                            <input ng-class="{'hidden':item.name == '_id'}" ng-model="item.value" type="{{item.type}}"
+                            <input onkeyup="this.value=this.value.replace(/[^a-zA-Z0-9\.\,\-\s\@]*$/, '');" ng-class="{'hidden':item.name == '_id'}" ng-model="item.value" type="{{item.type}}"
                                 class="form-control {{collection}}" name="{{item.name}}" id="{{item.name}}"
                                 ng-if="item.type != 'uf' && item.name != '_id' && item.type != 'textarea' && item.type != 'checkbox' && item.type != 'question' && item.type != 'select' && item.type != 'rut' && item.type != 'file' && !item.hiddenedit"
                                 placeholder="Escriba aquí" ng-required="{{item.required}}">

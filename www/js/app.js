@@ -1,3 +1,6 @@
+function soloTexto(item){
+  item.replace(/^[a-zA-Z0-9\.\,\-\@]*$/,'');
+}
 var app = angular.module('intranet', ['ngRoute', 'ngAnimate', 'platanus.rut', 'angularFileUpload', 'simplePagination']);
 app.config(function ($routeProvider, $locationProvider) {
 
