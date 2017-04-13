@@ -126,6 +126,12 @@
                   "hiddenlist": true
               },
               {
+                  "title": "Usar los mismos datos de asociado en el contácto",
+                  "type": "custom-checkbox",
+                  "oncheck": "copy-asociado",
+                  "hiddenlist": true
+              },
+              {
                   "name": "first_name2",
                   "title": "Primer Nombre",
                   "type": "text",

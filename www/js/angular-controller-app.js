@@ -7,6 +7,66 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         $scope.pageIndex = sessionStorage.page;
     }
 
+    /**
+    FUNCION DE AUTOCOMPLETAR CONTACTO CON DATOS DEL ASOCIADO
+    **/
+    $scope.CustomCheckbox = function(ev){
+      if(jQuery(ev).is(':checked')){
+        switch(jQuery(ev).data('action')){
+          case 'copy-asociado':
+            for(var x in $scope.fields){
+              for(var b in $scope.fields){
+                if($scope.fields[x].name == 'first_name' && $scope.fields[b].name == 'first_name2'){
+                  $scope.fields[b].value = $scope.fields[x].value;
+                }
+                if($scope.fields[x].name == 'second_name' && $scope.fields[b].name == 'second_name2'){
+                  $scope.fields[b].value = $scope.fields[x].value;
+                }
+                if($scope.fields[x].name == 'last_name' && $scope.fields[b].name == 'last_name2'){
+                  $scope.fields[b].value = $scope.fields[x].value;
+                }
+                if($scope.fields[x].name == 'second_last_name' && $scope.fields[b].name == 'second_last_name2'){
+                  $scope.fields[b].value = $scope.fields[x].value;
+                }
+                if($scope.fields[x].name == 'correo11' && $scope.fields[b].name == 'correo21'){
+                  $scope.fields[b].value = $scope.fields[x].value;
+                }
+                if($scope.fields[x].name == 'correo12' && $scope.fields[b].name == 'correo22'){
+                  $scope.fields[b].value = $scope.fields[x].value;
+                }
+                if($scope.fields[x].name == 'telefono11' && $scope.fields[b].name == 'telefono21'){
+                  $scope.fields[b].value = $scope.fields[x].value;
+                }
+                if($scope.fields[x].name == 'telefono12' && $scope.fields[b].name == 'telefono22'){
+                  $scope.fields[b].value = $scope.fields[x].value;
+                }
+              }
+            }
+          break;
+        }
+      } else {
+        switch(jQuery(ev).data('action')){
+          case 'copy-asociado':
+              for(var b in $scope.fields){
+                switch($scope.fields[b].name){
+                  case 'first_name2':
+                  case 'second_name2':
+                  case 'last_name2':
+                  case 'second_last_name2':
+                  case 'correo21':
+                  case 'correo22':
+                  case 'telefono21':
+                  case 'telefono22':
+                    $scope.fields[b].value = '';
+                  break;
+                }
+              }
+          break;
+        }
+      }
+      $scope.$apply();
+    }
+
     var activos = 1;
     var fieldsReset = [];
     var fieldsdata;

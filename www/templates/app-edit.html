@@ -9,7 +9,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group" ng-repeat="(key,item) in fields" ng-class="{'hidden':item.edit.hidden, 'hidden': item.type == 'hidden'}">
-                        <label for="{{item.name}}" class="col-sm-2 control-label" ng-if="item.name != '_id' && !item.hiddenedit">
+                        <label for="{{item.name}}" class="col-sm-2 control-label" ng-if="item.name != '_id' && !item.hiddenedit && item.type != 'custom-checkbox'">
                             <i class="glyphicon glyphicon-asterisk input-required-asterisk" ng-if="item.required"></i>
                             <span ng-if="item.type != 'title'">{{item.title}}</span>
                         </label>
@@ -77,8 +77,16 @@
 
                             <input onkeyup="this.value=this.value.replace(/[^a-zA-Z0-9\.\,\-\s\@]*$/, '');" ng-class="{'hidden':item.name == '_id'}" ng-model="item.value" type="{{item.type}}"
                                 class="form-control {{collection}}" name="{{item.name}}" id="{{item.name}}"
-                                ng-if="item.type != 'uf' && item.name != '_id' && item.type != 'textarea' && item.type != 'checkbox' && item.type != 'question' && item.type != 'select' && item.type != 'rut' && item.type != 'file' && !item.hiddenedit"
+                                ng-if="item.type != 'uf' && item.name != '_id' && item.type != 'textarea' && item.type != 'checkbox' && item.type != 'custom-checkbox' && item.type != 'question' && item.type != 'select' && item.type != 'rut' && item.type != 'file' && !item.hiddenedit"
                                 placeholder="Escriba aquí" ng-required="{{item.required}}">
+
+
+                                <!-- CUSTOM CHECKBOX -->
+                                <label ng-if="item.type == 'custom-checkbox'">
+                                  <input type="checkbox" data-action="{{item.oncheck}}" data-index="{{key}}" onchange="angular.element(this).scope().CustomCheckbox(this)"/>
+                                  {{item.title}}
+                                </label>
+
 
                             <div ng-if="item.type == 'question'"><div ng-include="'templates/app-preguntas.html'"></div></div>
 
