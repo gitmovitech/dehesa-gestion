@@ -53,23 +53,10 @@
                   "required": true
               },
               {
-                  "name": "persona",
-                  "title": "Tipo de persona",
-                  "type": "select",
-                  "data": {
-                      "options": [
-                          {
-                              "key": "PERSONA NATURAL",
-                              "value": "PERSONA NATURAL"
-                          },
-                          {
-                              "key": "PERSONA JURÍDICA",
-                              "value": "PERSONA JURÍDICA"
-                          }
-                      ]
-                  },
-                  "onselect": "on-select-persona",
-                  "required": true
+                  "title": "PERSONA JURÍDICA",
+                  "type": "custom-checkbox",
+                  "oncheck": "persona-juridica",
+                  "hiddenlist": true
               },
               {
                   "name": "razon_social",
