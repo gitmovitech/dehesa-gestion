@@ -119,6 +119,17 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
             for (var x in fieldsdata) {
                 for (var i in fieldsdata[x]) {
                     if (fieldsdata[x][i]) {
+                      if($scope.page.collection == 'asociados'){
+                        if(i == 'first_name' || i == 'last_name' || i == 'first_name2' || i == 'last_name2'){
+                          arr = fieldsdata[x][i];
+                          arr = arr.toString();
+                          arr = arr.toLowerCase();
+                          if (arr.indexOf($scope.page.filter.value) >= 0) {
+                              tmpdata[tmpdata.length] = fieldsdata[x];
+                              break;
+                          }
+                        }
+                      } else {
                         arr = fieldsdata[x][i];
                         arr = arr.toString();
                         arr = arr.toLowerCase();
@@ -126,16 +137,24 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
                             tmpdata[tmpdata.length] = fieldsdata[x];
                             break;
                         }
+                      }
                     }
                 }
             }
         }
+
         $scope.registros = tmpdata.length;
         $scope.pagination.numPages = Math.ceil(tmpdata.length / $scope.pagination.perPage);
         if (tmpdata.length > 0){
+          $scope.tabledata = [];
+          setTimeout(function(){
             $scope.tabledata = tmpdata;
-        } else
-            $scope.tabledata = fieldsdata;
+            if (!$scope.$$phase) $scope.$apply();
+          },0);
+        } else{
+          $scope.tabledata = fieldsdata;
+        }
+
     }
 
     $scope.pages = false;

@@ -55,8 +55,7 @@
         {
           "title": "PERSONA JURÍDICA",
           "type": "custom-checkbox",
-          "oncheck": "persona-juridica",
-          "hiddenlist": true
+          "oncheck": "persona-juridica"
         },
         {
           "name": "razon_social",

@@ -7,7 +7,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr ng-repeat="(index,trdata) in tabledata| startFrom: pagination.page * pagination.perPage | limitTo: pagination.perPage">
+        <tr ng-repeat="(index,trdata) in tabledata| startFrom: pagination.page * pagination.perPage | limitTo: pagination.perPage track by $index">
             <td><b class="text-danger" ng-if="page.collection != 'asociados'">{{trdata.index}}</b></td>
             <td ng-if="key == '_id' && session.type == 'Administrador'" ng-repeat="(key,tddata) in trdata">
                 <button class="btn btn-success btn-xs" ng-click="showModalAsociadosEdit(page.fields, trdata)"><i class="glyphicon glyphicon-edit"></i> Editar</button>
