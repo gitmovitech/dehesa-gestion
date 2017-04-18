@@ -1,710 +1,715 @@
 {
-    "url": "http://gestion.jvdehesa.cl",
-    "sendmail": {
-        "sendgrid": {
-            "key": "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"
-        }
-    },
-    "admin": {
-        "name": "Victor Vargas",
-        "email": "vvargas@movitech.cl",
-        "password": "xxx",
-        "type": "Administrador"
-    },
-    "mongo": {
-        "name": "dehesa"
-    },
-    "pages": [
-      {
-          "icon": "glyphicon glyphicon-list-alt",
-          "name": "Asociados",
-          "scope": [
-              "Administrador",
-              "Editor"
-          ],
-          "collection": "asociados",
-          "fields": [
+  "url": "http://gestion.jvdehesa.cl",
+  "sendmail": {
+    "sendgrid": {
+      "key": "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"
+    }
+  },
+  "admin": {
+    "name": "Victor Vargas",
+    "email": "vvargas@movitech.cl",
+    "password": "xxx",
+    "type": "Administrador"
+  },
+  "mongo": {
+    "name": "dehesa"
+  },
+  "pages": [
+    {
+      "icon": "glyphicon glyphicon-list-alt",
+      "name": "Asociados",
+      "scope": [
+        "Administrador",
+        "Editor"
+      ],
+      "collection": "asociados",
+      "fields": [
+        {
+          "name": "_id",
+          "type": "text",
+          "id": true
+        },
+        {
+          "name": "id",
+          "title": "Nº Socio",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "fecha_ingreso",
+          "title": "Fecha de ingreso",
+          "type": "text",
+          "hiddenedit": true
+        },
+        {
+          "title": "ASOCIADO",
+          "type": "title",
+          "hiddenlist": true
+        },
+        {
+          "name": "run",
+          "title": "RUN",
+          "type": "rut",
+          "required": true
+        },
+        {
+          "title": "PERSONA JURÍDICA",
+          "type": "custom-checkbox",
+          "oncheck": "persona-juridica",
+          "hiddenlist": true
+        },
+        {
+          "name": "razon_social",
+          "title": "Razón Social",
+          "type": "text",
+          "hiddenedit": true
+        },
+        {
+          "name": "first_name",
+          "title": "Primer Nombre",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "second_name",
+          "title": "Segundo Nombre",
+          "type": "text"
+        },
+        {
+          "name": "last_name",
+          "title": "Primer Apellido",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "second_last_name",
+          "title": "Segundo Apellido",
+          "type": "text"
+        },
+        {
+          "name": "correo11",
+          "title": "Correo 1",
+          "type": "email",
+          "required": true
+        },
+        {
+          "name": "correo12",
+          "title": "Correo 2",
+          "type": "email"
+        },
+        {
+          "name": "telefono11",
+          "title": "Teléfono 1",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "telefono12",
+          "title": "Teléfono 2",
+          "type": "number"
+        },
+        {
+          "title": "CONTACTO",
+          "type": "title",
+          "hiddenlist": true
+        },
+        {
+          "title": "Usar los mismos datos de asociado en el contácto",
+          "type": "custom-checkbox",
+          "oncheck": "copy-asociado",
+          "hiddenlist": true
+        },
+        {
+          "name": "first_name2",
+          "title": "Primer Nombre",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "second_name2",
+          "title": "Segundo Nombre",
+          "type": "text"
+        },
+        {
+          "name": "last_name2",
+          "title": "Primer Apellido",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "second_last_name2",
+          "title": "Segundo Apellido",
+          "type": "text"
+        },
+        {
+          "name": "correo21",
+          "title": "Correo 1",
+          "type": "email",
+          "required": true
+        },
+        {
+          "name": "correo22",
+          "title": "Correo 2",
+          "type": "email"
+        },
+        {
+          "name": "telefono21",
+          "title": "Teléfono 1",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "telefono22",
+          "title": "Teléfono 2",
+          "type": "number"
+        },
+        {
+          "title": "DIRECCIÓN",
+          "type": "title",
+          "hiddenlist": true
+        },
+        {
+          "name": "direccion",
+          "title": "Calle",
+          "type": "select",
+          "data": {
+            "options": [
               {
-                  "name": "_id",
-                  "type": "text",
-                  "id": true
+                "key": "AV. FELIPE CUBILLOS SIGALL",
+                "value": "AV. FELIPE CUBILLOS SIGALL"
               },
               {
-                  "name": "id",
-                  "title": "Nº Socio",
-                  "type": "number",
-                  "required": true
+                "key": "AV. EL TRANQUE",
+                "value": "AV. EL TRANQUE"
               },
               {
-                  "name": "fecha_ingreso",
-                  "title": "Fecha de ingreso",
-                  "type": "text",
-                  "hiddenedit": true
+                "key": "AV. JOSE ALCALDE DELANO",
+                "value": "AV. JOSE ALCALDE DELANO"
               },
               {
-                  "title": "ASOCIADO",
-                  "type": "title",
-                  "hiddenlist": true
+                "key": "AV. SANTA BLANCA",
+                "value": "AV. SANTA BLANCA"
               },
               {
-                  "name": "run",
-                  "title": "RUN",
-                  "type": "rut",
-                  "required": true
+                "key": "CAMINO CERRO LARGO",
+                "value": "CAMINO CERRO LARGO"
               },
               {
-                  "title": "PERSONA JURÍDICA",
-                  "type": "custom-checkbox",
-                  "oncheck": "persona-juridica",
-                  "hiddenlist": true
+                "key": "CAMINO DE LA AGUADA",
+                "value": "CAMINO DE LA AGUADA"
               },
               {
-                  "name": "razon_social",
-                  "title": "Razón Social",
-                  "type": "text"
+                "key": "CAMINO DE LA VILLA",
+                "value": "CAMINO DE LA VILLA"
               },
               {
-                  "name": "first_name",
-                  "title": "Primer Nombre",
-                  "type": "text",
-                  "required": true
+                "key": "CAMINO DE LAS ARDILLAS",
+                "value": "CAMINO DE LAS ARDILLAS"
               },
               {
-                  "name": "second_name",
-                  "title": "Segundo Nombre",
-                  "type": "text"
+                "key": "CAMINO DE LAS LIEBRES",
+                "value": "CAMINO DE LAS LIEBRES"
               },
               {
-                  "name": "last_name",
-                  "title": "Primer Apellido",
-                  "type": "text",
-                  "required": true
+                "key": "CAMINO DE LOS CASTORES",
+                "value": "CAMINO DE LOS CASTORES"
               },
               {
-                  "name": "second_last_name",
-                  "title": "Segundo Apellido",
-                  "type": "text"
+                "key": "CAMINO DE LOS CIERVOS",
+                "value": "CAMINO DE LOS CIERVOS"
               },
               {
-                  "name": "correo11",
-                  "title": "Correo 1",
-                  "type": "email",
-                  "required": true
+                "key": "CAMINO DEL ALARIFE",
+                "value": "CAMINO DEL ALARIFE"
               },
               {
-                  "name": "correo12",
-                  "title": "Correo 2",
-                  "type": "email"
+                "key": "CAMINO DEL LABRADOR",
+                "value": "CAMINO DEL LABRADOR"
               },
               {
-                  "name": "telefono11",
-                  "title": "Teléfono 1",
-                  "type": "number",
-                  "required": true
+                "key": "CAMINO EL ATAJO",
+                "value": "CAMINO EL ATAJO"
               },
               {
-                  "name": "telefono12",
-                  "title": "Teléfono 2",
-                  "type": "number"
+                "key": "CAMINO ENTRE LOMAS",
+                "value": "CAMINO ENTRE LOMAS"
               },
               {
-                  "title": "CONTACTO",
-                  "type": "title",
-                  "hiddenlist": true
+                "key": "CAMINO LA CAPELLANIA",
+                "value": "CAMINO LA CAPELLANIA"
               },
               {
-                  "title": "Usar los mismos datos de asociado en el contácto",
-                  "type": "custom-checkbox",
-                  "oncheck": "copy-asociado",
-                  "hiddenlist": true
+                "key": "CAMINO TURISTICO",
+                "value": "CAMINO TURISTICO"
               },
               {
-                  "name": "first_name2",
-                  "title": "Primer Nombre",
-                  "type": "text",
-                  "required": true
+                "key": "CAMINO TURISTICO INT.",
+                "value": "CAMINO TURISTICO INT."
               },
               {
-                  "name": "second_name2",
-                  "title": "Segundo Nombre",
-                  "type": "text"
+                "key": "CONTRALM. FDEZ.VIAL",
+                "value": "CONTRALM. FDEZ.VIAL"
               },
               {
-                  "name": "last_name2",
-                  "title": "Primer Apellido",
-                  "type": "text",
-                  "required": true
+                "key": "CONTRALM. FDEZ.VIAL INT",
+                "value": "CONTRALM. FDEZ.VIAL INT"
               },
               {
-                  "name": "second_last_name2",
-                  "title": "Segundo Apellido",
-                  "type": "text"
+                "key": "EL MAYORAZGO",
+                "value": "EL MAYORAZGO"
               },
               {
-                  "name": "correo21",
-                  "title": "Correo 1",
-                  "type": "email",
-                  "required": true
+                "key": "EL MONASTERIO",
+                "value": "EL MONASTERIO"
               },
               {
-                  "name": "correo22",
-                  "title": "Correo 2",
-                  "type": "email"
+                "key": "LOS PORTONES DE LA DEHESA",
+                "value": "LOS PORTONES DE LA DEHESA"
               },
               {
-                  "name": "telefono21",
-                  "title": "Teléfono 1",
-                  "type": "number",
-                  "required": true
+                "key": "MANUEL GUZMAN MATURANA",
+                "value": "MANUEL GUZMAN MATURANA"
               },
               {
-                  "name": "telefono22",
-                  "title": "Teléfono 2",
-                  "type": "number"
+                "key": "PASAJE EL RACO",
+                "value": "PASAJE EL RACO"
               },
               {
-                  "title": "DIRECCIÓN",
-                  "type": "title",
-                  "hiddenlist": true
+                "key": "RIHUE",
+                "value": "RIHUE"
               },
               {
-                  "name": "direccion",
-                  "title": "Calle",
-                  "type": "select",
-                  "data": {
-                      "options": [
-                          {
-                              "key": "AV. FELIPE CUBILLOS SIGALL",
-                              "value": "AV. FELIPE CUBILLOS SIGALL"
-                          },
-                          {
-                              "key": "AV. EL TRANQUE",
-                              "value": "AV. EL TRANQUE"
-                          },
-                          {
-                              "key": "AV. JOSE ALCALDE DELANO",
-                              "value": "AV. JOSE ALCALDE DELANO"
-                          },
-                          {
-                              "key": "AV. SANTA BLANCA",
-                              "value": "AV. SANTA BLANCA"
-                          },
-                          {
-                              "key": "CAMINO CERRO LARGO",
-                              "value": "CAMINO CERRO LARGO"
-                          },
-                          {
-                              "key": "CAMINO DE LA AGUADA",
-                              "value": "CAMINO DE LA AGUADA"
-                          },
-                          {
-                              "key": "CAMINO DE LA VILLA",
-                              "value": "CAMINO DE LA VILLA"
-                          },
-                          {
-                              "key": "CAMINO DE LAS ARDILLAS",
-                              "value": "CAMINO DE LAS ARDILLAS"
-                          },
-                          {
-                              "key": "CAMINO DE LAS LIEBRES",
-                              "value": "CAMINO DE LAS LIEBRES"
-                          },
-                          {
-                              "key": "CAMINO DE LOS CASTORES",
-                              "value": "CAMINO DE LOS CASTORES"
-                          },
-                          {
-                              "key": "CAMINO DE LOS CIERVOS",
-                              "value": "CAMINO DE LOS CIERVOS"
-                          },
-                          {
-                              "key": "CAMINO DEL ALARIFE",
-                              "value": "CAMINO DEL ALARIFE"
-                          },
-                          {
-                              "key": "CAMINO DEL LABRADOR",
-                              "value": "CAMINO DEL LABRADOR"
-                          },
-                          {
-                              "key": "CAMINO EL ATAJO",
-                              "value": "CAMINO EL ATAJO"
-                          },
-                          {
-                              "key": "CAMINO ENTRE LOMAS",
-                              "value": "CAMINO ENTRE LOMAS"
-                          },
-                          {
-                              "key": "CAMINO LA CAPELLANIA",
-                              "value": "CAMINO LA CAPELLANIA"
-                          },
-                          {
-                              "key": "CAMINO TURISTICO",
-                              "value": "CAMINO TURISTICO"
-                          },
-                          {
-                              "key": "CAMINO TURISTICO INT.",
-                              "value": "CAMINO TURISTICO INT."
-                          },
-                          {
-                              "key": "CONTRALM. FDEZ.VIAL",
-                              "value": "CONTRALM. FDEZ.VIAL"
-                          },
-                          {
-                              "key": "CONTRALM. FDEZ.VIAL INT",
-                              "value": "CONTRALM. FDEZ.VIAL INT"
-                          },
-                          {
-                              "key": "EL MAYORAZGO",
-                              "value": "EL MAYORAZGO"
-                          },
-                          {
-                              "key": "EL MONASTERIO",
-                              "value": "EL MONASTERIO"
-                          },
-                          {
-                              "key": "LOS PORTONES DE LA DEHESA",
-                              "value": "LOS PORTONES DE LA DEHESA"
-                          },
-                          {
-                              "key": "MANUEL GUZMAN MATURANA",
-                              "value": "MANUEL GUZMAN MATURANA"
-                          },
-                          {
-                              "key": "PASAJE EL RACO",
-                              "value": "PASAJE EL RACO"
-                          },
-                          {
-                              "key": "RIHUE",
-                              "value": "RIHUE"
-                          },
-                          {
-                              "key": "RIO LIUCURA",
-                              "value": "RIO LIUCURA"
-                          },
-                          {
-                              "key": "RIO TRANCURA",
-                              "value": "RIO TRANCURA"
-                          },
-                          {
-                              "key": "RUCAMANQUI",
-                              "value": "RUCAMANQUI"
-                          },
-                          {
-                              "key": "SENDERO DEL MONTE",
-                              "value": "SENDERO DEL MONTE"
-                          },
-                          {
-                              "key": "SENDERO ENTRE LOMAS",
-                              "value": "SENDERO ENTRE LOMAS"
-                          }
-                      ]
-                  },
-                  "required": true
+                "key": "RIO LIUCURA",
+                "value": "RIO LIUCURA"
               },
               {
-                  "name": "numeracion",
-                  "title": "Número",
-                  "type": "number",
-                  "required": true
+                "key": "RIO TRANCURA",
+                "value": "RIO TRANCURA"
               },
               {
-                  "name": "depto_casa",
-                  "title": "Depto/Casa",
-                  "type": "text"
+                "key": "RUCAMANQUI",
+                "value": "RUCAMANQUI"
               },
               {
-                  "name": "forma_de_pago",
-                  "title": "Forma de pago",
-                  "type": "select",
-                  "data": {
-                      "options": [
-                          {
-                              "key": "PAT",
-                              "value": "PAT"
-                          },
-                          {
-                              "key": "PAC",
-                              "value": "PAC"
-                          },
-                          {
-                              "key": "P/OFICINA",
-                              "value": "P/OFICINA"
-                          },
-                          {
-                              "key": "COSTO CERO",
-                              "value": "COSTO CERO"
-                          }
-                      ]
-                  },
-                  "required": true
+                "key": "SENDERO DEL MONTE",
+                "value": "SENDERO DEL MONTE"
               },
               {
-                  "name": "uf",
-                  "title": "Monto mensual (UF)",
-                  "type": "text",
-                  "required":true
-              },
-              {
-                  "name": "activo",
-                  "title": "Activo",
-                  "type": "number",
-                  "hiddenlist": true,
-                  "hiddenedit": true
+                "key": "SENDERO ENTRE LOMAS",
+                "value": "SENDERO ENTRE LOMAS"
               }
-          ]
-      },
-        {
-            "icon": "glyphicon glyphicon-user",
-            "name": "Cuentas de usuario",
-            "scope": [
-                "Administrador"
-            ],
-            "collection": "users",
-            "fields": [
-                {
-                    "name": "name",
-                    "title": "Nombre",
-                    "type": "text",
-                    "required": true
-                },
-                {
-                    "name": "email",
-                    "title": "Correo electrónico",
-                    "type": "email",
-                    "required": true,
-                    "id": true
-                },
-                {
-                    "name": "password",
-                    "title": "Contraseña",
-                    "type": "password",
-                    "hiddenlist": true,
-                    "required": true
-                },
-                {
-                    "name": "type",
-                    "title": "Tipo de usuario",
-                    "type": "select",
-                    "data": {
-                        "options": [
-                            {
-                                "key": "Editor",
-                                "value": "Editor"
-                            },
-                            {
-                                "key": "Contable",
-                                "value": "Contable"
-                            },
-                            {
-                                "key": "Administrador",
-                                "value": "Administrador"
-                            }
-                        ]
-                    },
-                    "required": true
-                }
             ]
+          },
+          "required": true
         },
         {
-            "icon": "glyphicon glyphicon-usd",
-            "name": "Pagos",
-            "scope": [
-                "Administrador",
-                "Editor",
-                "Contable"
-            ],
-            "collection": "pagos",
-            "fields": [
-                {
-                    "name": "_id",
-                    "type": "text",
-                    "id": true
-                },
-                {
-                    "name": "id",
-                    "title": "ID",
-                    "type": "text"
-                },
-                {
-                    "name": "nombre",
-                    "title": "Titular",
-                    "type": "text"
-                },
-                {
-                    "name": "tarifa",
-                    "title": "Tarifa",
-                    "type": "text",
-                    "required": true
-                },
-                {
-                    "name": "type",
-                    "title": "Estado de pago",
-                    "type": "select",
-                    "data": {
-                        "options": [
-                          {
-                              "key": "No importado",
-                              "value": "No importado"
-                          },
-                            {
-                                "key": "Pendiente",
-                                "value": "Pendiente"
-                            },
-                            {
-                                "group": "PAC",
-                                "options": [{
-                                    "key": "PAC Cargado",
-                                    "value": "PAC Cargado"
-                                },
-                                {
-                                    "key": "Pagos Procesados",
-                                    "value": "Pagos Procesados"
-                                },
-                                {
-                                    "key": "Mandato Anulado en Banco",
-                                    "value": "Mandato Anulado en Banco"
-                                },
-                                {
-                                    "key": "Falta de Fondos",
-                                    "value": "Falta de Fondos"
-                                },
-                                {
-                                    "key": "Monto a Pagar Excede el Máximo Permitido",
-                                    "value": "Monto a Pagar Excede el Máximo Permitido"
-                                },
-                                {
-                                    "key": "Cuenta con Orden de Cierre",
-                                    "value": "Cuenta con Orden de Cierre"
-                                }]
-                            },
-                            {
-                                "group": "PAT",
-                                "options":[{
-                                    "key": "PAT Cargado",
-                                    "value": "PAT Cargado"
-                                },
-                                {
-                                    "key": "Aprobada",
-                                    "value": "Aprobada"
-                                },
-                                {
-                                    "key": "Rechazo por Tarjeta Bloqueada",
-                                    "value": "Rechazo por Tarjeta Bloqueada"
-                                },
-                                {
-                                    "key": "Rechazo Tarjeta no Existe",
-                                    "value": "Rechazo Tarjeta no Existe"
-                                },
-                                {
-                                    "key": "Rechazo Tarjeta Perdida o Robada",
-                                    "value": "Rechazo Tarjeta Perdida o Robada"
-                                },
-                                {
-                                    "key": "Rechazo Tarjeta con Problemas",
-                                    "value": "Rechazo Tarjeta con Problemas"
-                                },
-                                {
-                                    "key": "Rechazo Tarjeta Vencida",
-                                    "value": "Rechazo Tarjeta Vencida"
-                                }]
-                            },
-                            {
-                                "key": "Pagado con transferencia",
-                                "value": "Pagado con transferencia",
-                                "scope": [
-                                    "Administrador",
-                                    "Editor"
-                                ]
-                            },
-                            {
-                                "key": "Cheque recibido",
-                                "value": "Cheque recibido",
-                                "scope": [
-                                    "Administrador",
-                                    "Editor"
-                                ]
-                            },
-                            {
-                                "key": "Pagado con cheque",
-                                "value": "Pagado con cheque",
-                                "scope": [
-                                    "Administrador",
-                                    "Editor"
-                                ]
-                            },
-                            {
-                                "key": "Pagado en efectivo",
-                                "value": "Pagado en efectivo",
-                                "scope": [
-                                    "Administrador",
-                                    "Editor"
-                                ]
-                            },
-                            {
-                                "key": "Pagado con excedentes",
-                                "value": "Pagado con excedentes",
-                                "scope": [
-                                    "Administrador",
-                                    "Editor"
-                                ]
-                            },
-                            {
-                                "key": "Pagado fuera de plazo (+ 20%)",
-                                "value": "Pagado fuera de plazo (+ 20%)",
-                                "scope": [
-                                    "Administrador",
-                                    "Editor"
-                                ]
-                            }
-                        ]
-                    }
-                },
-                {
-                    "name": "pagado",
-                    "title": "Pagado",
-                    "type": "text"
-                },
-                {
-                    "name": "debe",
-                    "title": "Debe",
-                    "type": "text"
-                },
-                {
-                    "name": "excedentes",
-                    "title": "Excedentes",
-                    "type": "text"
-                },
-                {
-                    "name": "comentarios",
-                    "title": "Comentarios",
-                    "type": "textarea"
-                },
-                {
-                    "name": "archivos",
-                    "title": "Archivos",
-                    "type": "file"
-                }
-            ]
+          "name": "numeracion",
+          "title": "Número",
+          "type": "number",
+          "required": true
         },
         {
-            "icon": "glyphicon glyphicon-stats",
-            "name": "Valores UF",
-            "scope": [
-                "Administrador",
-                "Editor"
-            ],
-            "collection": "valoresuf",
-            "fields": [
-                {
-                    "name": "_id",
-                    "type": "text",
-                    "id": true
-                },
-                {
-                    "name": "dia",
-                    "title": "Día",
-                    "type": "number",
-                    "required": true
-                },
-                {
-                    "name": "mes",
-                    "title": "Mes",
-                    "type": "select",
-                    "data": {
-                        "options": [
-                            {
-                                "key": "Enero",
-                                "value": "Enero"
-                            },
-                            {
-                                "key": "Febrero",
-                                "value": "Febrero"
-                            },
-                            {
-                                "key": "Marzo",
-                                "value": "Marzo"
-                            },
-                            {
-                                "key": "Abril",
-                                "value": "Abril"
-                            },
-                            {
-                                "key": "Mayo",
-                                "value": "Mayo"
-                            },
-                            {
-                                "key": "Junio",
-                                "value": "Junio"
-                            },
-                            {
-                                "key": "Julio",
-                                "value": "Julio"
-                            },
-                            {
-                                "key": "Agosto",
-                                "value": "Agosto"
-                            },
-                            {
-                                "key": "Septiembre",
-                                "value": "Septiembre"
-                            },
-                            {
-                                "key": "Octubre",
-                                "value": "Octubre"
-                            },
-                            {
-                                "key": "Noviembre",
-                                "value": "Noviembre"
-                            },
-                            {
-                                "key": "Diciembre",
-                                "value": "Diciembre"
-                            }
-                        ]
-                    },
-                    "required": true
-                },
-                {
-                    "name": "year",
-                    "title": "Año",
-                    "type": "number",
-                    "required": true
-                },
-                {
-                    "name": "valor",
-                    "title": "Valor",
-                    "type": "uf",
-                    "required": true
-                }
-            ]
+          "name": "depto_casa",
+          "title": "Depto/Casa",
+          "type": "text"
         },
         {
-            "icon": "glyphicon glyphicon-th-list",
-            "name": "Encuestas",
-            "scope": [
-                "Administrador",
-                "Editor"
-            ],
-            "collection": "encuestas",
-            "fields": [
-                {
-                    "name": "_id",
-                    "type": "text",
-                    "id": true
-                },
-                {
-                    "name": "nombre",
-                    "title": "Nombre de la encuesta",
-                    "type": "text",
-                    "required": true
-                },
-                {
-                    "name": "preguntas",
-                    "title": "Preguntas",
-                    "type": "question",
-                    "required": true
-                }
+          "name": "forma_de_pago",
+          "title": "Forma de pago",
+          "type": "select",
+          "data": {
+            "options": [
+              {
+                "key": "PAT",
+                "value": "PAT"
+              },
+              {
+                "key": "PAC",
+                "value": "PAC"
+              },
+              {
+                "key": "P/OFICINA",
+                "value": "P/OFICINA"
+              },
+              {
+                "key": "COSTO CERO",
+                "value": "COSTO CERO"
+              }
             ]
+          },
+          "required": true
+        },
+        {
+          "name": "uf",
+          "title": "Monto mensual (UF)",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "activo",
+          "title": "Activo",
+          "type": "number",
+          "hiddenlist": true,
+          "hiddenedit": true
         }
-    ]
+      ]
+    },
+    {
+      "icon": "glyphicon glyphicon-user",
+      "name": "Cuentas de usuario",
+      "scope": [
+        "Administrador"
+      ],
+      "collection": "users",
+      "fields": [
+        {
+          "name": "name",
+          "title": "Nombre",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "email",
+          "title": "Correo electrónico",
+          "type": "email",
+          "required": true,
+          "id": true
+        },
+        {
+          "name": "password",
+          "title": "Contraseña",
+          "type": "password",
+          "hiddenlist": true,
+          "required": true
+        },
+        {
+          "name": "type",
+          "title": "Tipo de usuario",
+          "type": "select",
+          "data": {
+            "options": [
+              {
+                "key": "Editor",
+                "value": "Editor"
+              },
+              {
+                "key": "Contable",
+                "value": "Contable"
+              },
+              {
+                "key": "Administrador",
+                "value": "Administrador"
+              }
+            ]
+          },
+          "required": true
+        }
+      ]
+    },
+    {
+      "icon": "glyphicon glyphicon-usd",
+      "name": "Pagos",
+      "scope": [
+        "Administrador",
+        "Editor",
+        "Contable"
+      ],
+      "collection": "pagos",
+      "fields": [
+        {
+          "name": "_id",
+          "type": "text",
+          "id": true
+        },
+        {
+          "name": "id",
+          "title": "ID",
+          "type": "text"
+        },
+        {
+          "name": "nombre",
+          "title": "Titular",
+          "type": "text"
+        },
+        {
+          "name": "tarifa",
+          "title": "Tarifa",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "type",
+          "title": "Estado de pago",
+          "type": "select",
+          "data": {
+            "options": [
+              {
+                "key": "No importado",
+                "value": "No importado"
+              },
+              {
+                "key": "Pendiente",
+                "value": "Pendiente"
+              },
+              {
+                "group": "PAC",
+                "options": [
+                  {
+                    "key": "PAC Cargado",
+                    "value": "PAC Cargado"
+                  },
+                  {
+                    "key": "Pagos Procesados",
+                    "value": "Pagos Procesados"
+                  },
+                  {
+                    "key": "Mandato Anulado en Banco",
+                    "value": "Mandato Anulado en Banco"
+                  },
+                  {
+                    "key": "Falta de Fondos",
+                    "value": "Falta de Fondos"
+                  },
+                  {
+                    "key": "Monto a Pagar Excede el Máximo Permitido",
+                    "value": "Monto a Pagar Excede el Máximo Permitido"
+                  },
+                  {
+                    "key": "Cuenta con Orden de Cierre",
+                    "value": "Cuenta con Orden de Cierre"
+                  }
+                ]
+              },
+              {
+                "group": "PAT",
+                "options": [
+                  {
+                    "key": "PAT Cargado",
+                    "value": "PAT Cargado"
+                  },
+                  {
+                    "key": "Aprobada",
+                    "value": "Aprobada"
+                  },
+                  {
+                    "key": "Rechazo por Tarjeta Bloqueada",
+                    "value": "Rechazo por Tarjeta Bloqueada"
+                  },
+                  {
+                    "key": "Rechazo Tarjeta no Existe",
+                    "value": "Rechazo Tarjeta no Existe"
+                  },
+                  {
+                    "key": "Rechazo Tarjeta Perdida o Robada",
+                    "value": "Rechazo Tarjeta Perdida o Robada"
+                  },
+                  {
+                    "key": "Rechazo Tarjeta con Problemas",
+                    "value": "Rechazo Tarjeta con Problemas"
+                  },
+                  {
+                    "key": "Rechazo Tarjeta Vencida",
+                    "value": "Rechazo Tarjeta Vencida"
+                  }
+                ]
+              },
+              {
+                "key": "Pagado con transferencia",
+                "value": "Pagado con transferencia",
+                "scope": [
+                  "Administrador",
+                  "Editor"
+                ]
+              },
+              {
+                "key": "Cheque recibido",
+                "value": "Cheque recibido",
+                "scope": [
+                  "Administrador",
+                  "Editor"
+                ]
+              },
+              {
+                "key": "Pagado con cheque",
+                "value": "Pagado con cheque",
+                "scope": [
+                  "Administrador",
+                  "Editor"
+                ]
+              },
+              {
+                "key": "Pagado en efectivo",
+                "value": "Pagado en efectivo",
+                "scope": [
+                  "Administrador",
+                  "Editor"
+                ]
+              },
+              {
+                "key": "Pagado con excedentes",
+                "value": "Pagado con excedentes",
+                "scope": [
+                  "Administrador",
+                  "Editor"
+                ]
+              },
+              {
+                "key": "Pagado fuera de plazo (+ 20%)",
+                "value": "Pagado fuera de plazo (+ 20%)",
+                "scope": [
+                  "Administrador",
+                  "Editor"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "pagado",
+          "title": "Pagado",
+          "type": "text"
+        },
+        {
+          "name": "debe",
+          "title": "Debe",
+          "type": "text"
+        },
+        {
+          "name": "excedentes",
+          "title": "Excedentes",
+          "type": "text"
+        },
+        {
+          "name": "comentarios",
+          "title": "Comentarios",
+          "type": "textarea"
+        },
+        {
+          "name": "archivos",
+          "title": "Archivos",
+          "type": "file"
+        }
+      ]
+    },
+    {
+      "icon": "glyphicon glyphicon-stats",
+      "name": "Valores UF",
+      "scope": [
+        "Administrador",
+        "Editor"
+      ],
+      "collection": "valoresuf",
+      "fields": [
+        {
+          "name": "_id",
+          "type": "text",
+          "id": true
+        },
+        {
+          "name": "dia",
+          "title": "Día",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "mes",
+          "title": "Mes",
+          "type": "select",
+          "data": {
+            "options": [
+              {
+                "key": "Enero",
+                "value": "Enero"
+              },
+              {
+                "key": "Febrero",
+                "value": "Febrero"
+              },
+              {
+                "key": "Marzo",
+                "value": "Marzo"
+              },
+              {
+                "key": "Abril",
+                "value": "Abril"
+              },
+              {
+                "key": "Mayo",
+                "value": "Mayo"
+              },
+              {
+                "key": "Junio",
+                "value": "Junio"
+              },
+              {
+                "key": "Julio",
+                "value": "Julio"
+              },
+              {
+                "key": "Agosto",
+                "value": "Agosto"
+              },
+              {
+                "key": "Septiembre",
+                "value": "Septiembre"
+              },
+              {
+                "key": "Octubre",
+                "value": "Octubre"
+              },
+              {
+                "key": "Noviembre",
+                "value": "Noviembre"
+              },
+              {
+                "key": "Diciembre",
+                "value": "Diciembre"
+              }
+            ]
+          },
+          "required": true
+        },
+        {
+          "name": "year",
+          "title": "Año",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "valor",
+          "title": "Valor",
+          "type": "uf",
+          "required": true
+        }
+      ]
+    },
+    {
+      "icon": "glyphicon glyphicon-th-list",
+      "name": "Encuestas",
+      "scope": [
+        "Administrador",
+        "Editor"
+      ],
+      "collection": "encuestas",
+      "fields": [
+        {
+          "name": "_id",
+          "type": "text",
+          "id": true
+        },
+        {
+          "name": "nombre",
+          "title": "Nombre de la encuesta",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "preguntas",
+          "title": "Preguntas",
+          "type": "question",
+          "required": true
+        }
+      ]
+    }
+  ]
 }

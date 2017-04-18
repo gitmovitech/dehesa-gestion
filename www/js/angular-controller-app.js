@@ -13,6 +13,17 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
     $scope.CustomCheckbox = function(ev){
       if(jQuery(ev).is(':checked')){
         switch(jQuery(ev).data('action')){
+          case 'persona-juridica':
+            for(var x in $scope.fields){
+              if($scope.fields[x].name == 'razon_social'){
+                $scope.fields[x].hiddenedit = false;
+                $scope.fields[x].required = true;
+              }
+              if($scope.fields[x].name == 'last_name'){
+                $scope.fields[x].required = false;
+              }
+            }
+          break;
           case 'copy-asociado':
             for(var x in $scope.fields){
               for(var b in $scope.fields){
@@ -46,6 +57,17 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         }
       } else {
         switch(jQuery(ev).data('action')){
+          case 'persona-juridica':
+            for(var x in $scope.fields){
+              if($scope.fields[x].name == 'razon_social'){
+                $scope.fields[x].hiddenedit = true;
+                $scope.fields[x].required = false;
+              }
+              if($scope.fields[x].name == 'last_name'){
+                $scope.fields[x].required = true;
+              }
+            }
+          break;
           case 'copy-asociado':
               for(var b in $scope.fields){
                 switch($scope.fields[b].name){
