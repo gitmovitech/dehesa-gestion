@@ -58,12 +58,6 @@
           "oncheck": "persona-juridica"
         },
         {
-          "name": "razon_social",
-          "title": "Razón Social",
-          "type": "text",
-          "hiddenedit": true
-        },
-        {
           "name": "first_name",
           "title": "Primer Nombre",
           "type": "text",

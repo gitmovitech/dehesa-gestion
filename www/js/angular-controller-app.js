@@ -15,10 +15,10 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         switch(jQuery(ev).data('action')){
           case 'persona-juridica':
             for(var x in $scope.fields){
-              if($scope.fields[x].name == 'razon_social'){
+              /*if($scope.fields[x].name == 'razon_social'){
                 $scope.fields[x].hiddenedit = false;
                 $scope.fields[x].required = true;
-              }
+              }*/
               if($scope.fields[x].name == 'last_name'){
                 $scope.fields[x].required = false;
               }
@@ -59,10 +59,10 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         switch(jQuery(ev).data('action')){
           case 'persona-juridica':
             for(var x in $scope.fields){
-              if($scope.fields[x].name == 'razon_social'){
+              /*if($scope.fields[x].name == 'razon_social'){
                 $scope.fields[x].hiddenedit = true;
                 $scope.fields[x].required = false;
-              }
+              }*/
               if($scope.fields[x].name == 'last_name'){
                 $scope.fields[x].required = true;
               }
