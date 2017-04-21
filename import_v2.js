@@ -62,7 +62,6 @@ if (process.argv[2]) {
                               fecha_ingreso: "",
                               run: item[13],
                               persona: 'PERSONA NATURAL',
-                              razon_social: '',
                               first_name: item[14],
                               second_name: item[15],
                               last_name: item[16],
