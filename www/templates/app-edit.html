@@ -75,17 +75,24 @@
                                 </table>
                             </div>
 
-                            <input onkeyup="this.value=this.value.replace(/[^a-zA-Z0-9\.\,\-\s\@]*$/, '');" ng-class="{'hidden':item.name == '_id'}" ng-model="item.value" type="{{item.type}}"
-                                class="form-control {{collection}}" name="{{item.name}}" id="{{item.name}}"
-                                ng-if="item.type != 'uf' && item.name != '_id' && item.type != 'textarea' && item.type != 'checkbox' && item.type != 'custom-checkbox' && item.type != 'question' && item.type != 'select' && item.type != 'rut' && item.type != 'file' && !item.hiddenedit"
-                                placeholder="Escriba aquí" ng-required="{{item.required}}">
+                            <input onkeyup="this.value=this.value.replace(/[^a-zA-Z0-9\.\,\-\s\@]*$/, '');"
+                            ng-class="{'hidden':item.name == '_id'}"
+                            ng-model="item.value"
+                            type="{{item.type}}"
+                            class="form-control {{collection}}"
+                            name="{{item.name}}"
+                            id="{{item.name}}"
+                            ng-if="item.type != 'phone' && item.type != 'uf' && item.name != '_id' && item.type != 'textarea' && item.type != 'checkbox' && item.type != 'custom-checkbox' && item.type != 'question' && item.type != 'select' && item.type != 'rut' && item.type != 'file' && !item.hiddenedit"
+                            placeholder="Escriba aquí" ng-required="{{item.required}}">
 
+                            <!-- Phone type input -->
+                            <input class="form-control" ng-model="item.value" min="11" type="number" placeholder="11 digitos, ejemplo: 56912345678" ng-if="item.type == 'phone'" />
 
-                                <!-- CUSTOM CHECKBOX -->
-                                <label ng-if="item.type == 'custom-checkbox'">
-                                  <input type="checkbox" data-action="{{item.oncheck}}" data-index="{{key}}" onchange="angular.element(this).scope().CustomCheckbox(this)"/>
-                                  {{item.title}}
-                                </label>
+                            <!-- CUSTOM CHECKBOX -->
+                            <label ng-if="item.type == 'custom-checkbox'">
+                              <input type="checkbox" data-action="{{item.oncheck}}" data-index="{{key}}" onchange="angular.element(this).scope().CustomCheckbox(this)"/>
+                              {{item.title}}
+                            </label>
 
 
                             <div ng-if="item.type == 'question'"><div ng-include="'templates/app-preguntas.html'"></div></div>

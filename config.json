@@ -93,13 +93,13 @@
         {
           "name": "telefono11",
           "title": "Teléfono 1",
-          "type": "number",
+          "type": "phone",
           "required": true
         },
         {
           "name": "telefono12",
           "title": "Teléfono 2",
-          "type": "number"
+          "type": "phone"
         },
         {
           "title": "CONTACTO",
@@ -148,13 +148,13 @@
         {
           "name": "telefono21",
           "title": "Teléfono 1",
-          "type": "number",
+          "type": "phone",
           "required": true
         },
         {
           "name": "telefono22",
           "title": "Teléfono 2",
-          "type": "number"
+          "type": "phone"
         },
         {
           "title": "DIRECCIÓN",

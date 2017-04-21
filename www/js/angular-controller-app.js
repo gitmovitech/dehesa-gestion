@@ -469,24 +469,57 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
             }
           }
         }
-        $http.post('/api/data', {
-            params: {
-                token: Session.get(),
-                collection: $scope.collection,
-                fields: $scope.fields
+        var send = true;
+        var fields = $scope.fields;
+        for(var p in fields){
+          if(fields[p].type == "title"){
+            fields.splice(p,1);
+          }
+          if(typeof fields[p].value == "undefined" || fields[p].value == null){
+            fields[p].value = "";
+          }
+        }
+        /*for(var p in fields){
+          if(fields[p].type == 'phone'){
+            if(fields[p].required && fields[p].value == ""){
+              alert("El campo de "+fields[p].title+" es obligatorio");
+              send = false;
+              break;
+            } else if(fields[p].required){
+              phone = fields[p].value;
+              alert(phone.length);
+              alert("El campo de "+fields[p].title+" debe contener 11 digitos");
+              send = false;
+              break;
+            } if(phone.length != 0 && phone.length != 11){
+              alert("El campo de "+fields[p].title+" debe contener 11 digitos");
+              send = false;
+              break;
             }
-        }).success(function (response) {
-            jQuery('#modalEdit').modal('hide');
-            if (reload) {
-              setTimeout(function () {
-                  $scope.uploader.destroy();
-                  delete $scope.uploader;
-                  setUploader();
-              }, 500);
-            }
-            $scope.load($scope.page);
 
-        });
+          }
+        }*/
+        if(send){
+          $http.post('/api/data', {
+              params: {
+                  token: Session.get(),
+                  collection: $scope.collection,
+                  fields: fields
+              }
+          }).success(function (response) {
+              jQuery('#modalEdit').modal('hide');
+              if (reload) {
+                setTimeout(function () {
+                    $scope.uploader.destroy();
+                    delete $scope.uploader;
+                    setUploader();
+                }, 500);
+              }
+              $scope.load($scope.page);
+
+          });
+        }
+
     }
 
     $scope.uploadCSV = function () {
