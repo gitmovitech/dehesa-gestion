@@ -1,9 +1,9 @@
 (function () {
     "use strict";
 
-    var paginationModule = angular.module('simplePagination', [$rootScope]);
+    var paginationModule = angular.module('simplePagination', []);
 
-    paginationModule.factory('Pagination', function () {
+    paginationModule.factory('Pagination', function ($rootScope) {
 
         var pagination = {};
 
