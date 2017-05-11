@@ -1,4 +1,4 @@
-app.controller('app', function ($scope, Session, $http, $location, FileUploader, Pagination, RutHelper, $filter, randomPass, Dialog) {
+app.controller('app', function ($scope, $rootScope, Session, $http, $location, FileUploader, Pagination, RutHelper, $filter, randomPass, Dialog) {
 
     //var socket = io.connect();
     $scope.pagination = Pagination.getNew(15);
@@ -6,6 +6,11 @@ app.controller('app', function ($scope, Session, $http, $location, FileUploader,
         sessionStorage.page = 0;
         $scope.pageIndex = sessionStorage.page;
     }
+
+    $rootScope.$on('refresh', function(){
+      console.log('Refreshing');
+      $scope.load($scope.pages[sessionStorage.page], sessionStorage.page);
+    });
 
     /**
     FUNCION DE AUTOCOMPLETAR CONTACTO CON DATOS DEL ASOCIADO
