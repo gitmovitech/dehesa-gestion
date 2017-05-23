@@ -10,9 +10,6 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
     $rootScope.$on('refresh', function(){
       console.log('Refreshing');
       $scope.load($scope.pages[sessionStorage.page], sessionStorage.page);
-      setTimeout(function(){
-        $scope.$apply();
-      },500);
     });
 
     /**
@@ -261,7 +258,9 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
                 });
             }
         }
-
+        setTimeout(function(){
+          $scope.$apply();
+        },500);
     }
     var excelPeriodo;
     $scope.showModalImportPagos = function (fields, data, object) {
