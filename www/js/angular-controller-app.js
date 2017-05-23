@@ -10,6 +10,9 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
     $rootScope.$on('refresh', function(){
       console.log('Refreshing');
       $scope.load($scope.pages[sessionStorage.page], sessionStorage.page);
+      setTimeout(function(){
+        $scope.$apply();
+      },500);
     });
 
     /**
