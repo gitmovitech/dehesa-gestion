@@ -116,6 +116,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
             }
             $scope.pages = pages;
         }
+        console.log($scope.pages[sessionStorage.page]);
         $scope.load($scope.pages[sessionStorage.page], sessionStorage.page);
     });
     $scope.search = function () {
