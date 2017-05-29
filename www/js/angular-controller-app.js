@@ -1,4 +1,4 @@
-app.controller('app', function ($scope, $rootScope, Session, $http, $location, FileUploader, Pagination, RutHelper, $filter, randomPass, Dialog) {
+app.controller('app', function ($scope, $rootScope, Session, $http, $location, FileUploader, Pagination, RutHelper, $filter, randomPass, Dialog, SendForm) {
 
     //var socket = io.connect();
     $scope.pagination = Pagination.getNew(15);
@@ -102,7 +102,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
         params: {
             token: Session.get()
         }
-    }).success(function (response) {
+    }).then(function (response) {
         $scope.session = response;
         var pages = Session.getPages().pages;
         if ($scope.session.type == 'Administrador') {
@@ -233,7 +233,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
               }
                 $http.get('/api/data', {
                     params: params
-                }).success(function (response) {
+                }).then(function (response) {
                     if (response.success) {
                         for (var d in response.data) {
                             if (item.collection == 'pagos') {
@@ -322,7 +322,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
                             function: fields[x].data.function,
                             databack: x
                         }
-                    }).success(function (response) {
+                    }).then(function (response) {
                         if (response.success) {
                             $scope.fields[response.databack].value = '';
                             $scope.fields[response.databack].data.options = response.data;
@@ -336,7 +336,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
                             collection: fields[x].data.collection,
                             databack: x
                         }
-                    }).success(function (response) {
+                    }).then(function (response) {
                         if (response.success) {
                             /**
                              * Busqueda a traves de filtro
@@ -448,85 +448,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
         //}
     }
     $scope.sendForm = function () {
-        var reload = false;
-        if ($scope.filestosave.length > 0) {
-            reload = true;
-            for (var x in $scope.fields) {
-                if ($scope.fields[x].type == 'file') {
-                    $scope.fields[x].value = $scope.filestosave;
-                    break;
-                }
-            }
-        }
-        if ($scope.collection == 'asociados') {
-            for (var x in $scope.fields) {
-                if ($scope.fields[x].name == 'servicios') {
-                    console.info($scope.fields[x])
-                }
-                if ($scope.fields[x].name == 'tipo_casa') {
-                    console.info($scope.fields[x])
-                }
-            }
-        }
-        if($scope.collection == 'encuestas'){
-          for(var p in $scope.fields){
-            if($scope.fields[p].name == 'preguntas'){
-              $scope.fields[p].value = JSON.parse(JSON.stringify($scope.encuestas.preguntas));
-              console.log($scope.fields[p].value);
-            }
-          }
-        }
-        var send = true;
-        var fields = $scope.fields;
-        for(var p in fields){
-          if(fields[p].type == "title"){
-            fields.splice(p,1);
-          }
-          if(typeof fields[p].value == "undefined" || fields[p].value == null){
-            fields[p].value = "";
-          }
-        }
-        /*for(var p in fields){
-          if(fields[p].type == 'phone'){
-            if(fields[p].required && fields[p].value == ""){
-              alert("El campo de "+fields[p].title+" es obligatorio");
-              send = false;
-              break;
-            } else if(fields[p].required){
-              phone = fields[p].value;
-              alert(phone.length);
-              alert("El campo de "+fields[p].title+" debe contener 11 digitos");
-              send = false;
-              break;
-            } if(phone.length != 0 && phone.length != 11){
-              alert("El campo de "+fields[p].title+" debe contener 11 digitos");
-              send = false;
-              break;
-            }
-
-          }
-        }*/
-        if(send){
-          $http.post('/api/data', {
-              params: {
-                  token: Session.get(),
-                  collection: $scope.collection,
-                  fields: fields
-              }
-          }).success(function (response) {
-              jQuery('#modalEdit').modal('hide');
-              if (reload) {
-                setTimeout(function () {
-                    $scope.uploader.destroy();
-                    delete $scope.uploader;
-                    setUploader();
-                }, 500);
-              }
-              $scope.load($scope.page);
-
-          });
-        }
-
+      SendForm.send($scope, $http, Session);
     }
 
     $scope.uploadCSV = function () {
@@ -539,7 +461,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
                         periodo: excelPeriodo,
                         uf: $scope.pagos.currentUF
                     }
-                }).success(function (response) {
+                }).then(function (response) {
                     if (response.success) {
 
                       jQuery('#modalCSVpagos').modal('hide');
@@ -604,7 +526,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
                     collection: $scope.collection,
                     data: id
                 }
-            }).success(function (response) {
+            }).then(function (response) {
                 $scope.load($scope.page);
             });
         }
@@ -635,7 +557,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
                         file: file
                     }
                 }
-            }).success(function (response) {
+            }).then(function (response) {
                 $scope.load($scope.page);
             });
         }
@@ -659,7 +581,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
                         message: $scope.input.messageText
                     }
                 }
-            }).success(function () {
+            }).then(function () {
                 $scope.input.messageText = '';
                 jQuery('#modalEditMessages').modal('hide');
                 $scope.load($scope.page);
@@ -696,7 +618,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
                 token: Session.get(),
                 collection: 'valoresuf'
             }
-        }).success(function (response) {
+        }).then(function (response) {
             if (response.success) {
                 if (response.data.length > 0) {
                   $scope.pagos.valoresuf = response.data;
@@ -714,7 +636,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
 
                         $http.get('/api/data', {
                             params: params
-                        }).success(function (response) {
+                        }).then(function (response) {
                             if (response.success) {
                                 var registros = [];
                                 var tarifa;
@@ -800,7 +722,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
                   id: item.id
                 }
             }
-          }).success(function (response) {
+          }).then(function (response) {
             if(response.success){
               var obj = response.data;
               var array=[];
@@ -836,7 +758,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
               params: {
                   token: Session.get()
               }
-            }).success(function (response) {
+            }).then(function (response) {
               obtenerPagos($scope.pagos.yearActive, $scope.pagos.monthActive);
               jQuery('#modalEdit').modal('hide');
             });
@@ -958,7 +880,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
                       token: Session.get(),
                       data: paramsdata
                   }
-              }).success(function (response) {
+              }).then(function (response) {
                   obtenerPagos($scope.pagos.yearActive, $scope.pagos.monthActive);
               });
             }
@@ -1011,7 +933,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
                         year: year,
                         month: month
                     }
-                }).success(function (response) {
+                }).then(function (response) {
                     if (response.success) {
                         Dialog.alert('Se ha enviado una notificación por correo al contador correctamente');
                     } else {
@@ -1029,7 +951,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
                     year: this.yearActive,
                     month: this.monthActive
                 }
-            }).success(function (response) {
+            }).then(function (response) {
                 if (response.success) {
                     Dialog.alert('El correo ha sido enviado');
                 } else {
@@ -1167,7 +1089,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
                     value: value
                 }]
             }
-        }).success(function (response) {
+        }).then(function (response) {
           $scope.load($scope.page);
         });
       }
@@ -1187,7 +1109,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
                     value: 1
                 }]
             }
-        }).success(function (response) {
+        }).then(function (response) {
           $scope.load($scope.page);
         });
       }
@@ -1276,7 +1198,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
                   token: Session.get(),
                   eid: eid
               }
-          }).success(function (response) {
+          }).then(function (response) {
             Dialog.alert(response.mensaje);
           });
         }

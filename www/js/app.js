@@ -33,7 +33,8 @@ app.run(function ($http, Session) {
             token: Session.get(),
             collection: 'modelos'
         }
-    }).success(function (response) {
+    }).then(function (response) {
+      response = response.data;
         if (response.success) {
             sessionStorage.tiposCasa = JSON.stringify(response.data);
         }
