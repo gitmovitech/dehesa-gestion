@@ -327,6 +327,10 @@
               {
                 "key": "COSTO CERO",
                 "value": "COSTO CERO"
+              },
+              {
+                "key": "TRANSFERENCIA",
+                "value": "TRANSFERENCIA"
               }
             ]
           },
