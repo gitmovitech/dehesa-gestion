@@ -103,6 +103,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
             token: Session.get()
         }
     }).then(function (response) {
+      response = response.data;
         $scope.session = response;
         var pages = Session.getPages().pages;
         if ($scope.session.type == 'Administrador') {
@@ -234,6 +235,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
                 $http.get('/api/data', {
                     params: params
                 }).then(function (response) {
+                  response = response.data;
                     if (response.success) {
                         for (var d in response.data) {
                             if (item.collection == 'pagos') {
@@ -323,6 +325,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
                             databack: x
                         }
                     }).then(function (response) {
+                      response = response.data;
                         if (response.success) {
                             $scope.fields[response.databack].value = '';
                             $scope.fields[response.databack].data.options = response.data;
@@ -337,6 +340,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
                             databack: x
                         }
                     }).then(function (response) {
+                      response = response.data;
                         if (response.success) {
                             /**
                              * Busqueda a traves de filtro
@@ -462,6 +466,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
                         uf: $scope.pagos.currentUF
                     }
                 }).then(function (response) {
+                  response = response.data;
                     if (response.success) {
 
                       jQuery('#modalCSVpagos').modal('hide');
@@ -527,6 +532,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
                     data: id
                 }
             }).then(function (response) {
+              response = response.data;
                 $scope.load($scope.page);
             });
         }
@@ -558,6 +564,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
                     }
                 }
             }).then(function (response) {
+              response = response.data;
                 $scope.load($scope.page);
             });
         }
@@ -581,7 +588,8 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
                         message: $scope.input.messageText
                     }
                 }
-            }).then(function () {
+            }).then(function (response) {
+              response = response.data;
                 $scope.input.messageText = '';
                 jQuery('#modalEditMessages').modal('hide');
                 $scope.load($scope.page);
@@ -619,6 +627,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
                 collection: 'valoresuf'
             }
         }).then(function (response) {
+          response = response.data;
             if (response.success) {
                 if (response.data.length > 0) {
                   $scope.pagos.valoresuf = response.data;
@@ -637,6 +646,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
                         $http.get('/api/data', {
                             params: params
                         }).then(function (response) {
+                          response = response.data;
                             if (response.success) {
                                 var registros = [];
                                 var tarifa;
@@ -723,6 +733,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
                 }
             }
           }).then(function (response) {
+            response = response.data;
             if(response.success){
               var obj = response.data;
               var array=[];
@@ -759,6 +770,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
                   token: Session.get()
               }
             }).then(function (response) {
+              response = response.data;
               obtenerPagos($scope.pagos.yearActive, $scope.pagos.monthActive);
               jQuery('#modalEdit').modal('hide');
             });
@@ -881,6 +893,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
                       data: paramsdata
                   }
               }).then(function (response) {
+                response = response.data;
                   obtenerPagos($scope.pagos.yearActive, $scope.pagos.monthActive);
               });
             }
@@ -934,6 +947,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
                         month: month
                     }
                 }).then(function (response) {
+                  response = response.data;
                     if (response.success) {
                         Dialog.alert('Se ha enviado una notificación por correo al contador correctamente');
                     } else {
@@ -952,6 +966,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
                     month: this.monthActive
                 }
             }).then(function (response) {
+              response = response.data;
                 if (response.success) {
                     Dialog.alert('El correo ha sido enviado');
                 } else {
@@ -1090,6 +1105,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
                 }]
             }
         }).then(function (response) {
+          response = response.data;
           $scope.load($scope.page);
         });
       }
@@ -1110,6 +1126,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
                 }]
             }
         }).then(function (response) {
+          response = response.data;
           $scope.load($scope.page);
         });
       }
@@ -1199,6 +1216,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
                   eid: eid
               }
           }).then(function (response) {
+            response = response.data;
             Dialog.alert(response.mensaje);
           });
         }
