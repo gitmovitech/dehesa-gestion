@@ -32,9 +32,6 @@ app.service('SendForm', function(){
       if(typeof fields[p].value == "undefined" || fields[p].value == null){
         fields[p].value = "";
       }
-      if(fields[p].type == "number"){
-        fields[p].value = fields[p].value - 0;
-      }
     }
 
     jQuery.ajax({

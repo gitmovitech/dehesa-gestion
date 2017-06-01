@@ -356,6 +356,9 @@ exports.editCollection = function (collection, data, callback) {
                         year = data[z].value;
                       if(data[z].name == 'month')
                         month = data[z].value;
+                      if(data[z].type == "number"){
+                        data[z].value = data[z].value - 0;
+                      }
                     }
                     for (var z in data) {
                         if (data[z].name == '_id' && data[z].value != '') {
