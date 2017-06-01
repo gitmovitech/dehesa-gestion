@@ -422,6 +422,7 @@ exports.editCollection = function (collection, data, callback) {
                     /*insertdata.splice(0, 1);*/
                     if (update) {
                       console.log("ACTUALIZANDO")
+                      console.log(update);
                         try {
                             query.update(update, {$set: JSON.parse('{' + insertdata.join(',') + '}')});
                         } catch (e) {
