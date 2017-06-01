@@ -417,18 +417,20 @@ exports.editCollection = function (collection, data, callback) {
                         insertdata.splice(x,1);
                       }
                     }
-                    console.log(insertdata);
+                    //console.log(insertdata);
                     console.log(JSON.parse('{' + insertdata.join(',') + '}'));
                     /*insertdata.splice(0, 1);*/
                     if (update) {
+                      console.log("ACTUALIZANDO")
                         try {
                             query.update(update, {$set: JSON.parse('{' + insertdata.join(',') + '}')});
                         } catch (e) {
-
+                          console.log(e);
                         }
                     } else {
+                      console.log("INSERTANDO")
                       insertdata.push('"activo":1');
-                      console.log(insertdata);
+                      //console.log(insertdata);
                         query.insert(JSON.parse('{' + insertdata.join(',') + '}'));
                     }
                     callback(true);

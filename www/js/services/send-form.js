@@ -34,12 +34,6 @@ app.service('SendForm', function(){
       }
     }
 
-    console.log(JSON.stringify({params: {
-        token: Session.get(),
-        collection: $scope.collection,
-        fields: fields
-    }}));
-
     jQuery.ajax({
       type: "POST",
       url: '/api/data',
@@ -52,6 +46,16 @@ app.service('SendForm', function(){
       },
       success: function(response){
         console.log(response);
+        jQuery('#modalEdit').modal('hide');
+        if (reload) {
+          setTimeout(function () {
+              $scope.uploader.destroy();
+              delete $scope.uploader;
+              setUploader();
+          }, 500);
+        } else {
+          $scope.load($scope.page);
+        }
       }
     });
 
