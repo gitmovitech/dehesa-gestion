@@ -26,6 +26,9 @@ app.service('SendForm', function(){
     LIMPIEZA DE VALORES NO GUARDABLES
     **/
     for(var p in fields){
+      if(fields[p].name == "id"){
+        fields[p].value = parseInt(fields[p].value);
+      }
       if(fields[p].type == "title"){
         fields.splice(p,1);
       }
