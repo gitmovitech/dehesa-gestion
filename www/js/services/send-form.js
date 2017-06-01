@@ -34,7 +34,26 @@ app.service('SendForm', function(){
       }
     }
 
-    $http.post('/api/data', {
+    console.log(JSON.stringify({params: {
+        token: Session.get(),
+        collection: $scope.collection,
+        fields: fields
+    }}));
+
+    jQuery.ajax({
+      type: "POST",
+      url: '/api/data',
+      data: params: {
+          token: Session.get(),
+          collection: $scope.collection,
+          fields: fields
+      },
+      success: function(response){
+        console.log(response);
+      }
+    });
+
+    /*$http.post('/api/data', {
         params: {
             token: Session.get(),
             collection: $scope.collection,
@@ -52,7 +71,7 @@ app.service('SendForm', function(){
           $scope.load($scope.page);
         }
 
-    });
+    });*/
 
   }
 });
