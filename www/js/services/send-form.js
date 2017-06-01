@@ -43,10 +43,12 @@ app.service('SendForm', function(){
     jQuery.ajax({
       type: "POST",
       url: '/api/data',
-      data: params: {
-          token: Session.get(),
-          collection: $scope.collection,
-          fields: fields
+      data: {
+        params: {
+            token: Session.get(),
+            collection: $scope.collection,
+            fields: fields
+        }
       },
       success: function(response){
         console.log(response);
