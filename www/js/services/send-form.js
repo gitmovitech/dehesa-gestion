@@ -26,14 +26,14 @@ app.service('SendForm', function(){
     LIMPIEZA DE VALORES NO GUARDABLES
     **/
     for(var p in fields){
-      if(fields[p].name == "id"){
-        fields[p].value = parseInt(fields[p].value);
-      }
       if(fields[p].type == "title"){
         fields.splice(p,1);
       }
       if(typeof fields[p].value == "undefined" || fields[p].value == null){
         fields[p].value = "";
+      }
+      if(fields[p].type == "number"){
+        fields[p].value = fields[p].value - 0;
       }
     }
 
