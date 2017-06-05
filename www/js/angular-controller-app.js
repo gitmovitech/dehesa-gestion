@@ -9,8 +9,6 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
 
     $rootScope.$on('refresh', function(){
       console.log('Refreshing');
-      console.log(sessionStorage.page);
-      console.log($scope.pages[sessionStorage.page]);
       $scope.load($scope.pages[sessionStorage.page], sessionStorage.page);
     });
 
@@ -1112,7 +1110,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
         }).then(function (response) {
           response = response.data;
           setTimeout(function(){
-            $rootScope.$emit('refresh');
+            location.reload();
           }, 100);
         });
       }
@@ -1135,7 +1133,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
         }).then(function (response) {
           response = response.data;
           setTimeout(function(){
-            $rootScope.$emit('refresh');
+            location.reload();
           }, 100);
         });
       }
