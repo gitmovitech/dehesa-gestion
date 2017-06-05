@@ -343,6 +343,108 @@
           "required": true
         },
         {
+          "name": "Banco",
+          "title": "Banco",
+          "type": "select",
+          "data": {
+            "options": [
+              {
+                "key": "BANCO DE CHILE - 001",
+                "value": "BANCO DE CHILE - 001"
+              },
+              {
+                "key": "BANCO INTERNACIONAL - 009",
+                "value": "BANCO INTERNACIONAL - 009"
+              },
+              {
+                "key": "SCOTIABANK CHILE - 014",
+                "value": "SCOTIABANK CHILE - 014"
+              },
+              {
+                "key": "BANCO DE CREDITO E INVERSIONES - 016",
+                "value": "BANCO DE CREDITO E INVERSIONES - 016"
+              },
+              {
+                "key": "BANCO BICE - 028",
+                "value": "BANCO BICE - 028"
+              },
+              {
+                "key": "HSBC BANK - 031",
+                "value": "HSBC BANK - 031"
+              },
+              {
+                "key": "BANCO SANTANDER - 037",
+                "value": "BANCO SANTANDER - 037"
+              },
+              {
+                "key": "BANCO ITAÚ CORPBANCA - 039",
+                "value": "BANCO ITAÚ CORPBANCA - 039"
+              },
+              {
+                "key": "BANCO SECURITY - 049",
+                "value": "BANCO SECURITY - 049"
+              },
+              {
+                "key": "BANCO FALABELLA - 051",
+                "value": "BANCO FALABELLA - 051"
+              },
+              {
+                "key": "BANCO RIPLEY - 053",
+                "value": "BANCO RIPLEY - 053"
+              },
+              {
+                "key": "RABOBANK CHILE - 054",
+                "value": "RABOBANK CHILE - 054"
+              },
+              {
+                "key": "BANCO CONSORCIO - 055",
+                "value": "BANCO CONSORCIO - 055"
+              },
+              {
+                "key": "BANCO PENTA - 056",
+                "value": "BANCO PENTA - 056"
+              },
+              {
+                "key": "BANCO PARIS - 057",
+                "value": "BANCO PARIS - 057"
+              },
+              {
+                "key": "BANCO BILBAO VIZCAYA ARGENTARIA, CHILE (BBVA) - 504",
+                "value": "BANCO BILBAO VIZCAYA ARGENTARIA, CHILE (BBVA) - 504"
+              },
+              {
+                "key": "BANCO BTG PACTUAL CHILE - 059",
+                "value": "BANCO BTG PACTUAL CHILE - 059"
+              },
+              {
+                "key": "BANCO DEL ESTADO DE CHILE - 012",
+                "value": "BANCO DEL ESTADO DE CHILE - 012"
+              },
+              {
+                "key": "BANCO DO BRASIL S.A - 017",
+                "value": "BANCO DO BRASIL S.A - 017"
+              },
+              {
+                "key": "JP MORGAN CHASE BANK, N. A - 041",
+                "value": "JP MORGAN CHASE BANK, N. A - 041"
+              },
+              {
+                "key": "BANCO DE LA NACION ARGENTINA - 043",
+                "value": "BANCO DE LA NACION ARGENTINA - 043"
+              },
+              {
+                "key": "THE BANK OF TOKYO-MITSUBISHI UFJ, LTD - 045",
+                "value": "THE BANK OF TOKYO-MITSUBISHI UFJ, LTD - 045"
+              },
+              {
+                "key": "CHINA CONSTRUCTION BANK, AGENCIA EN CHILE - 060",
+                "value": "CHINA CONSTRUCTION BANK, AGENCIA EN CHILE - 060"
+              }
+            ]
+          },
+          "required": true
+        },
+        {
           "name": "activo",
           "title": "Activo",
           "type": "number",
