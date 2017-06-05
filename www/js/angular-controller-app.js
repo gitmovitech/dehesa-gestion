@@ -1,4 +1,4 @@
-app.controller('app', function ($scope, $rootScope, Session, $http, $location, FileUploader, Pagination, RutHelper, $filter, randomPass, Dialog, SendForm) {
+app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $location, FileUploader, Pagination, RutHelper, $filter, randomPass, Dialog, SendForm) {
 
     //var socket = io.connect();
     $scope.pagination = Pagination.getNew(15);
@@ -116,7 +116,6 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
             }
             $scope.pages = pages;
         }
-        console.log($scope.pages[sessionStorage.page]);
         $scope.load($scope.pages[sessionStorage.page], sessionStorage.page);
     });
     $scope.search = function () {
@@ -199,74 +198,9 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
     }
 
     $scope.load = function (item, index) {
-        if (typeof $scope.page != 'undefined')
-            if (typeof $scope.page.filter != 'undefined')
-                $scope.page.filter.value = '';
-        $scope.tabledata = false;
-        $scope.registros = false;
-
-        $scope.valoruf = false;
-
-        if (item) {
-            sessionStorage.page = index;
-            $scope.pageIndex = index;
-            fieldsReset = item.fields;
-            $scope.page = item;
-            $scope.collection = item.collection;
-
-            var params = {
-                token: Session.get(),
-                collection: item.collection,
-                model: item.model
-            }
-            if (item.collection == 'pagos') {
-                if (!$scope.currentPagosYear) {
-                    $scope.currentPagosYear = new Date().getFullYear();
-                }
-                if (!$scope.currentPagosMonth) {
-                    $scope.currentPagosMonth = new Date().getMonth();
-                }
-                obtenerPagos($scope.currentPagosYear, $scope.currentPagosMonth);
-            } else {
-              if(item.collection == 'asociados'){
-                params.where = {
-                  activo: activos
-                }
-              }
-                $http.get('/api/data', {
-                    params: params
-                }).then(function (response) {
-                  response = response.data;
-                    if (response.success) {
-                        for (var d in response.data) {
-                            if (item.collection == 'pagos') {
-                                response.data[d] = {
-                                    index: parseInt(parseInt(d) + parseInt(1)),
-                                    _id: response.data[d]._id,
-                                    nombre: response.data[d].nombre,
-                                    tarifa: response.data[d].tarifa,
-                                    type: response.data[d].type
-                                }
-                            } else {
-                                response.data[d].index = parseInt(parseInt(d) + parseInt(1));
-                            }
-                        }
-                        $scope.registros = response.data.length;
-                        $scope.pagination.numPages = Math.ceil(response.data.length / $scope.pagination.perPage);
-                        $scope.tabledata = registro_pagos = response.data;
-                        fieldsdata = response.data;
-                    }
-                    jQuery('body').loader('hide');
-                    setTimeout(function(){
-                      $scope.$apply();
-                    },100);
-                });
-            }
-        }
-        setTimeout(function(){
-          $scope.$apply();
-        },500);
+      LoadList.load($scope, item, index, fieldsReset, $http, obtenerPagos);
     }
+
     var excelPeriodo;
     $scope.showModalImportPagos = function (fields, data, object) {
         excelPeriodo = object;
