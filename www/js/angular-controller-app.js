@@ -245,15 +245,13 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
          jQuery('#modalCSVpagos').modal('show');
          } else {*/
         //console.info(fields);
-        $scope.fields = [];
-
-        jQuery('#modalEdit').modal('show');
-        $scope.fields = fields;
-
         for (var x in $scope.fields) {
             $scope.fields[x].value = '';
         }
         $scope.$apply();
+
+        jQuery('#modalEdit').modal('show');
+        $scope.fields = fields;
 
         /**
          * Opciones para el dropdown en caso que deba conectarse a datos externos
