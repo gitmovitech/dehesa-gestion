@@ -1078,7 +1078,9 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
           $scope.asociadosTabActivo = "Exportar activos";
         break;
       }
-      $scope.load($scope.page);
+      setTimeout(function(){
+        $scope.load($scope.pages[sessionStorage.page], sessionStorage.page);
+      }, 100);
     }
 
     $scope.suspenderAsociado = function(asociado, value){
