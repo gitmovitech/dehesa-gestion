@@ -257,7 +257,9 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
                         fieldsdata = response.data;
                     }
                     jQuery('body').loader('hide');
-
+                    setTimeout(function(){
+                      $scope.$apply();
+                    },100);
                 });
             }
         }
@@ -1110,7 +1112,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
         }).then(function (response) {
           response = response.data;
           setTimeout(function(){
-            location.reload();
+            $rootScope.$emit('refresh');
           }, 100);
         });
       }
@@ -1133,7 +1135,7 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
         }).then(function (response) {
           response = response.data;
           setTimeout(function(){
-            location.reload();
+            $rootScope.$emit('refresh');
           }, 100);
         });
       }
