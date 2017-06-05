@@ -1015,6 +1015,7 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
         break;
       }
       setTimeout(function(){
+        $scope.pagination.page = 0;
         $rootScope.$emit('refresh');
       }, 100);
     }
