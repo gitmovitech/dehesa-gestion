@@ -20,21 +20,27 @@
             paginator.prevPage = function () {
                 if (paginator.page > 0) {
                     paginator.page -= 1;
-                    $rootScope.$emit('refresh');
+                    setTimeout(function(){
+                      $rootScope.$emit('refresh');
+                    }, 100);
                 }
             };
 
             paginator.nextPage = function () {
                 if (paginator.page < paginator.numPages - 1) {
                     paginator.page += 1;
-                    $rootScope.$emit('refresh');
+                    setTimeout(function(){
+                      $rootScope.$emit('refresh');
+                    }, 100);
                 }
             };
 
             paginator.toPageId = function (id) {
                 if (id >= 0 && id <= paginator.numPages - 1) {
                     paginator.page = id;
-                    $rootScope.$emit('refresh');
+                    setTimeout(function(){
+                      $rootScope.$emit('refresh');
+                    }, 100);
                 }
             };
 
