@@ -248,7 +248,6 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
         for (var x in $scope.fields) {
             $scope.fields[x].value = '';
         }
-        $scope.$apply();
 
         jQuery('#modalEdit').modal('show');
         $scope.fields = fields;
