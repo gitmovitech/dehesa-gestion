@@ -2,7 +2,7 @@
     <thead>
         <tr>
             <th></th>
-            <th ng-if="session.type == 'Administrador'"></th>
+            <th ng-if="session.type == 'Administrador'">{{pagination.page}} - {{pagination.perPage}}</th>
             <th style="white-space:nowrap" ng-repeat="field in page.fields" ng-if="field.name != '_id' && !field.hiddenlist">{{field.title}}</th>
         </tr>
     </thead>
