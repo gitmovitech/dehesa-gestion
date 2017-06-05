@@ -9,6 +9,8 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
 
     $rootScope.$on('refresh', function(){
       console.log('Refreshing');
+      console.log(sessionStorage.page);
+      console.log($scope.pages[sessionStorage.page]);
       $scope.load($scope.pages[sessionStorage.page], sessionStorage.page);
     });
 
