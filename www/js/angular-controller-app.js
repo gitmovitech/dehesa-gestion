@@ -1109,7 +1109,9 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
             }
         }).then(function (response) {
           response = response.data;
-          $scope.load($scope.page);
+          setTimeout(function(){
+            $scope.load($scope.pages[sessionStorage.page], sessionStorage.page);
+          }, 100);
         });
       }
     }
@@ -1130,7 +1132,9 @@ app.controller('app', function ($scope, $rootScope, Session, $http, $location, F
             }
         }).then(function (response) {
           response = response.data;
-          $scope.load($scope.page);
+          setTimeout(function(){
+            $scope.load($scope.pages[sessionStorage.page], sessionStorage.page);
+          }, 100);
         });
       }
     }
