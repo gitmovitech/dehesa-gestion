@@ -1,6 +1,6 @@
-app.service('LoadList', function($scope, $http, Session){
+app.service('LoadList', function($http, Session){
 
-  this.load = function(item, index, fieldsReset, obtenerPagos, activos){
+  this.load = function($scope, item, index, fieldsReset, obtenerPagos, activos){
     if (typeof $scope.page != 'undefined')
         if (typeof $scope.page.filter != 'undefined')
             $scope.page.filter.value = '';

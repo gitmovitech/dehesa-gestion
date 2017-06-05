@@ -198,7 +198,7 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
     }
 
     $scope.load = function (item, index) {
-      LoadList.load(item, index, fieldsReset, obtenerPagos, activos);
+      LoadList.load($scope, item, index, fieldsReset, obtenerPagos, activos);
     }
 
     var excelPeriodo;
