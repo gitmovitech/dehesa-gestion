@@ -55,14 +55,14 @@ app.service('LoadList', function($http, Session){
                     }
                     $scope.registros = response.data.length;
                     $scope.pagination.numPages = Math.ceil(response.data.length / $scope.pagination.perPage);
-                    $scope.tabledata = registro_pagos = response.data;
+                    registro_pagos = response.data;
                     fieldsdata = response.data;
+                    setTimeout(function(){
+                      $scope.tabledata = response.data;
+                      $scope.$apply();
+                    },100);
                 }
                 jQuery('body').loader('hide');
-                setTimeout(function(){
-                  console.log($scope.tabledata);
-                  $scope.$apply();
-                },2000);
             });
         }
     }
