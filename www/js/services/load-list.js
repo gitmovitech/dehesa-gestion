@@ -1,4 +1,4 @@
-app.service('LoadList', function(){
+app.service('LoadList', function(Session){
 
   this.load = function($scope, item, index, fieldsReset, $http, obtenerPagos){
     if (typeof $scope.page != 'undefined')
