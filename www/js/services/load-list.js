@@ -62,7 +62,7 @@ app.service('LoadList', function($http, Session){
                 setTimeout(function(){
                   console.log($scope.tabledata);
                   $scope.$apply();
-                },100);
+                },2000);
             });
         }
     }
