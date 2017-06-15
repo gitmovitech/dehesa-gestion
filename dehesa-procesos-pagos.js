@@ -115,6 +115,67 @@ var sumarDeudasAnteriores = function (pagos, data, index, cb) {
         cb(data);
     }
 }
-/**
- * Restar saldo a favor
- */
+
+
+var insertarPagodelMes = function(database, fecha, response, cb){
+  pesos = parseFloat(response.uf)*parseFloat(current_uf);
+  database.collection('pagos').insert({
+    id: response.id,
+    nombre: [response.first_name, response.last_name].join(' '),
+    tarifa: pesos,
+    type: 'Pendiente',
+    pagado: 0,
+    month: fecha.month,
+    year: fecha.year
+  });
+  cb();
+}
+var obtenerDeudasyPagosAnteriores = function(database, fecha, response, i, cb){
+  if(typeof response[i] != 'undefined'){
+    database.collection('pagos').find({
+      run: response[i].run
+    }).toArray(function(err, data){
+      if(data.length > 0){
+        //CAYO AQUI
+      } else {
+        insertarPagodelMes(database, fecha, response[i], function(){
+          obtenerDeudasyPagosAnteriores(database, fecha, response, i+1, cb);
+        });
+      }
+    });
+  } else {
+    cb();
+  }
+}
+var current_uf;
+var autocompletarPagosDelMes = function(database, fecha, cb){
+  console.log('CURRENT DEVELOPMENT')
+  var collection = database.collection('valoresuf');
+  var meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  //BUSCAR UF DEL MES
+  collection.findOne({
+    year: fecha.year,
+    mes: meses[fecha.month]
+  }, function(err, valoresuf){
+    if(valoresuf){
+
+      current_uf = valoresuf.valor;
+      collection = database.collection('asociados');
+      //BUSCAR SOCIOS PARA COMPLETAR MES DE PAGO
+      collection.find({"activo":1}).toArray(function(err, response){
+        if(response.length > 0){
+          obtenerDeudasyPagosAnteriores(database, fecha, response, 0, function(){
+            cb();
+          });
+        } else {
+          cb([]);
+        }
+      });
+
+    } else {
+      cb([]);
+    }
+  });
+
+}
+exports.autocompletarPagosDelMes = autocompletarPagosDelMes;

@@ -196,8 +196,18 @@ var getCollection = function (collection, callback, data, join) {
                       if(typeof data == 'string'){
                         data = JSON.parse(data);
                       }
+
                         query.find(data).sort( { id: 1 } ).toArray(function (err, response) {
                             if (!err) {
+
+                              if (collection == 'pagos' && response.length == 0) {
+                                //AUTOCOMPLETAR PAGOS DEL MES SI NO EXISTEN PARA PODER EXPORTARLOS
+                                dehesaPagos.autocompletarPagosDelMes(database, data, function(){
+                                  query.find(data).sort( { id: 1 } ).toArray(function (err, response) {
+                                    callback(response);
+                                  });
+                                });
+                              } else {
                                 for (var x in response) {
                                     for (var y in response[x]) {
                                         if (y == 'files')
@@ -226,6 +236,8 @@ var getCollection = function (collection, callback, data, join) {
                                     });
                                 } else
                                     callback(response);
+                              }
+
                             } else {
                                 console.log(err)
                                 callback([]);

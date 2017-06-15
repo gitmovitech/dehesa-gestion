@@ -64,10 +64,10 @@
                       <b>Total de pagos: {{tabledata | pagosPagadosCantidad | currency}}</b>
                     </p>
                     <div ng-if="session.type != 'Contable'">
-                        <button ng-disabled="!valoruf" class="btn btn-sm btn-primary" ng-click="showModalImportPagos(page.fields, null, {month: month, year: item.year})">
+                        <!--<button ng-disabled="!valoruf" class="btn btn-sm btn-primary" ng-click="showModalImportPagos(page.fields, null, {month: month, year: item.year})">
                             <i class="glyphicon glyphicon-cloud-upload"></i> Subir archivo excel de {{month}}
                         </button>
-                        <!--<button ng-disabled="!registros" class="btn btn-sm btn-primary" ng-click="pagos.notificarContador(month, item.year)">
+                        <button ng-disabled="!registros" class="btn btn-sm btn-primary" ng-click="pagos.notificarContador(month, item.year)">
                             <i class="glyphicon glyphicon-copy"></i> Notificar al contador
                         </button>-->
                         <button ng-disabled="!registros" class="btn btn-sm btn-primary" ng-click="pagos.exportarMesExcel(month, item.year)">
