@@ -12,7 +12,7 @@
                   <thead>
                     <tr>
                       <th>Fecha</th>
-                      <th>Tarifa UF</th>
+                      <th>Tarifa</th>
                       <th>Estado</th>
                       <th>Pagado del mes</th>
                       <th>Deuda del mes</th>
@@ -23,7 +23,7 @@
                   <tbody>
                     <tr ng-repeat="item in pagos.historialData">
                       <th>{{item.month | monthSpanish}} {{item.year}}</th>
-                      <td>{{item.tarifa}}</td>
+                      <td>{{item.tarifa | currency}}</td>
                       <td>{{item.type}}</td>
                       <td>{{item.pagado | currency}}</td>
                       <td>{{item.debe | currency}}</td>
