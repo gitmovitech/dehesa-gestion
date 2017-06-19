@@ -1,6 +1,8 @@
 app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $location, FileUploader, Pagination, RutHelper, $filter, randomPass, Dialog, SendForm) {
 
     //var socket = io.connect();
+    var fieldsdata = [];
+
     $scope.pagination = Pagination.getNew(15);
     if (!sessionStorage.page || sessionStorage.page == 'undefined') {
         sessionStorage.page = 0;
@@ -96,7 +98,6 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
 
     var activos = 1;
     var fieldsReset = [];
-    var fieldsdata;
     jQuery('body').loader('show');
     $http.get('/api/session', {
         params: {
@@ -119,8 +120,10 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
         $scope.load($scope.pages[sessionStorage.page], sessionStorage.page);
     });
     $scope.search = function () {
+      fieldsdata = $scope.tabledata;
         var arr;
         var tmpdata = [];
+        var string = '';
         if ($scope.page.filter) {
             for (var x in fieldsdata) {
                 for (var i in fieldsdata[x]) {
@@ -130,7 +133,8 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                           arr = fieldsdata[x][i];
                           arr = arr.toString();
                           arr = arr.toLowerCase();
-                          if (arr.indexOf($scope.page.filter.value) >= 0) {
+                          string = $scope.page.filter.value;
+                          if (arr.indexOf(string.toLowerCase()) >= 0) {
                               tmpdata[tmpdata.length] = fieldsdata[x];
                               break;
                           }
@@ -139,7 +143,8 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                         arr = fieldsdata[x][i];
                         arr = arr.toString();
                         arr = arr.toLowerCase();
-                        if (arr.indexOf($scope.page.filter.value) >= 0) {
+                        string = $scope.page.filter.value;
+                        if (arr.indexOf(string.toLowerCase()) >= 0) {
                             tmpdata[tmpdata.length] = fieldsdata[x];
                             break;
                         }
@@ -149,17 +154,23 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
             }
         }
 
-        $scope.registros = tmpdata.length;
-        $scope.pagination.numPages = Math.ceil(tmpdata.length / $scope.pagination.perPage);
-        if (tmpdata.length > 0){
-          $scope.tabledata = [];
-          setTimeout(function(){
-            $scope.tabledata = tmpdata;
-            if (!$scope.$$phase) $scope.$apply();
-          },0);
-        } else{
-          $scope.tabledata = fieldsdata;
+        if($scope.page.filter.value.length == 0){
+          $scope.load($scope.pages[sessionStorage.page], sessionStorage.page);
+        } else {
+          $scope.registros = tmpdata.length;
+          $scope.pagination.numPages = Math.ceil(tmpdata.length / $scope.pagination.perPage);
+          if (tmpdata.length > 0){
+            $scope.tabledata = [];
+            setTimeout(function(){
+              $scope.tabledata = tmpdata;
+              if (!$scope.$$phase)
+                $scope.$apply();
+            },0);
+          } else{
+            $scope.tabledata = fieldsdata;
+          }
         }
+
 
     }
 
@@ -198,7 +209,12 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
     }
 
     $scope.load = function (item, index) {
-      LoadList.load($scope, item, index, fieldsReset, obtenerPagos, activos);
+      LoadList.load($scope, item, index, fieldsReset, obtenerPagos, activos, function(response_load){
+        jQuery('body').loader('hide');
+        registro_pagos = fieldsdata = response_load;
+        $scope.tabledata = response_load;
+        $scope.$apply();
+      });
     }
 
     var excelPeriodo;

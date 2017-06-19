@@ -1,6 +1,6 @@
 app.service('LoadList', function($http, Session){
 
-  this.load = function($scope, item, index, fieldsReset, obtenerPagos, activos){
+  this.load = function($scope, item, index, fieldsReset, obtenerPagos, activos, cb){
     if (typeof $scope.page != 'undefined')
         if (typeof $scope.page.filter != 'undefined')
             $scope.page.filter.value = '';
@@ -55,14 +55,8 @@ app.service('LoadList', function($http, Session){
                     }
                     $scope.registros = response.data.length;
                     $scope.pagination.numPages = Math.ceil(response.data.length / $scope.pagination.perPage);
-                    registro_pagos = response.data;
-                    fieldsdata = response.data;
-                    setTimeout(function(){
-                      $scope.tabledata = response.data;
-                      $scope.$apply();
-                    },100);
+                    cb(response.data);
                 }
-                jQuery('body').loader('hide');
             });
         }
     }
