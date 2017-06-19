@@ -120,11 +120,15 @@ var sumarDeudasAnteriores = function (pagos, data, index, cb) {
 /**
 NUEVO PROCEDIMIENTO DE AUTOCARGA MENSUAL
 */
-var insertarPagodelMes = function(database, fecha, response, cb, debe_total){
+var insertarPagodelMes = function(database, fecha, response, cb, debe_total, excedentes_total){
   var tarifa = parseFloat(response.uf) * parseFloat(current_uf);
   var debe = tarifa;
+  var excedentes = 0;
   if(typeof debe_total != 'undefined'){
     debe += debe_total;
+  }
+  if(typeof excedentes_total != 'undefined'){
+    excedentes = excedentes_total;
   }
   database.collection('pagos').insert({
     id: response.id,
@@ -133,6 +137,7 @@ var insertarPagodelMes = function(database, fecha, response, cb, debe_total){
     type: 'Pendiente',
     pagado: 0,
     debe: debe,
+    excedentes:excedentes,
     month: fecha.month,
     year: fecha.year
   });
@@ -146,13 +151,20 @@ var obtenerDeudasyPagosAnteriores = function(database, fecha, response, i, cb){
       "_id":-1
     }).limit(1).toArray(function(err, data){
       var debe_total = 0;
+      var excedentes = 0;
       if(data.length > 0){
         for(var x in data){
           debe_total = parseFloat(data[x].debe)
+          if(typeof data[x].excedentes == 'undefined'){
+            excedentes = 0
+          }
+          else {
+              excedentes = data[x].excedentes;
+          }
         }
         insertarPagodelMes(database, fecha, response[i], function(){
           obtenerDeudasyPagosAnteriores(database, fecha, response, i+1, cb);
-        }, debe_total);
+        }, debe_total, excedentes);
       } else {
         insertarPagodelMes(database, fecha, response[i], function(){
           obtenerDeudasyPagosAnteriores(database, fecha, response, i+1, cb);

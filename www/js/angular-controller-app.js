@@ -779,7 +779,7 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                 Dialog.alert('El asociado no posee excedentes para realizar el pago');
                 obtenerPagos(this.yearActive, this.monthActive);
               } else{
-                pagado = prompt('Total a pagar', Math.round(data.tarifa*$scope.pagos.currentUF));
+                pagado = prompt('Total a pagar', Math.round(data.tarifa));
                 if (pagado) {
                   paramsdata = {
                       id: data.id,
@@ -787,7 +787,7 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                       month: this.tabMonthActive,
                       year: this.yearActive,
                       status: select,
-                      cobrodelmes: Math.round(data.tarifa*$scope.pagos.currentUF)
+                      cobrodelmes: Math.round(data.tarifa)
                   }
                 } else {
                   $scope.tabledata[index] = null;
@@ -807,7 +807,7 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                 if(select == 'Pagado fuera de plazo (+ 20%)'){
                   data.tarifa = data.tarifa*$scope.pagos.currentUF * 1.2;
                 }
-                pagado = prompt('Total a pagar', Math.round(data.tarifa*$scope.pagos.currentUF));
+                pagado = prompt('Total a pagar', Math.round(data.tarifa));
                 if (pagado) {
                   paramsdata = {
                       id: data.id,
@@ -815,7 +815,7 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                       month: this.tabMonthActive,
                       year: this.yearActive,
                       status: select,
-                      cobrodelmes: Math.round(data.tarifa*$scope.pagos.currentUF)
+                      cobrodelmes: Math.round(data.tarifa)
                   }
                 } else {
                   $scope.tabledata[index] = null;
