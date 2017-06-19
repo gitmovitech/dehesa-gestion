@@ -127,6 +127,9 @@ var insertarPagodelMes = function(database, fecha, response, cb, debe_total, exc
   if(typeof debe_total != 'undefined'){
     debe += debe_total;
   }
+  if(debe == 0){
+    debe = tarifa;
+  }
   if(typeof excedentes_total != 'undefined'){
     excedentes = excedentes_total;
   }
