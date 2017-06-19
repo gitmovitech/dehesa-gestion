@@ -661,6 +661,25 @@ exports.getPayments = function (params, cb) {
     }
 }
 
+exports.getPaymentsForBank = function (params, cb) {
+    if (database) {
+      database.collection('pagos')
+      .aggregate([
+        {$match: {"year": parseInt(params.year), "month": parseInt(params.month), "pagado": 0}},
+        {$lookup: {"localField": "id", "from": "asociados", "foreignField": "id", "as": "socio"}},
+        {$unwind : "$socio"}
+      ])
+      .sort({id:1})
+      .toArray(function (err, response) {
+          if (response) {
+              cb(response);
+          } else {
+              cb(false);
+          }
+      });
+    }
+}
+
 exports.pagar = function (data, cb) {
     if (database) {
       switch(data.status){

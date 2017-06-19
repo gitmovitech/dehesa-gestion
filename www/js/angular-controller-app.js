@@ -679,6 +679,10 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
         exportarMesExcel: function(month, year){
           window.open('/pagos/excel/'+year+'/'+month, '_blank');
         },
+        exportarAlBanco: function(month, year){
+          window.open('/pagos/banco/pat/'+year+'/'+month, '_blank');
+          window.open('/pagos/banco/pac/'+year+'/'+month, '_blank');
+        },
         modalHistorial: function(item){
           $http.get('/api/data', {
             params: {

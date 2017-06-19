@@ -399,6 +399,60 @@ app.get('/asociados/excel/:itab',function(req, res){
     }
   }
 });
+
+app.get('/pagos/banco/:patpac/:year/:month', function (req, res) {
+  var mes = null;
+  for (var x in meses) {
+      if (meses[x] == req.params.month) {
+          mes = x;
+          break;
+      }
+  }
+  db.getPaymentsForBank({
+      month: mes,
+      year: req.params.year
+  }, function(response){
+    var data = [];
+    var ahora = new Date();
+    var fecha = ahora.getFullYear()+('0' + ahora.getDate()).slice(-2) + ('0' + (ahora.getMonth()+1)).slice(-2);
+    var nombre_completo = '';
+    var ext = '';
+    for(x in response){
+      if(response[x].socio.forma_de_pago == req.params.patpac.toUpperCase()){
+        if(response[x].socio.forma_de_pago == 'PAT'){
+          ext = '.csv';
+          data.push([
+            Math.round(response[x].debe),
+            response[x].socio.run,
+            response[x].socio.run,
+            response[x].id
+          ].join(";"));
+        }
+        if(response[x].socio.forma_de_pago == 'PAC'){
+          ext = '.txt';
+          nombre_completo = response[x].socio.first_name +" "+ response[x].socio.last_name;
+          data.push([
+            ('0' + response[x].socio.run).slice(-10).replace("-",""),
+            nombre_completo.toUpperCase(),
+            response[x].socio.banco,
+            ('0' + response[x].socio.run).slice(-20).replace("-",""),
+            ('0' + response[x].debe).slice(-12).replace("-",""),
+            fecha
+          ].join(" "));
+        }
+      }
+    }
+    if(data.length > 0){
+      res.setHeader('Content-disposition', 'attachment; filename="' + ('0' + mes).slice(-2) + req.params.patpac.toUpperCase() + ext+'"');
+      res.setHeader('Content-type', 'text/csv');
+      res.send(data.join('\n'));
+    } else {
+      res.send('No hay registros')
+    }
+
+  });
+});
+
 app.get('/pagos/excel/:year/:month', function (req, res) {
   if(req.params.month && req.params.year){
     var mes = null;

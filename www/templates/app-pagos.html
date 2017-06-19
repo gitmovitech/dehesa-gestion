@@ -70,6 +70,9 @@
                         <button ng-disabled="!registros" class="btn btn-sm btn-primary" ng-click="pagos.notificarContador(month, item.year)">
                             <i class="glyphicon glyphicon-copy"></i> Notificar al contador
                         </button>-->
+                        <button ng-disabled="!registros" class="btn btn-sm btn-danger" ng-click="pagos.exportarAlBanco(month, item.year)">
+                            <i class="glyphicon glyphicon-export"></i> Exportar {{month}} al Banco
+                        </button>
                         <button ng-disabled="!registros" class="btn btn-sm btn-primary" ng-click="pagos.exportarMesExcel(month, item.year)">
                             <i class="glyphicon glyphicon-export"></i> Exportar {{month}} a Excel
                         </button>
