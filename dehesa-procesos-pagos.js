@@ -117,14 +117,22 @@ var sumarDeudasAnteriores = function (pagos, data, index, cb) {
 }
 
 
-var insertarPagodelMes = function(database, fecha, response, cb){
-  pesos = parseFloat(response.uf)*parseFloat(current_uf);
+/**
+NUEVO PROCEDIMIENTO DE AUTOCARGA MENSUAL
+*/
+var insertarPagodelMes = function(database, fecha, response, cb, debe_total){
+  var tarifa = parseFloat(response.uf) * parseFloat(current_uf);
+  var debe = tarifa;
+  if(typeof debe_total != 'undefined'){
+    debe += debe_total;
+  }
   database.collection('pagos').insert({
     id: response.id,
     nombre: [response.first_name, response.last_name].join(' '),
-    tarifa: pesos,
+    tarifa: tarifa,
     type: 'Pendiente',
     pagado: 0,
+    debe: debe,
     month: fecha.month,
     year: fecha.year
   });
@@ -133,10 +141,18 @@ var insertarPagodelMes = function(database, fecha, response, cb){
 var obtenerDeudasyPagosAnteriores = function(database, fecha, response, i, cb){
   if(typeof response[i] != 'undefined'){
     database.collection('pagos').find({
-      run: response[i].run
-    }).toArray(function(err, data){
+      id: response[i].id
+    }).sort({
+      "_id":-1
+    }).limit(1).toArray(function(err, data){
+      var debe_total = 0;
       if(data.length > 0){
-        //CAYO AQUI
+        for(var x in data){
+          debe_total = parseFloat(data[x].debe)
+        }
+        insertarPagodelMes(database, fecha, response[i], function(){
+          obtenerDeudasyPagosAnteriores(database, fecha, response, i+1, cb);
+        }, debe_total);
       } else {
         insertarPagodelMes(database, fecha, response[i], function(){
           obtenerDeudasyPagosAnteriores(database, fecha, response, i+1, cb);
@@ -147,11 +163,13 @@ var obtenerDeudasyPagosAnteriores = function(database, fecha, response, i, cb){
     cb();
   }
 }
+
 var current_uf;
+var meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
 var autocompletarPagosDelMes = function(database, fecha, cb){
   console.log('CURRENT DEVELOPMENT')
   var collection = database.collection('valoresuf');
-  var meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
   //BUSCAR UF DEL MES
   collection.findOne({
     year: fecha.year,
