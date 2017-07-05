@@ -129,7 +129,7 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                 for (var i in fieldsdata[x]) {
                     if (fieldsdata[x][i]) {
                       if($scope.page.collection == 'asociados'){
-                        if(i == 'first_name' || i == 'last_name' || i == 'first_name2' || i == 'last_name2'){
+                        if(i == 'id' || i == 'first_name' || i == 'last_name' || i == 'first_name2' || i == 'last_name2'){
                           arr = fieldsdata[x][i];
                           arr = arr.toString();
                           arr = arr.toLowerCase();
