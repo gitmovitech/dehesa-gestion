@@ -4,7 +4,7 @@ git commit -m 'upload'
 
 expect <<- DONE
   set timeout -1
-  spawn git push origin master
+  spawn git push origin v001
   match_max 100000
   expect "*?assword:*"
   send -- "Bnja7!\r"
