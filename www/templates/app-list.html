@@ -2,7 +2,7 @@
     <!--<h4 ng-if="page.collection == 'modelos' || page.collection == 'servicios'" style="float:right">Valor UF hoy: <b class="text-success">{{valoruf| currency}}</b></h4>-->
     <h1>
         <i class="{{page.icon}}"></i> {{page.name}}
-        <button ng-if="session.type == 'Administrador' && page.collection != 'pagos' && page.collection != 'asociados'" class="btn btn-sm btn-primary" ng-click="showModal(page.fields)">
+        <button ng-if="session.type == 'Administrador' && page.collection != 'pagos' && page.collection != 'asociados' && page.collection != 'cuentas_por_cobrar'" class="btn btn-sm btn-primary" ng-click="showModal(page.fields)">
             <i class="glyphicon glyphicon-plus-sign"></i> Crear nuevo
         </button>
         <button ng-if="session.type == 'Administrador' && page.collection == 'asociados'" class="btn btn-sm btn-primary" ng-click="showModalAsociados(page.fields)">
@@ -12,7 +12,7 @@
             <i class="glyphicon glyphicon-plus-sign"></i> Exportar registros
         </button>-->
     </h1>
-    <div class="form-group" ng-if="page.collection != 'pagos'">
+    <div class="form-group" ng-if="page.collection != 'pagos' && page.collection != 'cuentas_por_cobrar'">
         <label class="sr-only" for="buscador"></label>
         <div class="input-group">
             <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
@@ -42,9 +42,9 @@
       </button>
     </p>
 
-    <b class="text-primary" ng-if="registros && page.collection != 'pagos'">Mostrando {{registros}} registros.</b>
+    <b class="text-primary" ng-if="registros && page.collection != 'pagos' && page.collection != 'cuentas_por_cobrar'">Mostrando {{registros}} registros.</b>
 
-    <div ng-include="'templates/app-pagos.html'" ng-if="page.collection == 'pagos'"></div>
+    <div ng-include="'templates/app-pagos.html'" ng-if="page.collection == 'pagos' || page.collection == 'cuentas_por_cobrar'"></div>
     <div style="overflow-x:auto" ng-include="'templates/app-list-items.html'" ng-if="page.collection != 'pagos' && registros"></div>
 
     <nav class="text-center" ng-if="pagination.numPages > 1 && registros">

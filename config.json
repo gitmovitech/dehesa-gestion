@@ -691,6 +691,73 @@
       ]
     },
     {
+      "icon": "glyphicon glyphicon-usd",
+      "name": "Cuentas por cobrar",
+      "scope": [
+        "Administrador",
+        "Editor",
+        "Contable"
+      ],
+      "collection": "cuentas_por_cobrar",
+      "fields": [
+        {
+          "name": "_id",
+          "type": "text",
+          "id": true
+        },
+        {
+          "name": "id",
+          "title": "ID",
+          "type": "text"
+        },
+        {
+          "name": "nombre",
+          "title": "Titular",
+          "type": "text"
+        },
+        {
+          "name": "deuda",
+          "title": "Deuda",
+          "type": "text"
+        },
+        {
+          "name": "type",
+          "title": "Estado de pago",
+          "type": "select",
+          "data": {
+            "options": [
+              {
+                "key": "Pendiente",
+                "value": "Pendiente"
+              },{
+                "key": "Pagado",
+                "value": "Pagado"
+              }
+            ]
+          }
+        },
+        {
+          "name": "pagado",
+          "title": "Pagado",
+          "type": "text"
+        },{
+          "name": "ajuste_contable",
+          "title": "Ajuste Contable",
+          "type": "text"
+        },
+        {
+          "name": "comentarios",
+          "title": "Comentarios",
+          "type": "textarea"
+        },
+        {
+          "name": "archivos",
+          "title": "Archivos",
+          "type": "file"
+        }
+      ]
+    },
+    {
       "icon": "glyphicon glyphicon-stats",
       "name": "Valores UF",
       "scope": [

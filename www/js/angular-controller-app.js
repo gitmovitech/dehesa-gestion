@@ -577,6 +577,10 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                 month: month
             }
         }
+        //RESET DE LISTADO DE REGISTROS
+        $scope.pagination.numPages = 0;
+        $scope.tabledata = registro_pagos = [];
+        
         $http.get('/api/data', {
             params: {
                 token: Session.get(),
