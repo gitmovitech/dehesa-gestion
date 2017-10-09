@@ -126,9 +126,13 @@
                         </span>
                         <span ng-if="key == 'nombre'">{{tddata}}</span>
 
+                        <span ng-if="key == 'dias'">
+                            <input ng-model="trdata.dias" ng-keyup="pagos.modificarDias($event, trdata)" style="width:50px" max="31" min="1" type="number" size="2" maxlength="2" value="{{tddata}}"/>
+                        </span>
+
                         <span ng-if="key == 'tarifa'">
                             <b class="text-info">
-                                {{tddata | currency}}
+                                {{trdata.tarifa | currency}}
                             </b>
                         </span>
 

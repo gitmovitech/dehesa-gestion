@@ -802,3 +802,18 @@ exports.savePayment = function(data){
     }
   });
 }
+
+exports.modificarDias = function(data, cb){
+    var query = {
+        _id: ObjectID(data._id)
+    }
+    var values = {
+        $set:{
+            dias: data.dias,
+            tarifa: data.tarifa,
+            debe: data.tarifa
+        }
+    }
+    database.collection('pagos').update(query, values);
+    cb();
+}

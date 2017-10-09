@@ -531,6 +531,11 @@
           "type": "text"
         },
         {
+          "name": "dias",
+          "title": "Dias de cobro",
+          "type": "text"
+        },
+        {
           "name": "tarifa",
           "title": "Tarifa",
           "type": "text",

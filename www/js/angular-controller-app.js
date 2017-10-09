@@ -580,7 +580,7 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
         //RESET DE LISTADO DE REGISTROS
         $scope.pagination.numPages = 0;
         $scope.tabledata = registro_pagos = [];
-        
+
         $http.get('/api/data', {
             params: {
                 token: Session.get(),
@@ -618,13 +618,16 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                                         index: parseInt(parseInt(d) + parseInt(1)),
                                         id: response.data[d].id,
                                         nombre: response.data[d].nombre,
+                                        dias: response.data[d].dias,
                                         tarifa: response.data[d].tarifa,
                                         type: response.data[d].type,
                                         pagado: response.data[d].pagado,
                                         debe: response.data[d].debe,
                                         excedentes: response.data[d].excedentes,
                                         comentarios: response.data[d].comentarios,
-                                        archivos: response.data[d].archivos
+                                        archivos: response.data[d].archivos,
+                                        fijo_dias: response.data[d].dias,
+                                        fijo_tarifa: response.data[d].tarifa
                                     }
                                 }
                                 $scope.registros = response.data.length;
@@ -716,6 +719,23 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
               jQuery('#modalHistorial').modal('show');
             }
           });
+        },
+        modificarDias: function(event, trdata){
+            if(event.keyCode == 13){
+                if(confirm('Está seguro que desea modificar el cobro de los dias?')){
+                    trdata.debe = trdata.tarifa = (trdata.fijo_tarifa*trdata.dias)/trdata.fijo_dias;
+                    $http.get('/api/modificar-dias',{
+                        params:{
+                            token: Session.get(),
+                            _id: trdata._id,
+                            dias: trdata.dias,
+                            tarifa: trdata.tarifa,
+                            month: trdata.month,
+                            year: trdata.year 
+                        }
+                    });
+                }
+            }
         },
         eliminarDocumento: function(file, fields){
           if(confirm('¿Está seguro que desea eliminar el archivo "'+file+'"?')){
