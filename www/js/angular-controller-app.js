@@ -9,91 +9,91 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
         $scope.pageIndex = sessionStorage.page;
     }
 
-    $rootScope.$on('refresh', function(){
-      console.log('Refreshing');
-      $scope.load($scope.pages[sessionStorage.page], sessionStorage.page);
+    $rootScope.$on('refresh', function () {
+        console.log('Refreshing');
+        $scope.load($scope.pages[sessionStorage.page], sessionStorage.page);
     });
 
     /**
     FUNCION DE AUTOCOMPLETAR CONTACTO CON DATOS DEL ASOCIADO
     **/
-    $scope.CustomCheckbox = function(ev){
-      if(jQuery(ev).is(':checked')){
-        switch(jQuery(ev).data('action')){
-          case 'persona-juridica':
-            for(var x in $scope.fields){
-              /*if($scope.fields[x].name == 'razon_social'){
-                $scope.fields[x].hiddenedit = false;
-                $scope.fields[x].required = true;
-              }*/
-              if($scope.fields[x].name == 'last_name'){
-                $scope.fields[x].required = false;
-              }
+    $scope.CustomCheckbox = function (ev) {
+        if (jQuery(ev).is(':checked')) {
+            switch (jQuery(ev).data('action')) {
+                case 'persona-juridica':
+                    for (var x in $scope.fields) {
+                        /*if($scope.fields[x].name == 'razon_social'){
+                          $scope.fields[x].hiddenedit = false;
+                          $scope.fields[x].required = true;
+                        }*/
+                        if ($scope.fields[x].name == 'last_name') {
+                            $scope.fields[x].required = false;
+                        }
+                    }
+                    break;
+                case 'copy-asociado':
+                    for (var x in $scope.fields) {
+                        for (var b in $scope.fields) {
+                            if ($scope.fields[x].name == 'first_name' && $scope.fields[b].name == 'first_name2') {
+                                $scope.fields[b].value = $scope.fields[x].value;
+                            }
+                            if ($scope.fields[x].name == 'second_name' && $scope.fields[b].name == 'second_name2') {
+                                $scope.fields[b].value = $scope.fields[x].value;
+                            }
+                            if ($scope.fields[x].name == 'last_name' && $scope.fields[b].name == 'last_name2') {
+                                $scope.fields[b].value = $scope.fields[x].value;
+                            }
+                            if ($scope.fields[x].name == 'second_last_name' && $scope.fields[b].name == 'second_last_name2') {
+                                $scope.fields[b].value = $scope.fields[x].value;
+                            }
+                            if ($scope.fields[x].name == 'correo11' && $scope.fields[b].name == 'correo21') {
+                                $scope.fields[b].value = $scope.fields[x].value;
+                            }
+                            if ($scope.fields[x].name == 'correo12' && $scope.fields[b].name == 'correo22') {
+                                $scope.fields[b].value = $scope.fields[x].value;
+                            }
+                            if ($scope.fields[x].name == 'telefono11' && $scope.fields[b].name == 'telefono21') {
+                                $scope.fields[b].value = $scope.fields[x].value;
+                            }
+                            if ($scope.fields[x].name == 'telefono12' && $scope.fields[b].name == 'telefono22') {
+                                $scope.fields[b].value = $scope.fields[x].value;
+                            }
+                        }
+                    }
+                    break;
             }
-          break;
-          case 'copy-asociado':
-            for(var x in $scope.fields){
-              for(var b in $scope.fields){
-                if($scope.fields[x].name == 'first_name' && $scope.fields[b].name == 'first_name2'){
-                  $scope.fields[b].value = $scope.fields[x].value;
-                }
-                if($scope.fields[x].name == 'second_name' && $scope.fields[b].name == 'second_name2'){
-                  $scope.fields[b].value = $scope.fields[x].value;
-                }
-                if($scope.fields[x].name == 'last_name' && $scope.fields[b].name == 'last_name2'){
-                  $scope.fields[b].value = $scope.fields[x].value;
-                }
-                if($scope.fields[x].name == 'second_last_name' && $scope.fields[b].name == 'second_last_name2'){
-                  $scope.fields[b].value = $scope.fields[x].value;
-                }
-                if($scope.fields[x].name == 'correo11' && $scope.fields[b].name == 'correo21'){
-                  $scope.fields[b].value = $scope.fields[x].value;
-                }
-                if($scope.fields[x].name == 'correo12' && $scope.fields[b].name == 'correo22'){
-                  $scope.fields[b].value = $scope.fields[x].value;
-                }
-                if($scope.fields[x].name == 'telefono11' && $scope.fields[b].name == 'telefono21'){
-                  $scope.fields[b].value = $scope.fields[x].value;
-                }
-                if($scope.fields[x].name == 'telefono12' && $scope.fields[b].name == 'telefono22'){
-                  $scope.fields[b].value = $scope.fields[x].value;
-                }
-              }
+        } else {
+            switch (jQuery(ev).data('action')) {
+                case 'persona-juridica':
+                    for (var x in $scope.fields) {
+                        /*if($scope.fields[x].name == 'razon_social'){
+                          $scope.fields[x].hiddenedit = true;
+                          $scope.fields[x].required = false;
+                        }*/
+                        if ($scope.fields[x].name == 'last_name') {
+                            $scope.fields[x].required = true;
+                        }
+                    }
+                    break;
+                case 'copy-asociado':
+                    for (var b in $scope.fields) {
+                        switch ($scope.fields[b].name) {
+                            case 'first_name2':
+                            case 'second_name2':
+                            case 'last_name2':
+                            case 'second_last_name2':
+                            case 'correo21':
+                            case 'correo22':
+                            case 'telefono21':
+                            case 'telefono22':
+                                $scope.fields[b].value = '';
+                                break;
+                        }
+                    }
+                    break;
             }
-          break;
         }
-      } else {
-        switch(jQuery(ev).data('action')){
-          case 'persona-juridica':
-            for(var x in $scope.fields){
-              /*if($scope.fields[x].name == 'razon_social'){
-                $scope.fields[x].hiddenedit = true;
-                $scope.fields[x].required = false;
-              }*/
-              if($scope.fields[x].name == 'last_name'){
-                $scope.fields[x].required = true;
-              }
-            }
-          break;
-          case 'copy-asociado':
-              for(var b in $scope.fields){
-                switch($scope.fields[b].name){
-                  case 'first_name2':
-                  case 'second_name2':
-                  case 'last_name2':
-                  case 'second_last_name2':
-                  case 'correo21':
-                  case 'correo22':
-                  case 'telefono21':
-                  case 'telefono22':
-                    $scope.fields[b].value = '';
-                  break;
-                }
-              }
-          break;
-        }
-      }
-      $scope.$apply();
+        $scope.$apply();
     }
 
     var activos = 1;
@@ -104,7 +104,7 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
             token: Session.get()
         }
     }).then(function (response) {
-      response = response.data;
+        response = response.data;
         $scope.session = response;
         var pages = Session.getPages().pages;
         if ($scope.session.type == 'Administrador') {
@@ -120,7 +120,7 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
         $scope.load($scope.pages[sessionStorage.page], sessionStorage.page);
     });
     $scope.search = function () {
-      fieldsdata = $scope.tabledata;
+        fieldsdata = $scope.tabledata;
         var arr;
         var tmpdata = [];
         var string = '';
@@ -128,47 +128,47 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
             for (var x in fieldsdata) {
                 for (var i in fieldsdata[x]) {
                     if (fieldsdata[x][i]) {
-                      if($scope.page.collection == 'asociados'){
-                        if(i == 'id' || i == 'first_name' || i == 'last_name' || i == 'first_name2' || i == 'last_name2'){
-                          arr = fieldsdata[x][i];
-                          arr = arr.toString();
-                          arr = arr.toLowerCase();
-                          string = $scope.page.filter.value;
-                          if (arr.indexOf(string.toLowerCase()) >= 0) {
-                              tmpdata[tmpdata.length] = fieldsdata[x];
-                              break;
-                          }
+                        if ($scope.page.collection == 'asociados') {
+                            if (i == 'id' || i == 'first_name' || i == 'last_name' || i == 'first_name2' || i == 'last_name2') {
+                                arr = fieldsdata[x][i];
+                                arr = arr.toString();
+                                arr = arr.toLowerCase();
+                                string = $scope.page.filter.value;
+                                if (arr.indexOf(string.toLowerCase()) >= 0) {
+                                    tmpdata[tmpdata.length] = fieldsdata[x];
+                                    break;
+                                }
+                            }
+                        } else {
+                            arr = fieldsdata[x][i];
+                            arr = arr.toString();
+                            arr = arr.toLowerCase();
+                            string = $scope.page.filter.value;
+                            if (arr.indexOf(string.toLowerCase()) >= 0) {
+                                tmpdata[tmpdata.length] = fieldsdata[x];
+                                break;
+                            }
                         }
-                      } else {
-                        arr = fieldsdata[x][i];
-                        arr = arr.toString();
-                        arr = arr.toLowerCase();
-                        string = $scope.page.filter.value;
-                        if (arr.indexOf(string.toLowerCase()) >= 0) {
-                            tmpdata[tmpdata.length] = fieldsdata[x];
-                            break;
-                        }
-                      }
                     }
                 }
             }
         }
 
-        if($scope.page.filter.value.length == 0){
-          $scope.load($scope.pages[sessionStorage.page], sessionStorage.page);
+        if ($scope.page.filter.value.length == 0) {
+            $scope.load($scope.pages[sessionStorage.page], sessionStorage.page);
         } else {
-          $scope.registros = tmpdata.length;
-          $scope.pagination.numPages = Math.ceil(tmpdata.length / $scope.pagination.perPage);
-          if (tmpdata.length > 0){
-            $scope.tabledata = [];
-            setTimeout(function(){
-              $scope.tabledata = tmpdata;
-              if (!$scope.$$phase)
-                $scope.$apply();
-            },0);
-          } else{
-            $scope.tabledata = fieldsdata;
-          }
+            $scope.registros = tmpdata.length;
+            $scope.pagination.numPages = Math.ceil(tmpdata.length / $scope.pagination.perPage);
+            if (tmpdata.length > 0) {
+                $scope.tabledata = [];
+                setTimeout(function () {
+                    $scope.tabledata = tmpdata;
+                    if (!$scope.$$phase)
+                        $scope.$apply();
+                }, 0);
+            } else {
+                $scope.tabledata = fieldsdata;
+            }
         }
 
 
@@ -194,37 +194,37 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
     }
     setUploader();
 
-    $scope.onChangeSelect = function(data){
-      var css = jQuery(data).attr('class');
-      css = css.split(' ');
-      for(var x in css){
-        switch(css[x]){
-          case 'on-select-persona':
-            if(jQuery(data).val() == 'PERSONA NATURAL'){
-              //ver persona natural o juridica
+    $scope.onChangeSelect = function (data) {
+        var css = jQuery(data).attr('class');
+        css = css.split(' ');
+        for (var x in css) {
+            switch (css[x]) {
+                case 'on-select-persona':
+                    if (jQuery(data).val() == 'PERSONA NATURAL') {
+                        //ver persona natural o juridica
+                    }
+                    break;
             }
-          break;
         }
-      }
     }
 
     $scope.load = function (item, index) {
-      LoadList.load($scope, item, index, fieldsReset, obtenerPagos, activos, function(response_load){
-        jQuery('body').loader('hide');
-        registro_pagos = fieldsdata = response_load;
-        $scope.tabledata = response_load;
-        $scope.$apply();
-      });
+        LoadList.load($scope, item, index, fieldsReset, obtenerPagos, activos, function (response_load) {
+            jQuery('body').loader('hide');
+            registro_pagos = fieldsdata = response_load;
+            $scope.tabledata = response_load;
+            $scope.$apply();
+        });
     }
 
     var excelPeriodo;
     $scope.showModalImportPagos = function (fields, data, object) {
         excelPeriodo = object;
         $scope.fields = [{
-                name: 'csv_pagos',
-                title: 'Cargar Excel',
-                type: 'file'
-            }]
+            name: 'csv_pagos',
+            title: 'Cargar Excel',
+            type: 'file'
+        }]
         jQuery('#modalCSVpagos').modal('show');
     }
 
@@ -232,22 +232,22 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
     * BOTON NUEVO ASOCIADO
     */
     $scope.nuevoSocio = false;
-    $scope.showModalAsociados = function(fields){
-      $scope.nuevoSocio = 0;
-      for(var x in $scope.tabledata){
-        if($scope.tabledata[x].id > $scope.nuevoSocio){
-          $scope.nuevoSocio = $scope.tabledata[x].id;
+    $scope.showModalAsociados = function (fields) {
+        $scope.nuevoSocio = 0;
+        for (var x in $scope.tabledata) {
+            if ($scope.tabledata[x].id > $scope.nuevoSocio) {
+                $scope.nuevoSocio = $scope.tabledata[x].id;
+            }
         }
-      }
-      $scope.nuevoSocio++;
-      $scope.showModal(fields);
+        $scope.nuevoSocio++;
+        $scope.showModal(fields);
     }
     /**
     * BOTON EDITAR ASOCIADO
     */
-    $scope.showModalAsociadosEdit = function(fields, data){
-      $scope.nuevoSocio = false;
-      $scope.showModal(fields, data);
+    $scope.showModalAsociadosEdit = function (fields, data) {
+        $scope.nuevoSocio = false;
+        $scope.showModal(fields, data);
     }
 
     $scope.showModal = function (fields, data, object) {
@@ -281,103 +281,103 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                             databack: x
                         }
                     }).then(function (response) {
-                      response = response.data;
+                        response = response.data;
                         if (response.success) {
                             $scope.fields[response.databack].value = '';
                             $scope.fields[response.databack].data.options = response.data;
                         }
                     });
                 } else
-                if (typeof fields[x].data.collection != 'undefined') {
-                    $http.get('/api/data', {
-                        params: {
-                            token: Session.get(),
-                            collection: fields[x].data.collection,
-                            databack: x
-                        }
-                    }).then(function (response) {
-                      response = response.data;
-                        if (response.success) {
-                            /**
-                             * Busqueda a traves de filtro
-                             */
-                            var data = [];
-                            var add = true;
-                            for (var y in response.data) {
-                                //console.info(response.data[y]);
-                                for (var key in response.data[y]) {
-                                    if ($scope.fields[response.databack].data.filter) {
-                                        for (var filtro in $scope.fields[response.databack].data.filter) {
-                                            if (key == $scope.fields[response.databack].data.filter[filtro].key) {
-                                                if ($scope.fields[response.databack].data.filter[filtro].value == response.data[y][key]) {
-                                                    data[data.length] = response.data[y];
+                    if (typeof fields[x].data.collection != 'undefined') {
+                        $http.get('/api/data', {
+                            params: {
+                                token: Session.get(),
+                                collection: fields[x].data.collection,
+                                databack: x
+                            }
+                        }).then(function (response) {
+                            response = response.data;
+                            if (response.success) {
+                                /**
+                                 * Busqueda a traves de filtro
+                                 */
+                                var data = [];
+                                var add = true;
+                                for (var y in response.data) {
+                                    //console.info(response.data[y]);
+                                    for (var key in response.data[y]) {
+                                        if ($scope.fields[response.databack].data.filter) {
+                                            for (var filtro in $scope.fields[response.databack].data.filter) {
+                                                if (key == $scope.fields[response.databack].data.filter[filtro].key) {
+                                                    if ($scope.fields[response.databack].data.filter[filtro].value == response.data[y][key]) {
+                                                        data[data.length] = response.data[y];
+                                                    }
+                                                }
+                                            }
+                                        } else {
+                                            for (var n in data) {
+                                                add = true;
+                                                if (data[n]._id == response.data[y]._id) {
+                                                    add = false;
+                                                    break;
+                                                }
+                                            }
+                                            if (add)
+                                                data[data.length] = response.data[y];
+                                        }
+                                    }
+                                }
+
+                                /**
+                                 * Seleccion de campos
+                                 */
+                                if (data.length > 0) {
+                                    var option = [];
+                                    for (var y in data) {
+                                        option[y] = [];
+                                        for (var field in $scope.fields[response.databack].data.fields) {
+                                            for (var key in data[y]) {
+                                                if ($scope.fields[response.databack].data.fields[field].field == key) {
+                                                    id = false;
+                                                    if ($scope.fields[response.databack].data.fields[field].id) {
+                                                        id = true;
+                                                    }
+                                                    option[y][option[y].length] = {
+                                                        field: $scope.fields[response.databack].data.fields[field].field,
+                                                        id: id,
+                                                        value: data[y][key]
+                                                    };
                                                 }
                                             }
                                         }
-                                    } else {
-                                        for (var n in data) {
-                                            add = true;
-                                            if (data[n]._id == response.data[y]._id) {
-                                                add = false;
-                                                break;
-                                            }
-                                        }
-                                        if (add)
-                                            data[data.length] = response.data[y];
                                     }
                                 }
-                            }
-
-                            /**
-                             * Seleccion de campos
-                             */
-                            if (data.length > 0) {
-                                var option = [];
-                                for (var y in data) {
-                                    option[y] = [];
-                                    for (var field in $scope.fields[response.databack].data.fields) {
-                                        for (var key in data[y]) {
-                                            if ($scope.fields[response.databack].data.fields[field].field == key) {
-                                                id = false;
-                                                if ($scope.fields[response.databack].data.fields[field].id) {
-                                                    id = true;
-                                                }
-                                                option[y][option[y].length] = {
-                                                    field: $scope.fields[response.databack].data.fields[field].field,
-                                                    id: id,
-                                                    value: data[y][key]
-                                                };
-                                            }
+                                /**
+                                 * Formateo de option > value
+                                 */
+                                var key = [];
+                                var value = []
+                                data = []
+                                for (var x in option) {
+                                    key[x] = [];
+                                    value[x] = [];
+                                    for (var z in option[x]) {
+                                        if (option[x][z].id) {
+                                            key[x][key[x].length] = option[x][z].value;
+                                        } else {
+                                            value[x][value[x].length] = option[x][z].value;
                                         }
                                     }
-                                }
-                            }
-                            /**
-                             * Formateo de option > value
-                             */
-                            var key = [];
-                            var value = []
-                            data = []
-                            for (var x in option) {
-                                key[x] = [];
-                                value[x] = [];
-                                for (var z in option[x]) {
-                                    if (option[x][z].id) {
-                                        key[x][key[x].length] = option[x][z].value;
-                                    } else {
-                                        value[x][value[x].length] = option[x][z].value;
+                                    data[data.length] = {
+                                        key: key[x].join(' '),
+                                        value: value[x].join(' ')
                                     }
                                 }
-                                data[data.length] = {
-                                    key: key[x].join(' '),
-                                    value: value[x].join(' ')
-                                }
-                            }
-                            $scope.fields[response.databack].data.options = data;
+                                $scope.fields[response.databack].data.options = data;
 
-                        }
-                    });
-                }
+                            }
+                        });
+                    }
             }
         }
 
@@ -388,8 +388,8 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                         if (data[key])
                             $scope.fields[x].value = data[key];
                     }
-                    if($scope.fields[x].name == 'preguntas'){
-                      $scope.encuestas.preguntas = $scope.encuestas.agregarFunciones($scope.fields[x].value);
+                    if ($scope.fields[x].name == 'preguntas') {
+                        $scope.encuestas.preguntas = $scope.encuestas.agregarFunciones($scope.fields[x].value);
                     }
                 }
             }
@@ -408,7 +408,7 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
         //}
     }
     $scope.sendForm = function () {
-      SendForm.send($scope, $http, Session);
+        SendForm.send($scope, $http, Session);
     }
 
     $scope.uploadCSV = function () {
@@ -422,16 +422,16 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                         uf: $scope.pagos.currentUF
                     }
                 }).then(function (response) {
-                  response = response.data;
+                    response = response.data;
                     if (response.success) {
 
-                      jQuery('#modalCSVpagos').modal('hide');
-                      setTimeout(function () {
-                          $scope.uploader.destroy();
-                          delete $scope.uploader;
-                          setUploader();
-                      }, 500);
-                      $scope.load($scope.page);
+                        jQuery('#modalCSVpagos').modal('hide');
+                        setTimeout(function () {
+                            $scope.uploader.destroy();
+                            delete $scope.uploader;
+                            setUploader();
+                        }, 500);
+                        $scope.load($scope.page);
                     } else if (response.message) {
                         Dialog.alert(response.message);
                         if (response.logout) {
@@ -488,7 +488,7 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                     data: id
                 }
             }).then(function (response) {
-              response = response.data;
+                response = response.data;
                 $scope.load($scope.page);
             });
         }
@@ -520,7 +520,7 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                     }
                 }
             }).then(function (response) {
-              response = response.data;
+                response = response.data;
                 $scope.load($scope.page);
             });
         }
@@ -545,7 +545,7 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                     }
                 }
             }).then(function (response) {
-              response = response.data;
+                response = response.data;
                 $scope.input.messageText = '';
                 jQuery('#modalEditMessages').modal('hide');
                 $scope.load($scope.page);
@@ -561,13 +561,13 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
     var months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
     var registro_pagos = [];
     var obtenerPagos = function (year, month) {
-      if(typeof month == 'string')
-        for (var c in months) {
-            if (months[c] == month) {
-                month = parseInt(c);
-                break;
+        if (typeof month == 'string')
+            for (var c in months) {
+                if (months[c] == month) {
+                    month = parseInt(c);
+                    break;
+                }
             }
-        }
 
         var params = {
             token: Session.get(),
@@ -587,11 +587,11 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                 collection: 'valoresuf'
             }
         }).then(function (response) {
-          response = response.data;
+            response = response.data;
             if (response.success) {
                 if (response.data.length > 0) {
-                  $scope.pagos.valoresuf = response.data;
-                  sessionStorage.valoresuf = JSON.stringify(response.data);
+                    $scope.pagos.valoresuf = response.data;
+                    sessionStorage.valoresuf = JSON.stringify(response.data);
                     var valor = false;
                     for (var x in response.data) {
                         if (periodos_months[month] == response.data[x].mes && year == response.data[x].year) {
@@ -601,12 +601,12 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                     }
                     if (valor) {
                         $scope.valoruf = valor;
-                        $scope.pagos.currentUF = valor.toString().replace(',','.');
+                        $scope.pagos.currentUF = valor.toString().replace(',', '.');
 
                         $http.get('/api/data', {
                             params: params
                         }).then(function (response) {
-                          response = response.data;
+                            response = response.data;
                             if (response.success) {
                                 var registros = [];
                                 var tarifa;
@@ -618,7 +618,7 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                                         index: parseInt(parseInt(d) + parseInt(1)),
                                         id: response.data[d].id,
                                         nombre: response.data[d].nombre,
-                                        dias: response.data[d].dias,
+                                        dias: parseInt(response.data[d].dias),
                                         tarifa: response.data[d].tarifa,
                                         type: response.data[d].type,
                                         pagado: response.data[d].pagado,
@@ -639,16 +639,16 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                         });
 
                     } else {
-                      jQuery('body').loader('hide');
-                        Dialog.alert('No hay valores UF cargados de ' + months[month]+ '. \nVaya a la sección "Valores UF" y agregue el valor UF del mes');
+                        jQuery('body').loader('hide');
+                        Dialog.alert('No hay valores UF cargados de ' + months[month] + '. \nVaya a la sección "Valores UF" y agregue el valor UF del mes');
                     }
-               } else {
-                  jQuery('body').loader('hide');
-                    Dialog.alert('No hay valores UF cargados de ' + months[month]+ '. \nVaya a la sección "Valores UF" y agregue el valor UF del mes');
+                } else {
+                    jQuery('body').loader('hide');
+                    Dialog.alert('No hay valores UF cargados de ' + months[month] + '. \nVaya a la sección "Valores UF" y agregue el valor UF del mes');
                 }
             } else {
-              jQuery('body').loader('hide');
-                Dialog.alert('No hay valores UF cargados de ' + months[month]+ '. \nVaya a la sección "Valores UF" y agregue el valor UF del mes');
+                jQuery('body').loader('hide');
+                Dialog.alert('No hay valores UF cargados de ' + months[month] + '. \nVaya a la sección "Valores UF" y agregue el valor UF del mes');
             }
         });
     }
@@ -673,8 +673,8 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
     }
 
     $scope.pagos = {
-      valoresuf:[],
-      currentUF:'',
+        valoresuf: [],
+        currentUF: '',
         periodos: periodos,
         tabYearActive: null,
         yearActive: null,
@@ -683,208 +683,210 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
         showUploadExcel: false,
         randomPassCheckboxValue: false,
         historialData: [],
-        exportarMesExcel: function(month, year){
-          window.open('/pagos/excel/'+year+'/'+month, '_blank');
+        exportarMesExcel: function (month, year) {
+            window.open('/pagos/excel/' + year + '/' + month, '_blank');
         },
-        exportarAlBanco: function(month, year){
-          window.open('/pagos/banco/pat/'+year+'/'+month, '_blank');
-          window.open('/pagos/banco/pac/'+year+'/'+month, '_blank');
+        exportarAlBanco: function (month, year, patpac) {
+            if (patpac == 'pat')
+                window.open('/pagos/banco/pat/' + year + '/' + month, '_blank');
+            if (patpac == 'pac')
+                window.open('/pagos/banco/pac/' + year + '/' + month, '_blank');
         },
-        modalHistorial: function(item){
-          $http.get('/api/data', {
-            params: {
-                token: Session.get(),
-                collection: 'pagos',
-                where: {
-                  id: item.id
+        modalHistorial: function (item) {
+            $http.get('/api/data', {
+                params: {
+                    token: Session.get(),
+                    collection: 'pagos',
+                    where: {
+                        id: item.id
+                    }
                 }
-            }
-          }).then(function (response) {
-            response = response.data;
-            if(response.success){
-              var obj = response.data;
-              var array=[];
-              for (var i in obj){
-                  if (obj.hasOwnProperty(i)){
-                      obj[i].id=i;
-                      array.push(obj[i]);
-                  }
-              }
-              var fieldToSort = "month";
-              array.sort(function(a,b){
-                  return a[fieldToSort] - b[fieldToSort];
-              });
-              array = array.reverse();
-              $scope.pagos.historialData = array;
-              jQuery('#modalHistorial').modal('show');
-            }
-          });
+            }).then(function (response) {
+                response = response.data;
+                if (response.success) {
+                    var obj = response.data;
+                    var array = [];
+                    for (var i in obj) {
+                        if (obj.hasOwnProperty(i)) {
+                            obj[i].id = i;
+                            array.push(obj[i]);
+                        }
+                    }
+                    var fieldToSort = "month";
+                    array.sort(function (a, b) {
+                        return a[fieldToSort] - b[fieldToSort];
+                    });
+                    array = array.reverse();
+                    $scope.pagos.historialData = array;
+                    jQuery('#modalHistorial').modal('show');
+                }
+            });
         },
-        modificarDias: function(event, trdata){
-            if(event.keyCode == 13){
-                if(confirm('Está seguro que desea modificar el cobro de los dias?')){
-                    trdata.debe = trdata.tarifa = (trdata.fijo_tarifa*trdata.dias)/trdata.fijo_dias;
-                    $http.get('/api/modificar-dias',{
-                        params:{
+        modificarDias: function (event, trdata) {
+            if (event.keyCode == 13) {
+                if (confirm('Está seguro que desea modificar el cobro de los dias?')) {
+                    trdata.debe = trdata.tarifa = (trdata.fijo_tarifa * trdata.dias) / trdata.fijo_dias;
+                    $http.get('/api/modificar-dias', {
+                        params: {
                             token: Session.get(),
                             _id: trdata._id,
                             dias: trdata.dias,
                             tarifa: trdata.tarifa,
                             month: trdata.month,
-                            year: trdata.year 
+                            year: trdata.year
                         }
                     });
                 }
             }
         },
-        eliminarDocumento: function(file, fields){
-          if(confirm('¿Está seguro que desea eliminar el archivo "'+file+'"?')){
+        eliminarDocumento: function (file, fields) {
+            if (confirm('¿Está seguro que desea eliminar el archivo "' + file + '"?')) {
+                var id, year, month;
+                for (var x in fields) {
+                    if (fields[x].name == 'id')
+                        id = fields[x].value;
+                    if (fields[x].name == 'year')
+                        year = fields[x].value;
+                    if (fields[x].name == 'month')
+                        month = fields[x].value;
+                }
+                file = '/dropfile/' + id + '/' + year + '/' + month + '/' + window.btoa(encodeURI(file));
+                $http.post(file, {
+                    params: {
+                        token: Session.get()
+                    }
+                }).then(function (response) {
+                    response = response.data;
+                    obtenerPagos($scope.pagos.yearActive, $scope.pagos.monthActive);
+                    jQuery('#modalEdit').modal('hide');
+                });
+            }
+        },
+        descargarDocumento: function (file, fields) {
             var id, year, month;
-            for(var x in fields){
-              if(fields[x].name == 'id')
-                id = fields[x].value;
-              if(fields[x].name == 'year')
-                year = fields[x].value;
-              if(fields[x].name == 'month')
-                month = fields[x].value;
+            console.info(fields);
+            for (var x in fields) {
+                if (fields[x].name == 'id')
+                    id = fields[x].value;
+                if (fields[x].name == 'year')
+                    year = fields[x].value;
+                if (fields[x].name == 'month')
+                    month = fields[x].value;
             }
-            file = '/dropfile/'+id+'/'+year+'/'+month+'/'+window.btoa(encodeURI(file));
-            $http.post(file, {
-              params: {
-                  token: Session.get()
-              }
-            }).then(function (response) {
-              response = response.data;
-              obtenerPagos($scope.pagos.yearActive, $scope.pagos.monthActive);
-              jQuery('#modalEdit').modal('hide');
-            });
-          }
+            file = '/descargas/' + id + '/' + year + '/' + month + '/' + window.btoa(file);
+            window.open(file, '_blank');
+            //location.href = file;
         },
-        descargarDocumento : function(file, fields){
-          var id, year, month;
-          console.info(fields);
-          for(var x in fields){
-            if(fields[x].name == 'id')
-              id = fields[x].value;
-            if(fields[x].name == 'year')
-              year = fields[x].value;
-            if(fields[x].name == 'month')
-              month = fields[x].value;
-          }
-          file = '/descargas/'+id+'/'+year+'/'+month+'/'+window.btoa(file);
-          window.open(file, '_blank');
-          //location.href = file;
-        },
-        randomPassCheckbox:function(index, item){
-          if(this.randomPassCheckboxValue){
-            if(confirm('¿Desea generar una contraseña aleatoria para este usuario?')){
-              $scope.fields[index].value = randomPass.generate();
-              console.info(item.value);
-            } else {
-              this.randomPassCheckboxValue = false;
+        randomPassCheckbox: function (index, item) {
+            if (this.randomPassCheckboxValue) {
+                if (confirm('¿Desea generar una contraseña aleatoria para este usuario?')) {
+                    $scope.fields[index].value = randomPass.generate();
+                    console.info(item.value);
+                } else {
+                    this.randomPassCheckboxValue = false;
+                }
             }
-          }
         },
         changeStatus: function (select, data, index) {
             var pagado = 0;
             var paramsdata = false;
-            switch(select){
-              case 'Pendiente':
-              break;
-              case 'PAC Cargado':
-              case 'PAT Cargado':
-              case 'Mandato Anulado en Banco':
-              case 'Falta de Fondos':
-              case 'Monto a Pagar Excede el Máximo Permitido':
-              case 'Cuenta con Orden de Cierre':
-              case 'Rechazo por Tarjeta Bloqueada':
-              case 'Rechazo Tarjeta no Existe':
-              case 'Rechazo Tarjeta Perdida o Robada':
-              case 'Rechazo Tarjeta con Problemas':
-              case 'Rechazo Tarjeta Vencida':
-              case 'Cheque recibido':
-              if(confirm('¿Desea cambiar el estado de este pago a "'+ select +'"?')){
-                paramsdata = {
-                    id: data.id,
-                    month: this.tabMonthActive,
-                    year: this.yearActive,
-                    status: select
-                }
-              } else {
-                $scope.tabledata[index] = null;
-                setTimeout(function(){
-                  $scope.tabledata[index] = data;
-                  $scope.$apply();
-                },0);
-              }
-              break;
-              case 'Pagado con excedentes':
-              if(data.excedentes <= 0){
-                Dialog.alert('El asociado no posee excedentes para realizar el pago');
-                obtenerPagos(this.yearActive, this.monthActive);
-              } else{
-                pagado = prompt('Total a pagar', Math.round(data.tarifa));
-                if (pagado) {
-                  paramsdata = {
-                      id: data.id,
-                      pago: pagado,
-                      month: this.tabMonthActive,
-                      year: this.yearActive,
-                      status: select,
-                      cobrodelmes: Math.round(data.tarifa)
-                  }
-                } else {
-                  $scope.tabledata[index] = null;
-                  setTimeout(function(){
-                    $scope.tabledata[index] = data;
-                    $scope.$apply();
-                  },0);
-                }
-              }
-              break;
-              case 'Pagado con transferencia':
-              case 'Pagado en efectivo':
-              case 'Pagado con cheque':
-              case 'Pagado fuera de plazo (+ 20%)':
-              case "Pagos Procesados":
-              case "Aprobada":
-                if(select == 'Pagado fuera de plazo (+ 20%)'){
-                  data.tarifa = data.tarifa*$scope.pagos.currentUF * 1.2;
-                }
-                pagado = prompt('Total a pagar', Math.round(data.tarifa));
-                if (pagado) {
-                  paramsdata = {
-                      id: data.id,
-                      pago: pagado,
-                      month: this.tabMonthActive,
-                      year: this.yearActive,
-                      status: select,
-                      cobrodelmes: Math.round(data.tarifa)
-                  }
-                } else {
-                  $scope.tabledata[index] = null;
-                  setTimeout(function(){
-                    $scope.tabledata[index] = data;
-                    $scope.$apply();
-                  },0);
-                }
-              break;
+            switch (select) {
+                case 'Pendiente':
+                    break;
+                case 'PAC Cargado':
+                case 'PAT Cargado':
+                case 'Mandato Anulado en Banco':
+                case 'Falta de Fondos':
+                case 'Monto a Pagar Excede el Máximo Permitido':
+                case 'Cuenta con Orden de Cierre':
+                case 'Rechazo por Tarjeta Bloqueada':
+                case 'Rechazo Tarjeta no Existe':
+                case 'Rechazo Tarjeta Perdida o Robada':
+                case 'Rechazo Tarjeta con Problemas':
+                case 'Rechazo Tarjeta Vencida':
+                case 'Cheque recibido':
+                    if (confirm('¿Desea cambiar el estado de este pago a "' + select + '"?')) {
+                        paramsdata = {
+                            id: data.id,
+                            month: this.tabMonthActive,
+                            year: this.yearActive,
+                            status: select
+                        }
+                    } else {
+                        $scope.tabledata[index] = null;
+                        setTimeout(function () {
+                            $scope.tabledata[index] = data;
+                            $scope.$apply();
+                        }, 0);
+                    }
+                    break;
+                case 'Pagado con excedentes':
+                    if (data.excedentes <= 0) {
+                        Dialog.alert('El asociado no posee excedentes para realizar el pago');
+                        obtenerPagos(this.yearActive, this.monthActive);
+                    } else {
+                        pagado = prompt('Total a pagar', Math.round(data.tarifa));
+                        if (pagado) {
+                            paramsdata = {
+                                id: data.id,
+                                pago: pagado,
+                                month: this.tabMonthActive,
+                                year: this.yearActive,
+                                status: select,
+                                cobrodelmes: Math.round(data.tarifa)
+                            }
+                        } else {
+                            $scope.tabledata[index] = null;
+                            setTimeout(function () {
+                                $scope.tabledata[index] = data;
+                                $scope.$apply();
+                            }, 0);
+                        }
+                    }
+                    break;
+                case 'Pagado con transferencia':
+                case 'Pagado en efectivo':
+                case 'Pagado con cheque':
+                case 'Pagado fuera de plazo (+ 20%)':
+                case "Pagos Procesados":
+                case "Aprobada":
+                    if (select == 'Pagado fuera de plazo (+ 20%)') {
+                        data.tarifa = data.tarifa * $scope.pagos.currentUF * 1.2;
+                    }
+                    pagado = prompt('Total a pagar', Math.round(data.tarifa));
+                    if (pagado) {
+                        paramsdata = {
+                            id: data.id,
+                            pago: pagado,
+                            month: this.tabMonthActive,
+                            year: this.yearActive,
+                            status: select,
+                            cobrodelmes: Math.round(data.tarifa)
+                        }
+                    } else {
+                        $scope.tabledata[index] = null;
+                        setTimeout(function () {
+                            $scope.tabledata[index] = data;
+                            $scope.$apply();
+                        }, 0);
+                    }
+                    break;
             }
-            if(paramsdata){
-              $http.post('/api/pagar', {
-                  params: {
-                      token: Session.get(),
-                      data: paramsdata
-                  }
-              }).then(function (response) {
-                response = response.data;
-                  obtenerPagos($scope.pagos.yearActive, $scope.pagos.monthActive);
-              });
+            if (paramsdata) {
+                $http.post('/api/pagar', {
+                    params: {
+                        token: Session.get(),
+                        data: paramsdata
+                    }
+                }).then(function (response) {
+                    response = response.data;
+                    obtenerPagos($scope.pagos.yearActive, $scope.pagos.monthActive);
+                });
             }
         },
         modalEditarDetalles: function (data, boton) {
-          if(boton == 'comentarios'){
-            $scope.showModal([{
+            if (boton == 'comentarios') {
+                $scope.showModal([{
                     "name": "_id",
                     "type": "hidden"
                 }, {
@@ -893,11 +895,11 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                     type: 'textarea',
                     value: data.comentarios
                 }], {
-                _id: data._id
-            });
-          }
-          if(boton == 'archivos'){
-            $scope.showModal([{
+                        _id: data._id
+                    });
+            }
+            if (boton == 'archivos') {
+                $scope.showModal([{
                     "name": "_id",
                     "type": "hidden"
                 }, {
@@ -918,9 +920,9 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                     type: 'file',
                     value: data.archivos
                 }], {
-                _id: data._id
-            });
-          }
+                        _id: data._id
+                    });
+            }
         },
         notificarContador: function (month, year) {
             if (confirm('¿Desea notificar al contador que la carga de cobros se encuentra lista?')) {
@@ -931,7 +933,7 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                         month: month
                     }
                 }).then(function (response) {
-                  response = response.data;
+                    response = response.data;
                     if (response.success) {
                         Dialog.alert('Se ha enviado una notificación por correo al contador correctamente');
                     } else {
@@ -940,27 +942,27 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                 });
             }
         },
-        notificarAsociado: function(data){
-          if(confirm('¿Notificar cobro a "'+ data.nombre +'"?')){
-            $http.post('/api/notiticar-cobro-asociado', {
-                params: {
-                    token: Session.get(),
-                    data: data,
-                    year: this.yearActive,
-                    month: this.monthActive
-                }
-            }).then(function (response) {
-              response = response.data;
-                if (response.success) {
-                    Dialog.alert('El correo ha sido enviado');
-                } else {
-                    Dialog.alert(response.message);
-                }
-            });
-          }
+        notificarAsociado: function (data) {
+            if (confirm('¿Notificar cobro a "' + data.nombre + '"?')) {
+                $http.post('/api/notiticar-cobro-asociado', {
+                    params: {
+                        token: Session.get(),
+                        data: data,
+                        year: this.yearActive,
+                        month: this.monthActive
+                    }
+                }).then(function (response) {
+                    response = response.data;
+                    if (response.success) {
+                        Dialog.alert('El correo ha sido enviado');
+                    } else {
+                        Dialog.alert(response.message);
+                    }
+                });
+            }
         },
         changeTab: function (index, year, month) {
-          jQuery('body').loader('show');
+            jQuery('body').loader('show');
             this.tabMonthActive = index;
             this.monthActive = month;
             var valor = false;
@@ -971,7 +973,7 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                 }
             }
             if (valor) {
-              $scope.pagos.currentUF = valor.toString().replace(',','.');
+                $scope.pagos.currentUF = valor.toString().replace(',', '.');
             }
             obtenerPagos(year, month);
         },
@@ -993,7 +995,7 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
             }
             $scope.registros = tmpdata.length;
             $scope.pagination.numPages = Math.ceil(tmpdata.length / $scope.pagination.perPage);
-            if (tmpdata.length > 0){
+            if (tmpdata.length > 0) {
                 $scope.pagination.toPageId(0);
                 $scope.tabledata = tmpdata;
             } else
@@ -1026,112 +1028,112 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
     $scope.pagos.monthActive = $scope.pagos.periodos[$scope.pagos.periodos.length - 1].months[$scope.pagos.periodos[$scope.pagos.periodos.length - 1].months.length - 1];
 
 
-    $scope.exportarAsociados = function(tab){
-      var itab = false;
-      switch(tab){
-        case "Exportar activos":
-          itab = 1;
-        break;
-        case "Exportar suspendidos":
-          itab = 0;
-        break;
-        case "Exportar eliminados":
-          itab = -1;
-        break;
-        case "Exportar no socios":
-          itab = -2;
-        break;
-      }
-      window.open('/asociados/excel/'+itab, '_blank');
+    $scope.exportarAsociados = function (tab) {
+        var itab = false;
+        switch (tab) {
+            case "Exportar activos":
+                itab = 1;
+                break;
+            case "Exportar suspendidos":
+                itab = 0;
+                break;
+            case "Exportar eliminados":
+                itab = -1;
+                break;
+            case "Exportar no socios":
+                itab = -2;
+                break;
+        }
+        window.open('/asociados/excel/' + itab, '_blank');
     }
     $scope.asociadosTabActivo = "Exportar activos";
-    $scope.showAsociados = function(data){
-      activos = data;
-      switch(data){
-        case 0:
-          $scope.asociadosTabActivo = "Exportar suspendidos";
-          break;
-        case -1:
-          $scope.asociadosTabActivo = "Exportar eliminados";
-          break;
-        case -2:
-          $scope.asociadosTabActivo = "Exportar no socios";
-          break;
-        default:
-          $scope.asociadosTabActivo = "Exportar activos";
-        break;
-      }
-      setTimeout(function(){
-        $scope.pagination.page = 0;
-        $rootScope.$emit('refresh');
-      }, 100);
-    }
-
-    $scope.suspenderAsociado = function(asociado, value){
-      if(value == 0){
-        text = 'suspender';
-      }
-      if(value == -1){
-        text = 'eliminar';
-      }
-      if(value == -2){
-        text = 'cambiar estado a "No socio"';
-      }
-
-      if(confirm('¿Está seguro que desea '+text+' al socio "' + asociado.first_name +' '+ asociado.last_name + '"?')){
-        $http.post('/api/data', {
-            params: {
-                token: Session.get(),
-                collection: $scope.collection,
-                fields: [{
-                    name: '_id',
-                    value: asociado._id
-                },{
-                    name: 'activo',
-                    value: value
-                }]
-            }
-        }).then(function (response) {
-          response = response.data;
-          setTimeout(function(){
-            $rootScope.$emit('refresh');
-          }, 100);
-        });
-      }
-    }
-
-    $scope.activarAsociado = function(asociado){
-      if(confirm('¿Activar al socio "' + asociado.first_name +' '+ asociado.last_name + '"?')){
-        $http.post('/api/data', {
-            params: {
-                token: Session.get(),
-                collection: $scope.collection,
-                fields: [{
-                    name: '_id',
-                    value: asociado._id
-                },{
-                    name: 'activo',
-                    value: 1
-                }]
-            }
-        }).then(function (response) {
-          response = response.data;
-          setTimeout(function(){
-            $rootScope.$emit('refresh');
-          }, 100);
-        });
-      }
-    }
-
-    $scope.validateUF = function(event){
-      var key = event.keyCode || event.charCode;
-      if(key != 8){
-        key = String.fromCharCode(key);
-        key = key.toString();
-        if(!key.match(/[0-9]{1}|\,/g)){
-          event.preventDefault();
+    $scope.showAsociados = function (data) {
+        activos = data;
+        switch (data) {
+            case 0:
+                $scope.asociadosTabActivo = "Exportar suspendidos";
+                break;
+            case -1:
+                $scope.asociadosTabActivo = "Exportar eliminados";
+                break;
+            case -2:
+                $scope.asociadosTabActivo = "Exportar no socios";
+                break;
+            default:
+                $scope.asociadosTabActivo = "Exportar activos";
+                break;
         }
-      }
+        setTimeout(function () {
+            $scope.pagination.page = 0;
+            $rootScope.$emit('refresh');
+        }, 100);
+    }
+
+    $scope.suspenderAsociado = function (asociado, value) {
+        if (value == 0) {
+            text = 'suspender';
+        }
+        if (value == -1) {
+            text = 'eliminar';
+        }
+        if (value == -2) {
+            text = 'cambiar estado a "No socio"';
+        }
+
+        if (confirm('¿Está seguro que desea ' + text + ' al socio "' + asociado.first_name + ' ' + asociado.last_name + '"?')) {
+            $http.post('/api/data', {
+                params: {
+                    token: Session.get(),
+                    collection: $scope.collection,
+                    fields: [{
+                        name: '_id',
+                        value: asociado._id
+                    }, {
+                        name: 'activo',
+                        value: value
+                    }]
+                }
+            }).then(function (response) {
+                response = response.data;
+                setTimeout(function () {
+                    $rootScope.$emit('refresh');
+                }, 100);
+            });
+        }
+    }
+
+    $scope.activarAsociado = function (asociado) {
+        if (confirm('¿Activar al socio "' + asociado.first_name + ' ' + asociado.last_name + '"?')) {
+            $http.post('/api/data', {
+                params: {
+                    token: Session.get(),
+                    collection: $scope.collection,
+                    fields: [{
+                        name: '_id',
+                        value: asociado._id
+                    }, {
+                        name: 'activo',
+                        value: 1
+                    }]
+                }
+            }).then(function (response) {
+                response = response.data;
+                setTimeout(function () {
+                    $rootScope.$emit('refresh');
+                }, 100);
+            });
+        }
+    }
+
+    $scope.validateUF = function (event) {
+        var key = event.keyCode || event.charCode;
+        if (key != 8) {
+            key = String.fromCharCode(key);
+            key = key.toString();
+            if (!key.match(/[0-9]{1}|\,/g)) {
+                event.preventDefault();
+            }
+        }
     }
 
 
@@ -1139,16 +1141,16 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
     * ENCUESTAS
     **/
     $scope.encuestas = {
-      preguntas: [],
-      tipos_respuestas:[{
-        nombre: 'Selección simple',
-        selected: true
-      },{
-        nombre: 'Selección múltiple',
-        selected: false
-      },{
-        nombre: 'Calificación',
-        selected: false/*,
+        preguntas: [],
+        tipos_respuestas: [{
+            nombre: 'Selección simple',
+            selected: true
+        }, {
+            nombre: 'Selección múltiple',
+            selected: false
+        }, {
+            nombre: 'Calificación',
+            selected: false/*,
         respuestas:[{
           nombre: 1
         },{
@@ -1164,80 +1166,80 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
         },{
           nombre: 7
         }]*/
-      }],
-      cambioTipo: function(item){
-        /*if(item.tipo == 'Calificación'){
-          item.respuestas = this.tipos_respuestas[2].respuestas;
-        } else {
-          item.respuestas = [];
-        }*/
-      },
-      agregarPregunta: function(){
-        //this.preguntas.reverse();
-        this.preguntas[this.preguntas.length] = {
-          nombre: '',
-          tipo: 'Selección simple',
-          respuestas: [],
-          agregarRespuesta: function(){
-            this.respuestas[this.respuestas.length] = {
-              nombre: ''
+        }],
+        cambioTipo: function (item) {
+            /*if(item.tipo == 'Calificación'){
+              item.respuestas = this.tipos_respuestas[2].respuestas;
+            } else {
+              item.respuestas = [];
+            }*/
+        },
+        agregarPregunta: function () {
+            //this.preguntas.reverse();
+            this.preguntas[this.preguntas.length] = {
+                nombre: '',
+                tipo: 'Selección simple',
+                respuestas: [],
+                agregarRespuesta: function () {
+                    this.respuestas[this.respuestas.length] = {
+                        nombre: ''
+                    }
+                    setTimeout(function () {
+                        $scope.$apply();
+                    }, 0);
+                },
+                removerRespuesta: function (index) {
+                    if (confirm('¿Seguro que desea eliminar esta respuesta?')) {
+                        this.respuestas.splice(index, 1);
+                    }
+                }
             }
-            setTimeout(function () {
-              $scope.$apply();
-            }, 0);
-          },
-          removerRespuesta: function(index){
-            if(confirm('¿Seguro que desea eliminar esta respuesta?')){
-              this.respuestas.splice(index,1);
+            //this.preguntas.reverse();
+        },
+        removerPregunta: function (index) {
+            if (confirm('¿Seguro que desea eliminar esta pregunta?')) {
+                this.preguntas.splice(index, 1);
             }
-          }
-        }
-        //this.preguntas.reverse();
-      },
-      removerPregunta: function(index){
-        if(confirm('¿Seguro que desea eliminar esta pregunta?')){
-          this.preguntas.splice(index,1);
-        }
-      },
-      enviar: function(eid){
-        if(confirm('¿Está seguro que desea enviar esta encuesta a sus asociados ahora?')){
-          $http.post('/api/encuestas/enviar', {
-              params: {
-                  token: Session.get(),
-                  eid: eid
-              }
-          }).then(function (response) {
-            response = response.data;
-            Dialog.alert(response.mensaje);
-          });
-        }
-      },
-      exportarRespuestas: function(eid){
-        if(confirm('¿Desea exportar las respuestas de esta encuesta?')){
-          location.href = '/api/encuestas/exportar/'+eid+'/'+Session.get();
-        }
-      },
-      previsualizar: function(item){
-        window.open('http://www.jvdehesa.cl/encuestas?eid='+item+'&uid=a69c4a8625296f2b12a05cad4eb5aaea','_blank');
-      },
-      agregarFunciones: function(preguntas){
-        for(var item in preguntas){
-          preguntas[item].agregarRespuesta = function(){
-            this.respuestas[this.respuestas.length] = {
-              nombre: ''
+        },
+        enviar: function (eid) {
+            if (confirm('¿Está seguro que desea enviar esta encuesta a sus asociados ahora?')) {
+                $http.post('/api/encuestas/enviar', {
+                    params: {
+                        token: Session.get(),
+                        eid: eid
+                    }
+                }).then(function (response) {
+                    response = response.data;
+                    Dialog.alert(response.mensaje);
+                });
             }
-            setTimeout(function () {
-              $scope.$apply();
-            }, 0);
-          }
-          preguntas[item].removerRespuesta = function(index){
-            if(confirm('¿Seguro que desea eliminar esta respuesta?')){
-              this.respuestas.splice(index,1);
+        },
+        exportarRespuestas: function (eid) {
+            if (confirm('¿Desea exportar las respuestas de esta encuesta?')) {
+                location.href = '/api/encuestas/exportar/' + eid + '/' + Session.get();
             }
-          }
+        },
+        previsualizar: function (item) {
+            window.open('http://www.jvdehesa.cl/encuestas?eid=' + item + '&uid=a69c4a8625296f2b12a05cad4eb5aaea', '_blank');
+        },
+        agregarFunciones: function (preguntas) {
+            for (var item in preguntas) {
+                preguntas[item].agregarRespuesta = function () {
+                    this.respuestas[this.respuestas.length] = {
+                        nombre: ''
+                    }
+                    setTimeout(function () {
+                        $scope.$apply();
+                    }, 0);
+                }
+                preguntas[item].removerRespuesta = function (index) {
+                    if (confirm('¿Seguro que desea eliminar esta respuesta?')) {
+                        this.respuestas.splice(index, 1);
+                    }
+                }
+            }
+            return preguntas;
         }
-        return preguntas;
-      }
     }
 
 });

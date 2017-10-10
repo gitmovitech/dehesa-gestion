@@ -76,8 +76,11 @@
                             <!--<button ng-disabled="!registros" class="btn btn-sm btn-primary" ng-click="pagos.notificarContador(month, item.year)">
                             <i class="glyphicon glyphicon-copy"></i> Notificar al contador
                         </button>-->
-                            <button ng-disabled="!registros" class="btn btn-sm btn-danger" ng-click="pagos.exportarAlBanco(month, item.year)">
-                                <i class="glyphicon glyphicon-export"></i> Exportar {{month}} al Banco
+                            <button ng-disabled="!registros" class="btn btn-sm btn-danger" ng-click="pagos.exportarAlBanco(month, item.year, 'pac')">
+                                <i class="glyphicon glyphicon-export"></i> Exportar PAC
+                            </button>
+                            <button ng-disabled="!registros" class="btn btn-sm btn-danger" ng-click="pagos.exportarAlBanco(month, item.year, 'pat')">
+                                <i class="glyphicon glyphicon-export"></i> Exportar PAT
                             </button>
                             <button ng-disabled="!registros" class="btn btn-sm btn-primary" ng-click="pagos.exportarMesExcel(month, item.year)">
                                 <i class="glyphicon glyphicon-export"></i> Exportar {{month}} a Excel
@@ -127,7 +130,7 @@
                         <span ng-if="key == 'nombre'">{{tddata}}</span>
 
                         <span ng-if="key == 'dias'">
-                            <input ng-model="trdata.dias" ng-keyup="pagos.modificarDias($event, trdata)" style="width:50px" max="31" min="1" type="number" size="2" maxlength="2" value="{{tddata}}"/>
+                            <input ng-model="trdata.dias" ng-keyup="pagos.modificarDias($event, trdata)" style="width:50px" max="31" min="1" type="number" size="2" maxlength="2" ng-value="{{tddata}}"/>
                         </span>
 
                         <span ng-if="key == 'tarifa'">

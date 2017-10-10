@@ -48,6 +48,29 @@ var validarEmail = function (email) {
     return true;
 }
 
+var charsDerecha = function(string, spaces, cantidad){
+  var out = string;
+  for(var n = 0; n < cantidad;n++){
+     if(string.charAt(n) == ""){
+       out = out + spaces;
+     }
+  }
+  return out;
+}
+
+var charsIzquierda = function(string, spaces, cantidad){
+  var out = "";
+  for(var n = cantidad; n > 0;n--){
+     if(string.charAt(n) == ""){
+       out = out + spaces;
+     } else {
+      out = out + string;
+      break;
+     }
+  }
+  return out;
+}
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(function (req, res, next) {
@@ -453,11 +476,11 @@ app.get('/pagos/banco/:patpac/:year/:month', function (req, res) {
           ext = '.txt';
           nombre_completo = response[x].socio.first_name + " " + response[x].socio.last_name;
           data.push([
-            ('0' + response[x].socio.run).slice(-10).replace("-", ""),
-            nombre_completo.toUpperCase(),
+            charsIzquierda(response[x].socio.run,"0",10),
+            charsDerecha(nombre_completo.toUpperCase(), " ", 50),
             response[x].socio.banco,
-            ('0' + response[x].socio.run).slice(-20).replace("-", ""),
-            ('0' + response[x].debe).slice(-12).replace("-", ""),
+            charsDerecha(charsIzquierda(response[x].socio.run,"0",20)," ",32),
+            charsDerecha(charsIzquierda(Math.round(response[x].debe).toString(),"0",12)," ",17),
             fecha
           ].join(" "));
         }
