@@ -607,7 +607,8 @@ app.post('/api/data/import/excel', function (req, res) {
                   comentarios: '-',
                   archivos: '-',
                   year: req.body.params.periodo.year,
-                  month: ''
+                  month: '',
+                  opened: true
                 }
                 for (var i in importacion.data) {
                   if (importacion.data[i].id == asociados[x].id) {

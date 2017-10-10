@@ -88,7 +88,7 @@
                             <button ng-disabled="!registros" class="btn btn-sm btn-primary" ng-click="pagos.exportarMesExcel(month, item.year)">
                                 <i class="glyphicon glyphicon-export"></i> Exportar {{month}} a Excel
                             </button>
-                            <button ng-disabled="!valoruf" class="btn btn-sm btn-warning" ng-click="showModalImportPagos(page.fields, null, {month: month, year: item.year})">
+                            <button ng-disabled="!valoruf" class="btn btn-sm btn-warning" ng-click="pagos.cerrarMes(month, item.year)">
                                 <i class="glyphicon glyphicon-ok-sign"></i> Cerrar mes
                             </button>
                         </div>
@@ -107,7 +107,7 @@
             </div>
         </div>-->
 
-        <table class="table table-striped table-hover" ng-if="registros">
+        <table ng-class="{'table-striped':!trdata.opened}" class="table table-hover" ng-if="registros">
             <thead>
                 <tr>
                     <th colspan="2"></th>
@@ -118,7 +118,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="(index,trdata) in tabledata  | startFrom: pagination.page * pagination.perPage | limitTo: pagination.perPage track by trdata._id">
+                <tr ng-class="{'warning':!trdata.opened}" ng-repeat="(index,trdata) in tabledata  | startFrom: pagination.page * pagination.perPage | limitTo: pagination.perPage track by trdata._id">
                     <td ng-repeat="(key, tddata) in trdata">
 
                         <span class="text-danger" ng-if="key == 'index'">
@@ -130,7 +130,7 @@
                         <span ng-if="key == 'nombre'">{{tddata}}</span>
 
                         <span ng-if="key == 'dias'">
-                            <input ng-model="trdata.dias" ng-keyup="pagos.modificarDias($event, trdata)" style="width:50px" max="31" min="1" type="number" size="2" maxlength="2" ng-value="{{tddata}}"/>
+                            <input ng-disabled="!trdata.opened" ng-model="trdata.dias" ng-keyup="pagos.modificarDias($event, trdata)" style="width:50px" max="31" min="1" type="number" size="2" maxlength="2" ng-value="{{tddata}}"/>
                         </span>
 
                         <span ng-if="key == 'tarifa'">
@@ -145,7 +145,7 @@
                             <span class="text-success" ng-if="tddata == 'Pagos Procesados' || tddata == 'Aprobada' || tddata.indexOf('Pagado') >= 0">{{tddata}}</span>
                             <span ng-if="tddata != 'No importado' && tddata != 'Pagos Procesados' && tddata != 'Aprobada' && !tddata.match('Pagado')">
                                 <div ng-repeat="field in page.fields track by field.name" ng-if="field.name == 'type'" style="float:left">
-                                    <select ng-model="tddata" ng-change="pagos.changeStatus(tddata, trdata, index)" ng-if="trdata.tarifa != '-'">
+                                    <select ng-disabled="!trdata.opened" ng-model="tddata" ng-change="pagos.changeStatus(tddata, trdata, index)" ng-if="trdata.tarifa != '-'">
 
                                         <option ng-repeat="option in field.data.options" ng-if="!option.group && option.value != 'No importado' && (option | scope: session.type)"
                                             value="{{option.value}}" ng-selected="tddata == option.value">{{option.key}}</option>

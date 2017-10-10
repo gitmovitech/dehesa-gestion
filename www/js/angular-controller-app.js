@@ -626,6 +626,7 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                                         excedentes: response.data[d].excedentes,
                                         comentarios: response.data[d].comentarios,
                                         archivos: response.data[d].archivos,
+                                        opened: response.data[d].opened,
                                         fijo_dias: response.data[d].dias,
                                         fijo_tarifa: response.data[d].tarifa
                                     }
@@ -683,6 +684,11 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
         showUploadExcel: false,
         randomPassCheckboxValue: false,
         historialData: [],
+        cerrarMes: function (month, year) {
+            if(confirm('¿Está seguro que desea cerrar el mes de '+month+' del '+year+'?\nUna vez cerrado no se podrán realizar cambios en este mes.')){
+
+            }
+        },
         exportarMesExcel: function (month, year) {
             window.open('/pagos/excel/' + year + '/' + month, '_blank');
         },

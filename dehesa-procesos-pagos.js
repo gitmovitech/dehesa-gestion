@@ -146,7 +146,8 @@ var insertarPagodelMes = function (database, fecha, response, cb, debe_total, ex
         debe: tarifa,//debe,
         excedentes: excedentes,
         month: fecha.month,
-        year: fecha.year
+        year: fecha.year,
+        opened: true
     });
     cb();
 }
