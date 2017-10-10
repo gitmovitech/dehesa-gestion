@@ -697,6 +697,12 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                 });
             }
         },
+        cerrarMesButton: function(month, year){
+            for(var n in $scope.tabledata){
+                return $scope.tabledata[n].opened
+                break;
+            }
+        },
         exportarMesExcel: function (month, year) {
             window.open('/pagos/excel/' + year + '/' + month, '_blank');
         },

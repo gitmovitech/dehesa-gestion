@@ -88,7 +88,7 @@
                             <button ng-disabled="!registros" class="btn btn-sm btn-primary" ng-click="pagos.exportarMesExcel(month, item.year)">
                                 <i class="glyphicon glyphicon-export"></i> Exportar {{month}} a Excel
                             </button>
-                            <button ng-disabled="!valoruf" class="btn btn-sm btn-warning" ng-click="pagos.cerrarMes(month, item.year)">
+                            <button ng-show="pagos.cerrarMesButton(month, item.year)" ng-disabled="!valoruf" class="btn btn-sm btn-warning" ng-click="pagos.cerrarMes(month, item.year)">
                                 <i class="glyphicon glyphicon-ok-sign"></i> Cerrar mes
                             </button>
                         </div>
