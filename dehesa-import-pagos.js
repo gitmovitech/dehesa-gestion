@@ -137,7 +137,7 @@ var guardarRegistros = function(registros, month, year, cb){
           tarifa: item.tarifa,
           type: item.estado,
           pagado: item.pago,
-          debe: item.tarifa,//item.debe,
+          debe: item.debe,
           month: month,
           year: year
         });

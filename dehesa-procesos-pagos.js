@@ -125,14 +125,14 @@ function daysInMonth(humanMonth, year) {
 }
 var insertarPagodelMes = function (database, fecha, response, cb, debe_total, excedentes_total) {
     var tarifa = parseFloat(response.uf) * parseFloat(current_uf);
-    var debe = tarifa;
+    //var debe = tarifa;
     var excedentes = 0;
-    if (typeof debe_total != 'undefined') {
+    /*if (typeof debe_total != 'undefined') {
         debe += debe_total;
     }
     if (debe == 0) {
         debe = tarifa;
-    }
+    }*/
     if (typeof excedentes_total != 'undefined') {
         excedentes = excedentes_total;
     }
@@ -143,7 +143,7 @@ var insertarPagodelMes = function (database, fecha, response, cb, debe_total, ex
         tarifa: tarifa,
         type: 'Pendiente',
         pagado: 0,
-        debe: debe,
+        debe: tarifa,//debe,
         excedentes: excedentes,
         month: fecha.month,
         year: fecha.year
