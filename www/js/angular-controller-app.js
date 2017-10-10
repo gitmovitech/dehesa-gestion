@@ -686,7 +686,15 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
         historialData: [],
         cerrarMes: function (month, year) {
             if(confirm('¿Está seguro que desea cerrar el mes de '+month+' del '+year+'?\nUna vez cerrado no se podrán realizar cambios en este mes.')){
-
+                $http.get('/api/cerrar-mes', {
+                    params: {
+                        token: Session.get(),
+                        month: month,
+                        year: year
+                    }
+                }).then(function (response) {
+                    obtenerPagos($scope.pagos.yearActive, $scope.pagos.monthActive);
+                });
             }
         },
         exportarMesExcel: function (month, year) {

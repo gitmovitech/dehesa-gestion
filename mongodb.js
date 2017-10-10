@@ -8,6 +8,7 @@ var sendmail = require('./sendmail');
 var dehesaPagos = require('./dehesa-procesos-pagos');
 var RutJS = require('./RutJS');
 var fs = require('fs');
+var periodos_months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 MongoClient.connect(url, function (err, db) {
     if (!err) {
         console.log("Conectado a " + config.mongo.name + " DB");
@@ -715,7 +716,6 @@ exports.pagar = function (data, cb) {
         case "Aprobada":
 
           //OBTENER VALORES UF
-          var periodos_months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
           database.collection('valoresuf').findOne({
             mes: periodos_months[data.month]
           }, function(err, ufs){
@@ -815,5 +815,19 @@ exports.modificarDias = function(data, cb){
         }
     }
     database.collection('pagos').update(query, values);
+    cb();
+}
+
+exports.cerrarMes = function(data, cb){
+    var query = {
+        month: parseInt(periodos_months.indexOf(data.month)),
+        year: parseInt(data.year)
+    }
+    var values = {
+        $set:{
+            opened: false
+        }
+    }
+    database.collection('pagos').update(query, values, {multi:true});
     cb();
 }
