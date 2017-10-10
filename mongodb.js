@@ -829,5 +829,34 @@ exports.cerrarMes = function(data, cb){
         }
     }
     database.collection('pagos').update(query, values, {multi:true});
-    cb();
+    cb(query);
+}
+
+exports.pasarCuentasPorCobrar = function(query, cb){
+    query.type = "Pendiente";
+    var values = {
+        $set:{
+            opened: false
+        }
+    }
+    database.collection('pagos').find(query).toArray(function(err, data){
+        if(data.length > 0){
+            data.forEach(function(item, i){
+                database.collection('cuentas_por_cobrar').insert({
+                    id: item.id,
+                    nombre: item.nombre,
+                    deuda: item.tarifa,
+                    type: item.type,
+                    pagado: "0",
+                    ajuste_contable: "0",
+                    month: query.month,
+                    year: query.year
+                });
+            });
+            cb();
+        } else {
+            cb();
+        }
+    });
+    
 }

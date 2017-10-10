@@ -106,8 +106,10 @@ app.get('/api/cerrar-mes', function (req, res) {
   if (req.query.token) {
     getSession(req.query.token, function (userdata, err) {
       if (userdata) {
-        db.cerrarMes(req.query, function(){
-          res.send({ok:true});
+        db.cerrarMes(req.query, function(data){
+          db.pasarCuentasPorCobrar(data, function(){
+            res.send({ok:true});
+          });
         });
       } else {
         res.send(err);
