@@ -82,11 +82,11 @@
                             <button ng-disabled="!registros" class="btn btn-sm btn-danger" ng-click="pagos.exportarAlBanco(month, item.year, 'pat')">
                                 <i class="glyphicon glyphicon-export"></i> Exportar PAT
                             </button>
+                            <button ng-disabled="!valoruf" class="btn btn-sm btn-primary" ng-click="showModalImportPagos(page.fields, null, {month: month, year: item.year})">
+                                <i class="glyphicon glyphicon-cloud-upload"></i> Importar pagos procesados del banco
+                            </button>
                             <button ng-disabled="!registros" class="btn btn-sm btn-primary" ng-click="pagos.exportarMesExcel(month, item.year)">
                                 <i class="glyphicon glyphicon-export"></i> Exportar {{month}} a Excel
-                            </button>
-                            <button ng-disabled="!valoruf" class="btn btn-sm btn-primary" ng-click="showModalImportPagos(page.fields, null, {month: month, year: item.year})">
-                                <i class="glyphicon glyphicon-cloud-upload"></i> Importar pagos del banco de {{month}}
                             </button>
                             <button ng-disabled="!valoruf" class="btn btn-sm btn-warning" ng-click="showModalImportPagos(page.fields, null, {month: month, year: item.year})">
                                 <i class="glyphicon glyphicon-ok-sign"></i> Cerrar mes
