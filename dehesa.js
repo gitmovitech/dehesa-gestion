@@ -48,25 +48,25 @@ var validarEmail = function (email) {
     return true;
 }
 
-var charsDerecha = function(string, spaces, cantidad){
+var charsDerecha = function (string, spaces, cantidad) {
   var out = string;
-  for(var n = 0; n < cantidad;n++){
-     if(string.charAt(n) == ""){
-       out = out + spaces;
-     }
+  for (var n = 0; n < cantidad; n++) {
+    if (string.charAt(n) == "") {
+      out = out + spaces;
+    }
   }
   return out;
 }
 
-var charsIzquierda = function(string, spaces, cantidad){
+var charsIzquierda = function (string, spaces, cantidad) {
   var out = "";
-  for(var n = cantidad; n > 0;n--){
-     if(string.charAt(n) == ""){
-       out = out + spaces;
-     } else {
+  for (var n = cantidad; n > 0; n--) {
+    if (string.charAt(n) == "") {
+      out = out + spaces;
+    } else {
       out = out + string;
       break;
-     }
+    }
   }
   return out;
 }
@@ -87,8 +87,8 @@ app.get('/api/modificar-dias', function (req, res) {
   if (req.query.token) {
     getSession(req.query.token, function (userdata, err) {
       if (userdata) {
-        db.modificarDias(req.query, function(){
-          res.send({ok:true});
+        db.modificarDias(req.query, function () {
+          res.send({ ok: true });
         });
       } else {
         res.send(err);
@@ -106,9 +106,9 @@ app.get('/api/cerrar-mes', function (req, res) {
   if (req.query.token) {
     getSession(req.query.token, function (userdata, err) {
       if (userdata) {
-        db.cerrarMes(req.query, function(data){
-          db.pasarCuentasPorCobrar(data, function(){
-            res.send({ok:true});
+        db.cerrarMes(req.query, function (data) {
+          db.pasarCuentasPorCobrar(data, function () {
+            res.send({ ok: true });
           });
         });
       } else {
@@ -497,11 +497,11 @@ app.get('/pagos/banco/:patpac/:year/:month', function (req, res) {
           ext = '.txt';
           nombre_completo = response[x].socio.first_name + " " + response[x].socio.last_name;
           data.push([
-            charsIzquierda(response[x].socio.run,"0",10),
+            charsIzquierda(response[x].socio.run, "0", 10),
             charsDerecha(nombre_completo.toUpperCase(), " ", 50),
             response[x].socio.banco,
-            charsDerecha(charsIzquierda(response[x].socio.run,"0",20)," ",32),
-            charsDerecha(charsIzquierda(Math.round(response[x].debe).toString(),"0",12)," ",17),
+            charsDerecha(charsIzquierda(response[x].socio.run, "0", 20), " ", 32),
+            charsDerecha(charsIzquierda(Math.round(response[x].debe).toString(), "0", 12), " ", 17),
             fecha
           ].join(" "));
         }
@@ -836,9 +836,15 @@ app.post('/api/pagar', function (req, res) {
       if (response) {
         var data = req.body.params.data;
         data.usuario = response;
-        db.pagar(data, function () {
-          res.send('OK');
-        });
+        if (data.cuentas_cobrar) {
+          db.pagarCuentasCobrar(data, function () {
+            res.send('OK');
+          });
+        } else {
+          db.pagar(data, function () {
+            res.send('OK');
+          });
+        }
       }
     });
   }

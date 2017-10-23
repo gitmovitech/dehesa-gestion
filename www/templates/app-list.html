@@ -44,8 +44,14 @@
 
     <b class="text-primary" ng-if="registros && page.collection != 'pagos' && page.collection != 'cuentas_por_cobrar'">Mostrando {{registros}} registros.</b>
 
-    <div ng-include="'templates/app-pagos.html'" ng-if="page.collection == 'pagos' || page.collection == 'cuentas_por_cobrar'"></div>
-    <div style="overflow-x:auto" ng-include="'templates/app-list-items.html'" ng-if="page.collection != 'pagos' && registros"></div>
+    <!-- PLANTILLA DE PAGOS -->
+    <div ng-include="'templates/app-pagos.html'" ng-if="page.collection == 'pagos'"></div>
+
+    <!-- PLANTILLA DE CUENTAS POR COBRAR -->
+    <div ng-include="'templates/app-cuentas-cobrar.html'" ng-if="page.collection == 'cuentas_por_cobrar'"></div>
+    
+
+    <div style="overflow-x:auto" ng-include="'templates/app-list-items.html'" ng-if="page.collection != 'pagos' && page.collection != 'cuentas_por_cobrar' && registros"></div>
 
     <nav class="text-center" ng-if="pagination.numPages > 1 && registros">
         <ul class="pagination">

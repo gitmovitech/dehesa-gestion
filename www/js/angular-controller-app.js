@@ -685,7 +685,7 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
         randomPassCheckboxValue: false,
         historialData: [],
         cerrarMes: function (month, year) {
-            if(confirm('¿Está seguro que desea cerrar el mes de '+month+' del '+year+'?\nUna vez cerrado no se podrán realizar cambios en este mes.')){
+            if (confirm('¿Está seguro que desea cerrar el mes de ' + month + ' del ' + year + '?\nUna vez cerrado no se podrán realizar cambios en este mes.')) {
                 $http.get('/api/cerrar-mes', {
                     params: {
                         token: Session.get(),
@@ -697,8 +697,8 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                 });
             }
         },
-        cerrarMesButton: function(month, year){
-            for(var n in $scope.tabledata){
+        cerrarMesButton: function (month, year) {
+            for (var n in $scope.tabledata) {
                 return $scope.tabledata[n].opened
                 break;
             }
@@ -853,7 +853,8 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                                 month: this.tabMonthActive,
                                 year: this.yearActive,
                                 status: select,
-                                cobrodelmes: Math.round(data.tarifa)
+                                cobrodelmes: Math.round(data.tarifa),
+                                cuentas_cobrar: false
                             }
                         } else {
                             $scope.tabledata[index] = null;
@@ -881,7 +882,29 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                             month: this.tabMonthActive,
                             year: this.yearActive,
                             status: select,
-                            cobrodelmes: Math.round(data.tarifa)
+                            cobrodelmes: Math.round(data.tarifa),
+                            cuentas_cobrar: false
+                        }
+                    } else {
+                        $scope.tabledata[index] = null;
+                        setTimeout(function () {
+                            $scope.tabledata[index] = data;
+                            $scope.$apply();
+                        }, 0);
+                    }
+                    break;
+
+                case 'Pagado':
+                    pagado = prompt('Total a pagar', Math.round(data.deuda));
+                    if (pagado) {
+                        paramsdata = {
+                            id: data.id,
+                            pago: pagado,
+                            month: this.tabMonthActive,
+                            year: this.yearActive,
+                            status: select,
+                            cobrodelmes: Math.round(data.deuda),
+                            cuentas_cobrar: true
                         }
                     } else {
                         $scope.tabledata[index] = null;
@@ -893,6 +916,12 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                     break;
             }
             if (paramsdata) {
+                console.log({
+                    params: {
+                        token: Session.get(),
+                        data: paramsdata
+                    }
+                });
                 $http.post('/api/pagar', {
                     params: {
                         token: Session.get(),
@@ -900,7 +929,7 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                     }
                 }).then(function (response) {
                     response = response.data;
-                    obtenerPagos($scope.pagos.yearActive, $scope.pagos.monthActive);
+                    $scope.load($scope.page);
                 });
             }
         },
@@ -980,6 +1009,11 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                     }
                 });
             }
+        },
+        changeTabCuentasCobrar: function(index, year, month){
+            this.tabMonthActive = index;
+            this.monthActive = month;
+            $scope.load($scope.page);
         },
         changeTab: function (index, year, month) {
             jQuery('body').loader('show');

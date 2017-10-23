@@ -1,0 +1,113 @@
+<div>
+
+    <div class="modal fade" id="modalHistorial" tabindex="-1" role="dialog" aria-labelledby="modalEditLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="modalHistorial">
+                        <b>
+                            <i class="glyphicon glyphicon-stats"></i> Historial de pagos</b>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Tarifa</th>
+                                <th>Estado</th>
+                                <th>Pagado del mes</th>
+                                <th>Deuda del mes</th>
+                                <th>Excedentes del mes</th>
+                                <th>Comentarios</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="item in pagos.historialData">
+                                <th>{{item.month | monthSpanish}} {{item.year}}</th>
+                                <td>{{item.tarifa | currency}}</td>
+                                <td>{{item.type}}</td>
+                                <td>{{item.pagado | currency}}</td>
+                                <td>{{item.debe | currency}}</td>
+                                <td>{{item.excedentes | currency}}</td>
+                                <td>{{item.comentarios}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" ng-class="{'active': pagos.tabYearActive == $index}" ng-repeat="item in pagos.periodos">
+            <a href="#" ng-click="pagos.tabYearActive = $index; pagos.yearActive = item.year;" role="tab" data-toggle="tab">{{item.year}}</a>
+        </li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane" ng-class="{'active': pagos.tabYearActive == $index}" id="periodo-year-{{$index}}" ng-repeat="item in pagos.periodos">
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" ng-class="{'active': pagos.tabMonthActive == $index}" ng-repeat="month in item.months">
+                    <a href="javascript:" ng-click="pagos.changeTabCuentasCobrar($index, item.year, month)" role="tab" data-toggle="tab">{{month}}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div>
+
+        <table class="table table-hover" ng-if="registros">
+            <thead>
+                <tr>
+                    <th ng-repeat="field in page.fields track by field.name" ng-if="field.name != '_id'">
+                        <span ng-if="session.type != 'Contable'">{{field.title}}</span>
+                        <span ng-if="session.type == 'Contable' && field.name != 'nombre' && field.name != 'log'">{{field.title}}</span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-if="pagos.yearActive == trdata.year && pagos.tabMonthActive == trdata.month" ng-class="{'danger':trdata.type != 'Pagado','success':trdata.type == 'Pagado'}" ng-repeat="(index,trdata) in tabledata  | startFrom: pagination.page * pagination.perPage | limitTo: pagination.perPage track by trdata._id">
+                    <td ng-repeat="(key, tddata) in trdata" ng-if="key != '_id' && key != 'month' && key != 'year' && key != 'index'">
+
+                        <span ng-if="key == 'deuda' || key == 'pagado' || key == 'ajuste_contable'">
+                            <b>{{tddata | currency}}</b>
+                        </span>
+
+                        <span ng-if="key != 'deuda' &&  key != 'pagado' && key != 'ajuste_contable' && key != 'type'">
+                            {{tddata}}
+                        </span>
+
+                        <span ng-if="key == 'type'">
+                            <span class="text-success" ng-if="tddata.indexOf('Pagado') >= 0">{{tddata}}</span>
+                            <span ng-if="!tddata.match('Pagado')">
+                                <div ng-repeat="field in page.fields track by field.name" ng-if="field.name == 'type'" style="float:left">
+                                    <select ng-model="tddata" ng-change="pagos.changeStatus(tddata, trdata, index)">
+
+                                        <option ng-repeat="option in field.data.options" ng-if="!option.group && option.value != 'No importado' && (option | scope: session.type)"
+                                            value="{{option.value}}" ng-selected="tddata == option.value">{{option.key}}</option>
+                                        <optgroup ng-repeat="options in field.data.options" ng-if="options.group" label="{{options.group}}">
+                                            <option ng-if="option | scope: session.type" ng-repeat="option in options.options" value="{{option.value}}" ng-selected="tddata == option.value">{{option.key}}</option>
+                                        </optgroup>
+
+                                    </select>
+                                </div>
+                            </span>
+                        </span>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
