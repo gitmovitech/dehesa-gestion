@@ -608,7 +608,7 @@ exports.guardarImportacionPagos = function (pagos, cb) {
                                                         pagado: pagos.data[x].pagado,
                                                         debe: pagos.data[x].debe,
                                                         excedentes: pagos.data[x].excedentes,
-                                                        ajuste_contable: 0,
+                                                        ajuste_contable: pagos.data[x].ajuste_contable,
                                                         comentarios: pagos.data[x].comentarios,
                                                         archivos: pagos.data[x].archivos
                                                     }
@@ -716,8 +716,36 @@ exports.pagar = function (data, cb) {
             case "Pagos Procesados":
             case "Aprobada":
 
+                var debe = data.cobrodelmes - parseInt(data.pago);
+                var excedentes = 0;
+                var ajuste_contable = 0;
+                
+                if (debe <= 4000 && debe > 0) { // DIFERENCIA SE VA A AJUSTE CONTABLE
+                    ajuste_contable = debe;
+                    debe = 0;
+                } else if (debe < 0) { // DIFERENCIA SE VA EXCEDENTES
+                    excedentes = debe * -1;
+                    debe = 0;
+                }
+
+                database.collection('pagos').update({
+                    id: data.id,
+                    month: data.month,
+                    year: data.year
+                }, {
+                        $set: {
+                            type: data.status,
+                            excedentes: excedentes,
+                            debe: debe,
+                            ajuste_contable: ajuste_contable,
+                            pagado: parseInt(data.pago)
+                        }
+                    }, function (err, response) {
+                        cb();
+                    });
+
                 //OBTENER VALORES UF
-                database.collection('valoresuf').findOne({
+                /*database.collection('valoresuf').findOne({
                     mes: periodos_months[data.month]
                 }, function (err, ufs) {
                     ufs.valor = ufs.valor.toString();
@@ -738,6 +766,10 @@ exports.pagar = function (data, cb) {
                     }, function (err, pago) {
                         data.debe = 0;
                         data.excedentes = 0;
+
+                        console.log("PAGO");
+                        console.log(data);
+                        console.log("PAGO");
 
                         if (pago) {
                             if (pago.debe > 0) {
@@ -778,7 +810,7 @@ exports.pagar = function (data, cb) {
 
                     });
 
-                });
+                });*/
                 break;
         }
     }
@@ -790,11 +822,11 @@ exports.pagarCuentasCobrar = function (data, cb) {
         month: data.month,
         year: data.year
     }, {
-        $set: {
-            type: 'Pagado',
-            deuda: 0,
-            pagado: data.pago
-        }
+            $set: {
+                type: 'Pagado',
+                deuda: 0,
+                pagado: data.pago
+            }
         }, function (err, response) {
             cb();
         });

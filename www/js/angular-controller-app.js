@@ -624,7 +624,7 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                                         pagado: response.data[d].pagado,
                                         debe: response.data[d].debe,
                                         excedentes: response.data[d].excedentes,
-                                        ajuste_contable: 0,
+                                        ajuste_contable: response.data[d].ajuste_contable,
                                         comentarios: response.data[d].comentarios,
                                         archivos: response.data[d].archivos,
                                         opened: response.data[d].opened,
