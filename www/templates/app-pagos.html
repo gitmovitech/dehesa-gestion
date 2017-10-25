@@ -161,9 +161,10 @@
                         </span>
 
                         <span class="text-info" ng-if="key == 'pagado' && trdata.tarifa != '-'">{{tddata | currency}}</span>
-                        <span class="text-warning" ng-if="key == 'excedentes' && tddata != '-' && trdata.tarifa != '-'">{{tddata | currency}}</span>
-                        <span class="text-warning" ng-if="key == 'excedentes' && tddata == '-' && trdata.tarifa != '-'">{{'0' | currency}}</span>
+                        <span class="text-success" ng-if="key == 'excedentes' && tddata != '-' && trdata.tarifa != '-'">{{tddata | currency}}</span>
+                        <span class="text-success" ng-if="key == 'excedentes' && tddata == '-' && trdata.tarifa != '-'">{{'0' | currency}}</span>
                         <span class="text-danger" ng-if="key == 'debe' && tddata != '-' && trdata.tarifa != '-'">{{(tddata-0) | currency}}</span>
+                        <span class="text-warning" ng-if="key == 'ajuste_contable' && tddata != '-' && trdata.tarifa != '-'">{{tddata | currency}}</span>
                         <span ng-if="key == 'debe' && tddata == '-' && trdata.tarifa != '-'">-</span>
 
                         <span ng-if="key == 'comentarios' && trdata.tarifa != '-'" style="position:relative">

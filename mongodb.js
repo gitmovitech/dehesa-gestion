@@ -608,6 +608,7 @@ exports.guardarImportacionPagos = function (pagos, cb) {
                                                         pagado: pagos.data[x].pagado,
                                                         debe: pagos.data[x].debe,
                                                         excedentes: pagos.data[x].excedentes,
+                                                        ajuste_contable: 0,
                                                         comentarios: pagos.data[x].comentarios,
                                                         archivos: pagos.data[x].archivos
                                                     }

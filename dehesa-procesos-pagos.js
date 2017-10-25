@@ -145,6 +145,7 @@ var insertarPagodelMes = function (database, fecha, response, cb, debe_total, ex
         pagado: 0,
         debe: tarifa,//debe,
         excedentes: excedentes,
+        ajuste_contable: 0,
         month: fecha.month,
         year: fecha.year,
         opened: true

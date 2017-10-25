@@ -624,6 +624,7 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                                         pagado: response.data[d].pagado,
                                         debe: response.data[d].debe,
                                         excedentes: response.data[d].excedentes,
+                                        ajuste_contable: 0,
                                         comentarios: response.data[d].comentarios,
                                         archivos: response.data[d].archivos,
                                         opened: response.data[d].opened,
@@ -1010,7 +1011,7 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                 });
             }
         },
-        changeTabCuentasCobrar: function(index, year, month){
+        changeTabCuentasCobrar: function (index, year, month) {
             this.tabMonthActive = index;
             this.monthActive = month;
             $scope.load($scope.page);

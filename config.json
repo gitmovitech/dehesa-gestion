@@ -684,6 +684,11 @@
           "type": "text"
         },
         {
+          "name": "ajuste_contable",
+          "title": "Ajuste Contable",
+          "type": "text"
+        },
+        {
           "name": "comentarios",
           "title": "Comentarios",
           "type": "textarea"
