@@ -560,24 +560,29 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
     }
     var months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
     var registro_pagos = [];
-    var obtenerPagos = function (year, month) {
-        if (typeof month == 'string')
+    var obtenerPagos = function (year, month, cuentas) {
+        if (typeof month == 'string') {
             for (var c in months) {
                 if (months[c] == month) {
                     month = parseInt(c);
                     break;
                 }
             }
+        }
+
+        var collection = 'pagos';
+        if (cuentas) {
+            collection = 'cuentas_por_cobrar';
+        } 
 
         var params = {
             token: Session.get(),
-            collection: 'pagos',
+            collection: collection,
             where: {
                 year: year,
                 month: month
             }
         }
-        console.log(params);
         //RESET DE LISTADO DE REGISTROS
         $scope.pagination.numPages = 0;
         $scope.tabledata = registro_pagos = [];
@@ -744,20 +749,26 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                 }
             });
         },
-        modificarDias: function (event, trdata) {
+        modificarDias: function (event, trdata, cuentas) {
+            var collection = 'pagos';
+            if (cuentas) {
+                collection = 'cuentas_por_cobrar';
+            } 
             if (event.keyCode == 13) {
                 if (confirm('Está seguro que desea modificar el cobro de los dias?')) {
                     trdata.debe = trdata.tarifa = (trdata.fijo_tarifa * trdata.dias) / trdata.fijo_dias;
-                    $http.get('/api/modificar-dias', {
+                    console.log(trdata);
+                    /*$http.get('/api/modificar-dias', {
                         params: {
                             token: Session.get(),
                             _id: trdata._id,
                             dias: trdata.dias,
                             tarifa: trdata.tarifa,
                             month: trdata.month,
-                            year: trdata.year
+                            year: trdata.year,
+                            collection: collection
                         }
-                    });
+                    });*/
                 }
             }
         },
@@ -809,7 +820,11 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                 }
             }
         },
-        changeStatus: function (select, data, index) {
+        changeStatus: function (select, data, index, cuentas) {
+            var collection = 'pagos';
+            if(cuentas){
+                collection = 'cuentas_por_cobrar';
+            }
             var pagado = 0;
             var paramsdata = false;
             switch (select) {
@@ -845,7 +860,7 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                 case 'Pagado con excedentes':
                     if (data.excedentes <= 0) {
                         Dialog.alert('El asociado no posee excedentes para realizar el pago');
-                        obtenerPagos(this.yearActive, this.monthActive);
+                        obtenerPagos(this.yearActive, this.monthActive, cuentas);
                     } else {
                         pagado = prompt('Total a pagar', Math.round(data.tarifa));
                         if (pagado) {
@@ -929,11 +944,12 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                 $http.post('/api/pagar', {
                     params: {
                         token: Session.get(),
-                        data: paramsdata
+                        data: paramsdata,
+                        collection: collection
                     }
                 }).then(function (response) {
                     response = response.data;
-                    obtenerPagos(year, month);
+                    obtenerPagos(year, month, cuentas);
                 });
             }
         },
@@ -1017,9 +1033,9 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
         changeTabCuentasCobrar: function (index, year, month) {
             this.tabMonthActive = index;
             this.monthActive = month;
-            $scope.load($scope.page);
+            obtenerPagos(year, month, true);
         },
-        changeTab: function (index, year, month) {
+        changeTab: function (index, year, month, cuentas) {
             jQuery('body').loader('show');
             this.tabMonthActive = index;
             this.monthActive = month;
@@ -1033,7 +1049,7 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
             if (valor) {
                 $scope.pagos.currentUF = valor.toString().replace(',', '.');
             }
-            obtenerPagos(year, month);
+            obtenerPagos(year, month, cuentas);
         },
         search: function () {
             var arr;

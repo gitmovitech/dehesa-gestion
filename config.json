@@ -726,9 +726,15 @@
           "type": "text"
         },
         {
-          "name": "deuda",
-          "title": "Deuda",
+          "name": "dias",
+          "title": "Dias de cobro",
           "type": "text"
+        },
+        {
+          "name": "tarifa",
+          "title": "Tarifa",
+          "type": "text",
+          "required": true
         },
         {
           "name": "type",
@@ -737,11 +743,122 @@
           "data": {
             "options": [
               {
+                "key": "No importado",
+                "value": "No importado"
+              },
+              {
                 "key": "Pendiente",
                 "value": "Pendiente"
-              },{
-                "key": "Pagado",
-                "value": "Pagado"
+              },
+              {
+                "group": "PAC",
+                "options": [
+                  {
+                    "key": "PAC Cargado",
+                    "value": "PAC Cargado"
+                  },
+                  {
+                    "key": "Pagos Procesados",
+                    "value": "Pagos Procesados"
+                  },
+                  {
+                    "key": "Mandato Anulado en Banco",
+                    "value": "Mandato Anulado en Banco"
+                  },
+                  {
+                    "key": "Falta de Fondos",
+                    "value": "Falta de Fondos"
+                  },
+                  {
+                    "key": "Monto a Pagar Excede el Máximo Permitido",
+                    "value": "Monto a Pagar Excede el Máximo Permitido"
+                  },
+                  {
+                    "key": "Cuenta con Orden de Cierre",
+                    "value": "Cuenta con Orden de Cierre"
+                  }
+                ]
+              },
+              {
+                "group": "PAT",
+                "options": [
+                  {
+                    "key": "PAT Cargado",
+                    "value": "PAT Cargado"
+                  },
+                  {
+                    "key": "Aprobada",
+                    "value": "Aprobada"
+                  },
+                  {
+                    "key": "Rechazo por Tarjeta Bloqueada",
+                    "value": "Rechazo por Tarjeta Bloqueada"
+                  },
+                  {
+                    "key": "Rechazo Tarjeta no Existe",
+                    "value": "Rechazo Tarjeta no Existe"
+                  },
+                  {
+                    "key": "Rechazo Tarjeta Perdida o Robada",
+                    "value": "Rechazo Tarjeta Perdida o Robada"
+                  },
+                  {
+                    "key": "Rechazo Tarjeta con Problemas",
+                    "value": "Rechazo Tarjeta con Problemas"
+                  },
+                  {
+                    "key": "Rechazo Tarjeta Vencida",
+                    "value": "Rechazo Tarjeta Vencida"
+                  }
+                ]
+              },
+              {
+                "key": "Pagado con transferencia",
+                "value": "Pagado con transferencia",
+                "scope": [
+                  "Administrador",
+                  "Editor"
+                ]
+              },
+              {
+                "key": "Cheque recibido",
+                "value": "Cheque recibido",
+                "scope": [
+                  "Administrador",
+                  "Editor"
+                ]
+              },
+              {
+                "key": "Pagado con cheque",
+                "value": "Pagado con cheque",
+                "scope": [
+                  "Administrador",
+                  "Editor"
+                ]
+              },
+              {
+                "key": "Pagado en efectivo",
+                "value": "Pagado en efectivo",
+                "scope": [
+                  "Administrador",
+                  "Editor"
+                ]
+              },
+              {
+                "key": "Pagado con excedentes",
+                "value": "Pagado con excedentes",
+                "scope": [
+                  "Administrador",
+                  "Editor"
+                ]
+              },
+              {
+                "key": "Pagado fuera de plazo (+ 20%)",
+                "value": "Pagado fuera de plazo (+ 20%)",
+                "scope": [
+                  "Administrador",
+                  "Editor"
+                ]
               }
             ]
           }
@@ -750,10 +867,31 @@
           "name": "pagado",
           "title": "Pagado",
           "type": "text"
-        },{
+        },
+        {
+          "name": "debe",
+          "title": "Debe",
+          "type": "text"
+        },
+        {
+          "name": "excedentes",
+          "title": "Excedentes",
+          "type": "text"
+        },
+        {
           "name": "ajuste_contable",
           "title": "Ajuste Contable",
           "type": "text"
+        },
+        {
+          "name": "comentarios",
+          "title": "Comentarios",
+          "type": "textarea"
+        },
+        {
+          "name": "archivos",
+          "title": "Archivos",
+          "type": "file"
         }
       ]
     },

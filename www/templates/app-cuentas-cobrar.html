@@ -48,7 +48,7 @@
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">
         <li role="presentation" ng-class="{'active': pagos.tabYearActive == $index}" ng-repeat="item in pagos.periodos">
-            <a href="#" ng-click="pagos.tabYearActive = $index; pagos.yearActive = item.year;" role="tab" data-toggle="tab">{{item.year}}</a>
+            <a href="javascript:" ng-click="pagos.tabYearActive = $index; pagos.yearActive = item.year;" role="tab" data-toggle="tab">{{item.year}}</a>
         </li>
     </ul>
 
@@ -57,7 +57,7 @@
         <div role="tabpanel" class="tab-pane" ng-class="{'active': pagos.tabYearActive == $index}" id="periodo-year-{{$index}}" ng-repeat="item in pagos.periodos">
             <ul class="nav nav-tabs" role="tablist">
                 <li role="presentation" ng-class="{'active': pagos.tabMonthActive == $index}" ng-repeat="month in item.months">
-                    <a href="javascript:" ng-click="pagos.changeTabCuentasCobrar($index, item.year, month)" role="tab" data-toggle="tab">{{month}}</a>
+                    <a href="javascript:" ng-click="pagos.changeTab($index, item.year, month, true)" role="tab" data-toggle="tab">{{month}}</a>
                 </li>
             </ul>
         </div>
@@ -75,22 +75,33 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-if="pagos.yearActive == trdata.year && pagos.tabMonthActive == trdata.month" ng-class="{'danger':trdata.type != 'Pagado','success':trdata.type == 'Pagado'}" ng-repeat="(index,trdata) in tabledata  | startFrom: pagination.page * pagination.perPage | limitTo: pagination.perPage track by trdata._id">
-                    <td ng-repeat="(key, tddata) in trdata" ng-if="key != '_id' && key != 'month' && key != 'year' && key != 'index'">
+                <tr ng-class="{'danger':trdata.status='Pendiente'}" ng-repeat="(index,trdata) in tabledata  | startFrom: pagination.page * pagination.perPage | limitTo: pagination.perPage track by trdata._id">
+                    <td ng-if="key != '_id' && key != 'index'" ng-repeat="(key, tddata) in trdata">
+                        <!--<span class="text-danger" ng-if="key == 'index'">
+                            <b>{{tddata}}</b>
+                        </span>-->
+                        <span ng-if="key == 'id'">
+                            <b>{{tddata}}</b>
+                        </span>
+                        <span ng-if="key == 'nombre'">{{tddata}}</span>
 
-                        <span ng-if="key == 'deuda' || key == 'pagado' || key == 'ajuste_contable'">
-                            <b>{{tddata | currency}}</b>
+                        <span ng-if="key == 'dias'">
+                            <input ng-model="trdata.dias" ng-keyup="pagos.modificarDias($event, trdata, true)" style="width:50px" max="31" min="1" type="number" size="2" maxlength="2" ng-value="{{tddata}}"/>
                         </span>
 
-                        <span ng-if="key != 'deuda' &&  key != 'pagado' && key != 'ajuste_contable' && key != 'type'">
-                            {{tddata}}
+                        <span ng-if="key == 'tarifa'">
+                            <b class="text-info">
+                                {{trdata.tarifa | currency}}
+                            </b>
                         </span>
 
+                        <!--ESTADOS DE PAGOS-->
                         <span ng-if="key == 'type'">
-                            <span class="text-success" ng-if="tddata.indexOf('Pagado') >= 0">{{tddata}}</span>
-                            <span ng-if="!tddata.match('Pagado')">
+                            <div class="alert alert-danger" ng-if="tddata == 'No importado'">{{tddata}}. El registro no existe en la carga de excel de ADT.</div>
+                            <span class="text-success" ng-if="tddata == 'Pagos Procesados' || tddata == 'Aprobada' || tddata.indexOf('Pagado') >= 0">{{tddata}}</span>
+                            <span ng-if="tddata != 'No importado' && tddata != 'Pagos Procesados' && tddata != 'Aprobada' && !tddata.match('Pagado')">
                                 <div ng-repeat="field in page.fields track by field.name" ng-if="field.name == 'type'" style="float:left">
-                                    <select ng-model="tddata" ng-change="pagos.changeStatus(tddata, trdata, index)">
+                                    <select ng-model="tddata" ng-change="pagos.changeStatus(tddata, trdata, index, true)" ng-if="trdata.tarifa != '-'">
 
                                         <option ng-repeat="option in field.data.options" ng-if="!option.group && option.value != 'No importado' && (option | scope: session.type)"
                                             value="{{option.value}}" ng-selected="tddata == option.value">{{option.key}}</option>
@@ -100,8 +111,36 @@
 
                                     </select>
                                 </div>
+                                <div class="alert alert-warning" ng-if="trdata.tarifa == '-'">No existe tarifa. Revisar que el asociado tenga la opción "Tipo de casa" en la sección "Asociados"
+                                    e importar de nuevo.</div>
                             </span>
                         </span>
+
+                        <span class="text-info" ng-if="key == 'pagado' && trdata.tarifa != '-'">{{tddata | currency}}</span>
+                        <span class="text-success" ng-if="key == 'excedentes' && tddata != '-' && trdata.tarifa != '-'">{{tddata | currency}}</span>
+                        <span class="text-success" ng-if="key == 'excedentes' && tddata == '-' && trdata.tarifa != '-'">{{'0' | currency}}</span>
+                        <span class="text-danger" ng-if="key == 'debe' && tddata != '-' && trdata.tarifa != '-'">{{(tddata-0) | currency}}</span>
+                        <span class="text-warning" ng-if="key == 'ajuste_contable' && tddata != '-' && trdata.tarifa != '-'">{{tddata | currency}}</span>
+                        <span ng-if="key == 'debe' && tddata == '-' && trdata.tarifa != '-'">-</span>
+
+                        <span ng-if="key == 'comentarios' && trdata.tarifa != '-'" style="position:relative">
+                            <button style="float:left;margin-left:5px;" class="btn btn-default btn-xs" ng-click="pagos.modalEditarDetalles(trdata, 'comentarios')">
+                                <i class="glyphicon glyphicon-comment"></i> Comentarios
+                            </button>
+                            <i style="position: absolute; right: -7px; top: 9px;" class="text-danger glyphicon glyphicon-asterisk" ng-if="tddata != '-'"></i>
+                        </span>
+
+                        <span ng-if="key == 'archivos' && trdata.tarifa != '-'" style="position:relative">
+                            <button style="float:left;margin-left:5px;" class="btn btn-default btn-xs" ng-click="pagos.modalEditarDetalles(trdata, 'archivos')">
+                                <i class="glyphicon glyphicon-folder-open"></i> Documentos
+                            </button>
+                            <i style="position: absolute; right: -7px; top: 9px;" class="text-danger glyphicon glyphicon-asterisk" ng-if="tddata != '-'"></i>
+                        </span>
+
+                        <!--<span ng-if="key == '_id'">
+                            <a ng-if="trdata.tarifa != '-'" class="btn btn-success btn-xs glyphicon glyphicon-stats" ng-click="pagos.modalHistorial(trdata)"></a>
+                            <a ng-if="trdata.debe != '0' && trdata.tarifa != '-'" class="btn btn-info btn-xs glyphicon glyphicon-send" ng-click="pagos.notificarAsociado(trdata)"></a>
+                        </span>-->
 
                     </td>
                 </tr>

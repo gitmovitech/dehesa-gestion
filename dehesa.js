@@ -808,7 +808,7 @@ app.post('/api/notiticar-cobro-asociado', function (req, res) {
           if (correo) {
             sendmail.notificarCobroAsociado({
               toname: response.usuario,
-              to: 'vvargas@movitech.cl',//correo,
+              to: correo,
               cobro: req.body.params.data.tarifa.totalpesos,
               month: req.body.params.month,
               year: req.body.params.year
@@ -836,15 +836,9 @@ app.post('/api/pagar', function (req, res) {
       if (response) {
         var data = req.body.params.data;
         data.usuario = response;
-        if (data.cuentas_cobrar) {
-          db.pagarCuentasCobrar(data, function () {
-            res.send('OK');
-          });
-        } else {
-          db.pagar(data, function () {
-            res.send('OK');
-          });
-        }
+        db.pagar(data, req.body.params.collection, function () {
+          res.send('OK');
+        });
       }
     });
   }

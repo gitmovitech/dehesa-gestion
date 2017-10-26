@@ -682,7 +682,7 @@ exports.getPaymentsForBank = function (params, cb) {
     }
 }
 
-exports.pagar = function (data, cb) {
+exports.pagar = function (data, collection, cb) {
     if (database) {
         switch (data.status) {
             case 'PAC Cargado':
@@ -697,7 +697,7 @@ exports.pagar = function (data, cb) {
             case 'Rechazo Tarjeta con Problemas':
             case 'Rechazo Tarjeta Vencida':
             case 'Cheque recibido':
-                database.collection('pagos').update({
+                database.collection(collection).update({
                     id: data.id,
                     month: data.month,
                     year: data.year
@@ -728,7 +728,7 @@ exports.pagar = function (data, cb) {
                     debe = 0;
                 }
 
-                database.collection('pagos').update({
+                database.collection(collection).update({
                     id: data.id,
                     month: data.month,
                     year: data.year
@@ -863,7 +863,7 @@ exports.modificarDias = function (data, cb) {
             debe: data.tarifa
         }
     }
-    database.collection('pagos').update(query, values);
+    database.collection(data.collection).update(query, values);
     cb();
 }
 
@@ -891,16 +891,14 @@ exports.pasarCuentasPorCobrar = function (query, cb) {
     database.collection('pagos').find(query).toArray(function (err, data) {
         if (data.length > 0) {
             data.forEach(function (item, i) {
-                database.collection('cuentas_por_cobrar').insert({
-                    id: item.id,
-                    nombre: item.nombre,
-                    deuda: item.tarifa,
-                    type: item.type,
-                    pagado: "0",
-                    ajuste_contable: "0",
-                    month: query.month,
-                    year: query.year
-                });
+                delete item["_id"];
+                if(typeof item.comentarios == 'undefined'){
+                    item.comentarios = '';
+                }
+                if(typeof item.archivos == 'undefined'){
+                    item.archivos = '';
+                }
+                database.collection('cuentas_por_cobrar').insert(item);
             });
             cb();
         } else {
