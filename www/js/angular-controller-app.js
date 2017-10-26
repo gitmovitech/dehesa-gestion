@@ -577,6 +577,7 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                 month: month
             }
         }
+        console.log(params);
         //RESET DE LISTADO DE REGISTROS
         $scope.pagination.numPages = 0;
         $scope.tabledata = registro_pagos = [];
@@ -917,6 +918,8 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                     break;
             }
             if (paramsdata) {
+                var year = this.yearActive;
+                var month = this.monthActive;
                 console.log({
                     params: {
                         token: Session.get(),
@@ -930,7 +933,7 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                     }
                 }).then(function (response) {
                     response = response.data;
-                    $scope.load($scope.page);
+                    obtenerPagos(year, month);
                 });
             }
         },
