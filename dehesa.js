@@ -406,7 +406,8 @@ app.get('/asociados/excel/:itab', function (req, res) {
         'CALLE',
         'NÚMERO',
         'DEPTO / CASA',
-        'FORMA DE PAGO'
+        'FORMA DE PAGO',
+        'UF'
       ]];
       db.getAsociados(function (response) {
         for (var x in response) {
@@ -436,7 +437,8 @@ app.get('/asociados/excel/:itab', function (req, res) {
               response[x].direccion,
               response[x].numeracion,
               response[x].depto_casa,
-              response[x].forma_de_pago
+              response[x].forma_de_pago,
+              response[x].uf
             ]);
           }
         }
