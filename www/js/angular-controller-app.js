@@ -651,6 +651,7 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                                         pagado: response.data[d].pagado,
                                         debe: response.data[d].debe,
                                         excedentes: response.data[d].excedentes,
+                                        deuda: response.data[d].deuda,
                                         ajuste_contable: response.data[d].ajuste_contable,
                                         comentarios: response.data[d].comentarios,
                                         archivos: response.data[d].archivos,
@@ -658,6 +659,7 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                                         fijo_dias: response.data[d].dias,
                                         fijo_tarifa: response.data[d].tarifa
                                     }
+                                    console.log(response.data[d].debe);
                                 }
                                 $scope.registros = response.data.length;
                                 $scope.pagination.numPages = Math.ceil(response.data.length / $scope.pagination.perPage);

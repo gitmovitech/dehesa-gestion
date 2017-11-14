@@ -684,6 +684,11 @@
           "type": "text"
         },
         {
+          "name": "deuda",
+          "title": "Deuda total",
+          "type": "text"
+        },
+        {
           "name": "ajuste_contable",
           "title": "Ajuste Contable",
           "type": "text"
@@ -876,6 +881,11 @@
         {
           "name": "excedentes",
           "title": "Excedentes",
+          "type": "text"
+        },
+        {
+          "name": "deuda",
+          "title": "Deuda total",
           "type": "text"
         },
         {

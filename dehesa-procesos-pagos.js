@@ -121,18 +121,18 @@ var sumarDeudasAnteriores = function (pagos, data, index, cb) {
 NUEVO PROCEDIMIENTO DE AUTOCARGA MENSUAL
 */
 function daysInMonth(humanMonth, year) {
-    return new Date(year || new Date().getFullYear(), humanMonth+1, 0).getDate();
+    return new Date(year || new Date().getFullYear(), humanMonth + 1, 0).getDate();
 }
 var insertarPagodelMes = function (database, fecha, response, cb, debe_total, excedentes_total) {
     var tarifa = parseFloat(response.uf) * parseFloat(current_uf);
-    //var debe = tarifa;
+    var debe = tarifa;
     var excedentes = 0;
-    /*if (typeof debe_total != 'undefined') {
+    if (typeof debe_total != 'undefined') {
         debe += debe_total;
     }
     if (debe == 0) {
         debe = tarifa;
-    }*/
+    }
     if (typeof excedentes_total != 'undefined') {
         excedentes = excedentes_total;
     }
@@ -145,6 +145,7 @@ var insertarPagodelMes = function (database, fecha, response, cb, debe_total, ex
         pagado: 0,
         debe: tarifa,//debe,
         excedentes: excedentes,
+        deuda: debe,
         ajuste_contable: 0,
         month: fecha.month,
         year: fecha.year,
