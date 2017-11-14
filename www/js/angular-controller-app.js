@@ -206,6 +206,27 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                     break;
             }
         }
+        // SI EL METODO ES PAT NO SE REQUIERE BANCO, CASO CONTRARIO ES OBLIGATORIO
+        var item = jQuery(data).data('item');
+        if(typeof item.name != 'undefined'){
+            if(item.name == 'forma_de_pago'){
+                if(jQuery(data).val() == 'PAC'){
+                    for(var d in $scope.fields){
+                        if($scope.fields[d].name == 'Banco'){
+                            $scope.fields[d].required = true;
+                            break;
+                        }
+                    }
+                } else {
+                    for(var d in $scope.fields){
+                        if($scope.fields[d].name == 'Banco'){
+                            $scope.fields[d].required = false;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     $scope.load = function (item, index) {

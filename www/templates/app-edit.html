@@ -106,7 +106,7 @@
                             <select id="select-{{item.name}}" onchange="angular.element(this).scope().chosenSelect(this)" data-placeholder="Seleccione" class="form-control chosen-select {{collection}}" ng-if="item.type == 'select' && item.multiple" multiple="multiple" ng-model="item.value">
                                 <option value="{{option.key}}" ng-repeat="option in item.data.options" ng-if="item.data">{{option.value}}</option>
                             </select>
-                            <select onchange="angular.element(this).scope().onChangeSelect(this)" data-placeholder="Seleccione" class="select form-control {{item.onselect}}" ng-if="item.type == 'select' && !item.multiple" ng-model="item.value">
+                            <select onchange="angular.element(this).scope().onChangeSelect(this)" data-item="{{item}}" data-placeholder="Seleccione" class="select form-control {{item.onselect}}" ng-if="item.type == 'select' && !item.multiple" ng-model="item.value">
                                 <option value="">Seleccione</option>
                                 <option value="{{option.key}}" ng-repeat="option in item.data.options" ng-if="item.data">{{option.value}}</option>
                             </select>

@@ -310,6 +310,7 @@
           "name": "forma_de_pago",
           "title": "Forma de pago",
           "type": "select",
+          "onchange": "changeFormaPago",
           "data": {
             "options": [
               {
@@ -441,8 +442,7 @@
                 "value": "CHINA CONSTRUCTION BANK, AGENCIA EN CHILE - 060"
               }
             ] 
-          },
-          "required": true
+          }
         },
         {
           "name": "activo",
