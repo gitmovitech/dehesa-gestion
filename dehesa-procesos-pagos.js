@@ -139,7 +139,7 @@ var insertarPagodelMes = function (database, fecha, response, cb, debe_total, ex
     database.collection('pagos').insert({
         id: response.id,
         nombre: [response.first_name, response.last_name].join(' '),
-        dias: daysInMonth(fecha.month, fecha.year),
+        dias: 30,//daysInMonth(fecha.month, fecha.year),
         tarifa: tarifa,
         type: 'Pendiente',
         pagado: 0,
