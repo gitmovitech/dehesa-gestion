@@ -7,7 +7,7 @@ import { HeaderComponent } from './shared/header/header.component';
 import { PagosComponent } from './pages/pagos/pagos.component';
 import { CuentasPorCobrarComponent } from './pages/cuentas-por-cobrar/cuentas-por-cobrar.component';
 import { AsociadosComponent } from './pages/asociados/asociados.component';
-import { TitulosComponent } from './shared/titulos/titulos.component';
+//import { TitulosComponent } from './shared/titulos/titulos.component';
 import { BotonesAsociadosComponent } from './shared/botones-asociados/botones-asociados.component';
 import { PestanasComponent } from './pages/asociados/pestanas/pestanas.component';
 import { ActivosComponent } from './pages/asociados/pestanas/activos/activos.component';
@@ -33,7 +33,7 @@ export const router: Routes = [
     PagosComponent,
     CuentasPorCobrarComponent,
     AsociadosComponent,
-    TitulosComponent,
+    //TitulosComponent,
     BotonesAsociadosComponent,
     PestanasComponent,
     ActivosComponent,
