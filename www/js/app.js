@@ -23,6 +23,10 @@ app.config(function ($routeProvider, $locationProvider) {
                 templateUrl: 'templates/app.html',
                 controller: 'app'
             })
+            .when('/pagos', {
+                templateUrl: 'templates/app-pagos.html',
+                controller: 'pagos'
+            })
             .otherwise({
                 redirectTo: '/'
             });

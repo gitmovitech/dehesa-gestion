@@ -625,6 +625,23 @@
           "required": true
         }
       ]
+    },
+
+    {
+      "icon": "glyphicon glyphicon-usd",
+      "name": "Pagos",
+      "scope": [
+        "Administrador",
+        "Editor"
+      ],
+      "collection": "pagos",
+      "fields": [
+        {
+          "name": "_id",
+          "type": "text",
+          "id": true
+        }
+      ]
     }
   ]
 }

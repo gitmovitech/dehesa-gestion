@@ -1149,6 +1149,13 @@ app.get('/api/encuestas/exportar/:eid/:token', function (req, res, next) {
 });
 
 
+app.get('/api/pagos/planilla-cobro', function (req, res, next) {
+  setTimeout(function () {
+    res.send({ ok: 1 });
+  }, 3000);
+});
+
+
 
 app.use(express.static(__dirname + '/www'));
 app.get('/*', function (req, res) {

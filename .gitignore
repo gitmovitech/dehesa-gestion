@@ -1,3 +1,7 @@
 /uploads/
 .DS_Store
 /pagos.bkp/
+/node_modules/
+/nbproject/
+.vscode/
+/bkp/

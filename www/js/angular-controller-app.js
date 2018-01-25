@@ -2,6 +2,7 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
 
     //var socket = io.connect();
     var fieldsdata = [];
+    $scope.pagos_height = window.innerHeight-150;
 
     $scope.pagination = Pagination.getNew(15);
     if (!sessionStorage.page || sessionStorage.page == 'undefined') {

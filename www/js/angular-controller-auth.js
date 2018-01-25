@@ -1,11 +1,11 @@
-app.controller('auth-init', function ($scope, $http, $location, Session,Dialog) {
+app.controller('auth-init', function ($scope, $http, $location, Session, Dialog, $routeParams) {
     if (Session.get()) {
         $http.get('/api/config', {
             params: {
                 token: Session.get()
             }
         }).then(function (response, err) {
-          response = response.data;
+            response = response.data;
             if (response) {
                 Session.setPages(response);
                 $location.path('app');

@@ -53,7 +53,7 @@
 
     <div style="overflow-x:auto" ng-include="'templates/app-list-items.html'" ng-if="page.collection != 'pagos' && page.collection != 'cuentas_por_cobrar' && registros"></div>
 
-    <nav class="text-center" ng-if="pagination.numPages > 1 && registros">
+    <nav class="text-center" ng-if="pagination.numPages > 1 && registros && page.collection != 'pagos'">
         <ul class="pagination">
             <li><a href="javascript:" ng-click="pagination.toPageId(0)"><i class="glyphicon glyphicon-fast-backward"></i></a></li>
             <li><a ng-hide="pagination.page == 0" href="javascript:" ng-click="pagination.prevPage()"><i class="glyphicon glyphicon-arrow-left"></i></a></li>
