@@ -1,11 +1,11 @@
 <ul class="nav nav-tabs" id="myTab" role="tablist">
   <li class="nav-item">
-    <a class="nav-link-junta nav-link active" id="pagos-tab" data-toggle="tab" href="#pagos" role="tab" aria-controls="pagos"
+    <a class="nav-link-junta nav-link" id="pagos-tab" data-toggle="tab" href="#pagos" role="tab" aria-controls="pagos"
       aria-selected="true">
       <i class="fas fa-file-excel"></i> Planilla Cobro</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link-junta nav-link" id="cxc-tab" data-toggle="tab" href="#cxc" role="tab" aria-controls="cxc" aria-selected="false">
+    <a class="nav-link-junta nav-link" id="cxc-tab" data-toggle="tab" href="#cxc" role="tab" aria-controls="cxc">
       <i class="fas fa-money-bill-alt"></i> Costos por cobrar</a>
   </li>
   <li class="nav-item">
@@ -25,16 +25,16 @@
     <app-planilla></app-planilla>
   </div>
   <!-- tab cxc-->
-  <div class="tab-pane fade" id="cxc" role="tabpanel" aria-labelledby="cxc">
+  <div class="tab-pane fade show" id="cxc" role="tabpanel" aria-labelledby="cxc">
     <app-costos></app-costos>
   </div>
   <!-- tab pagos manuales-->
-  <div class="tab-pane fade" id="ingresomanual" role="tabpanel" aria-labelledby="ingresomanual">
+  <div class="tab-pane fade show" id="ingresomanual" role="tabpanel" aria-labelledby="ingresomanual">
     <app-ingreso></app-ingreso>
   </div>
 
   <!-- tab detalles cartola-->
-  <div class="tab-pane fade" id="detallecobro" role="tabpanel" aria-labelledby="detallecobro">
+  <div class="tab-pane fade show" id="detallecobro" role="tabpanel" aria-labelledby="detallecobro">
     <app-detalle></app-detalle>
   </div>
 </div>
