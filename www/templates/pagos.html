@@ -23,7 +23,7 @@
           <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
           <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
-    <script src="js/jquery-1.12.3.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="js/jquery.loader.js"></script>
     <script src="js/autocomplete.js"></script>
     <script src="js/bootstrap.min.js"></script>
@@ -32,6 +32,33 @@
 </head>
 
 <body>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal_validar_adt">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="/api/carga/planilla-adt" id="form_upload_validar_adt" method="post" enctype="multipart/form-data">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">Cargar Planilla ADT</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            <input type="hidden" name="year" id="year" />
+                            <input type="hidden" name="month" id="month" />
+                            <input type="file" name="adt_file" id="adt_file" />
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Validar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 
     <div class="container">
         <br>
@@ -55,17 +82,17 @@
                         <div class="form-group">
                             <select class="form-control" id="filtro_mes">
                                 <option class="disable">Seleccionar Mes</option>
-                                <option>Enero</option>
-                                <option>Febrero</option>
-                                <option>Marzo</option>
-                                <option>Abril</option>
-                                <option>Mayo</option>
-                                <option>Junio</option>
-                                <option>Julio</option>
-                                <option>Agosto</option>
-                                <option>Septiembre</option>
-                                <option>Octubre</option>
-                                <option>Noviembre</option>
+                                <option value="0">Enero</option>
+                                <option value="1">Febrero</option>
+                                <option value="2">Marzo</option>
+                                <option value="3">Abril</option>
+                                <option value="5">Mayo</option>
+                                <option value="6">Junio</option>
+                                <option value="7">Julio</option>
+                                <option value="8">Agosto</option>
+                                <option value="9">Septiembre</option>
+                                <option value="10">Octubre</option>
+                                <option value="11">Noviembre</option>
                             </select>
                         </div>
                     </div>
@@ -91,7 +118,7 @@
         <div id="contenido_pagos" style="display:none">
             <!-- title-->
             <div id="title" class="box-title-page" style="display:block">
-                <h4>Cobros de {{Mes}}</h4>
+                <h4></h4>
             </div>
             <br>
             <!-- end title -->
@@ -120,7 +147,8 @@
                     <div id="alert-adt" class="box-alert" style="display:none">
                         <br>
                         <div class="alert alert-danger" role="alert">
-                            Hay un error en la importación con los siguientes id´s: 1,2,3,4. Por favor verificar y volver a importar.
+                            Los siguientes IDs no se encuentran en la planilla de ADT:
+                            <span id="noexiste"></span>
                         </div>
                     </div>
                     <!-- end box alert message-->
@@ -130,19 +158,19 @@
                         <br>
                         <div class="row">
                             <div class="btn-col col-md-2 col-xs-12">
-                                <a class="btn btn-success" href="#" role="button">
+                                <a class="btn btn-success" href="javascript:" role="button" data-toggle="modal" data-target="#modal_validar_adt">
                                     <span class="glyphicon glyphicon-save" aria-hidden="true"></span> Validar planilla ADT</a>
                             </div>
                             <div class="btn-col col-md-2 col-xs-12">
-                                <a class="btn btn-info" href="#" role="button">
+                                <a class="btn btn-info" href="javascript:" role="button">
                                     <span class="glyphicon glyphicon-export" aria-hidden="true"></span> Exportar Cobros</a>
                             </div>
                             <div class="btn-col col-md-2 col-xs-12">
-                                <a class="btn btn-warning" href="#" role="button">
+                                <a class="btn btn-warning" href="javascript:" role="button">
                                     <span class="glyphicon glyphicon-import" aria-hidden="true"></span> Importar Cobros </a>
                             </div>
                             <div class="btn-col col-md-2 col-xs-12">
-                                <a class="btn btn-danger" href="#" role="button">
+                                <a class="btn btn-danger" href="javascript:" role="button">
                                     <span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span> Cerrar Mes </a>
                             </div>
                         </div>
@@ -167,16 +195,16 @@
                                     <th class="button-box"></th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="cobro_tbody">
                                 <!--tr asociado-->
-                                <tr class="asociado-list">
+                                <tr class="asociado-list" id="cobro_template" style="display:none">
                                     <td>
                                         <input type="checkbox" class="filled-in" id="filled-in-box" checked="checked" />
                                         <label for="filled-in-box"></label>
                                     </td>
-                                    <td>0</td>
+                                    <td class="asociado-id">0</td>
                                     <td>
-                                        <input type="text" class="days-input" id="service-day" value="30">
+                                        <input type="text" class="days-input dias" value="30">
                                     </td>
                                     <td>
                                         <select class="estado-select">
@@ -186,10 +214,10 @@
                                             <option value="3">Estado 3</option>
                                         </select>
                                     </td>
-                                    <td>$000.000</td>
-                                    <td>$000.000</td>
-                                    <td>$000.000</td>
-                                    <td>$000.000</td>
+                                    <td class="tarifa">$000.000</td>
+                                    <td class="excedentes">$000.000</td>
+                                    <td class="ajuste">$000.000</td>
+                                    <td class="deuda">$000.000</td>
                                     <td>
                                         <a class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalcomentarios">
                                             <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
@@ -305,8 +333,24 @@
                     <br>
 
                     <div class="row box-table">
-                        <!-- aqui va la misma tabla que en la petaña "planilla cobros"-->
-                        Aqui va la misma planilla que esta en la pestaña "Planilla cobros"
+                        <table class="table">
+                            <thead class="bg-success thead-junta">
+                                <tr>
+                                    <th>Activo</th>
+                                    <th>ID</th>
+                                    <th class="days-table-box">Días</th>
+                                    <th class="pay-table-box">Estado de Pago</th>
+                                    <th>Monto a pagar</th>
+                                    <th>Excedentes</th>
+                                    <th>Ajuste Contable</th>
+                                    <th>Deuda Total</th>
+                                    <th class="button-box"></th>
+                                    <th class="button-box"></th>
+                                    <th class="button-box"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="costos_tbody"></tbody>
+                        </table>
                     </div>
 
                 </div>

@@ -660,7 +660,7 @@ app.controller('app', function ($scope, $rootScope, Session, LoadList, $http, $l
                                         fijo_dias: response.data[d].dias,
                                         fijo_tarifa: response.data[d].tarifa
                                     }
-                                    console.log(response.data[d].debe);
+                                    //console.log(response.data[d].debe);
                                 }
                                 $scope.registros = response.data.length;
                                 $scope.pagination.numPages = Math.ceil(response.data.length / $scope.pagination.perPage);

@@ -15,6 +15,7 @@ var mime = require('mime');
 var sendmail = require('./sendmail');
 var config = require('./config');
 var atob = require('atob');
+var nodepagos = require('./node-pagos');
 var meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 var currentToken = false;
 var getSession = function (token, callback) {
@@ -78,6 +79,12 @@ app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
+
+/**
+ * COBROS
+ */
+app.post('/api/carga/planilla-adt', upload.single('adt_file'), nodepagos.ValidarPlanillaADT);
+app.get('/api/carga/cobros', nodepagos.CargarCobros);
 
 
 /**

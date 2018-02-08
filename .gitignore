@@ -2,6 +2,7 @@
 .DS_Store
 /pagos.bkp/
 /node_modules/
+/pagos/node_modules/
 /nbproject/
 .vscode/
 /bkp/
