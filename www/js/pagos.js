@@ -30,6 +30,15 @@ var modal_contacto = function (item) {
     }
 }
 
+
+var exportarPAT = function () {
+    location.href = '/pagos/banco/pat/' + $('#filtro_ano').val() + '/' + $('#filtro_mes').val();
+}
+
+var exportarPAC = function () {
+    location.href = '/pagos/banco/pac/' + $('#filtro_ano').val() + '/' + $('#filtro_mes').val();
+}
+
 jQuery(function ($) {
 
     var params = GetUrlParams();

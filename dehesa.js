@@ -475,17 +475,18 @@ app.get('/asociados/excel/:itab', function (req, res) {
 });
 
 app.get('/pagos/banco/:patpac/:year/:month', function (req, res) {
-  var mes = null;
-  for (var x in meses) {
+  var mes = req.params.month;
+  /*for (var x in meses) {
     if (meses[x] == req.params.month) {
       mes = x;
       break;
     }
-  }
+  }*/
   db.getPaymentsForBank({
-    month: mes,
+    month: req.params.month,
     year: req.params.year
   }, function (response) {
+    //console.log(response);
     var data = [];
     var ahora = new Date();
     var fecha = ahora.getFullYear() + ('0' + ahora.getDate()).slice(-2) + ('0' + (ahora.getMonth() + 1)).slice(-2);
