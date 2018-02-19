@@ -255,17 +255,17 @@
                                     <span class="glyphicon glyphicon-export" aria-hidden="true"></span> Exportar Cobros PAT</a>
                             </div>
                             <div class="btn-col col-md-2 col-xs-12">
-                                    <a class="btn btn-info" href="javascript:exportarPAC()" role="button">
-                                        <span class="glyphicon glyphicon-export" aria-hidden="true"></span> Exportar Cobros PAC</a>
-                                </div>
+                                <a class="btn btn-info" href="javascript:exportarPAC()" role="button">
+                                    <span class="glyphicon glyphicon-export" aria-hidden="true"></span> Exportar Cobros PAC</a>
+                            </div>
                             <div class="btn-col col-md-2 col-xs-12">
                                 <a class="btn btn-warning" href="javascript:importarPAT()" role="button">
                                     <span class="glyphicon glyphicon-import" aria-hidden="true"></span> Importar Cobros PAT</a>
                             </div>
                             <div class="btn-col col-md-2 col-xs-12">
-                                    <a class="btn btn-warning" href="javascript:importarPAC()" role="button">
-                                        <span class="glyphicon glyphicon-import" aria-hidden="true"></span> Importar Cobros PAC</a>
-                                </div>
+                                <a class="btn btn-warning" href="javascript:importarPAC()" role="button">
+                                    <span class="glyphicon glyphicon-import" aria-hidden="true"></span> Importar Cobros PAC</a>
+                            </div>
                             <div class="btn-col col-md-2 col-xs-12">
                                 <a class="btn btn-danger" href="javascript:" role="button">
                                     <span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span> Cerrar Mes </a>
@@ -274,6 +274,26 @@
                         <br>
                     </div>
                     <!--end box button menu planilla -->
+
+                    <div class="box-button-planilla">
+                        <br>
+                        <div class="row">
+                            <div class="btn-col col-md-1 col-xs-12">
+                                <select id="limitPerPage">
+                                    <option value="30">30</option>
+                                    <option value="60">60</option>
+                                    <option value="100">100</option>
+                                </select>
+                            </div>
+                            <div class="btn-col col-md-2 col-xs-12">
+                                <a class="btn btn-xs btn-danger" id="filtrarLimites" href="javascript:" role="button">
+                                    <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Filtrar </a>
+                            </div>
+                        </div>
+
+                        <br>
+                    </div>
+
 
                     <div class="row box-table">
                         <table class="table">
@@ -292,7 +312,7 @@
                                     <th class="button-box"></th>
                                 </tr>
                             </thead>
-                            <tbody id="cobro_tbody">
+                            <div>
                                 <!--tr asociado-->
                                 <tr class="asociado-list" id="cobro_template" style="display:none">
                                     <td>
@@ -311,19 +331,19 @@
                                                 <option value="Pagos Procesados">Pagos Procesados</option>
                                                 <option value="Rechazado">Rechazado</option>
                                                 <!--<option value="Mandato Anulado en Banco">Mandato Anulado en Banco</option>
-                                                <option value="Falta de Fondos">Falta de Fondos</option>
-                                                <option value="Monto a Pagar Excede el Máximo Permitido">Monto a Pagar Excede el Máximo Permitido</option>
-                                                <option value="Cuenta con Orden de Cierre">Cuenta con Orden de Cierre</option>-->
+                    <option value="Falta de Fondos">Falta de Fondos</option>
+                    <option value="Monto a Pagar Excede el Máximo Permitido">Monto a Pagar Excede el Máximo Permitido</option>
+                    <option value="Cuenta con Orden de Cierre">Cuenta con Orden de Cierre</option>-->
                                             </optgroup>
                                             <optgroup label="PAT">
                                                 <!--<option value="PAT Cargado">PAT Cargado</option>-->
                                                 <option value="Aprobado">Aprobado</option>
                                                 <option value="Rechazado">Rechazado</option>
                                                 <!--<option value="Rechazo por Tarjeta Bloqueada">Rechazo por Tarjeta Bloqueada</option>
-                                                <option value="Rechazo Tarjeta no Existe">Rechazo Tarjeta no Existe</option>
-                                                <option value="Rechazo Tarjeta Perdida o Robada">Rechazo Tarjeta Perdida o Robada</option>
-                                                <option value="Rechazo Tarjeta con Problemas">Rechazo Tarjeta con Problemas</option>
-                                                <option value="Rechazo Tarjeta Vencida">Rechazo Tarjeta Vencida</option>-->
+                    <option value="Rechazo Tarjeta no Existe">Rechazo Tarjeta no Existe</option>
+                    <option value="Rechazo Tarjeta Perdida o Robada">Rechazo Tarjeta Perdida o Robada</option>
+                    <option value="Rechazo Tarjeta con Problemas">Rechazo Tarjeta con Problemas</option>
+                    <option value="Rechazo Tarjeta Vencida">Rechazo Tarjeta Vencida</option>-->
                                             </optgroup>
                                             <option value="Pagado con transferencia">Pagado con transferencia</option>
                                             <option value="Cheque recibido">Cheque recibido</option>
@@ -355,7 +375,18 @@
 
                                 </tr>
                                 <!--tr asociado-->
+                            </div>
+                            <tbody>
+                                <tr>
+                                    <td colspan="11" class="paginador-foot"></td>
+                                </tr>
                             </tbody>
+                            <tbody id="cobro_tbody"></tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="11" class="paginador-foot"></td>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>
