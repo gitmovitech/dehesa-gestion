@@ -100,3 +100,23 @@ var CargarCobros = function (req, res) {
     }
 }
 exports.CargarCobros = CargarCobros;
+
+
+
+
+var ImportarPacPat = function(req, res){
+    if (!fs.existsSync(__dirname + '/uploads')) {
+        fs.mkdirSync(__dirname + '/uploads', 0777);
+    }
+    if (!fs.existsSync(__dirname + '/uploads/pacpat')) {
+        fs.mkdirSync(__dirname + '/uploads/pacpat', 0777);
+    }
+    var file = __dirname + '/uploads/pacpat/' + req.file.originalname;
+    if (fs.existsSync(file)) {
+        fs.unlinkSync(file);
+    }
+    fs.renameSync(__dirname + '/' + req.file.path, file);
+    //console.log(req.file.originalname);
+    //console.log(req.body);
+}
+exports.ImportarPacPat = ImportarPacPat;

@@ -40,17 +40,21 @@ var setPage = function (page) {
 
 
 var exportarPAT = function () {
-    location.href = '/pagos/banco/pat/' + $('#filtro_ano').val() + '/' + $('#filtro_mes').val();
+    location.href = '/pagos/banco/pat/' + $('#filtro_ano').val() + '/' + $('#filtro_mes').val() + '?no=' + $('#noexiste').html();
 }
 
 var exportarPAC = function () {
-    location.href = '/pagos/banco/pac/' + $('#filtro_ano').val() + '/' + $('#filtro_mes').val();
+    location.href = '/pagos/banco/pac/' + $('#filtro_ano').val() + '/' + $('#filtro_mes').val() + '?no=' + $('#noexiste').html();
+}
+
+var importarPATPAC = function(){
+    $('#modal_importar_patpac').modal(true);
 }
 
 var construirPaginador = function () {
     var paginas = Math.ceil(data.length / $('#limitPerPage').val());
     $('.paginador-foot').html('');
-    for (var n = 1; n <= paginas-1; n++) {
+    for (var n = 1; n <= paginas - 1; n++) {
         if (current_page == n) {
             $('.paginador-foot').append('<a class="btn btn-xs btn-success active" href="javascript:setPage(' + n + ')">' + n + '</a> ');
         } else {
@@ -158,8 +162,20 @@ jQuery(function ($) {
     });
 
     $('#form_upload_validar_adt').submit(function () {
+        $('.input_month').val(month);
+        $('.input_year').val(year);
         if ($('#adt_file').val() == "") {
             alert('Seleccione una planilla ADT primero');
+            return false;
+        }
+        return true;
+    });
+
+    $('#form_upload_importar_pacpat').submit(function () {
+        $('.input_month').val(month);
+        $('.input_year').val(year);
+        if ($('#pacpat_file').val() == "") {
+            alert('Seleccione un archivo para subir primero');
             return false;
         }
         return true;
@@ -169,7 +185,9 @@ jQuery(function ($) {
         $('#filtro_ano').val(year);
         $('#filtro_mes').val(month);
         $('#filtrarButton').click();
-        $('#alert-adt').show();
+        if(noexiste != ''){
+            $('#alert-adt').show();
+        }
         $('#noexiste').html(noexiste);
     }
 

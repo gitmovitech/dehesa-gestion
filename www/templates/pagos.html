@@ -134,14 +134,46 @@
                     </div>
                     <div class="modal-body">
                         <p>
-                            <input type="hidden" name="year" id="year" />
-                            <input type="hidden" name="month" id="month" />
+                            <input type="hidden" class="input_year" name="year" id="year" />
+                            <input type="hidden" class="input_month" name="month" id="month" />
                             <input type="file" name="adt_file" id="adt_file" />
                         </p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
                         <button type="submit" class="btn btn-primary">Validar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal_importar_patpac">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="/api/carga/patpac" id="form_upload_importar_pacpat" method="post" enctype="multipart/form-data">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">Archivo PAT / PAC</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            <select name="pacpat">
+                                <option value="PAC">PAC</option>
+                                <option value="PAT">PAT</option>
+                            </select>
+                        </p>
+                        <p>
+                            <input type="hidden" class="input_year" name="year"/>
+                            <input type="hidden" class="input_month" name="month"/>
+                            <input type="file" name="pacpat_file" id="pacpat_file" />
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Importar</button>
                     </div>
                 </form>
             </div>
@@ -259,12 +291,8 @@
                                     <span class="glyphicon glyphicon-export" aria-hidden="true"></span> Exportar Cobros PAC</a>
                             </div>
                             <div class="btn-col col-md-2 col-xs-12">
-                                <a class="btn btn-warning" href="javascript:importarPAT()" role="button">
-                                    <span class="glyphicon glyphicon-import" aria-hidden="true"></span> Importar Cobros PAT</a>
-                            </div>
-                            <div class="btn-col col-md-2 col-xs-12">
-                                <a class="btn btn-warning" href="javascript:importarPAC()" role="button">
-                                    <span class="glyphicon glyphicon-import" aria-hidden="true"></span> Importar Cobros PAC</a>
+                                <a class="btn btn-warning" href="javascript:importarPATPAC()" role="button">
+                                    <span class="glyphicon glyphicon-import" aria-hidden="true"></span> Importar PAT / PAC</a>
                             </div>
                             <div class="btn-col col-md-2 col-xs-12">
                                 <a class="btn btn-danger" href="javascript:" role="button">

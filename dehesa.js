@@ -81,9 +81,12 @@ app.use(function (req, res, next) {
 });
 
 /**
- * COBROS
+ * PAGOS
  */
-app.post('/api/carga/planilla-adt', upload.single('adt_file'), nodepagos.ValidarPlanillaADT);
+var adt_file = upload.single('adt_file');
+var patpac_file = upload.single('patpac_file');
+app.post('/api/carga/planilla-adt', adt_file, nodepagos.ValidarPlanillaADT);
+app.post('/api/carga/patpac', patpac_file, nodepagos.ImportarPacPat);
 app.get('/api/carga/cobros', nodepagos.CargarCobros);
 
 
@@ -195,7 +198,7 @@ app.get('/api/data', function (req, res) {
  * Guarda collections
  */
 app.post('/api/data', function (req, res) {
-  console.log(req.body);
+  //console.log(req.body);
   if (req.body.params.token) {
     getSession(req.body.params.token, function (userdata, err) {
       if (userdata) {
@@ -214,7 +217,7 @@ app.post('/api/data', function (req, res) {
             }
           }
         }
-        console.log(req.body.params.fields);
+        //console.log(req.body.params.fields);
         db.editCollection(req.body.params.collection, req.body.params.fields, function (response) {
           if (response) {
             res.send({
@@ -372,6 +375,7 @@ app.post('/api/upload', upload.single('file'), function (req, res, next) {
   fs.rename(__dirname + '/' + req.file.path, __dirname + '/uploads/' + req.file.originalname);
   res.send({ answer: 'Archivo cargado correctamente', filename: req.file.originalname });
 });
+
 app.get('/descargas/:id/:year/:month/:file', function (req, res) {
   var file = __dirname + '/uploads/documents/' + req.params.id + '/' + req.params.year + '/' + req.params.month + '/' + atob(req.params.file);
   if (fs.existsSync(file)) {
@@ -385,6 +389,7 @@ app.get('/descargas/:id/:year/:month/:file', function (req, res) {
     res.send('El archivo no fue encontrado en el servidor');
   }
 });
+
 app.get('/asociados/excel/:itab', function (req, res) {
   if (req.params.itab) {
     if (req.params.itab == 1 || req.params.itab == 0 || req.params.itab == -1 || req.params.itab == -2) {
@@ -475,6 +480,15 @@ app.get('/asociados/excel/:itab', function (req, res) {
 });
 
 app.get('/pagos/banco/:patpac/:year/:month', function (req, res) {
+  var no = [];
+  try {
+    no = req.query.no.split(',');
+    for (var n in no) {
+      no[n] = no[n] * 1;
+    }
+  } catch (e) {
+
+  }
   var mes = req.params.month;
   /*for (var x in meses) {
     if (meses[x] == req.params.month) {
@@ -492,8 +506,16 @@ app.get('/pagos/banco/:patpac/:year/:month', function (req, res) {
     var fecha = ahora.getFullYear() + ('0' + ahora.getDate()).slice(-2) + ('0' + (ahora.getMonth() + 1)).slice(-2);
     var nombre_completo = '';
     var ext = '';
+    var add = true;
     for (x in response) {
-      if (response[x].socio.forma_de_pago == req.params.patpac.toUpperCase()) {
+      add = true;
+      for (var n in no) {
+        if (no[n] == response[x].id) {
+          add = false;
+          break;
+        }
+      }
+      if (response[x].socio.forma_de_pago == req.params.patpac.toUpperCase() && add) {
         if (response[x].socio.forma_de_pago == 'PAT') {
           ext = '.csv';
           data.push([
@@ -580,6 +602,7 @@ app.get('/pagos/excel/:year/:month', function (req, res) {
     });
   }
 });
+
 app.post('/dropfile/:id/:year/:month/:file', function (req, res) {
   var file = __dirname + '/uploads/documents/' + req.params.id + '/' + req.params.year + '/' + req.params.month + '/' + decodeURI(atob(req.params.file));
   if (fs.existsSync(file)) {
@@ -604,6 +627,7 @@ app.post('/dropfile/:id/:year/:month/:file', function (req, res) {
  */
 var importPagos = require('./dehesa-import-pagos');
 app.post('/api/data/import/excel', function (req, res) {
+  console.log(req.body);
   if (req.body.params.token) {
     getSession(req.body.params.token, function (userdata, err) {
       if (userdata) {
