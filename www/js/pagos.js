@@ -47,7 +47,7 @@ var exportarPAC = function () {
     location.href = '/pagos/banco/pac/' + $('#filtro_ano').val() + '/' + $('#filtro_mes').val() + '?no=' + $('#noexiste').html();
 }
 
-var importarPATPAC = function(){
+var importarPATPAC = function () {
     $('#modal_importar_patpac').modal(true);
 }
 
@@ -108,21 +108,32 @@ var listar = function () {
     });
 }
 
+var params;
+var noexiste;
+var pacpat;
+var file_pacpat;
+var year = false;
+var month = false;
+
 jQuery(function ($) {
 
-    var params = GetUrlParams();
-    var noexiste;
-    var year = false;
-    var month = false;
+    params = GetUrlParams();
 
     if (params) {
         try {
             noexiste = params[2];
             noexiste = noexiste.split('=');
-            noexiste = noexiste[1];
-            noexiste = noexiste.split('-');
-            noactive = noexiste;
-            noexiste = noexiste.join(', ')
+            if (noexiste[0] == 'pacpat') {
+                pacpat = noexiste[1];
+                file_pacpat = params[3].split('=');
+                file_pacpat = file_pacpat[1];
+                noexiste = '';
+            } else {
+                noexiste = noexiste[1];
+                noexiste = noexiste.split('-');
+                noactive = noexiste;
+                noexiste = noexiste.join(', ')
+            }
 
             year = params[0];
             year = year.split('=')[1];
@@ -146,6 +157,7 @@ jQuery(function ($) {
 
     $('#filtrarButton').click(function () {
         $('.template-clean').remove();
+        $('#contenido_pagos').hide();
         if ($('#filtro_ano').val() == '' || $('#filtro_mes').val() == '') {
             alert('Seleccione año y mes');
         } else {
@@ -164,7 +176,7 @@ jQuery(function ($) {
     $('#form_upload_validar_adt').submit(function () {
         $('.input_month').val(month);
         $('.input_year').val(year);
-        if ($('#adt_file').val() == "") {
+        if ($('#single_file_adt').val() == "") {
             alert('Seleccione una planilla ADT primero');
             return false;
         }
@@ -174,7 +186,7 @@ jQuery(function ($) {
     $('#form_upload_importar_pacpat').submit(function () {
         $('.input_month').val(month);
         $('.input_year').val(year);
-        if ($('#pacpat_file').val() == "") {
+        if ($('#single_file_pacpat').val() == "") {
             alert('Seleccione un archivo para subir primero');
             return false;
         }
@@ -185,10 +197,10 @@ jQuery(function ($) {
         $('#filtro_ano').val(year);
         $('#filtro_mes').val(month);
         $('#filtrarButton').click();
-        if(noexiste != ''){
+        if (noexiste != '') {
             $('#alert-adt').show();
+            $('#noexiste').html(noexiste);
         }
-        $('#noexiste').html(noexiste);
     }
 
 });

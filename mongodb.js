@@ -719,7 +719,7 @@ exports.pagar = function (data, collection, cb) {
                 var debe = data.cobrodelmes - parseInt(data.pago);
                 var excedentes = 0;
                 var ajuste_contable = 0;
-                
+
                 if (debe <= 4000 && debe > 0) { // DIFERENCIA SE VA A AJUSTE CONTABLE
                     ajuste_contable = debe;
                     debe = 0;
@@ -843,11 +843,29 @@ exports.getUserByRun = function (run, cb) {
 exports.savePayment = function (data) {
     database.collection('pagos').findOne({
         id: data.id,
-        month: data.month,
-        year: data.year
+        month: parseInt(data.month),
+        year: parseInt(data.year)
     }, function (err, response) {
         if (!response) {
             database.collection('pagos').insert(data);
+        } else {
+            data.comentarios = '';
+            if(data.type != 'Aprobada' && data.type != 'Pagos Procesados'){
+                data.comentarios = data.type;
+                data.type = 'Rechazado';
+            } 
+            database.collection('pagos').update({
+                id: data.id,
+                month: parseInt(data.month),
+                year: parseInt(data.year)
+            }, {
+                    $set: {
+                        pagado: parseInt(data.pagado),
+                        debe: parseInt(data.debe),
+                        type: data.type,
+                        comentarios: data.comentarios
+                    }
+                });
         }
     });
 }
@@ -892,10 +910,10 @@ exports.pasarCuentasPorCobrar = function (query, cb) {
         if (data.length > 0) {
             data.forEach(function (item, i) {
                 delete item["_id"];
-                if(typeof item.comentarios == 'undefined'){
+                if (typeof item.comentarios == 'undefined') {
                     item.comentarios = '';
                 }
-                if(typeof item.archivos == 'undefined'){
+                if (typeof item.archivos == 'undefined') {
                     item.archivos = '';
                 }
                 database.collection('cuentas_por_cobrar').insert(item);

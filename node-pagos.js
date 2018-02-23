@@ -1,6 +1,8 @@
 var fs = require('fs');
 var xlsx = require('node-xlsx');
+var csvparse = require('csv-parse');
 var db = require('./mongodb');
+var import_pagos = require('./dehesa-import-pagos');
 
 var ValidarPlanillaADT = function (req, res) {
     if (!fs.existsSync(__dirname + '/uploads')) {
@@ -104,19 +106,47 @@ exports.CargarCobros = CargarCobros;
 
 
 
-var ImportarPacPat = function(req, res){
+var ImportarPacPat = function (req, res) {
+    var error = '';
+    var data = [];
+    var file;
     if (!fs.existsSync(__dirname + '/uploads')) {
         fs.mkdirSync(__dirname + '/uploads', 0777);
     }
     if (!fs.existsSync(__dirname + '/uploads/pacpat')) {
         fs.mkdirSync(__dirname + '/uploads/pacpat', 0777);
     }
-    var file = __dirname + '/uploads/pacpat/' + req.file.originalname;
+    if (req.body.pacpat == 'PAC') {
+        file = __dirname + '/uploads/pacpat/' + req.body.year + '-' + req.body.month + '-' + req.body.pacpat + '.xls';
+    }
+    if (req.body.pacpat == 'PAT') {
+        file = __dirname + '/uploads/pacpat/' + req.body.year + '-' + req.body.month + '-' + req.body.pacpat + '.csv';
+    }
+
     if (fs.existsSync(file)) {
         fs.unlinkSync(file);
     }
     fs.renameSync(__dirname + '/' + req.file.path, file);
-    //console.log(req.file.originalname);
-    //console.log(req.body);
+
+    if (req.body.pacpat == 'PAC') {
+        try {
+            data = xlsx.parse(fs.readFileSync(file));
+        } catch (e) {
+            error = 'El archivo excel subido no es válido. Suba el archivo en formato excel y con el formato adecuado.'
+        }
+        import_pagos.procesarPAC(data, req.body.month, req.body.year, function () {
+            res.redirect('/templates/pagos.html?year=' + req.body.year + '&month=' + req.body.month + '&pacpat=' + req.body.pacpat + '&file=' + req.body.year + '-' + req.body.month + '-' + req.body.pacpat + '.xls');
+        });
+    } else if (req.body.pacpat == 'PAT') {
+        var parser = csvparse({ delimiter: ';' }, function (err, data) {
+            if(!err){
+                import_pagos.procesarPAT(data, req.body.month, req.body.year, function () {
+                    res.redirect('/templates/pagos.html?year=' + req.body.year + '&month=' + req.body.month + '&pacpat=' + req.body.pacpat + '&file=' + req.body.year + '-' + req.body.month + '-' + req.body.pacpat + '.xls');
+                });
+            }
+        });
+        fs.createReadStream(file).pipe(parser);
+    }
+
 }
 exports.ImportarPacPat = ImportarPacPat;

@@ -83,10 +83,9 @@ app.use(function (req, res, next) {
 /**
  * PAGOS
  */
-var adt_file = upload.single('adt_file');
-var patpac_file = upload.single('patpac_file');
-app.post('/api/carga/planilla-adt', adt_file, nodepagos.ValidarPlanillaADT);
-app.post('/api/carga/patpac', patpac_file, nodepagos.ImportarPacPat);
+var single_file = upload.single('single_file');
+app.post('/api/carga/planilla-adt', single_file, nodepagos.ValidarPlanillaADT);
+app.post('/api/carga/patpac', single_file, nodepagos.ImportarPacPat);
 app.get('/api/carga/cobros', nodepagos.CargarCobros);
 
 
