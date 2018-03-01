@@ -134,18 +134,26 @@ var ImportarPacPat = function (req, res) {
         } catch (e) {
             error = 'El archivo excel subido no es válido. Suba el archivo en formato excel y con el formato adecuado.'
         }
-        import_pagos.procesarPAC(data, req.body.month, req.body.year, function () {
-            res.redirect('/templates/pagos.html?year=' + req.body.year + '&month=' + req.body.month + '&pacpat=' + req.body.pacpat + '&file=' + req.body.year + '-' + req.body.month + '-' + req.body.pacpat + '.xls');
-        });
+        if (error != '') {
+            res.send(error);
+        } else {
+            import_pagos.procesarPAC(data, req.body.month, req.body.year, function () {
+                res.redirect('/templates/pagos.html?year=' + req.body.year + '&month=' + req.body.month + '&pacpat=' + req.body.pacpat + '&file=' + req.body.year + '-' + req.body.month + '-' + req.body.pacpat + '.xls');
+            });
+        }
     } else if (req.body.pacpat == 'PAT') {
         var parser = csvparse({ delimiter: ';' }, function (err, data) {
-            if(!err){
+            if (!err) {
                 import_pagos.procesarPAT(data, req.body.month, req.body.year, function () {
                     res.redirect('/templates/pagos.html?year=' + req.body.year + '&month=' + req.body.month + '&pacpat=' + req.body.pacpat + '&file=' + req.body.year + '-' + req.body.month + '-' + req.body.pacpat + '.xls');
                 });
+            } else {
+                res.send(JSON.stringify(err))
             }
         });
         fs.createReadStream(file).pipe(parser);
+    } else {
+        res.send('Error, no PAT o PAC');
     }
 
 }

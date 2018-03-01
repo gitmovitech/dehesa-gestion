@@ -86,6 +86,7 @@ var listar = function () {
                     contador++;
                     $('#cobro_template .activo-checkbox').attr('id', 'active_' + response.data[i].id);
                     $('#cobro_template .activo-checkbox').attr('checked', 'checked');
+                    $('#cobro_template .estado-select').attr('');
                     $('#cobro_template .activo-checkbox').val(response.data[i].id)
                     $('#cobro_template .asociado-id').html(response.data[i].id);
                     $('#cobro_template .dias').html(response.data[i].dias);
