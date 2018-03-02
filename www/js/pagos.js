@@ -15,6 +15,22 @@ var GetUrlParams = function () {
     }
 }
 
+var GetParam = function(id){
+    var params = GetUrlParams();
+    if(params){
+        var keyval;
+        for(var n in params){
+            keyval = params[n].split('=');
+            if(keyval[0] == id){
+                return keyval[1];
+            }
+        }
+        return "";
+    } else {
+        return "";
+    }
+}
+
 
 var global;
 var modal_contacto = function (item) {
