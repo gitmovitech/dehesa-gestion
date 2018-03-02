@@ -21,7 +21,7 @@ app.service('LoadList', function($http, Session){
             collection: item.collection,
             model: item.model
         }
-        if (item.collection == 'pagos') {
+        /*if (item.collection == 'pagos') {
             if (!$scope.currentPagosYear) {
                 $scope.currentPagosYear = new Date().getFullYear();
             }
@@ -29,7 +29,7 @@ app.service('LoadList', function($http, Session){
                 $scope.currentPagosMonth = new Date().getMonth();
             }
             obtenerPagos($scope.currentPagosYear, $scope.currentPagosMonth);
-        } else {
+        } else {*/
           if(item.collection == 'asociados'){
             params.where = {
               activo: activos
@@ -58,7 +58,7 @@ app.service('LoadList', function($http, Session){
                     cb(response.data);
                 }
             });
-        }
+        //}
     }
   }
 });

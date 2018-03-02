@@ -109,7 +109,7 @@ exports.CargarCobros = CargarCobros;
 var ObtenerAsociado = function (req, res) {
     try {
         db.getAsociado({
-            id: req.params.id,
+            id: req.params.id
         }, function (response) {
             res.send({
                 ok: 1,

@@ -148,14 +148,14 @@ var guardarRegistros = function (registros, month, year, cb) {
           }
           //if(asociado.id == 772)
           mongo.savePayment({
-            id: asociado.id,
+            id: parseInt(asociado.id),
             nombre: [asociado.first_name, asociado.second_name, asociado.last_name, asociado.second_last_name].join(' '),
             tarifa: item.tarifa,
             type: item.estado,
             pagado: item.pago,
             debe: item.debe,
-            month: month,
-            year: year
+            month: parseInt(month),
+            year: parseInt(year)
           });
         } catch (e) {
           console.log(e);

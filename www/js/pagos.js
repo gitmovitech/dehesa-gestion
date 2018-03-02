@@ -3,6 +3,11 @@ var data;
 var listfrom = 0;
 var noactive = [];
 var current_page = 1;
+var noexiste = "";
+var pacpat;
+var file_pacpat;
+var year = false;
+var month = false;
 
 var GetUrlParams = function () {
     var url = location.href;
@@ -133,43 +138,27 @@ var listar = function () {
     });
 }
 
-var params;
-var noexiste;
-var pacpat;
-var file_pacpat;
-var year = false;
-var month = false;
+
+
+var cerrarMes = function(){
+    year = $('#filtro_ano').val();
+    month = $('#filtro_mes').val();
+    if('Está seguro que desea cerrar el mes?'){
+        
+    }
+}
+
+
+
 
 jQuery(function ($) {
 
-    params = GetUrlParams();
+    year = GetParam('year');
+    month = GetParam('month');
+    noexiste = GetParam('noexiste');
+    pacpat = GetParam('pacpat');
+    file_pacpat = GetParam('file');
 
-    if (params) {
-        try {
-            noexiste = params[2];
-            noexiste = noexiste.split('=');
-            if (noexiste[0] == 'pacpat') {
-                pacpat = noexiste[1];
-                file_pacpat = params[3].split('=');
-                file_pacpat = file_pacpat[1];
-                noexiste = '';
-            } else {
-                noexiste = noexiste[1];
-                noexiste = noexiste.split('-');
-                noactive = noexiste;
-                noexiste = noexiste.join(', ')
-            }
-
-            year = params[0];
-            year = year.split('=')[1];
-
-            month = params[1];
-            month = month.split('=')[1];
-
-        } catch (e) {
-
-        }
-    }
 
     for (var n = new Date().getFullYear(); n >= 2017; n--) {
         $('#filtro_ano').append('<option value="' + n + '">' + n + '</option>');
