@@ -106,6 +106,28 @@ exports.CargarCobros = CargarCobros;
 
 
 
+var ObtenerAsociado = function (req, res) {
+    try {
+        db.getAsociado({
+            id: req.params.id,
+        }, function (response) {
+            res.send({
+                ok: 1,
+                data: response
+            })
+        });
+    }
+    catch (e) {
+        res.send({
+            ok: 0
+        });
+    }
+}
+exports.ObtenerAsociado = ObtenerAsociado;
+
+
+
+
 var ImportarPacPat = function (req, res) {
     var error = '';
     var data = [];

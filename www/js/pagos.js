@@ -16,15 +16,23 @@ var GetUrlParams = function () {
 }
 
 
-
+var global;
 var modal_contacto = function (item) {
+    $('.contacto-dates span').html('');
     for (var n in data) {
         if (data[n].id == item) {
             $('#contacto_nombre').html(data[n].nombre);
-            /**
-             * @todo Llamar a REST para obtener el resto de los datos del asociado
-             */
-            //$.getJSON();
+            $.getJSON('/api/asociados/'+item, function(response){
+                global = response;
+                $('#tel1').html(response.data.telefono11);
+                $('#tel2').html(response.data.telefono12);
+                $('#tel3').html(response.data.telefono21);
+                $('#tel4').html(response.data.telefono22);
+                $('#email1').html(response.data.correo11);
+                $('#email2').html(response.data.correo12);
+                $('#email3').html(response.data.correo21);
+                $('#email4').html(response.data.correo22);
+            });
             setTimeout(function () {
                 $('#modalcontacto').modal(true);
             }, 100);

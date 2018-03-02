@@ -87,6 +87,7 @@ var single_file = upload.single('single_file');
 app.post('/api/carga/planilla-adt', single_file, nodepagos.ValidarPlanillaADT);
 app.post('/api/carga/patpac', single_file, nodepagos.ImportarPacPat);
 app.get('/api/carga/cobros', nodepagos.CargarCobros);
+app.get('/api/asociados/:id', nodepagos.ObtenerAsociado);
 
 
 /**

@@ -663,6 +663,23 @@ exports.getPayments = function (params, cb) {
     }
 }
 
+
+
+exports.getAsociado = function (params, cb) {
+    if (database) {
+        database.collection('asociados').findOne({
+            id: parseInt(params.id)
+        }, function (err, response) {
+            if (response) {
+                cb(response);
+            } else {
+                cb(false);
+            }
+        });
+    }
+}
+
+
 exports.getPaymentsForBank = function (params, cb) {
     if (database) {
         database.collection('pagos')
