@@ -122,12 +122,23 @@ var listar = function () {
                     $('#cobro_template .tarifa').html('$' + response.data[i].tarifa.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
                     $('#cobro_template .excedentes').html('$' + response.data[i].excedentes.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
                     $('#cobro_template .ajuste').html('$' + response.data[i].ajuste_contable.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
-                    $('#cobro_template .deuda').html('$' + response.data[i].debe.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+                    try{
+                        $('#cobro_template .deuda').html('$' + response.data[i].debe.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+                    }catch(e){
+                        $('#cobro_template .deuda').html('');
+                    }
                     $('#cobro_template .btn-modal-contact').attr('onclick', 'javascript:modal_contacto(' + response.data[i].id + ')');
                     htmldata += '<tr class="asociado-list template-clean" id="row_' + response.data[i].id + '">' + $('#cobro_template').html() + '</tr>';
                 }
             }
             $('#cobro_tbody, #costos_tbody').append(htmldata);
+            if(data.length == 0){
+                $('#btn_cargar_mes').show();
+                $('#btn_cerrar_mes').hide();
+            } else {
+                $('#btn_cargar_mes').hide();
+                $('#btn_cerrar_mes').show();
+            }
         }
         if (noactive.length > 0) {
             noactive.forEach(function (item) {
@@ -143,8 +154,33 @@ var listar = function () {
 var cerrarMes = function(){
     year = $('#filtro_ano').val();
     month = $('#filtro_mes').val();
-    if('Está seguro que desea cerrar el mes?'){
-        
+    if(confirm('Está seguro que desea cerrar el mes?')){
+        $.getJSON('/api/cerrar/mes', {
+            year: $('#filtro_ano').val(),
+            month: $('#filtro_mes').val()
+        }, function (response) {
+            alert('El mes ha sido cerrado')
+        });
+    }
+}
+
+
+
+
+var cargarMes = function(){
+    year = $('#filtro_ano').val();
+    month = $('#filtro_mes').val();
+    if(confirm('Está seguro que desea cargar el mes?')){
+        $.getJSON('/api/cargar/mes', {
+            year: $('#filtro_ano').val(),
+            month: $('#filtro_mes').val()
+        }, function (response) {
+            if(response.ok == 0){
+                alert(response.message)
+            } else {
+                $('#filtrarButton').click()
+            }
+        });
     }
 }
 

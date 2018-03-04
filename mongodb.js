@@ -648,7 +648,12 @@ exports.guardarImportacionPagos = function (pagos, cb) {
         });
     });
 }
+
+
+
+
 exports.getPayments = function (params, cb) {
+    console.log(params);
     if (database) {
         database.collection('pagos').find({
             month: parseInt(params.month),
@@ -678,6 +683,7 @@ exports.getAsociado = function (params, cb) {
         });
     }
 }
+
 
 
 exports.getPaymentsForBank = function (params, cb) {
@@ -858,19 +864,21 @@ exports.getUserByRun = function (run, cb) {
 }
 
 exports.savePayment = function (data) {
+    data.month = parseInt(data.month);
+    data.year = parseInt(data.year);
     database.collection('pagos').findOne({
         id: data.id,
-        month: parseInt(data.month),
-        year: parseInt(data.year)
+        month: data.month,
+        year: data.year
     }, function (err, response) {
         if (!response) {
             database.collection('pagos').insert(data);
         } else {
             data.comentarios = '';
-            if(data.type != 'Aprobada' && data.type != 'Pagos Procesados'){
-                data.comentarios = data.type;
-                data.type = 'Rechazado';
-            } 
+            if (data.estado != 'Aprobada' && data.estado != 'Pagos Procesados') {
+                data.comentarios = data.estado;
+                data.estado = 'Rechazado';
+            }
             database.collection('pagos').update({
                 id: data.id,
                 month: parseInt(data.month),
@@ -879,7 +887,7 @@ exports.savePayment = function (data) {
                     $set: {
                         pagado: parseInt(data.pagado),
                         debe: parseInt(data.debe),
-                        type: data.type,
+                        estado: data.estado,
                         comentarios: data.comentarios
                     }
                 });
@@ -902,9 +910,14 @@ exports.modificarDias = function (data, cb) {
     cb();
 }
 
+
+
+
+
+
 exports.cerrarMes = function (data, cb) {
     var query = {
-        month: parseInt(periodos_months.indexOf(data.month)),
+        month: parseInt(data.month),
         year: parseInt(data.year)
     }
     var values = {
@@ -915,6 +928,24 @@ exports.cerrarMes = function (data, cb) {
     database.collection('pagos').update(query, values, { multi: true });
     cb(query);
 }
+
+
+
+
+
+exports.getUF = function (data, cb) {
+    database.collection('valoresuf').findOne({
+        mes: periodos_months[data.month],
+        year: parseInt(data.year)
+    }, function (er, response) {
+        cb(response);
+    });
+}
+
+
+
+
+
 
 exports.pasarCuentasPorCobrar = function (query, cb) {
     query.type = "Pendiente";

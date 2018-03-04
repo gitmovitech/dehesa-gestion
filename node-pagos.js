@@ -86,8 +86,8 @@ exports.ValidarPlanillaADT = ValidarPlanillaADT;
 var CargarCobros = function (req, res) {
     try {
         db.getPayments({
-            year: req.query.year,
-            month: req.query.month
+            year: parseInt(req.query.year),
+            month: parseInt(req.query.month)
         }, function (response) {
             res.send({
                 ok: 1,
@@ -124,6 +124,94 @@ var ObtenerAsociado = function (req, res) {
     }
 }
 exports.ObtenerAsociado = ObtenerAsociado;
+
+
+
+
+var CerrarMes = function (req, res) {
+    try {
+        db.cerrarMes({
+            year: parseInt(req.query.year),
+            month: parseInt(req.query.month)
+        }, function (response) {
+            res.send({
+                ok: 1
+            })
+        });
+    }
+    catch (e) {
+        res.send({
+            ok: 0
+        });
+    }
+}
+exports.CerrarMes = CerrarMes;
+
+
+
+
+var CargarMes = function (req, res) {
+    var pagos = [];
+    try {
+        db.getUF(req.query, function (valoruf) {
+            if (valoruf) {
+                var tarifa = 0;
+                db.getAsociados(function (asociados) {
+                    var agregarPago = function (n, cb) {
+                        if (typeof asociados[n] != 'undefined') {
+                            if(asociados[n].uf == 0){
+                                tarifa = 0;
+                            } else {
+                                tarifa = parseFloat(asociados[n].uf) * parseFloat(valoruf.valor);
+                            }
+                            
+                            pagos.push({
+                                id: asociados[n].id,
+                                nombre: [asociados[n].first_name, asociados[n].last_name].join(' '),
+                                tarifa: tarifa,
+                                month: parseInt(req.query.month),
+                                year: parseInt(req.query.year),
+                                opened: true,
+                                dias: 30,
+                                estado: 'Pendiente',
+                                pagado: 0,
+                                debe: tarifa,
+                                ajuste_contable: 0
+                            });
+                            agregarPago(n + 1, cb);
+                        } else {
+                            cb();
+                        }
+                    }
+                    agregarPago(0, function(){
+                        db.obtenerExcedentes(pagos, 0, function(response){
+                            pagos = response;
+                            db.obtenerDeudasAnteriores(pagos, 0, function(response){
+                                pagos = response;
+                                for(var i in pagos){
+                                    db.savePayment(pagos[i]);
+                                }
+                                res.send({ok:1});
+                            });
+                        });
+                    });
+                });
+            } else {
+                res.send({
+                    ok: 0,
+                    message: "Este mes no puede ser cargado porque falta el valor UF en el sistema"
+                });
+            }
+        });
+    }
+    catch (e) {
+        res.send({
+            ok: 0,
+            message: "Error desconocido al Cargar el Mes"
+        });
+    }
+}
+exports.CargarMes = CargarMes;
 
 
 

@@ -88,6 +88,8 @@ app.post('/api/carga/planilla-adt', single_file, nodepagos.ValidarPlanillaADT);
 app.post('/api/carga/patpac', single_file, nodepagos.ImportarPacPat);
 app.get('/api/carga/cobros', nodepagos.CargarCobros);
 app.get('/api/asociados/:id', nodepagos.ObtenerAsociado);
+app.get('/api/cerrar/mes', nodepagos.CerrarMes);
+app.get('/api/cargar/mes', nodepagos.CargarMes);
 
 
 /**

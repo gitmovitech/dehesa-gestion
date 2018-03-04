@@ -109,21 +109,29 @@
                         <strong>Nombre:</strong>
                         <span id="contacto_nombre">{{nameasociado}}</span>
                         <br>
-                        <strong>Teléfono 1:</strong> <span id="tel1"></span>
+                        <strong>Teléfono 1:</strong>
+                        <span id="tel1"></span>
                         <br>
-                        <strong>Teléfono 2:</strong> <span id="tel2"></span>
+                        <strong>Teléfono 2:</strong>
+                        <span id="tel2"></span>
                         <br>
-                        <strong>Teléfono 3:</strong> <span id="tel3"></span>
+                        <strong>Teléfono 3:</strong>
+                        <span id="tel3"></span>
                         <br>
-                        <strong>Teléfono 4:</strong> <span id="tel4"></span>
+                        <strong>Teléfono 4:</strong>
+                        <span id="tel4"></span>
                         <br>
-                        <strong>Email 1:</strong> <span id="email1"></span>
+                        <strong>Email 1:</strong>
+                        <span id="email1"></span>
                         <br>
-                        <strong>Email 2:</strong> <span id="email2"></span>
+                        <strong>Email 2:</strong>
+                        <span id="email2"></span>
                         <br>
-                        <strong>Email 3:</strong> <span id="email3"></span>
+                        <strong>Email 3:</strong>
+                        <span id="email3"></span>
                         <br>
-                        <strong>Email 4:</strong> <span id="email4"></span>
+                        <strong>Email 4:</strong>
+                        <span id="email4"></span>
                         <!--<br>
                         <br>
                         <button type="button" class="btn btn-success">
@@ -178,8 +186,8 @@
                             </select>
                         </p>
                         <p>
-                            <input type="hidden" class="input_year" name="year"/>
-                            <input type="hidden" class="input_month" name="month"/>
+                            <input type="hidden" class="input_year" name="year" />
+                            <input type="hidden" class="input_month" name="month" />
                             <input type="file" name="single_file" id="single_file_pacpat" />
                         </p>
                     </div>
@@ -307,7 +315,9 @@
                                     <span class="glyphicon glyphicon-import" aria-hidden="true"></span> Importar PAT / PAC</a>
                             </div>
                             <div class="btn-col col-md-2 col-xs-12">
-                                <a class="btn btn-danger" href="javascript:cerrarMes()" role="button">
+                                <a id="btn_cargar_mes" style="display:none" class="btn btn-danger" href="javascript: cargarMes()" role="button">
+                                    <span class="glyphicon glyphicon-import" aria-hidden="true"></span> Cargar Mes </a>
+                                <a id="btn_cerrar_mes" style="display:none" class="btn btn-danger" href="javascript:cerrarMes()" role="button">
                                     <span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span> Cerrar Mes </a>
                             </div>
                         </div>
