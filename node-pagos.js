@@ -43,7 +43,7 @@ var ValidarPlanillaADT = function (req, res) {
                 year: year
             }, function (pagos) {
                 if (pagos) {
-                    db.getAsociados(function (asociados) {
+                    db.getAsociadosActivos(function (asociados) {
                         var asociado_id = 0;
                         var activo = 0;
                         // BUSCAR ASOCIADOS NO EXISTENTES
@@ -52,15 +52,10 @@ var ValidarPlanillaADT = function (req, res) {
                             activo = asociados[a].activo;
                             add = true;
                             for (var p in planilla) {
-                                if (activo != 1) {
+                                if (planilla[p][0] == asociado_id) {
                                     add = false;
                                     break;
-                                } else {
-                                    if (planilla[p][0] == asociado_id) {
-                                        add = false;
-                                        break;
-                                    }
-                                } 
+                                }
                             }
                             if (add) {
                                 noexiste.push(asociado_id);

@@ -515,6 +515,15 @@ exports.getAsociados = function (cb) {
     });
 }
 
+exports.getAsociadosActivos = function (cb) {
+    database.collection('asociados').find({
+        $query: { activo: 1 },
+        $orderby: { id: 1 }
+    }).toArray(function (err, asociados) {
+        cb(asociados);
+    });
+}
+
 
 var obtenerDeudasAnteriores = function (registros_importados, x, cb) {
     if (registros_importados[x]) {
