@@ -13,10 +13,12 @@ var ValidarPlanillaADT = function (req, res) {
     }
     //var file = '/Users/victorvargas/Projects/dehesa-gestion/uploads/adt/adt.xlsx';
     var file = __dirname + '/uploads/adt/' + req.file.originalname;
+    console.log(file);
     if (fs.existsSync(file)) {
         fs.unlinkSync(file);
     }
     fs.renameSync(__dirname + '/' + req.file.path, file);
+    console.log(req.file.path+'=>'+file)
     var data = [];
     var planilla = [];
     var year = 2018;
