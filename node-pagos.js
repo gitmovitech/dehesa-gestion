@@ -13,12 +13,10 @@ var ValidarPlanillaADT = function (req, res) {
     }
     //var file = '/Users/victorvargas/Projects/dehesa-gestion/uploads/adt/adt.xlsx';
     var file = __dirname + '/uploads/adt/' + req.file.originalname;
-    console.log(file);
     if (fs.existsSync(file)) {
         fs.unlinkSync(file);
     }
     fs.renameSync(__dirname + '/' + req.file.path, file);
-    console.log(req.file.path+'=>'+file)
     var data = [];
     var planilla = [];
     var year = 2018;
@@ -54,7 +52,7 @@ var ValidarPlanillaADT = function (req, res) {
                             activo = asociados[a].activo;
                             add = true;
                             for (var p in planilla) {
-                                if (activo == 0) {
+                                if (activo != 1) {
                                     add = false;
                                     break;
                                 } else {
@@ -62,7 +60,7 @@ var ValidarPlanillaADT = function (req, res) {
                                         add = false;
                                         break;
                                     }
-                                }
+                                } 
                             }
                             if (add) {
                                 noexiste.push(asociado_id);
