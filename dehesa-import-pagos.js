@@ -85,14 +85,15 @@ exports.import = function (params, cb) {
 var procesarPAT = function (data, month, year, cb) {
   registros = [];
   for (var i in data) {
-    if(data[i][13] == 'APROBADA'){
+    console.log(data[i][13]);
+    if (data[i][13] == 'APROBADA') {
       registros[registros.length] = {
         run: data[i][8],
         pago: data[i][1],
         tarifa: data[i][1],
         estado: data[i][13]
       }
-    } else{
+    } else {
       registros[registros.length] = {
         run: data[i][8],
         pago: data[i][1],
@@ -114,6 +115,7 @@ var procesarPAC = function (data, month, year, cb) {
   registros = [];
   try {
     data = data[0].data;
+    console.log(data.length)
     for (var i in data) {
       if (i >= 11) {
         registros[registros.length] = {
@@ -136,27 +138,33 @@ var guardarRegistros = function (registros, month, year, cb) {
     mongo.getUserByRun(item.run, function (asociado) {
       if (asociado) {
         try {
-          if (item.estado != 'Pagos Procesados' && item.estado != 'APROBADA') {
-            item.estado = 'Pendiente';
-            item.debe = parseInt(item.pago);
-            item.pago = 0;
-          } else {
-            item.debe = 0
+          if (item.estado != 'Estado') {
+            if (item.estado == 'Pagos Procesados') {
+              item.comentarios = '';
+              item.debe = 0;
+            } else if (item.estado == 'APROBADA') {
+              item.estado = 'Aprobada';
+              item.comentarios = '';
+              item.debe = 0;
+            } else {
+              item.pago = 0;
+              item.comentarios = item.estado;
+              item.estado = 'Rechazado';
+              item.debe = parseInt(item.pago);
+            }
+            //if(asociado.id == 772)
+            mongo.savePayment({
+              id: parseInt(asociado.id),
+              nombre: [asociado.first_name, asociado.second_name, asociado.last_name, asociado.second_last_name].join(' '),
+              tarifa: item.tarifa,
+              estado: item.estado,
+              pagado: item.pago,
+              debe: item.debe,
+              month: parseInt(month),
+              year: parseInt(year),
+              comentarios: item.comentarios
+            });
           }
-          if (item.estado == 'APROBADA') {
-            item.estado = 'Aprobada';
-          }
-          //if(asociado.id == 772)
-          mongo.savePayment({
-            id: parseInt(asociado.id),
-            nombre: [asociado.first_name, asociado.second_name, asociado.last_name, asociado.second_last_name].join(' '),
-            tarifa: item.tarifa,
-            type: item.estado,
-            pagado: item.pago,
-            debe: item.debe,
-            month: parseInt(month),
-            year: parseInt(year)
-          });
         } catch (e) {
           console.log(e);
         }

@@ -883,11 +883,6 @@ exports.savePayment = function (data) {
         if (!response) {
             database.collection('pagos').insert(data);
         } else {
-            data.comentarios = '';
-            if (data.estado != 'Aprobada' && data.estado != 'Pagos Procesados') {
-                data.comentarios = data.estado;
-                data.estado = 'Rechazado';
-            }
             database.collection('pagos').update({
                 id: data.id,
                 month: parseInt(data.month),

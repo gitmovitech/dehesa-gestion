@@ -20,13 +20,13 @@ var GetUrlParams = function () {
     }
 }
 
-var GetParam = function(id){
+var GetParam = function (id) {
     var params = GetUrlParams();
-    if(params){
+    if (params) {
         var keyval;
-        for(var n in params){
+        for (var n in params) {
             keyval = params[n].split('=');
-            if(keyval[0] == id){
+            if (keyval[0] == id) {
                 return keyval[1];
             }
         }
@@ -43,7 +43,7 @@ var modal_contacto = function (item) {
     for (var n in data) {
         if (data[n].id == item) {
             $('#contacto_nombre').html(data[n].nombre);
-            $.getJSON('/api/asociados/'+item, function(response){
+            $.getJSON('/api/asociados/' + item, function (response) {
                 global = response;
                 $('#tel1').html(response.data.telefono11);
                 $('#tel2').html(response.data.telefono12);
@@ -82,7 +82,7 @@ var importarPATPAC = function () {
 
 var construirPaginador = function () {
     var paginas = Math.ceil(data.length / $('#limitPerPage').val());
-    $('.paginador-foot').html('');
+    $('.paginador-foot').hide().html('');
     for (var n = 1; n <= paginas - 1; n++) {
         if (current_page == n) {
             $('.paginador-foot').append('<a class="btn btn-xs btn-success active" href="javascript:setPage(' + n + ')">' + n + '</a> ');
@@ -101,38 +101,89 @@ var listar = function () {
         if (response.ok == 1) {
             data = response.data;
 
+            $('#cantidad_registros').html(data.length);
+            $('#cantidad_registros_rechazados, #cantidad_registros_pendientes, #cantidad_registros_pac, #cantidad_registros_pat').html(0);
+            var cant_pendientes = 0;
+            var cant_rechazados = 0;
+            var cant_pat = 0;
+            var cant_pac = 0;
+            for (var i in data) {
+                if (data[i].estado == 'Pendiente') {
+                    cant_pendientes++;
+                }
+                if (data[i].estado == 'Rechazado') {
+                    cant_rechazados++;
+                }
+                if (data[i].estado == 'Pagos Procesados') {
+                    cant_pac++;
+                }
+                if (data[i].estado == 'Aprobada') {
+                    cant_pat++;
+                }
+            }
+            $('#cantidad_registros_rechazados').html(cant_rechazados);
+            $('#cantidad_registros_pendientes').html(cant_pendientes);
+            $('#cantidad_registros_pac').html(cant_pac);
+            $('#cantidad_registros_pat').html(cant_pat);
+
             construirPaginador();
 
-            var htmldata = "";
+            var cobrosdata = "";
+            var costosdata = "";
             var contador = 0;
+
             for (var i in response.data) {
-                if (current_page == 1) {
-                    listfrom = 0;
-                } else {
-                    listfrom = ($('#limitPerPage').val() * current_page) + 1;
-                }
-                if (i >= listfrom && contador <= $('#limitPerPage').val()) {
-                    contador++;
+                if (response.data[i].estado != 'Pendiente' && data[i].estado != 'Rechazado') {
                     $('#cobro_template .activo-checkbox').attr('id', 'active_' + response.data[i].id);
                     $('#cobro_template .activo-checkbox').attr('checked', 'checked');
-                    $('#cobro_template .estado-select').attr('');
+                    $('#cobro_template .estado-pago').html(response.data[i].estado);
                     $('#cobro_template .activo-checkbox').val(response.data[i].id)
                     $('#cobro_template .asociado-id').html(response.data[i].id);
                     $('#cobro_template .dias').html(response.data[i].dias);
                     $('#cobro_template .tarifa').html('$' + response.data[i].tarifa.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
                     $('#cobro_template .excedentes').html('$' + response.data[i].excedentes.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
                     $('#cobro_template .ajuste').html('$' + response.data[i].ajuste_contable.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
-                    try{
+                    try {
                         $('#cobro_template .deuda').html('$' + response.data[i].debe.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
-                    }catch(e){
+                    } catch (e) {
                         $('#cobro_template .deuda').html('');
                     }
                     $('#cobro_template .btn-modal-contact').attr('onclick', 'javascript:modal_contacto(' + response.data[i].id + ')');
-                    htmldata += '<tr class="asociado-list template-clean" id="row_' + response.data[i].id + '">' + $('#cobro_template').html() + '</tr>';
+                    costosdata += '<tr class="asociado-list template-clean ' + response.data[i].estado + '-estado" id="row_' + response.data[i].id + '">' + $('#cobro_template').html() + '</tr>';
+                }
+
+            }
+
+            for (var i in response.data) {
+                if (current_page == 1) {
+                    listfrom = 0;
+                } else {
+                    listfrom = ($('#limitPerPage').val() * current_page) + 1;
+                }
+                //if (i >= listfrom && contador <= $('#limitPerPage').val() && (response.data[i].estado == 'Pendiente' || data[i].estado == 'Rechazado')) {
+                if(response.data[i].estado == 'Pendiente' || data[i].estado == 'Rechazado'){
+                    contador++;
+                    $('#cobro_template .activo-checkbox').attr('id', 'active_' + response.data[i].id);
+                    $('#cobro_template .activo-checkbox').attr('checked', 'checked');
+                    $('#cobro_template .estado-pago').html(response.data[i].estado);
+                    $('#cobro_template .activo-checkbox').val(response.data[i].id)
+                    $('#cobro_template .asociado-id').html(response.data[i].id);
+                    $('#cobro_template .dias').html(response.data[i].dias);
+                    $('#cobro_template .tarifa').html('$' + response.data[i].tarifa.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+                    $('#cobro_template .excedentes').html('$' + response.data[i].excedentes.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+                    $('#cobro_template .ajuste').html('$' + response.data[i].ajuste_contable.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+                    try {
+                        $('#cobro_template .deuda').html('$' + response.data[i].debe.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+                    } catch (e) {
+                        $('#cobro_template .deuda').html('');
+                    }
+                    $('#cobro_template .btn-modal-contact').attr('onclick', 'javascript:modal_contacto(' + response.data[i].id + ')');
+                    cobrosdata += '<tr class="asociado-list template-clean ' + response.data[i].estado + '-estado" id="row_' + response.data[i].id + '">' + $('#cobro_template').html() + '</tr>';
                 }
             }
-            $('#cobro_tbody, #costos_tbody').append(htmldata);
-            if(data.length == 0){
+            $('#cobro_tbody').append(cobrosdata);
+            $('#costos_tbody').append(costosdata);
+            if (data.length == 0) {
                 $('#btn_cargar_mes').show();
                 $('#btn_cerrar_mes').hide();
             } else {
@@ -151,10 +202,10 @@ var listar = function () {
 
 
 
-var cerrarMes = function(){
+var cerrarMes = function () {
     year = $('#filtro_ano').val();
     month = $('#filtro_mes').val();
-    if(confirm('Está seguro que desea cerrar el mes?')){
+    if (confirm('Está seguro que desea cerrar el mes?')) {
         $.getJSON('/api/cerrar/mes', {
             year: $('#filtro_ano').val(),
             month: $('#filtro_mes').val()
@@ -167,15 +218,15 @@ var cerrarMes = function(){
 
 
 
-var cargarMes = function(){
+var cargarMes = function () {
     year = $('#filtro_ano').val();
     month = $('#filtro_mes').val();
-    if(confirm('Está seguro que desea cargar el mes?')){
+    if (confirm('Está seguro que desea cargar el mes?')) {
         $.getJSON('/api/cargar/mes', {
             year: $('#filtro_ano').val(),
             month: $('#filtro_mes').val()
         }, function (response) {
-            if(response.ok == 0){
+            if (response.ok == 0) {
                 alert(response.message)
             } else {
                 $('#filtrarButton').click()

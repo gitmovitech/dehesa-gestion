@@ -61,7 +61,6 @@ var ValidarPlanillaADT = function (req, res) {
                                 noexiste.push(asociado_id);
                             }
                         }
-
                         res.redirect('/templates/pagos.html?year=' + year + '&month=' + month + '&noexiste=' + noexiste.join('-'));
 
                     });

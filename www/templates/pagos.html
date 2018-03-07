@@ -29,13 +29,22 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/pagos.js?v=1"></script>
 
+    <style>
+    .Pendiente-estado{
+        background-color:rgba(232, 255, 255, 0.5);
+    }
+    .Rechazado-estado{
+        background-color:rgba(255, 206, 184, 0.5);
+    }
+    </style>
+
 </head>
 
 <body>
 
 
     <!--modal comentarios-->
-    <div class="modal fade" id="modalcomentarios" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal" id="modalcomentarios" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -77,7 +86,7 @@
     </div>
 
     <!--modal archivos-->
-    <div class="modal fade" id="modalarchivos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal" id="modalarchivos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -94,7 +103,7 @@
     </div>
 
     <!--modal contacto-->
-    <div class="modal fade" id="modalcontacto" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal" id="modalcontacto" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -142,7 +151,7 @@
         </div>
     </div>
 
-    <div class="modal fade" tabindex="-1" role="dialog" id="modal_validar_adt">
+    <div class="modal" tabindex="-1" role="dialog" id="modal_validar_adt">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <form action="/api/carga/planilla-adt" id="form_upload_validar_adt" method="post" enctype="multipart/form-data">
@@ -168,7 +177,7 @@
         </div>
     </div>
 
-    <div class="modal fade" tabindex="-1" role="dialog" id="modal_importar_patpac">
+    <div class="modal" tabindex="-1" role="dialog" id="modal_importar_patpac">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <form action="/api/carga/patpac" id="form_upload_importar_pacpat" method="post" enctype="multipart/form-data">
@@ -257,19 +266,14 @@
 
         <!--nav tabs-->
         <div id="contenido_pagos" style="display:none">
-            <!-- title-->
-            <div id="title" class="box-title-page" style="display:block">
-                <h4></h4>
-            </div>
-            <br>
-            <!-- end title -->
+
             <!--nav tabs pestañas sección de pagos-->
             <ul class="nav nav-tabs" role="tablist">
                 <li role="presentation" class="active">
-                    <a href="#pagos" aria-controls="home" role="tab" data-toggle="tab">Planilla Cobro</a>
+                    <a href="#pagos" aria-controls="home" role="tab" data-toggle="tab">Costos por cobrar</a>
                 </li>
                 <li role="presentation">
-                    <a href="#cxc" aria-controls="profile" role="tab" data-toggle="tab">Costos por cobrar</a>
+                    <a href="#cxc" aria-controls="profile" role="tab" data-toggle="tab">Pagos</a>
                 </li>
                 <li role="presentation">
                     <a href="#ingresomanual" aria-controls="messages" role="tab" data-toggle="tab">Ingresos Manuales</a>
@@ -325,7 +329,9 @@
                     </div>
                     <!--end box button menu planilla -->
 
-                    <div class="box-button-planilla">
+                    
+
+                    <div class="box-button-planilla" style="display:none">
                         <br>
                         <div class="row">
                             <div class="btn-col col-md-1 col-xs-12">
@@ -343,6 +349,18 @@
 
                         <br>
                     </div>
+
+
+                    <!-- title-->
+                    <div class="box-alert">
+                        <div class="alert alert-info" role="alert">
+                            Pendientes:
+                            <span id="cantidad_registros_pendientes">0</span> - 
+                            Rechazados:
+                            <span id="cantidad_registros_rechazados">0</span>
+                        </div>
+                    </div>
+                    <!-- end title -->
 
 
                     <div class="row box-table">
@@ -371,10 +389,11 @@
                                     </td>
                                     <td class="asociado-id">0</td>
                                     <td>
-                                        <input type="text" class="days-input dias" value="30">
+                                        <input type="text" class="days-input dias" value="30" readonly>
                                     </td>
                                     <td>
-                                        <select class="estado-select">
+                                        <div class="estado-pago">Pendiente</div>
+                                        <select class="estado-select" style="display:none">
                                             <option value="Pendiente" selected>Pendiente</option>
                                             <optgroup label="PAC">
                                                 <!--<option value="PAC Cargado">PAC Cargado</option>-->
@@ -444,6 +463,17 @@
                 <div class="tab-pane" id="cxc" role="tabpanel" aria-labelledby="cxc">
                     <br>
 
+                    <!-- title-->
+                    <div class="box-alert">
+                            <div class="alert alert-info" role="alert">
+                                PAC:
+                                <span id="cantidad_registros_pac">0</span> - 
+                                PAT:
+                                <span id="cantidad_registros_pat">0</span>
+                            </div>
+                        </div>
+                        <!-- end title -->
+
                     <div class="row box-table">
                         <table class="table">
                             <thead class="bg-success thead-junta">
@@ -452,7 +482,7 @@
                                     <th>ID</th>
                                     <th class="days-table-box">Días</th>
                                     <th class="pay-table-box">Estado de Pago</th>
-                                    <th>Monto a pagar</th>
+                                    <th>Monto Pagado</th>
                                     <th>Excedentes</th>
                                     <th>Ajuste Contable</th>
                                     <th>Deuda Total</th>
