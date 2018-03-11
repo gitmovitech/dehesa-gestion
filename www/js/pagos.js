@@ -185,10 +185,10 @@ var listar = function () {
             $('#costos_tbody').append(costosdata);
             if (data.length == 0) {
                 $('#btn_cargar_mes').show();
-                $('#btn_cerrar_mes').hide();
+                $('#btn_cerrar_mes,.mes-cargado').hide();
             } else {
                 $('#btn_cargar_mes').hide();
-                $('#btn_cerrar_mes').show();
+                $('#btn_cerrar_mes,.mes-cargado').show();
             }
         }
         if (noactive.length > 0) {
