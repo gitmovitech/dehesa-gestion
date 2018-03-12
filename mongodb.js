@@ -705,6 +705,8 @@ exports.getPaymentsForBank = function (params, cb) {
             ])
             .sort({ id: 1 })
             .toArray(function (err, response) {
+                console.log(err);
+                console.log(response);
                 if (response) {
                     cb(response);
                 } else {

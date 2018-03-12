@@ -498,7 +498,6 @@ app.get('/pagos/banco/:patpac/:year/:month', function (req, res) {
       break;
     }
   }*/
-  console.log(req.params);
   db.getPaymentsForBank({
     month: req.params.month,
     year: req.params.year
@@ -517,7 +516,6 @@ app.get('/pagos/banco/:patpac/:year/:month', function (req, res) {
           break;
         }
       }
-      console.log(response[x].socio);
       if (response[x].socio.forma_de_pago == req.params.patpac.toUpperCase() && add) {
         if (response[x].socio.forma_de_pago == 'PAT') {
           ext = '.csv';
