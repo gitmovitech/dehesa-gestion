@@ -907,12 +907,12 @@ exports.modificarDias = function (data, cb) {
     }
     var values = {
         $set: {
-            dias: data.dias,
-            tarifa: data.tarifa,
-            debe: data.tarifa
+            dias: data.dias
         }
     }
-    database.collection(data.collection).update(query, values);
+    console.log(query);
+    console.log(values);
+    database.collection('pagos').update(query, values);
     cb();
 }
 

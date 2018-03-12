@@ -89,6 +89,17 @@ var setPage = function (page) {
 }
 
 
+var modificardias = function (elem) {
+    $.getJSON('/api/modificar-dias', {
+        token: localStorage.intranetSession,
+        _id: $(elem).data('id'),
+        dias: $(elem).val()
+    }, function () {
+        $('#filtrarButton').click();
+    });
+}
+
+
 var exportarPAT = function () {
     location.href = '/pagos/banco/pat/' + $('#filtro_ano').val() + '/' + $('#filtro_mes').val() + '?no=' + $('#noexiste').html();
 }
@@ -223,6 +234,7 @@ var listar = function () {
                 if (response.data[i].estado != 'Pendiente' && data[i].estado != 'Rechazado') {
                     contador++;
                     $('#cobro_template .btn-comentarios').attr('data-id', response.data[i].id);
+                    $('#cobro_template .dias').attr('data-id', response.data[i]._id);
                     $('#cobro_template .contador-tabla').html(contador);
                     $('#cobro_template .activo-checkbox').attr('id', 'active_' + response.data[i].id);
                     $('#cobro_template .activo-checkbox').attr('checked', 'checked');
@@ -235,9 +247,14 @@ var listar = function () {
 
                     $('#cobro_template .estado-pago').html(response.data[i].estado).show();
                     $('#cobro_template .estado-select').hide();
+                    $('#cobro_template .days-input').attr('value', response.data[i].dias).attr('readonly', 'readonly');
                     $('#cobro_template .activo-checkbox').val(response.data[i].id)
                     $('#cobro_template .asociado-id').html(response.data[i].id);
-                    $('#cobro_template .dias').html(response.data[i].dias);
+                    if (30 != response.data[i].dias) {
+                        tarifa = response.data[i].tarifa;
+                        response.data[i].tarifa = (response.data[i].tarifa * response.data[i].dias) / 30;
+                        response.data[i].debe -= response.data[i].debe -= tarifa-response.data[i].tarifa
+                    }
                     $('#cobro_template .tarifa').html('$' + response.data[i].tarifa.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
                     $('#cobro_template .excedentes').html('$' + response.data[i].excedentes.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
                     $('#cobro_template .ajuste').html('$' + response.data[i].ajuste_contable.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
@@ -268,6 +285,7 @@ var listar = function () {
                 if (response.data[i].estado == 'Pendiente' || data[i].estado == 'Rechazado') {
                     contador++;
                     $('#cobro_template .btn-comentarios').attr('data-id', response.data[i].id);
+                    $('#cobro_template .dias').attr('data-id', response.data[i]._id);
                     $('#cobro_template .contador-tabla').html(contador);
                     $('#cobro_template .activo-checkbox').attr('id', 'active_' + response.data[i].id);
 
@@ -283,14 +301,21 @@ var listar = function () {
                         $('#cobro_template .estado-pago').html(response.data[i].estado).hide();
                         $('#cobro_template .estado-select').show();
                         $('#cobro_template .estado-select option[value=' + data[i].estado + ']').attr('selected', 'selected');
+                        $('#cobro_template .days-input').removeAttr('readonly');
                     } else {
                         $('#cobro_template .estado-pago').html(response.data[i].estado).show();
                         $('#cobro_template .estado-select').hide();
+                        $('#cobro_template .days-input').attr('readonly', 'readonly');
                     }
 
                     $('#cobro_template .activo-checkbox').val(response.data[i].id);
+                    $('#cobro_template .days-input').attr('value', response.data[i].dias);
                     $('#cobro_template .asociado-id').html(response.data[i].id);
-                    $('#cobro_template .dias').html(response.data[i].dias);
+                    if (30 != response.data[i].dias) {
+                        tarifa = response.data[i].tarifa;
+                        response.data[i].tarifa = (response.data[i].tarifa * response.data[i].dias) / 30;
+                        response.data[i].debe -= tarifa-response.data[i].tarifa
+                    }
                     $('#cobro_template .tarifa').html('$' + response.data[i].tarifa.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
                     $('#cobro_template .excedentes').html('$' + response.data[i].excedentes.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
                     $('#cobro_template .ajuste').html('$' + response.data[i].ajuste_contable.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));

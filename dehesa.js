@@ -520,8 +520,13 @@ app.get('/pagos/banco/:patpac/:year/:month', function (req, res) {
       if (response[x].socio.forma_de_pago == req.params.patpac.toUpperCase() && add) {
         if (response[x].socio.forma_de_pago == 'PAT') {
           ext = '.csv';
+          debe = response[x].tarifa;
+          dias = 30;
+          if (dias != response[x].dias) {
+            debe = (response[x].tarifa * response[x].dias) / dias;
+          }
           data.push([
-            Math.round(response[x].debe),
+            Math.round(debe),
             response[x].socio.run,
             response[x].socio.run,
             response[x].id
@@ -530,12 +535,17 @@ app.get('/pagos/banco/:patpac/:year/:month', function (req, res) {
         if (response[x].socio.forma_de_pago == 'PAC') {
           ext = '.txt';
           nombre_completo = response[x].socio.first_name2 + " " + response[x].socio.last_name2;
+          debe = response[x].tarifa;
+          dias = 30;
+          if (dias != response[x].dias) {
+            debe = (response[x].tarifa * response[x].dias) / dias;
+          }
           data.push([
             charsIzquierda(response[x].socio.run, "0", 10),
             charsDerecha(nombre_completo.toUpperCase(), " ", 50),
             response[x].socio.banco,
             charsDerecha(charsIzquierda(response[x].socio.run, "0", 20), " ", 32),
-            charsDerecha(charsIzquierda(Math.round(response[x].debe).toString(), "0", 12), " ", 17),
+            charsDerecha(charsIzquierda(Math.round(debe).toString(), "0", 12), " ", 17),
             fecha
           ].join(" "));
         }
