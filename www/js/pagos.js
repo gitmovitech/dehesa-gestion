@@ -123,6 +123,7 @@ var listar = function () {
             var cant_rechazados = 0;
             var cant_pat = 0;
             var cant_pac = 0;
+            var total_mensual = 0;
             for (var i in data) {
                 if (data[i].estado == 'Pendiente') {
                     cant_pendientes++;
@@ -136,11 +137,15 @@ var listar = function () {
                 if (data[i].estado == 'Aprobada') {
                     cant_pat++;
                 }
+                total_mensual += data[i].pagado;
             }
+            total_mensual = $.number(total_mensual);
+            $('#cartola_detalle_total_mensual').html('$' + total_mensual.split(',').join('.'));
+            $('#cartola_detalle_asociados').html(data.length);
             $('#cantidad_registros_rechazados').html(cant_rechazados);
             $('#cantidad_registros_pendientes').html(cant_pendientes);
-            $('#cantidad_registros_pac').html(cant_pac);
-            $('#cantidad_registros_pat').html(cant_pat);
+            $('#cantidad_registros_pac, #cartola_total_pac').html(cant_pac);
+            $('#cantidad_registros_pat, #cartola_total_pat').html(cant_pat);
 
             construirPaginador();
 
