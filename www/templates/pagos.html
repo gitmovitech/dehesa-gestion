@@ -23,17 +23,24 @@
             color: white;
             background-color: green;
             padding: 4px 8px;
-            border-radius:20px;
+            border-radius: 20px;
         }
-        .asociado-id{
+
+        .asociado-id {
             font-weight: bold;
         }
+
         .Pendiente-estado {
             background-color: rgba(232, 255, 255, 0.5);
         }
 
         .Rechazado-estado {
             background-color: rgba(255, 206, 184, 0.5);
+        }
+
+        .box-cartola span b {
+            color: green;
+            margin-left:10px;
         }
     </style>
 
@@ -400,26 +407,26 @@
                                     </td>
                                     <td>
                                         <div class="estado-pago">Pendiente</div>
-                                        <select class="estado-select" style="display:none">
+                                        <select onchange="javascript:return pago_manual(this)" class="estado-select" style="display:none">
                                             <option value="Pendiente" selected>Pendiente</option>
                                             <optgroup label="PAC">
                                                 <!--<option value="PAC Cargado">PAC Cargado</option>-->
                                                 <option value="Pagos Procesados">Pagos Procesados</option>
                                                 <option value="Rechazado">Rechazado</option>
                                                 <!--<option value="Mandato Anulado en Banco">Mandato Anulado en Banco</option>
-                    <option value="Falta de Fondos">Falta de Fondos</option>
-                    <option value="Monto a Pagar Excede el Máximo Permitido">Monto a Pagar Excede el Máximo Permitido</option>
-                    <option value="Cuenta con Orden de Cierre">Cuenta con Orden de Cierre</option>-->
+                                                <option value="Falta de Fondos">Falta de Fondos</option>
+                                                <option value="Monto a Pagar Excede el Máximo Permitido">Monto a Pagar Excede el Máximo Permitido</option>
+                                                <option value="Cuenta con Orden de Cierre">Cuenta con Orden de Cierre</option>-->
                                             </optgroup>
                                             <optgroup label="PAT">
                                                 <!--<option value="PAT Cargado">PAT Cargado</option>-->
                                                 <option value="Aprobado">Aprobado</option>
                                                 <option value="Rechazado">Rechazado</option>
                                                 <!--<option value="Rechazo por Tarjeta Bloqueada">Rechazo por Tarjeta Bloqueada</option>
-                    <option value="Rechazo Tarjeta no Existe">Rechazo Tarjeta no Existe</option>
-                    <option value="Rechazo Tarjeta Perdida o Robada">Rechazo Tarjeta Perdida o Robada</option>
-                    <option value="Rechazo Tarjeta con Problemas">Rechazo Tarjeta con Problemas</option>
-                    <option value="Rechazo Tarjeta Vencida">Rechazo Tarjeta Vencida</option>-->
+                                                <option value="Rechazo Tarjeta no Existe">Rechazo Tarjeta no Existe</option>
+                                                <option value="Rechazo Tarjeta Perdida o Robada">Rechazo Tarjeta Perdida o Robada</option>
+                                                <option value="Rechazo Tarjeta con Problemas">Rechazo Tarjeta con Problemas</option>
+                                                <option value="Rechazo Tarjeta Vencida">Rechazo Tarjeta Vencida</option>-->
                                             </optgroup>
                                             <option value="Pagado con transferencia">Pagado con transferencia</option>
                                             <option value="Cheque recibido">Cheque recibido</option>
@@ -577,19 +584,29 @@
                             <div class="col-lg-6 col-md-6 col-xs-12">
                                 <div class="group-dates">
                                     <span>
-                                        <strong>Nº Asociados:</strong> <b id="cartola_detalle_asociados"></b></span>
+                                        <strong>Nº Asociados:</strong>
+                                        <b id="cartola_detalle_asociados"></b>
+                                    </span>
                                     <br>
                                     <span>
-                                        <strong>Total Mensual:</strong> <b id="cartola_detalle_total_mensual"></b></span>
+                                        <strong>Total Mensual:</strong>
+                                        <b id="cartola_detalle_total_mensual"></b>
+                                    </span>
                                     <br>
                                     <span>
-                                        <strong>Total PAC:</strong> <b id="cartola_total_pac"></b></span>
+                                        <strong>Total PAC:</strong>
+                                        <b id="cartola_total_pac"></b>
+                                    </span>
                                     <br>
                                     <span>
-                                        <strong>Total PAT:</strong> <b id="cartola_total_pat"></b></span>
+                                        <strong>Total PAT:</strong>
+                                        <b id="cartola_total_pat"></b>
+                                    </span>
                                     <br>
                                     <span>
-                                        <strong>Ingreso Total Pagos manuales:</strong> <b id="cartola_total_manual"></b></span>
+                                        <strong>Ingreso Total Pagos manuales:</strong>
+                                        <b id="cartola_total_manual"></b>
+                                    </span>
                                 </div>
                             </div>
                             <!--col-->

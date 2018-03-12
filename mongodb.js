@@ -730,12 +730,12 @@ exports.pagar = function (data, collection, cb) {
             case 'Rechazo Tarjeta Vencida':
             case 'Cheque recibido':
                 database.collection(collection).update({
-                    id: data.id,
-                    month: data.month,
-                    year: data.year
+                    id: parseInt(data.id),
+                    month: parseInt(data.month),
+                    year: parseInt(data.year)
                 }, {
                         $set: {
-                            type: data.status
+                            estado: data.status
                         }
                     });
                 cb();
@@ -748,7 +748,7 @@ exports.pagar = function (data, collection, cb) {
             case "Pagos Procesados":
             case "Aprobada":
 
-                var debe = data.cobrodelmes - parseInt(data.pago);
+                var debe = data.tarifa - parseInt(data.pago);
                 var excedentes = 0;
                 var ajuste_contable = 0;
 
@@ -761,12 +761,12 @@ exports.pagar = function (data, collection, cb) {
                 }
 
                 database.collection(collection).update({
-                    id: data.id,
-                    month: data.month,
-                    year: data.year
+                    id: parseInt(data.id),
+                    month: parseInt(data.month),
+                    year: parseInt(data.year)
                 }, {
                         $set: {
-                            type: data.status,
+                            estado: data.status,
                             excedentes: excedentes,
                             debe: debe,
                             ajuste_contable: ajuste_contable,

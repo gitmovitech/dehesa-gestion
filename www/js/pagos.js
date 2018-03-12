@@ -105,6 +105,43 @@ var abrirComentarios = function (elem) {
     }
 }
 
+var pago_manual = function (elem) {
+    if (confirm('¿Desea realizar este pago manual y cambiar el estado a ' + jQuery(elem).val() + '?')) {
+        var id = jQuery(elem).data('id');
+        var pagar;
+        var response = JSON.parse(sessionStorage.payments);
+        for (var i in response.data) {
+            if (response.data[i].id == id) {
+                pagar = Math.round(response.data[i].tarifa);
+                break;
+            }
+        }
+        pagar = prompt('Valor a pagar', pagar);
+        if (pagar) {
+            jQuery.post('/api/pagar', {
+                params: {
+                    token: localStorage.intranetSession,
+                    collection: 'pagos',
+                    data: {
+                        status: jQuery(elem).val(),
+                        id: id,
+                        month: $('#filtro_mes').val(),
+                        year: $('#filtro_ano').val(),
+                        pago: pagar,
+                        tarifa: Math.round(response.data[i].tarifa)
+                    }
+                }
+            }, function(response){
+                $('#filtrarButton').click();
+            });
+        } else {
+            jQuery(elem).val(jQuery(elem).data('estado'));
+        }
+    } else {
+        jQuery(elem).val(jQuery(elem).data('estado'));
+    }
+}
+
 var opened = true;
 var listar = function () {
     opened = true;
@@ -121,31 +158,38 @@ var listar = function () {
             $('#cantidad_registros_rechazados, #cantidad_registros_pendientes, #cantidad_registros_pac, #cantidad_registros_pat').html(0);
             var cant_pendientes = 0;
             var cant_rechazados = 0;
+            var cant_manuales = 0;
             var cant_pat = 0;
             var cant_pac = 0;
             var total_mensual = 0;
+            var total_pac = 0;
+            var total_pat = 0;
             for (var i in data) {
                 if (data[i].estado == 'Pendiente') {
                     cant_pendientes++;
-                }
-                if (data[i].estado == 'Rechazado') {
+                } else if (data[i].estado == 'Rechazado') {
                     cant_rechazados++;
-                }
-                if (data[i].estado == 'Pagos Procesados') {
+                } else if (data[i].estado == 'Pagos Procesados') {
                     cant_pac++;
-                }
-                if (data[i].estado == 'Aprobada') {
+                    total_pac += data[i].pagado;
+                } else if (data[i].estado == 'Aprobada') {
                     cant_pat++;
+                    total_pat += data[i].pagado;
+                } else {
+                    cant_manuales += data[i].pagado;
                 }
                 total_mensual += data[i].pagado;
             }
             total_mensual = $.number(total_mensual);
-            $('#cartola_detalle_total_mensual').html('$' + total_mensual.split(',').join('.'));
+            $('#cartola_detalle_total_mensual').html('$' + total_mensual);
             $('#cartola_detalle_asociados').html(data.length);
             $('#cantidad_registros_rechazados').html(cant_rechazados);
             $('#cantidad_registros_pendientes').html(cant_pendientes);
-            $('#cantidad_registros_pac, #cartola_total_pac').html(cant_pac);
-            $('#cantidad_registros_pat, #cartola_total_pat').html(cant_pat);
+            $('#cartola_total_manual').html('$'+$.number(cant_manuales));
+            $('#cartola_total_pac').html('$'+$.number(total_pac));
+            $('#cantidad_registros_pac').html(cant_pac);
+            $('#cartola_total_pat').html('$'+$.number(total_pat));
+            $('#cantidad_registros_pat').html(cant_pat);
 
             construirPaginador();
 
@@ -161,8 +205,8 @@ var listar = function () {
                     $('#cobro_template .contador-tabla').html(contador);
                     $('#cobro_template .activo-checkbox').attr('id', 'active_' + response.data[i].id);
                     $('#cobro_template .activo-checkbox').attr('checked', 'checked');
-                    
-                    if(response.data[i].activo == 1){
+
+                    if (response.data[i].activo == 1) {
                         $('#cobro_template .activo-checkbox').attr('checked', 'checked');
                     } else {
                         $('#cobro_template .activo-checkbox').removeAttr('checked');
@@ -204,14 +248,16 @@ var listar = function () {
                     $('#cobro_template .btn-comentarios').attr('data-id', response.data[i].id);
                     $('#cobro_template .contador-tabla').html(contador);
                     $('#cobro_template .activo-checkbox').attr('id', 'active_' + response.data[i].id);
-                    
-                    if(response.data[i].activo == 1){
+
+                    if (response.data[i].activo == 1) {
                         $('#cobro_template .activo-checkbox').attr('checked', 'checked');
                     } else {
                         $('#cobro_template .activo-checkbox').removeAttr('checked');
                     }
 
                     if (opened) {
+                        $('#cobro_template .estado-select').attr('data-id', response.data[i].id);
+                        $('#cobro_template .estado-select').attr('data-estado', response.data[i].estado);
                         $('#cobro_template .estado-pago').html(response.data[i].estado).hide();
                         $('#cobro_template .estado-select').show();
                         $('#cobro_template .estado-select option[value=' + data[i].estado + ']').attr('selected', 'selected');
