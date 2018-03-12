@@ -161,6 +161,13 @@ var listar = function () {
                     $('#cobro_template .contador-tabla').html(contador);
                     $('#cobro_template .activo-checkbox').attr('id', 'active_' + response.data[i].id);
                     $('#cobro_template .activo-checkbox').attr('checked', 'checked');
+                    
+                    if(response.data[i].activo == 1){
+                        $('#cobro_template .activo-checkbox').attr('checked', 'checked');
+                    } else {
+                        $('#cobro_template .activo-checkbox').removeAttr('checked');
+                    }
+
                     $('#cobro_template .estado-pago').html(response.data[i].estado).show();
                     $('#cobro_template .estado-select').hide();
                     $('#cobro_template .activo-checkbox').val(response.data[i].id)
@@ -197,7 +204,12 @@ var listar = function () {
                     $('#cobro_template .btn-comentarios').attr('data-id', response.data[i].id);
                     $('#cobro_template .contador-tabla').html(contador);
                     $('#cobro_template .activo-checkbox').attr('id', 'active_' + response.data[i].id);
-                    $('#cobro_template .activo-checkbox').attr('checked', 'checked');
+                    
+                    if(response.data[i].activo == 1){
+                        $('#cobro_template .activo-checkbox').attr('checked', 'checked');
+                    } else {
+                        $('#cobro_template .activo-checkbox').removeAttr('checked');
+                    }
 
                     if (opened) {
                         $('#cobro_template .estado-pago').html(response.data[i].estado).hide();

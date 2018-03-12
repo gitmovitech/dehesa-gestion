@@ -170,6 +170,7 @@ var CargarMes = function (req, res) {
                                 estado: 'Pendiente',
                                 pagado: 0,
                                 debe: tarifa,
+                                activo: asociados[n].activo,
                                 ajuste_contable: 0
                             });
                             agregarPago(n + 1, cb);
