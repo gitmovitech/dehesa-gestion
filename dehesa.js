@@ -502,7 +502,7 @@ app.get('/pagos/banco/:patpac/:year/:month', function (req, res) {
     month: req.params.month,
     year: req.params.year
   }, function (response) {
-    //console.log(response);
+    console.log(response);
     var data = [];
     var ahora = new Date();
     var fecha = ahora.getFullYear() + ('0' + ahora.getDate()).slice(-2) + ('0' + (ahora.getMonth() + 1)).slice(-2);
