@@ -281,3 +281,48 @@ var ImportarPacPat = function (req, res) {
 
 }
 exports.ImportarPacPat = ImportarPacPat;
+
+
+
+
+var CargarArchivo = function (req, res) {
+    console.log("IMPORTA")
+    console.log(req.file);
+    var error = '';
+    var data = [];
+    var file;
+    if (!fs.existsSync(__dirname + '/uploads')) {
+        fs.mkdirSync(__dirname + '/uploads', 0777);
+    }
+    if (!fs.existsSync(__dirname + '/uploads/pagos')) {
+        fs.mkdirSync(__dirname + '/uploads/pagos', 0777);
+    }
+    if (!fs.existsSync(__dirname + '/uploads/pagos/' + req.body._id)) {
+        fs.mkdirSync(__dirname + '/uploads/pagos/' + req.body._id, 0777);
+    }
+    file = __dirname + '/uploads/pagos/' + req.body._id + '/' + req.file.originalname;
+
+    if (fs.existsSync(file)) {
+        fs.unlinkSync(file);
+    }
+    fs.renameSync(__dirname + '/' + req.file.path, file);
+
+    res.redirect('/templates/pagos.html?year=' + req.body.year + '&month=' + req.body.month);
+
+}
+exports.CargarArchivo = CargarArchivo;
+
+
+
+
+var ObtenerArchivos = function (req, res) {
+    var files = [];
+    try{
+        fs.readdirSync(__dirname + '/uploads/pagos/' + req.params.id).forEach(file => {
+            files.push(file);
+        });
+    } catch(e){}
+    
+    res.send(files);
+}
+exports.ObtenerArchivos = ObtenerArchivos;

@@ -83,6 +83,19 @@ var modal_historial = function (item) {
     }
 }
 
+var modal_archivos = function (item) {
+    jQuery('.input_year').val(jQuery('#filtro_ano').val());
+    jQuery('.input_month').val(jQuery('#filtro_mes').val());
+    $('#archivo_id').val(item);
+    $('#modalarchivos').modal(true);
+    $('#listado_archivos').html('');
+    $.getJSON('/api/carga/archivo/pago/' + item, function (response) {
+        for (var n in response) {
+            $('#listado_archivos').append('<li><a href="/pagos/' + item + '/' + response[n] + '">' + response[n] + '</a></li>');
+        }
+    });
+}
+
 var setPage = function (page) {
     current_page = page;
     listar();
@@ -253,7 +266,7 @@ var listar = function () {
                     if (30 != response.data[i].dias) {
                         tarifa = response.data[i].tarifa;
                         response.data[i].tarifa = (response.data[i].tarifa * response.data[i].dias) / 30;
-                        response.data[i].debe -= response.data[i].debe -= tarifa-response.data[i].tarifa
+                        response.data[i].debe -= response.data[i].debe -= tarifa - response.data[i].tarifa
                     }
                     $('#cobro_template .tarifa').html('$' + response.data[i].tarifa.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
                     $('#cobro_template .excedentes').html('$' + response.data[i].excedentes.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
@@ -263,6 +276,7 @@ var listar = function () {
                     } catch (e) {
                         $('#cobro_template .deuda').html('');
                     }
+                    $('#cobro_template .btn-modal-archivos').attr('onclick', 'javascript:modal_archivos(\'' + response.data[i]._id + '\')');
                     $('#cobro_template .btn-modal-contact').attr('onclick', 'javascript:modal_contacto(' + response.data[i].id + ')');
                     $('#cobro_template .btn-modal-historial').attr('onclick', 'javascript:modal_historial(' + response.data[i].id + ')');
                     costosdata += '<tr class="asociado-list template-clean ' + response.data[i].estado + '-estado" id="row_' + response.data[i].id + '">' + $('#cobro_template').html() + '</tr>';
@@ -314,7 +328,7 @@ var listar = function () {
                     if (30 != response.data[i].dias) {
                         tarifa = response.data[i].tarifa;
                         response.data[i].tarifa = (response.data[i].tarifa * response.data[i].dias) / 30;
-                        response.data[i].debe -= tarifa-response.data[i].tarifa
+                        response.data[i].debe -= tarifa - response.data[i].tarifa
                     }
                     $('#cobro_template .tarifa').html('$' + response.data[i].tarifa.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
                     $('#cobro_template .excedentes').html('$' + response.data[i].excedentes.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
@@ -324,6 +338,7 @@ var listar = function () {
                     } catch (e) {
                         $('#cobro_template .deuda').html('');
                     }
+                    $('#cobro_template .btn-modal-archivos').attr('onclick', 'javascript:modal_archivos(\'' + response.data[i]._id + '\')');
                     $('#cobro_template .btn-modal-contact').attr('onclick', 'javascript:modal_contacto(' + response.data[i].id + ')');
                     $('#cobro_template .btn-modal-historial').attr('onclick', 'javascript:modal_historial(' + response.data[i].id + ')');
                     cobrosdata += '<tr class="asociado-list template-clean ' + response.data[i].estado + '-estado" id="row_' + response.data[i].id + '">' + $('#cobro_template').html() + '</tr>';

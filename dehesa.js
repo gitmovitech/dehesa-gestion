@@ -80,12 +80,15 @@ app.use(function (req, res, next) {
   next();
 });
 
+
 /**
  * PAGOS
  */
 var single_file = upload.single('single_file');
 app.post('/api/carga/planilla-adt', single_file, nodepagos.ValidarPlanillaADT);
 app.post('/api/carga/patpac', single_file, nodepagos.ImportarPacPat);
+app.post('/api/carga/archivo/pago', single_file, nodepagos.CargarArchivo);
+app.get('/api/carga/archivo/pago/:id', nodepagos.ObtenerArchivos);
 app.get('/api/carga/cobros', nodepagos.CargarCobros);
 app.get('/api/asociados/:id', nodepagos.ObtenerAsociado);
 app.get('/api/cerrar/mes', nodepagos.CerrarMes);
@@ -1200,13 +1203,16 @@ app.get('/api/pagos/planilla-cobro', function (req, res, next) {
 });
 
 
-
 app.use(express.static(__dirname + '/www'));
-app.get('/*', function (req, res) {
+
+app.use('/archivos', express.static(__dirname +'/uploads'));
+
+/*app.get('/*', function (req, res) {
   var serverpath = __dirname;
   serverpath = serverpath.replace('/server', '/')
   res.sendFile(serverpath + '/www/index.html');
-});
+});*/
+
 server.listen(3389, function () {
   console.log('Running port 3389');
 });

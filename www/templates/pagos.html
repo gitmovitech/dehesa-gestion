@@ -107,8 +107,21 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                </div>
+
+                <form action="/api/carga/archivo/pago" method="post" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <input type="hidden" class="" name="_id" id="archivo_id" />
+                        <input type="hidden" class="input_year" name="year" id="year" />
+                        <input type="hidden" class="input_month" name="month" id="month" />
+                        <input type="file" name="single_file" id="archivo_pago" />
+                        <br><br>
+                        <ul id="listado_archivos"></ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Subir</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -432,7 +445,7 @@
                                     </td>
                                     <td class="asociado-id">0</td>
                                     <td>
-                                        <input style="width:50px" onchange="javascript:modificardias(this)" type="number" class="days-input dias" value=""/>
+                                        <input style="width:50px" onchange="javascript:modificardias(this)" type="number" class="days-input dias" value="" />
                                     </td>
                                     <td>
                                         <div class="estado-pago">Pendiente</div>
@@ -476,7 +489,7 @@
                                         </a>
                                     </td>
                                     <td>
-                                        <a class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalarchivos">
+                                        <a class="btn btn-success btn-sm btn-modal-archivos">
                                             <span class="glyphicon glyphicon-open" aria-hidden="true"></span>
                                         </a>
                                     </td>
