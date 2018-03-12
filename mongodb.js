@@ -699,7 +699,7 @@ exports.getPaymentsForBank = function (params, cb) {
     if (database) {
         database.collection('pagos')
             .aggregate([
-                { $match: { "year": parseInt(params.year), "month": parseInt(params.month), "pagado": 0 } },
+                { $match: { "year": parseInt(params.year), "month": parseInt(params.month), "pagado": 0, "activo": 1 } },
                 { $lookup: { "localField": "id", "from": "asociados", "foreignField": "id", "as": "socio" } },
                 { $unwind: "$socio" }
             ])

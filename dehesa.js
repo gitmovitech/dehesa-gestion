@@ -529,7 +529,7 @@ app.get('/pagos/banco/:patpac/:year/:month', function (req, res) {
         }
         if (response[x].socio.forma_de_pago == 'PAC') {
           ext = '.txt';
-          nombre_completo = response[x].socio.first_name + " " + response[x].socio.last_name;
+          nombre_completo = response[x].socio.first_name2 + " " + response[x].socio.last_name2;
           data.push([
             charsIzquierda(response[x].socio.run, "0", 10),
             charsDerecha(nombre_completo.toUpperCase(), " ", 50),
