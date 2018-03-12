@@ -136,6 +136,8 @@ var listar = function () {
 
             for (var i in response.data) {
                 if (response.data[i].estado != 'Pendiente' && data[i].estado != 'Rechazado') {
+                    contador++;
+                    $('#cobro_template .contador-tabla').html(contador);
                     $('#cobro_template .activo-checkbox').attr('id', 'active_' + response.data[i].id);
                     $('#cobro_template .activo-checkbox').attr('checked', 'checked');
                     $('#cobro_template .estado-pago').html(response.data[i].estado);
@@ -156,6 +158,8 @@ var listar = function () {
 
             }
 
+            contador = 0;
+
             for (var i in response.data) {
                 if (current_page == 1) {
                     listfrom = 0;
@@ -163,8 +167,9 @@ var listar = function () {
                     listfrom = ($('#limitPerPage').val() * current_page) + 1;
                 }
                 //if (i >= listfrom && contador <= $('#limitPerPage').val() && (response.data[i].estado == 'Pendiente' || data[i].estado == 'Rechazado')) {
-                if(response.data[i].estado == 'Pendiente' || data[i].estado == 'Rechazado'){
+                if (response.data[i].estado == 'Pendiente' || data[i].estado == 'Rechazado') {
                     contador++;
+                    $('#cobro_template .contador-tabla').html(contador);
                     $('#cobro_template .activo-checkbox').attr('id', 'active_' + response.data[i].id);
                     $('#cobro_template .activo-checkbox').attr('checked', 'checked');
                     $('#cobro_template .estado-pago').html(response.data[i].estado);
