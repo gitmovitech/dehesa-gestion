@@ -193,9 +193,16 @@ var listar = function () {
                     $('#cobro_template .contador-tabla').html(contador);
                     $('#cobro_template .activo-checkbox').attr('id', 'active_' + response.data[i].id);
                     $('#cobro_template .activo-checkbox').attr('checked', 'checked');
-                    $('#cobro_template .estado-pago').html(response.data[i].estado).hide();
-                    $('#cobro_template .estado-select').show();
-                    $('#cobro_template .estado-select option[value=' + data[i].estado + ']').attr('selected', 'selected');
+
+                    if (opened) {
+                        $('#cobro_template .estado-pago').html(response.data[i].estado).hide();
+                        $('#cobro_template .estado-select').show();
+                        $('#cobro_template .estado-select option[value=' + data[i].estado + ']').attr('selected', 'selected');
+                    } else {
+                        $('#cobro_template .estado-pago').html(response.data[i].estado).show();
+                        $('#cobro_template .estado-select').hide();
+                    }
+
                     $('#cobro_template .activo-checkbox').val(response.data[i].id)
                     $('#cobro_template .asociado-id').html(response.data[i].id);
                     $('#cobro_template .dias').html(response.data[i].dias);
