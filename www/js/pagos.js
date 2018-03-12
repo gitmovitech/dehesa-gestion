@@ -77,6 +77,8 @@ var exportarPAC = function () {
 }
 
 var importarPATPAC = function () {
+    jQuery('.input_year').val(jQuery('#filtro_ano').val());
+    jQuery('.input_month').val(jQuery('#filtro_mes').val());
     $('#modal_importar_patpac').modal(true);
 }
 
