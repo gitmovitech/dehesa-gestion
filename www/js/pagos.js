@@ -94,6 +94,17 @@ var construirPaginador = function () {
     }
 }
 
+var abrirComentarios = function (elem) {
+    var id = jQuery(elem).data('id');
+    var response = JSON.parse(sessionStorage.payments);
+    for(var i in response.data){
+        if(response.data[i].id == id){
+            jQuery('#comentario').html(response.data[i].comentarios);
+            break;
+        }
+    }
+}
+
 var listar = function () {
     $.getJSON('/api/carga/cobros', {
         year: $('#filtro_ano').val(),
@@ -101,6 +112,7 @@ var listar = function () {
     }, function (response) {
         $('#cobro_tbody, #costos_tbody').html('');
         if (response.ok == 1) {
+            sessionStorage.payments = JSON.stringify(response);
             data = response.data;
 
             $('#cantidad_registros').html(data.length);
@@ -137,6 +149,7 @@ var listar = function () {
             for (var i in response.data) {
                 if (response.data[i].estado != 'Pendiente' && data[i].estado != 'Rechazado') {
                     contador++;
+                    $('#cobro_template .btn-comentarios').attr('data-id', response.data[i].id);
                     $('#cobro_template .contador-tabla').html(contador);
                     $('#cobro_template .activo-checkbox').attr('id', 'active_' + response.data[i].id);
                     $('#cobro_template .activo-checkbox').attr('checked', 'checked');
@@ -169,6 +182,7 @@ var listar = function () {
                 //if (i >= listfrom && contador <= $('#limitPerPage').val() && (response.data[i].estado == 'Pendiente' || data[i].estado == 'Rechazado')) {
                 if (response.data[i].estado == 'Pendiente' || data[i].estado == 'Rechazado') {
                     contador++;
+                    $('#cobro_template .btn-comentarios').attr('data-id', response.data[i].id);
                     $('#cobro_template .contador-tabla').html(contador);
                     $('#cobro_template .activo-checkbox').attr('id', 'active_' + response.data[i].id);
                     $('#cobro_template .activo-checkbox').attr('checked', 'checked');

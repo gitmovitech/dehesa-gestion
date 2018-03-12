@@ -17,6 +17,26 @@
     <link href="css/jquery.loader.css" rel="stylesheet" />
     <link href='js/bootstrap-chosen-master/bootstrap-chosen.css' rel="stylesheet" />
 
+    <style>
+        .contador-tabla {
+            font-weight: bold;
+            color: white;
+            background-color: green;
+            padding: 4px 8px;
+            border-radius:20px;
+        }
+        .asociado-id{
+            font-weight: bold;
+        }
+        .Pendiente-estado {
+            background-color: rgba(232, 255, 255, 0.5);
+        }
+
+        .Rechazado-estado {
+            background-color: rgba(255, 206, 184, 0.5);
+        }
+    </style>
+
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -28,15 +48,6 @@
     <script src="js/autocomplete.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/pagos.js?v=1"></script>
-
-    <style>
-    .Pendiente-estado{
-        background-color:rgba(232, 255, 255, 0.5);
-    }
-    .Rechazado-estado{
-        background-color:rgba(255, 206, 184, 0.5);
-    }
-    </style>
 
 </head>
 
@@ -66,19 +77,11 @@
                     <br>
                     <hr>
                     <div class="title-box">
-                        <h6>Comentarios Anteriores</h6>
+                        <h6>Comentarios</h6>
                     </div>
                     <!--box-list-->
-                    <div class="box-comment-list">
-                        <div class="date-comment">{{Username}} -
-                            <small>dd/mm/aaaa</small> dijo:</div>
-                        <div class="text-comment">Lorem ipsum dolor sit amet, lorem ipsum.</div>
-                    </div>
-                    <!--box-list-->
-                    <div class="box-comment-list">
-                        <div class="date-comment">{{Username}} -
-                            <small>dd/mm/aaaa</small> dijo:</div>
-                        <div class="text-comment">Lorem ipsum dolor sit amet, lorem ipsum.</div>
+                    <div class="box-comment-list" id="comentario">
+
                     </div>
                 </div>
             </div>
@@ -329,7 +332,7 @@
                     </div>
                     <!--end box button menu planilla -->
 
-                    
+
 
                     <div class="box-button-planilla" style="display:none">
                         <br>
@@ -355,8 +358,7 @@
                     <div class="box-alert">
                         <div class="alert alert-info" role="alert">
                             Pendientes:
-                            <span id="cantidad_registros_pendientes">0</span> - 
-                            Rechazados:
+                            <span id="cantidad_registros_pendientes">0</span> - Rechazados:
                             <span id="cantidad_registros_rechazados">0</span>
                         </div>
                     </div>
@@ -384,7 +386,9 @@
                             <div>
                                 <!--tr asociado-->
                                 <tr class="asociado-list" id="cobro_template" style="display:none">
-                                    <td><span class="contador-tabla"></span></td>
+                                    <td>
+                                        <span class="contador-tabla"></span>
+                                    </td>
                                     <td>
                                         <input value="" type="checkbox" class="filled-in activo-checkbox" />
                                         <label for="filled-in-box"></label>
@@ -429,7 +433,8 @@
                                     <td class="ajuste">$000.000</td>
                                     <td class="deuda">$000.000</td>
                                     <td>
-                                        <a class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalcomentarios">
+                                        <a class="btn btn-success btn-sm btn-comentarios" data-toggle="modal" data-id="" onclick="javascript:abrirComentarios(this)"
+                                            data-target="#modalcomentarios">
                                             <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
                                         </a>
                                     </td>
@@ -467,14 +472,13 @@
 
                     <!-- title-->
                     <div class="box-alert">
-                            <div class="alert alert-info" role="alert">
-                                PAC:
-                                <span id="cantidad_registros_pac">0</span> - 
-                                PAT:
-                                <span id="cantidad_registros_pat">0</span>
-                            </div>
+                        <div class="alert alert-info" role="alert">
+                            PAC:
+                            <span id="cantidad_registros_pac">0</span> - PAT:
+                            <span id="cantidad_registros_pat">0</span>
                         </div>
-                        <!-- end title -->
+                    </div>
+                    <!-- end title -->
 
                     <div class="row box-table">
                         <table class="table">
