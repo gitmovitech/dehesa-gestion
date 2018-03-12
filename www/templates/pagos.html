@@ -40,7 +40,7 @@
 
         .box-cartola span b {
             color: green;
-            margin-left:10px;
+            margin-left: 10px;
         }
     </style>
 
@@ -108,6 +108,34 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal" id="modalhistorial" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Año</th>
+                                <th>Mes</th>
+                                <th>Pagado</th>
+                                <th>Deuda</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-historial"></tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -389,6 +417,7 @@
                                     <th class="button-box"></th>
                                     <th class="button-box"></th>
                                     <th class="button-box"></th>
+                                    <th class="button-box"></th>
                                 </tr>
                             </thead>
                             <div>
@@ -452,8 +481,14 @@
                                         </a>
                                     </td>
                                     <td>
-                                        <a class="btn btn-success btn-sm f btn-modal-contact">
+                                        <a class="btn btn-success btn-sm btn-modal-contact">
                                             <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                                        </a>
+                                    </td>
+
+                                    <td>
+                                        <a class="btn btn-success btn-sm btn-modal-historial">
+                                            <span class="glyphicon glyphicon-book" aria-hidden="true"></span>
                                         </a>
                                     </td>
 
@@ -501,6 +536,7 @@
                                     <th>Excedentes</th>
                                     <th>Ajuste Contable</th>
                                     <th>Deuda Total</th>
+                                    <th class="button-box"></th>
                                     <th class="button-box"></th>
                                     <th class="button-box"></th>
                                     <th class="button-box"></th>

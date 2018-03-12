@@ -153,12 +153,12 @@ var CargarMes = function (req, res) {
                 db.getAsociados(function (asociados) {
                     var agregarPago = function (n, cb) {
                         if (typeof asociados[n] != 'undefined') {
-                            if(asociados[n].uf == 0){
+                            if (asociados[n].uf == 0) {
                                 tarifa = 0;
                             } else {
                                 tarifa = parseFloat(asociados[n].uf) * parseFloat(valoruf.valor);
                             }
-                            
+
                             pagos.push({
                                 id: asociados[n].id,
                                 nombre: [asociados[n].first_name, asociados[n].last_name].join(' '),
@@ -178,15 +178,15 @@ var CargarMes = function (req, res) {
                             cb();
                         }
                     }
-                    agregarPago(0, function(){
-                        db.obtenerExcedentes(pagos, 0, function(response){
+                    agregarPago(0, function () {
+                        db.obtenerExcedentes(pagos, 0, function (response) {
                             pagos = response;
-                            db.obtenerDeudasAnteriores(pagos, 0, function(response){
+                            db.obtenerDeudasAnteriores(pagos, 0, function (response) {
                                 pagos = response;
-                                for(var i in pagos){
+                                for (var i in pagos) {
                                     db.savePayment(pagos[i]);
                                 }
-                                res.send({ok:1});
+                                res.send({ ok: 1 });
                             });
                         });
                     });
@@ -207,6 +207,22 @@ var CargarMes = function (req, res) {
     }
 }
 exports.CargarMes = CargarMes;
+
+
+
+
+var CargarHistorial = function (req, res) {
+    if (req.query.id) {
+        db.getHistorialPagos({
+            id: parseInt(req.query.id)
+        }, function (response) {
+            res.send(response);
+        });
+    } else {
+        res.send({});
+    }
+}
+exports.CargarHistorial = CargarHistorial;
 
 
 

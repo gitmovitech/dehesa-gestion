@@ -1017,3 +1017,13 @@ exports.pasarCuentasPorCobrar = function (query, cb) {
     });
 
 }
+
+
+
+exports.getHistorialPagos = function (query, cb) {
+    database.collection('pagos').find({
+        id: query.id
+    }).sort({ $natural: -1 }).toArray(function (er, response) {
+        cb(response);
+    });
+}

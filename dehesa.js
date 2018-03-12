@@ -90,6 +90,7 @@ app.get('/api/carga/cobros', nodepagos.CargarCobros);
 app.get('/api/asociados/:id', nodepagos.ObtenerAsociado);
 app.get('/api/cerrar/mes', nodepagos.CerrarMes);
 app.get('/api/cargar/mes', nodepagos.CargarMes);
+app.get('/api/cargar/historial', nodepagos.CargarHistorial);
 
 
 /**

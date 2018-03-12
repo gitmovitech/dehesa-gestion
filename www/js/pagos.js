@@ -8,6 +8,8 @@ var pacpat;
 var file_pacpat;
 var year = false;
 var month = false;
+var meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
 
 var GetUrlParams = function () {
     var url = location.href;
@@ -57,6 +59,25 @@ var modal_contacto = function (item) {
             setTimeout(function () {
                 $('#modalcontacto').modal(true);
             }, 100);
+            break;
+        }
+    }
+}
+
+var modal_historial = function (item) {
+    for (var n in data) {
+        if (data[n].id == item) {
+            $('#modalhistorial h5').html(data[n].nombre);
+            $.getJSON('/api/cargar/historial', {
+                id: item
+            }, function (response) {
+                $('#modalhistorial .table-historial').html('');
+                for (var i in response) {
+                    inner = '<tr><td>' + response[i].year + '</td><td>' + meses[response[i].month] + '</td><td>$' + $.number(response[i].pagado) + '</td><td>$' + $.number(response[i].debe) + '</td><td>' + response[i].estado + '</td></tr>';
+                    $('#modalhistorial .table-historial').append(inner);
+                }
+                $('#modalhistorial').modal(true);
+            });
             break;
         }
     }
@@ -131,7 +152,7 @@ var pago_manual = function (elem) {
                         tarifa: Math.round(response.data[i].tarifa)
                     }
                 }
-            }, function(response){
+            }, function (response) {
                 $('#filtrarButton').click();
             });
         } else {
@@ -185,10 +206,10 @@ var listar = function () {
             $('#cartola_detalle_asociados').html(data.length);
             $('#cantidad_registros_rechazados').html(cant_rechazados);
             $('#cantidad_registros_pendientes').html(cant_pendientes);
-            $('#cartola_total_manual').html('$'+$.number(cant_manuales));
-            $('#cartola_total_pac').html('$'+$.number(total_pac));
+            $('#cartola_total_manual').html('$' + $.number(cant_manuales));
+            $('#cartola_total_pac').html('$' + $.number(total_pac));
             $('#cantidad_registros_pac').html(cant_pac);
-            $('#cartola_total_pat').html('$'+$.number(total_pat));
+            $('#cartola_total_pat').html('$' + $.number(total_pat));
             $('#cantidad_registros_pat').html(cant_pat);
 
             construirPaginador();
@@ -226,6 +247,7 @@ var listar = function () {
                         $('#cobro_template .deuda').html('');
                     }
                     $('#cobro_template .btn-modal-contact').attr('onclick', 'javascript:modal_contacto(' + response.data[i].id + ')');
+                    $('#cobro_template .btn-modal-historial').attr('onclick', 'javascript:modal_historial(' + response.data[i].id + ')');
                     costosdata += '<tr class="asociado-list template-clean ' + response.data[i].estado + '-estado" id="row_' + response.data[i].id + '">' + $('#cobro_template').html() + '</tr>';
                 }
 
@@ -266,7 +288,7 @@ var listar = function () {
                         $('#cobro_template .estado-select').hide();
                     }
 
-                    $('#cobro_template .activo-checkbox').val(response.data[i].id)
+                    $('#cobro_template .activo-checkbox').val(response.data[i].id);
                     $('#cobro_template .asociado-id').html(response.data[i].id);
                     $('#cobro_template .dias').html(response.data[i].dias);
                     $('#cobro_template .tarifa').html('$' + response.data[i].tarifa.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
@@ -278,6 +300,7 @@ var listar = function () {
                         $('#cobro_template .deuda').html('');
                     }
                     $('#cobro_template .btn-modal-contact').attr('onclick', 'javascript:modal_contacto(' + response.data[i].id + ')');
+                    $('#cobro_template .btn-modal-historial').attr('onclick', 'javascript:modal_historial(' + response.data[i].id + ')');
                     cobrosdata += '<tr class="asociado-list template-clean ' + response.data[i].estado + '-estado" id="row_' + response.data[i].id + '">' + $('#cobro_template').html() + '</tr>';
                 }
             }
