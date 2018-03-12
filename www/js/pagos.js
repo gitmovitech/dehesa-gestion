@@ -97,15 +97,17 @@ var construirPaginador = function () {
 var abrirComentarios = function (elem) {
     var id = jQuery(elem).data('id');
     var response = JSON.parse(sessionStorage.payments);
-    for(var i in response.data){
-        if(response.data[i].id == id){
+    for (var i in response.data) {
+        if (response.data[i].id == id) {
             jQuery('#comentario').html(response.data[i].comentarios);
             break;
         }
     }
 }
 
+var opened = true;
 var listar = function () {
+    opened = true;
     $.getJSON('/api/carga/cobros', {
         year: $('#filtro_ano').val(),
         month: $('#filtro_mes').val()
@@ -147,13 +149,15 @@ var listar = function () {
             var contador = 0;
 
             for (var i in response.data) {
+                opened = response.data[i].opened;
                 if (response.data[i].estado != 'Pendiente' && data[i].estado != 'Rechazado') {
                     contador++;
                     $('#cobro_template .btn-comentarios').attr('data-id', response.data[i].id);
                     $('#cobro_template .contador-tabla').html(contador);
                     $('#cobro_template .activo-checkbox').attr('id', 'active_' + response.data[i].id);
                     $('#cobro_template .activo-checkbox').attr('checked', 'checked');
-                    $('#cobro_template .estado-pago').html(response.data[i].estado);
+                    $('#cobro_template .estado-pago').html(response.data[i].estado).show();
+                    $('#cobro_template .estado-select').hide();
                     $('#cobro_template .activo-checkbox').val(response.data[i].id)
                     $('#cobro_template .asociado-id').html(response.data[i].id);
                     $('#cobro_template .dias').html(response.data[i].dias);
@@ -174,6 +178,9 @@ var listar = function () {
             contador = 0;
 
             for (var i in response.data) {
+                $('#cobro_template .estado-select option').each(function () {
+                    $(this).removeAttr('selected');
+                });
                 if (current_page == 1) {
                     listfrom = 0;
                 } else {
@@ -186,7 +193,9 @@ var listar = function () {
                     $('#cobro_template .contador-tabla').html(contador);
                     $('#cobro_template .activo-checkbox').attr('id', 'active_' + response.data[i].id);
                     $('#cobro_template .activo-checkbox').attr('checked', 'checked');
-                    $('#cobro_template .estado-pago').html(response.data[i].estado);
+                    $('#cobro_template .estado-pago').html(response.data[i].estado).hide();
+                    $('#cobro_template .estado-select').show();
+                    $('#cobro_template .estado-select option[value=' + data[i].estado + ']').attr('selected', 'selected');
                     $('#cobro_template .activo-checkbox').val(response.data[i].id)
                     $('#cobro_template .asociado-id').html(response.data[i].id);
                     $('#cobro_template .dias').html(response.data[i].dias);
@@ -208,8 +217,12 @@ var listar = function () {
                 $('#btn_cargar_mes').show();
                 $('#btn_cerrar_mes,.mes-cargado').hide();
             } else {
-                $('#btn_cargar_mes').hide();
-                $('#btn_cerrar_mes,.mes-cargado').show();
+                if (opened) {
+                    $('#btn_cargar_mes').hide();
+                    $('#btn_cerrar_mes,.mes-cargado').show();
+                } else {
+                    $('#btn_cargar_mes,#btn_cerrar_mes,.mes-cargado').hide();
+                }
             }
         }
         if (noactive.length > 0) {
