@@ -211,6 +211,8 @@ exports.CargarMes = CargarMes;
 
 
 var ImportarPacPat = function (req, res) {
+    console.log("IMPORTA")
+    console.log(req.body);
     var error = '';
     var data = [];
     var file;

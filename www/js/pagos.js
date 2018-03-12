@@ -256,7 +256,8 @@ var cerrarMes = function () {
             year: $('#filtro_ano').val(),
             month: $('#filtro_mes').val()
         }, function (response) {
-            alert('El mes ha sido cerrado')
+            alert('El mes ha sido cerrado');
+            $('#filtrarButton').click();
         });
     }
 }
@@ -331,8 +332,8 @@ jQuery(function ($) {
     });
 
     $('#form_upload_importar_pacpat').submit(function () {
-        $('.input_month').val(month);
-        $('.input_year').val(year);
+        $('.input_month').val($('#filtro_mes').val());
+        $('.input_year').val($('#filtro_ano').val());
         if ($('#single_file_pacpat').val() == "") {
             alert('Seleccione un archivo para subir primero');
             return false;
