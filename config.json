@@ -642,6 +642,53 @@
           "id": true
         }
       ]
+    },
+    {
+      "icon": "glyphicon glyphicon-th-list",
+      "name": "Notificaciones Pago Por Enviar",
+      "scope": [
+        "Administrador",
+        "Editor"
+      ],
+      "collection": "notify",
+      "fields": [
+        {
+          "name": "_id",
+          "type": "text",
+          "id": true
+        },
+        {
+          "name": "nombre",
+          "title": "Asociado",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "correos",
+          "title": "Correos",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "estado",
+          "title": "Estado de pago",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "month",
+          "title": "Mes",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "year",
+          "title": "Año",
+          "type": "text",
+          "required": true
+        }
+      ]
     }
+
   ]
 }

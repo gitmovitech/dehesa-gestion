@@ -929,7 +929,45 @@ exports.cerrarMes = function (data, cb) {
             opened: false
         }
     }
-    database.collection('pagos').update(query, values, { multi: true });
+    var asociados = [];
+    var pagos = [];
+    var email_to = [];
+    database.collection('pagos').find(query).toArray(function (err, response) {
+        var pagos = response;
+        database.collection('asociados').find({ activo: 1 }).toArray(function (err, response) {
+            var asociados = response;
+            for (var p in pagos) {
+                email_to = [];
+                for (var a in asociados) {
+                    if (asociados[a].id == pagos[p].id) {
+                        if (asociados[a].correo11 != '') {
+                            email_to.push(asociados[a].correo11);
+                        }
+                        if (asociados[a].correo12 != '') {
+                            email_to.push(asociados[a].correo12);
+                        }
+                        if (asociados[a].correo21 != '') {
+                            email_to.push(asociados[a].correo21);
+                        }
+                        if (asociados[a].correo22 != '') {
+                            email_to.push(asociados[a].correo22);
+                        }
+                        if (email_to.length > 0) {
+                            database.collection('notify').insert({
+                                nombre: [asociados[a].first_name2, asociados[a].last_name2].join(' '),
+                                correos: email_to.join(','),
+                                estado: pagos[p].estado,
+                                month: parseInt(data.month),
+                                year: parseInt(data.year)
+                            });
+                        }
+                        break;
+                    }
+                }
+            }
+        });
+    });
+    //database.collection('pagos').update(query, values, { multi: true });
     cb(query);
 }
 

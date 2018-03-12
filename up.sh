@@ -1,8 +1,8 @@
 #!/bin/bash
-echo 'Mensaje:'
-read mensaje
-git add .
-git commit -m $mensaje
+#echo 'Mensaje:'
+#read mensaje
+#git add .
+#git commit -m $mensaje
 git push origin master
 
 
