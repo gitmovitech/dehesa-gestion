@@ -91,7 +91,7 @@ var modal_archivos = function (item) {
     $('#listado_archivos').html('');
     $.getJSON('/api/carga/archivo/pago/' + item, function (response) {
         for (var n in response) {
-            $('#listado_archivos').append('<li><a href="/pagos/' + item + '/' + response[n] + '">' + response[n] + '</a></li>');
+            $('#listado_archivos').append('<li><a href="/descargar/' + item + '/' + response[n] + '">' + response[n] + '</a></li>');
         }
     });
 }

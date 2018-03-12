@@ -1203,15 +1203,19 @@ app.get('/api/pagos/planilla-cobro', function (req, res, next) {
 });
 
 
+app.get('/descargar/:id/:file', function (req, res) {
+  var file = __dirname + '/uploads/pagos/' + req.params.id + '/' + req.params.file;
+  res.download(file);
+});
+
+
 app.use(express.static(__dirname + '/www'));
 
-app.use('/archivos', express.static(__dirname +'/uploads'));
-
-/*app.get('/*', function (req, res) {
+app.get('/*', function (req, res) {
   var serverpath = __dirname;
   serverpath = serverpath.replace('/server', '/')
   res.sendFile(serverpath + '/www/index.html');
-});*/
+});
 
 server.listen(3389, function () {
   console.log('Running port 3389');
