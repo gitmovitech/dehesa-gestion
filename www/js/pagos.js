@@ -225,15 +225,15 @@ var listar = function () {
                 }
                 total_mensual += data[i].pagado;
             }
-            total_mensual = $.number(total_mensual);
-            $('#cartola_detalle_total_mensual').html('$' + total_mensual);
+            //total_mensual = $.number(total_mensual);
+            $('#cartola_detalle_total_mensual').html('$' + money_format(total_mensual));
             $('#cartola_detalle_asociados').html(data.length);
             $('#cantidad_registros_rechazados').html(cant_rechazados);
             $('#cantidad_registros_pendientes').html(cant_pendientes);
-            $('#cartola_total_manual').html('$' + $.number(cant_manuales));
-            $('#cartola_total_pac').html('$' + $.number(total_pac));
+            $('#cartola_total_manual').html('$' + money_format(cant_manuales));
+            $('#cartola_total_pac').html('$' + money_format(total_pac));
             $('#cantidad_registros_pac').html(cant_pac);
-            $('#cartola_total_pat').html('$' + $.number(total_pat));
+            $('#cartola_total_pat').html('$' + money_format(total_pat));
             $('#cantidad_registros_pat').html(cant_pat);
 
             construirPaginador();
@@ -268,11 +268,11 @@ var listar = function () {
                         response.data[i].tarifa = (response.data[i].tarifa * response.data[i].dias) / 30;
                         response.data[i].debe -= response.data[i].debe -= tarifa - response.data[i].tarifa
                     }
-                    $('#cobro_template .tarifa').html('$' + response.data[i].tarifa.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
-                    $('#cobro_template .excedentes').html('$' + response.data[i].excedentes.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
-                    $('#cobro_template .ajuste').html('$' + response.data[i].ajuste_contable.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+                    $('#cobro_template .tarifa').html('$' + money_format(response.data[i].tarifa));
+                    $('#cobro_template .excedentes').html('$' + money_format(response.data[i].excedentes));
+                    $('#cobro_template .ajuste').html('$' + money_format(response.data[i].ajuste_contable));
                     try {
-                        $('#cobro_template .deuda').html('$' + response.data[i].debe.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+                        $('#cobro_template .deuda').html('$' + money_format(response.data[i].debe));
                     } catch (e) {
                         $('#cobro_template .deuda').html('');
                     }
@@ -330,11 +330,11 @@ var listar = function () {
                         response.data[i].tarifa = (response.data[i].tarifa * response.data[i].dias) / 30;
                         response.data[i].debe -= tarifa - response.data[i].tarifa
                     }
-                    $('#cobro_template .tarifa').html('$' + response.data[i].tarifa.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
-                    $('#cobro_template .excedentes').html('$' + response.data[i].excedentes.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
-                    $('#cobro_template .ajuste').html('$' + response.data[i].ajuste_contable.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+                    $('#cobro_template .tarifa').html('$' + money_format(response.data[i].tarifa));
+                    $('#cobro_template .excedentes').html('$' + money_format(response.data[i].excedentes));
+                    $('#cobro_template .ajuste').html('$' + money_format(response.data[i].ajuste_contable));
                     try {
-                        $('#cobro_template .deuda').html('$' + response.data[i].debe.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+                        $('#cobro_template .deuda').html('$' + money_format(response.data[i].debe));
                     } catch (e) {
                         $('#cobro_template .deuda').html('');
                     }
@@ -365,6 +365,21 @@ var listar = function () {
             });
         }
     });
+}
+
+
+
+var money_format = function(money){
+    try{
+        money = money.toFixed(2);
+    } catch(e){}
+    
+    money = money.split('.');
+    if(typeof money[0] != 'undefined') {
+        money[0] = money[0]+'';
+        money[0] = money[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+    return money.join(',');
 }
 
 
